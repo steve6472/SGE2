@@ -35,6 +35,8 @@ public class Test extends MainApplication
 	{
 		tickGui();
 	}
+	
+	double shake;
 
 	@Override
 	public void render(Screen screen)
@@ -58,6 +60,8 @@ public class Test extends MainApplication
 //		screen.drawSprite(getMouseX(), getMouseY(), sprite2);
 //		screen.drawSprite(getMouseX(), getMouseY(), cursor);
 //		glPopAttrib();
+		shake += 10;
+		screen.rotateScreen(getCurrentWidth() / 2, getCurrentHeight() / 2, (float) Math.cos(Math.toRadians(shake)) / 8f);
 	}
 
 	@Override

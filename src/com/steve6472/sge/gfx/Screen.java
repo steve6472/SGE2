@@ -355,6 +355,73 @@ public class Screen
 		glPopMatrix();
 	}
 
+	/**
+	 * Ehm... render... sprite...
+	 * @param x
+	 * @param y
+	 * @param texture
+	 * @param translateX
+	 * @param translateY
+	 * @param width
+	 * @param height
+	 * @param rotation
+	 * @param repeatX
+	 * @param repeatY
+	 * @param flip
+	 * @param repeat
+	 * @param scaleX
+	 * @param scaleY
+	 * @param c00
+	 * @param c10
+	 * @param c11
+	 * @param c01
+	 */
+	public void drawSprite(int x, int y, Sprite texture, float translateX, float translateY, int width, int height, float rotation, int repeatX,
+			int repeatY, boolean flip, boolean repeat, float scaleX, float scaleY, int c00, int c10, int c11, int c01)
+	{
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+		glEnable(GL_TEXTURE_2D);
+		if (repeat)
+		{
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		}
+		glTranslatef(translateX, translateY, 0);
+		glRotatef(rotation, 0f, 0f, 1f);
+		glTranslatef(-translateX, -translateY, 0);
+		//TODO: Scale
+		//TODO: Add flip
+		texture.bind();
+		glBegin(GL_QUADS);
+		{
+			//Left Top
+            glTexCoord2i(0, 0);
+            color(c00);
+            glVertex2f(x, y);
+            
+            //Right Top
+            glTexCoord2i(repeatX, 0);
+            color(c10);
+            glVertex2f(x + width, y);
+            
+            
+            //Right Bottom
+            glTexCoord2i(repeatX, repeatY);
+            color(c11);
+            glVertex2f(x + width, y + height);
+            
+            //Left Bottom
+            glTexCoord2i(0, repeatY);
+            color(c01);
+            glVertex2f(x, y + height);
+		}
+		glEnd();
+		glMatrixMode(GL_MODELVIEW);
+		glDisable(GL_TEXTURE_2D);
+		glPopMatrix();
+	}
+
 	public void drawSprite(int x, int y, Sprite texture, int width, int height)
 	{
 		glPushMatrix();

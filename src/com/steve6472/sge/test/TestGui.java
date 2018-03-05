@@ -7,7 +7,6 @@
 
 package com.steve6472.sge.test;
 
-import com.steve6472.sge.gfx.FunRenderMethods;
 import com.steve6472.sge.gfx.Screen;
 import com.steve6472.sge.gui.Gui;
 import com.steve6472.sge.gui.GuiUtils;
@@ -65,9 +64,9 @@ public class TestGui extends Gui
 
 		Image image = new Image(Test.sprite);
 		image.setLocation(174, 37);
-//		image.setRepeat(true);
-//		image.setSize(2, 2);
-		image.setSize(32, 64);
+		image.setRepeat(true);
+		image.setSize(1, 2);
+//		image.setSize(32, 64);
 		addComponent(image);
 		
 		ProgressBar progressBar = new ProgressBar();
@@ -113,6 +112,29 @@ public class TestGui extends Gui
 		FileBrowser fileBrowser = new FileBrowser();
 		addComponent(fileBrowser);
 		fileBrowser.setLocation(630, 30);
+		
+
+	}
+
+	{
+		String[] types =
+		//		  0						      1				                           2							3				4
+		{ " wdith, height ", " rotation, translateX, translateY ", " repeatX, repeatY, repeat, scaleX, scaleY ", " flip ", "c00, c10, c11, c01 " };
+		int[][] methods =
+		{
+				{0, 1, 2, 3, 4, 5},
+				{0, 1, 2, 3, 4},
+				{0, 1, 2, 3},
+				{0, 1, 2},
+				{0, 1},
+				{0},
+				{0, 1, 3, 4},
+				{0, 2, 3, 4},
+				{0, 3, 4},
+				{0, 4},
+				{0, 2}, 
+				{0, 3},
+		};
 	}
 
 	@Override
@@ -121,7 +143,6 @@ public class TestGui extends Gui
 	}
 	
 	float rot = 0f;
-	double shake;
 
 	@Override
 	public void render(Screen screen)
@@ -129,13 +150,13 @@ public class TestGui extends Gui
 		Background.renderFrame(screen, getMainApp());
 		
 		rot += 1f;
+		
+		screen.drawSprite(256, 256, Test.sprite, 64 + 256, 16 + 256, 32 * 4, 32, slider.getValue(), 4, 1, false, true, 0, 0, 0xffff00ff, 0xffffffff, 0xffffffff, 0xffffffff);
 
 //		screen.drawSprite(50, 0, Test.hsv, rot);
 //		screen.drawSprite(256, 256, Test.hsv, rot);
-		FunRenderMethods.renderPulsatingSquare(screen, 256, 256, rot, Test.hsv, Test.hsv.getWidth(), 0, 0, Test.hsv.getWidth(), Test.hsv.getHeight());
+//		FunRenderMethods.renderPulsatingSquare(screen, 256, 256, rot, Test.hsv, Test.hsv.getWidth(), 0, 0, Test.hsv.getWidth(), Test.hsv.getHeight());
 //		screen.drawSprite(256, 256, Test.hsv, (float) slider.getValue());
-		shake += 15;
-//		screen.rotateScreen(getMainApp().getCurrentWidth() / 2, getMainApp().getCurrentHeight() / 2, (float) Math.cos(Math.toRadians(shake)) / 1f);
 	}
 
 }
