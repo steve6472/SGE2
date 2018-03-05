@@ -17,6 +17,8 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
+import com.steve6472.sge.main.callbacks.CursorPosCallback;
+import com.steve6472.sge.main.callbacks.MouseButtonCallback;
 import com.steve6472.sge.main.game.Vec2;
 
 public class MouseHandler

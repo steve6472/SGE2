@@ -174,6 +174,7 @@ public abstract class MainApplication
         try
 		{
             getKeyHandler().getKeyCallback().free();
+            getKeyHandler().getCharCallback().free();
             getMouseHandler().getMouseButtonCallback().free();
             getMouseHandler().getCursorPosCallback().free();
             glfwDestroyWindow(window);

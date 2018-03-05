@@ -13,6 +13,10 @@ import static org.lwjgl.opengl.GL11.*;
 public class Screen
 {
 
+	public Screen()
+	{
+	}
+	
 	public static int getColor(int r, int g, int b, int a)
 	{
 		int re = ((a & 0xff) << 24) | ((r & 0xff) << 16) | ((g & 0xff) << 8) | (b & 0xff);
@@ -32,6 +36,11 @@ public class Screen
 	public static int getColor(int gray, float red, float green, float blue)
 	{
 		return getColor((int) (gray * red), (int) (gray * green), (int) (gray * blue));
+	}
+	
+	public static int getColor(float red, float green, float blue, float alpha)
+	{
+		return getColor((int) (red * 255f), (int) (green * 255f), (int) (blue * 255f), (int) (alpha * 255f));
 	}
 	
 	public static int getColor(double gray)
@@ -71,21 +80,29 @@ public class Screen
 	
 	public void fillRect(int x, int y, int width, int height, int color)
 	{
+		fillRect(x, y, width, height, color, color, color, color);
+	}
+	
+	public void fillRect(int x, int y, int width, int height, int c00, int c10, int c11, int c01)
+	{
 		glPushMatrix();
 		glPushAttrib(GL_CURRENT_BIT);
-		color(color);
 		glBegin(GL_QUADS);
 		{
 			//Left Top
+			color(c00);
             glVertex2i(x, y);
             
             //Right Top
+			color(c10);
             glVertex2i(x + width, y);
             
             //Right Bottom
+			color(c11);
             glVertex2i(x + width, y + height);
             
             //Left Bottom
+			color(c01);
             glVertex2i(x, y + height);
 		}
 		glEnd();
@@ -93,11 +110,11 @@ public class Screen
 		glPopMatrix();
 	}
 	
-	public void drawCircle(int x, int y, int edgeCount, int radius, double addAng)
+	public void drawCircle(int x, int y, int edgeCount, int radius, double addAng, int color)
 	{
 		glPushMatrix();
 		glPushAttrib(GL_CURRENT_BIT);
-		color(0xffffffff);
+		color(color);
 		glBegin(GL_LINES);
 		{
 			int lastX = 0;
@@ -133,12 +150,18 @@ public class Screen
 	
 	public void drawLine(int x1, int y1, int x2, int y2, int color)
 	{
+		drawLine(x1, y1, x2, y2, color, color);
+	}
+	
+	public void drawLine(int x1, int y1, int x2, int y2, int c00, int c11)
+	{
 		glPushMatrix();
 		glPushAttrib(GL_CURRENT_BIT);
-		color(color);
 		glBegin(GL_LINES);
 		{
+			color(c00);
 			glVertex2i(x1, y1);
+			color(c11);
 			glVertex2i(x2, y2);
 		}
 		glEnd();
@@ -202,11 +225,11 @@ public class Screen
 	public static void drawRawSprite(int x, int y, int width, int height, Sprite texture)
 	{
         glTexCoord2f(0, 0);
-        glVertex2f(0 + x, 0 + y);
+        glVertex2f(0 + x, y);
         
         //Right Top
         glTexCoord2f(1, 0);
-        glVertex2f(width + x, 0 + y);
+        glVertex2f(width + x, y);
         
         //Right Bottom
         glTexCoord2f(1, 1);
@@ -240,14 +263,9 @@ public class Screen
 	public void drawSprite(int x, int y, Sprite texture, int color)
 	{
 		float[] colors = getColors(color);
-		drawSprite(x, y, texture, colors[0], colors[1], colors[2], colors[3]);
-	}
-
-	public void drawSprite(int x, int y, Sprite texture, float red, float green, float blue, float alpha) 
-	{
 		glPushMatrix();
 		glPushAttrib(GL_CURRENT_BIT);
-		glColor3f(red, green, blue);
+		glColor3f(colors[0], colors[1], colors[2]);
 		glEnable(GL_TEXTURE_2D);
 		texture.bind();
 		glBegin(GL_QUADS);
@@ -292,6 +310,49 @@ public class Screen
 		glPopMatrix();
 		
 		glScalef((float) texture.getWidth(), (float) texture.getHeight(), 1f);
+	}
+
+	public void drawSprite(int x, int y, Sprite texture, float rotation)
+	{
+		drawSprite(x, y, texture, rotation, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff);
+	}
+	
+	public void drawSprite(int x, int y, Sprite texture, float rotation, int c00, int c10, int c11, int c01)
+	{
+		glEnable(GL_TEXTURE_2D);
+		glMatrixMode(GL_MODELVIEW);
+		glPushMatrix();
+		glTranslatef(texture.getWidth() / 2f + x, texture.getHeight() / 2f + x, 0);
+		glRotatef(rotation, 0f, 0f, 1f);
+		glTranslatef(-texture.getWidth() / 2f - x, -texture.getHeight() / 2f - y, 0);
+		texture.bind();
+		glBegin(GL_QUADS);
+		{
+			//Left Top
+            glTexCoord2i(0, 0);
+            color(c00);
+            glVertex2f(x, y);
+            
+            //Right Top
+            glTexCoord2i(1, 0);
+            color(c10);
+            glVertex2f(x + texture.getWidth(), y);
+            
+            
+            //Right Bottom
+            glTexCoord2i(1, 1);
+            color(c11);
+            glVertex2f(x + texture.getWidth(), y + texture.getHeight());
+            
+            //Left Bottom
+            glTexCoord2i(0, 1);
+            color(c01);
+            glVertex2f(x, y + texture.getHeight());
+		}
+		glEnd();
+		glMatrixMode(GL_MODELVIEW);
+		glDisable(GL_TEXTURE_2D);
+		glPopMatrix();
 	}
 
 	public void drawSprite(int x, int y, Sprite texture, int width, int height)
@@ -385,6 +446,14 @@ public class Screen
 
 		// Render
 		di.apply(x, y, width, height);
+	}
+	
+	public void rotateScreen(int x, int y, float rotation)
+	{
+		glMatrixMode(GL_MODELVIEW);
+		glTranslatef(x, y, 0);
+		glRotatef(rotation, 0f, 0f, 1f);
+		glTranslatef(-x, -y, 0);
 	}
 
 }

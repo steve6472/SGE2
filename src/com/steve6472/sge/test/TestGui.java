@@ -7,16 +7,20 @@
 
 package com.steve6472.sge.test;
 
+import com.steve6472.sge.gfx.FunRenderMethods;
 import com.steve6472.sge.gfx.Screen;
 import com.steve6472.sge.gui.Gui;
 import com.steve6472.sge.gui.GuiUtils;
 import com.steve6472.sge.gui.components.Background;
 import com.steve6472.sge.gui.components.CheckBox;
 import com.steve6472.sge.gui.components.Image;
+import com.steve6472.sge.gui.components.FileBrowser;
 import com.steve6472.sge.gui.components.ItemGridList;
 import com.steve6472.sge.gui.components.ItemList;
 import com.steve6472.sge.gui.components.NumberSelector;
 import com.steve6472.sge.gui.components.ProgressBar;
+import com.steve6472.sge.gui.components.Slider;
+import com.steve6472.sge.gui.components.TextField;
 import com.steve6472.sge.main.MainApplication;
 
 public class TestGui extends Gui
@@ -31,6 +35,8 @@ public class TestGui extends Gui
 		switchRender();
 	}
 
+	Slider slider;
+	
 	@Override
 	public void createGui()
 	{
@@ -87,17 +93,49 @@ public class TestGui extends Gui
 		numberSelector.setLocation(14, 260);
 		numberSelector.setSize(40 * 4, 40);
 		addComponent(numberSelector);
+		
+		TextField textField = new TextField();
+		textField.setLocation(14, 310);
+		textField.setSize(160, 40);
+		textField.setFontSize(2);
+		addComponent(textField);
+		
+		slider = new Slider();
+		slider.setLocation(14 + 310, 204);
+		slider.setSize(300);
+		slider.setMaxValue(360);
+		slider.addChangeEvent(() ->
+		{
+			progressBar.setValue((int) (slider.getValue() / 360d * 100d));
+		});
+		addComponent(slider);
+		
+		FileBrowser fileBrowser = new FileBrowser();
+		addComponent(fileBrowser);
+		fileBrowser.setLocation(630, 30);
 	}
 
 	@Override
 	public void guiTick()
 	{
 	}
+	
+	float rot = 0f;
+	double shake;
 
 	@Override
 	public void render(Screen screen)
 	{
 		Background.renderFrame(screen, getMainApp());
+		
+		rot += 1f;
+
+//		screen.drawSprite(50, 0, Test.hsv, rot);
+//		screen.drawSprite(256, 256, Test.hsv, rot);
+		FunRenderMethods.renderPulsatingSquare(screen, 256, 256, rot, Test.hsv, Test.hsv.getWidth(), 0, 0, Test.hsv.getWidth(), Test.hsv.getHeight());
+//		screen.drawSprite(256, 256, Test.hsv, (float) slider.getValue());
+		shake += 15;
+//		screen.rotateScreen(getMainApp().getCurrentWidth() / 2, getMainApp().getCurrentHeight() / 2, (float) Math.cos(Math.toRadians(shake)) / 1f);
 	}
 
 }

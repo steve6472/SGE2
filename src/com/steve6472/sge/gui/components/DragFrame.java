@@ -67,9 +67,9 @@ public class DragFrame extends Component
 		{
 			if (renderTextInCenter)
 				getFont().render(getText(), getX() + getWidth() / 2 - (getText().length() * (8 * textSize)) / 2,
-						getHeight() / 2 - (8 * textSize) / 2 + 3 * textSize, textSize);
+						getHeight() / 2 - (8 * textSize) / 2 + 3, textSize);
 			else
-				getFont().render(getText(), getX(), getY() + getHeight() / 2 - (8 * textSize) / 2 + 3 * textSize, textSize);
+				getFont().render(getText(), getX(), getY() + getHeight() / 2 - (8 * textSize) / 2 + 3, textSize);
 
 		}
 	}

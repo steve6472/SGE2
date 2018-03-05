@@ -21,7 +21,7 @@ public class NumberSelector extends Component
 	private boolean enabled = true;
 	
 	private boolean addHovered = false, removeHovered = false, round = false;
-	private Vec2 addCenter, removeCenter;
+	private Vec2 addCenter = new Vec2(), removeCenter = new Vec2();
 	
 	@Override
 	public void init(MainApplication game)

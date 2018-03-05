@@ -22,6 +22,7 @@ public abstract class Gui implements Serializable
 	 * If true it will render components last
 	 */
 	private boolean switchedRender = false;
+	private boolean canHide = false;
 
 	public Gui(MainApplication mainApp)
 	{
@@ -29,6 +30,7 @@ public abstract class Gui implements Serializable
 		mainApp.addGui(this);
 		font = mainApp.getFont();
 		hideGui();
+		canHide = true;
 		createGui();
 	}
 	
@@ -142,7 +144,8 @@ public abstract class Gui implements Serializable
 			gc.hide();
 		}
 		
-		hideEvent();
+		if (canHide)
+			hideEvent();
 	}
 	
 	public void showGui()

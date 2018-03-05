@@ -98,7 +98,7 @@ public class ItemGridList extends Component
 		if (sprite != null)
 			screen.drawSprite(getX() + 2 + i * getWidth(),
 					getY() + j * getHeight() + (getHeight() / 2 - items.get(y + scroll).sprite.getHeight() / 2), items.get((y + scroll)).sprite,
-					item.getRed(), item.getGreen(), item.getBlue(), item.getAlpha());
+					Screen.getColor(item.getRed(), item.getGreen(), item.getBlue(), item.getAlpha()));
 
 		if (hovered == y)
 			screen.fillRect(getX() + i * getWidth(), getY() + j * getHeight(), getWidth(), getHeight(), Util.HOVERED_OVERLAY);

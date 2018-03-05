@@ -16,7 +16,7 @@ import com.steve6472.sge.main.MainApplication;
 
 public class Test extends MainApplication
 {
-	public static Sprite sprite, cursor, sprite2;
+	public static Sprite sprite, cursor, sprite2, hsv;
 
 	@Override
 	public void init()
@@ -24,6 +24,7 @@ public class Test extends MainApplication
 //		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 		cursor = new Sprite("*sprite.png");
 		sprite = new Sprite("*grass.png");
+		hsv = new Sprite("*hsv.png");
 		sprite2 = new Sprite("grass.png");
 
 		new TestGui(this);
@@ -70,13 +71,13 @@ public class Test extends MainApplication
 	@Override
 	public int getWidth()
 	{
-		return 16 * 40;
+		return 16 * 60;
 	}
 
 	@Override
 	public int getHeight()
 	{
-		return 9 * 40;
+		return 9 * 60;
 	}
 	
 	@Override

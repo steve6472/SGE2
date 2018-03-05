@@ -5,10 +5,10 @@
 *
 ***********************/
 
-package com.steve6472.sge.main;
+package com.steve6472.sge.main.callbacks;
 
 @FunctionalInterface
-public interface KeyCallback
+public interface CursorPosCallback
 {
-	public abstract void invoke(int key, int scancode, int action, int mods);
+	public abstract void invoke(double x, double y);
 }

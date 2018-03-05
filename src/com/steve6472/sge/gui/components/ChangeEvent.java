@@ -1,6 +1,7 @@
 package com.steve6472.sge.gui.components;
 
-public abstract class ChangeEvent
+@FunctionalInterface
+public abstract interface ChangeEvent
 {
 	public abstract void change();
 }

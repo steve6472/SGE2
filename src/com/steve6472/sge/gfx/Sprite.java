@@ -17,6 +17,7 @@ import com.steve6472.sge.main.MainApplication;
 public class Sprite
 {
 	private int id, width, height;
+	private int[] pixels;
 	
 	public Sprite()
 	{
@@ -25,10 +26,16 @@ public class Sprite
 		height = 0;
 	}
 
+	public Sprite(BufferedImage image)
+	{
+		create(image.getRGB(0, 0, image.getWidth(), image.getHeight(), null, 0, image.getWidth()), image.getWidth(), image.getHeight());
+	}
+
 	public Sprite(File file)
 	{
-		BufferedImage img = load(file);
-		create(img.getRGB(0, 0, img.getWidth(), img.getHeight(), null, 0, width), img.getWidth(), img.getHeight());
+		BufferedImage image = load(file);
+		System.out.println(image.getWidth() * image.getHeight() + " " + file.getAbsolutePath());
+		create(image.getRGB(0, 0, image.getWidth(), image.getHeight(), null, 0, image.getWidth()), image.getWidth(), image.getHeight());
 	}
 	
 	public Sprite(String fileName)
@@ -36,9 +43,9 @@ public class Sprite
 		if (fileName.startsWith("*"))
 		{
 			Sprite s = new Sprite(new File(fileName.substring(1)));
-			this.id = s.getId();
 			this.width = s.getWidth();
 			this.height = s.getHeight();
+			this.id = s.getId();
 		} else
 		{
 			if (!fileName.startsWith("/"))
@@ -47,8 +54,8 @@ public class Sprite
 			}
 			
 			fileName = "/textures" + fileName;
-			BufferedImage img = load(MainApplication.class.getResourceAsStream(fileName));
-			create(img.getRGB(0, 0, img.getWidth(), img.getHeight(), null, 0, img.getWidth()), img.getWidth(), img.getHeight());
+			BufferedImage image = load(MainApplication.class.getResourceAsStream(fileName));
+			create(image.getRGB(0, 0, image.getWidth(), image.getHeight(), null, 0, image.getWidth()), image.getWidth(), image.getHeight());
 		}
 	}
 	
@@ -62,16 +69,25 @@ public class Sprite
 		this.width = width;
 		this.height = height;
 		
+		pixels = new int[width * height];
+		
 //		int[] pixels_raw = new int[width * height];
 //		pixels_raw = bi.getRGB(0, 0, width, height, null, 0, width);
 
 		ByteBuffer pixels = BufferUtils.createByteBuffer(width * height * 4);
 
-		for (int i = 0; i < width; i++)
+//		for (int i = 0; i < width; i++)
+//		{
+//			for (int j = 0; j < height; j++)
+//			{
+//				int pixel = pixels_raw[i * width + j];
+		for(int y = 0; y < height; y++)
 		{
-			for (int j = 0; j < height; j++)
-			{
-				int pixel = pixels_raw[i * width + j];
+            for(int x = 0; x < width; x++)
+            {
+                int pixel = pixels_raw[y * width + x];
+//				int pixel = pixels_raw[i + j * width];
+//				this.pixels[i * width + j] = pixel;
 				pixels.put((byte) ((pixel >> 16) & 0xFF)); // RED
 				pixels.put((byte) ((pixel >> 8) & 0xFF)); // GREEN
 				pixels.put((byte) ((pixel) & 0xFF)); // BLUE
@@ -138,4 +154,18 @@ public class Sprite
 	{
 		return id;
 	}
+	
+	public int[] getPixels()
+	{
+		return pixels;
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Sprite [id=" + id + ", width=" + width + ", height=" + height + "]";
+	}
+	
+	
+	
 }

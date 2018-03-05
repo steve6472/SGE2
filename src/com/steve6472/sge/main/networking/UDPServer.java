@@ -32,11 +32,11 @@ public abstract class UDPServer extends Thread
 		try
 		{
 			this.socket = new DatagramSocket(port);
+			System.out.println("Started server on port " + port + " Ip: " + InetAddress.getLocalHost().getHostAddress());
 		} catch (Exception ex)
 		{
 			ex.printStackTrace();
 		}
-		System.out.println("Started server on port " + port);
 	}
 	
 	public void setIPacketHandler(IPacketHandler packetHandler)

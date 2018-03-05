@@ -1,4 +1,4 @@
-package com.steve6472.sge.main;
+package com.steve6472.sge.main.callbacks;
 
 @FunctionalInterface
 public interface MouseButtonCallback

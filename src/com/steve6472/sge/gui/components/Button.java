@@ -12,7 +12,7 @@ import com.steve6472.sge.main.MainApplication;
 public class Button extends Component implements IFocusable
 {
 	private static final long serialVersionUID = -4734082970298391201L;
-	int fontScale = 1, image_offset_x, image_offset_y;
+	int fontSize = 1, image_offset_x, image_offset_y;
 	protected Sprite enabled = null, disabled = null, hovered = null;
 
 	protected boolean enabled_ = true, hovered_ = false;
@@ -158,7 +158,7 @@ public class Button extends Component implements IFocusable
 		{
 			if (text != null)
 			{
-				getFont().render(text, x + (width / 2) - ((text.length() * (8 * fontScale)) / 2), y + (height / 2) - 3, red, green, blue);
+				getFont().render(text, x + (width / 2) - ((text.length() * (8 * fontSize)) / 2), y + (height / 2) - 3, fontSize, red, green, blue);
 			}
 		}
 	}
@@ -223,9 +223,9 @@ public class Button extends Component implements IFocusable
 		disabled = image;
 	}
 
-	public void setFontScale(int s)
+	public void setFontSize(int s)
 	{
-		fontScale = Math.max(1, s);
+		fontSize = Math.max(1, s);
 	}
 	
 	public void setFontColor(int color)
@@ -267,9 +267,9 @@ public class Button extends Component implements IFocusable
 		return y;
 	}
 
-	public int getFontScale()
+	public int getFontSize()
 	{
-		return fontScale;
+		return fontSize;
 	}
 
 	public boolean isHovered()

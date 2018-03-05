@@ -28,11 +28,13 @@ public class Font
 	
 	public void render(String text, int x, int y, int size, float red, float green, float blue)
 	{
-		int scale = 1;
+		if (text == null)
+			return;
+		
 		glMatrixMode(GL_TEXTURE);
-		glScalef(1f / (float) font.getWidth(), 1f / (float) font.getHeight(), 1f);
 
 		glPushMatrix();
+		glScalef(1f / (float) font.getWidth() / size, 1f / (float) font.getHeight() / size, 1f);
 		glEnable(GL_TEXTURE_2D);
 		font.bind();
 		glBegin(GL_QUADS);
@@ -44,17 +46,15 @@ public class Font
 				if (char_index >= 0)
 				{
 					glColor3f(0.21f * red, 0.21f * green, 0.21f * blue);
-					renderChar(x + (8 * i * scale) + 1, y + 1, char_index, scale);
+					renderChar(x + (8 * i * size) + size, y + size, char_index, size);
 					glColor3f(red, green, blue);
-					renderChar(x + (8 * i * scale), y, char_index, scale);
+					renderChar(x + (8 * i * size), y, char_index, size);
 				}
 			}
 		}
 		glEnd();
 		glDisable(GL_TEXTURE_2D);
 		glPopMatrix();
-		
-		glScalef((float) font.getWidth(), (float) font.getHeight(), 1f);
 	}
 	
 	public void render(String text, int x, int y, int size)
@@ -74,9 +74,9 @@ public class Font
 	
 	private void renderChar(int x, int y, int index, int size)
 	{
-		size = 1;
-		int indexX = index % 64 * 8;
-		int indexY = index / 64 * 8;
+//		size = 1;
+		int indexX = index % 64 * 8 * size;
+		int indexY = index / 64 * 8 * size;
 		
 		int sizeX = 8 * size + indexX;
 		int sizeY = 8 * size + indexY;
@@ -87,7 +87,6 @@ public class Font
         //Right Top
         glTexCoord2i(sizeX, indexY);
         glVertex2f(sizeX + x - indexX, 0 + y);
-        
         
         //Right Bottom
         glTexCoord2i(sizeX, sizeY);
@@ -113,7 +112,7 @@ public class Font
 
 	public static Vec2 stringCenter(AABB recSize, String text, int fontSize)
 	{
-		return new Vec2(recSize.from.getX() + (recSize.getWidth() / 2) - ((text.length() * (8 * fontSize)) / 2), recSize.from.getY() + (recSize.getHeight() / 2) - 3);
+		return new Vec2(recSize.from.getX() + (recSize.getWidth() / 2) - ((text.length() * (8 * fontSize)) / 2), recSize.from.getY() + (recSize.getHeight() / 2) - (4 * fontSize));
 	}
 
 }
