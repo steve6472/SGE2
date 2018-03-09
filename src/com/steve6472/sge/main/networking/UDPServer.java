@@ -70,13 +70,13 @@ public abstract class UDPServer extends Thread
 			//Generic client connection
 			if (msg.substring(0, 4).equals("0000"))
 			{
-				clientConnectEvent(p);
 				connectClient(p.getAddress(), p.getPort());
+				clientConnectEvent(p);
 				
 			} else if (msg.substring(0, 4).equals("0001"))
 			{
-				clientDisconnectEvent(p);
 				disconnectClientByPort(p.getPort());
+				clientDisconnectEvent(p);
 				
 			} else
 			{

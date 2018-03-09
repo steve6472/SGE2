@@ -78,6 +78,63 @@ public class Screen
 		glColor4fv(getColors(color));
 	}
 	
+	public void drawRotatedPartOfTexture(int x, int y, Sprite texture, float rotation, int subImageSizeX, int subImageSizeY, int indexX, int indexY)
+	{
+		float width = texture.getWidth();
+		float height = texture.getHeight();
+		
+		//Tile size <>
+		float tsx = subImageSizeX;
+		float tsy = subImageSizeY;
+		
+		float sx = 1f / width * tsx;
+		float sy = 1f / height * tsy;
+		
+		//Index <>
+		float ix = indexX;
+		float iy = indexY;
+		
+		float iX = ix * sx;
+		float iY = iy * sy;
+		
+		float iix = iX + sx;
+		float iiy = iY + sy;
+
+		glPushMatrix();
+		
+		texture.bind();
+		glEnable(GL_TEXTURE_2D);
+		
+		glTranslatef(x + tsx / 2f, y + tsy / 2f, 0);
+		glRotatef(rotation, 0f, 0f, 1f);
+		glTranslatef(-x - tsx / 2f, -y - tsy / 2f, 0);
+		
+		glBegin(GL_QUADS);
+
+		//
+		
+		//Left Top 00
+        glTexCoord2f(iX, iY);
+        glVertex2f(x, y);
+        
+        //Right Top 10
+        glTexCoord2f(iix, iY);
+        glVertex2f(width * sx + x, y);
+        
+        
+        //Right Bottom 11
+        glTexCoord2f(iix, iiy);
+        glVertex2f(width * sx + x, height * sy + y);
+        
+        //Left Bottom 01
+        glTexCoord2f(iX, iiy);
+        glVertex2f(x, height * sy + y);
+
+		glEnd();
+		glDisable(GL_TEXTURE_2D);
+		glPopMatrix();
+	}
+	
 	public void fillRect(int x, int y, int width, int height, int color)
 	{
 		fillRect(x, y, width, height, color, color, color, color);
@@ -225,7 +282,7 @@ public class Screen
 	public static void drawRawSprite(int x, int y, int width, int height, Sprite texture)
 	{
         glTexCoord2f(0, 0);
-        glVertex2f(0 + x, y);
+        glVertex2f(x, y);
         
         //Right Top
         glTexCoord2f(1, 0);
@@ -420,6 +477,24 @@ public class Screen
 		glMatrixMode(GL_MODELVIEW);
 		glDisable(GL_TEXTURE_2D);
 		glPopMatrix();
+	}
+
+	public void drawSprite(int x, int y, Sprite texture, float translateX, float translateY, int width, int height, float rotation, int repeatX,
+			int repeatY, boolean flip, boolean repeat, float scaleX, float scaleY)
+	{
+		drawSprite(x, y, texture, translateX, translateY, width, height, rotation, repeatX, repeatY, flip, repeat, scaleX, scaleY, 0xffffffff,
+				0xffffffff, 0xffffffff, 0xffffffff);
+	}
+	
+	public void drawSprite(int x, int y, Sprite texture, float translateX, float translateY, int width, int height, float rotation, int repeatX,
+			int repeatY, boolean repeat, int scaleX, int scaleY)
+	{
+		drawSprite(x, y, texture, translateX, translateY, width, height, rotation, repeatX, repeatY, repeat, false, scaleX, scaleY);
+	}
+	
+	public void drawSprite(int x, int y, Sprite texture, float translateX, float translateY, int width, int height, float rotation, int scaleX, int scaleY)
+	{
+		drawSprite(x, y, texture, translateX, translateY, width, height, rotation, 0, 0, false, scaleX, scaleY);
 	}
 
 	public void drawSprite(int x, int y, Sprite texture, int width, int height)

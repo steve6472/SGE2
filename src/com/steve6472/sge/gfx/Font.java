@@ -28,11 +28,11 @@ public class Font
 	
 	public void render(String text, int x, int y, int size, float red, float green, float blue)
 	{
-		if (text == null)
+		if (text == null || text.isEmpty())
 			return;
 		
 		glMatrixMode(GL_TEXTURE);
-
+		
 		glPushMatrix();
 		glScalef(1f / (float) font.getWidth() / size, 1f / (float) font.getHeight() / size, 1f);
 		glEnable(GL_TEXTURE_2D);
@@ -54,7 +54,10 @@ public class Font
 		}
 		glEnd();
 		glDisable(GL_TEXTURE_2D);
+		glScalef((float) font.getWidth(), (float) font.getHeight(), 1f);
 		glPopMatrix();
+		
+		glMatrixMode(GL_MODELVIEW);
 	}
 	
 	public void render(String text, int x, int y, int size)

@@ -631,6 +631,26 @@ public class Util
 		Random r = new Random(seed);
 		return getRandomLong(Long.MAX_VALUE, Long.MIN_VALUE, r.nextLong());
 	}
+	
+	public static int maxi(int a, int b)
+	{
+		return Math.max(a, b);
+	}
+	
+	public static double maxd(double a, double b)
+	{
+		return Math.max(a, b);
+	}
+	
+	public static float maxf(float a, float b)
+	{
+		return Math.max(a, b);
+	}
+	
+	public static long maxl(long a, long b)
+	{
+		return Math.max(a, b);
+	}
 
 	
 /*

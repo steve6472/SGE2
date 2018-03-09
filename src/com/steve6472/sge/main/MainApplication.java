@@ -40,6 +40,9 @@ public abstract class MainApplication
 	
 	private List<Gui> guis;
 	
+	double lastTime = glfwGetTime();
+	int nbFrames = 0;
+	
 	public MainApplication()
 	{
 		guis = new ArrayList<Gui>();
@@ -96,6 +99,8 @@ public abstract class MainApplication
 			}
         });
 	}
+	
+	private double fps;
 
 	private void loop() 
 	{
@@ -136,7 +141,17 @@ public abstract class MainApplication
 		while (!glfwWindowShouldClose(window))
 		{
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-			
+
+			double currentTime = glfwGetTime();
+			nbFrames++;
+			if (currentTime - lastTime >= 1.0)
+			{ // If last prinf() was more than 1 sec ago
+				// printf and reset timer
+				fps = 1000.0 / (double) (nbFrames);
+				nbFrames = 0;
+				lastTime += 1.0;
+			}
+
 			mouseHandler.tick();
 			
 			glfwGetWindowPos(window, windowXBuffer, windowYBuffer);
@@ -148,6 +163,16 @@ public abstract class MainApplication
 
 			glfwPollEvents();
 		}
+	}
+	
+	/**
+	 * 16.666 = 60fps
+	 * 33.333 = 30fps
+	 * @return
+	 */
+	public double getFPS()
+	{
+		return fps;
 	}
 	
 	public void tickGui()

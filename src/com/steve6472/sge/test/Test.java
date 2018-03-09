@@ -16,7 +16,7 @@ import com.steve6472.sge.main.MainApplication;
 
 public class Test extends MainApplication
 {
-	public static Sprite sprite, cursor, sprite2, hsv;
+	public static Sprite sprite, cursor, sprite2, hsv, atlas;
 
 	@Override
 	public void init()
@@ -26,6 +26,7 @@ public class Test extends MainApplication
 		sprite = new Sprite("*grass.png");
 		hsv = new Sprite("*hsv.png");
 		sprite2 = new Sprite("grass.png");
+		atlas = new Sprite("*textureAtlas.png");
 
 		new TestGui(this);
 	}
@@ -61,7 +62,7 @@ public class Test extends MainApplication
 //		screen.drawSprite(getMouseX(), getMouseY(), cursor);
 //		glPopAttrib();
 		shake += 10;
-		screen.rotateScreen(getCurrentWidth() / 2, getCurrentHeight() / 2, (float) Math.cos(Math.toRadians(shake)) / 8f);
+//		screen.rotateScreen(getCurrentWidth() / 2, getCurrentHeight() / 2, (float) Math.cos(Math.toRadians(shake)) / 8f);
 	}
 
 	@Override

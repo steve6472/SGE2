@@ -7,6 +7,8 @@
 
 package com.steve6472.sge.test;
 
+import static org.lwjgl.opengl.GL11.*;
+
 import com.steve6472.sge.gfx.Screen;
 import com.steve6472.sge.gui.Gui;
 import com.steve6472.sge.gui.GuiUtils;
@@ -64,9 +66,9 @@ public class TestGui extends Gui
 
 		Image image = new Image(Test.sprite);
 		image.setLocation(174, 37);
-		image.setRepeat(true);
-		image.setSize(1, 2);
-//		image.setSize(32, 64);
+//		image.setRepeat(true);
+//		image.setSize(1, 2);
+		image.setSize(32, 64);
 		addComponent(image);
 		
 		ProgressBar progressBar = new ProgressBar();
@@ -113,7 +115,7 @@ public class TestGui extends Gui
 		addComponent(fileBrowser);
 		fileBrowser.setLocation(630, 30);
 		
-
+//		removeAllComponents();
 	}
 
 	{
@@ -122,8 +124,8 @@ public class TestGui extends Gui
 		{ " wdith, height ", " rotation, translateX, translateY ", " repeatX, repeatY, repeat, scaleX, scaleY ", " flip ", "c00, c10, c11, c01 " };
 		int[][] methods =
 		{
-				{0, 1, 2, 3, 4, 5},
-				{0, 1, 2, 3, 4},
+//				{0, 1, 2, 3, 4, 5},
+//				{0, 1, 2, 3, 4},
 				{0, 1, 2, 3},
 				{0, 1, 2},
 				{0, 1},
@@ -151,8 +153,18 @@ public class TestGui extends Gui
 		
 		rot += 1f;
 		
-		screen.drawSprite(256, 256, Test.sprite, 64 + 256, 16 + 256, 32 * 4, 32, slider.getValue(), 4, 1, false, true, 0, 0, 0xffff00ff, 0xffffffff, 0xffffffff, 0xffffffff);
+		
+//		screen.drawSprite(256, 256, Test.sprite, 64 + 256, 16 + 256, 32 * 4, 32, slider.getValue(), 4, 1, false, true, 0, 0, 0xffff00ff, 0xffffffff, 0xffffffff, 0xffffffff);
 
+		screen.drawRotatedPartOfTexture(getMainApp().getWidth() / 2 - 16, getMainApp().getCurrentHeight() / 2 - 16, Test.atlas, rot, 32, 32, 4, 3);
+		
+//		glLoadIdentity();
+
+		screen.drawLine(0, getMainApp().getCurrentHeight() / 2, getMainApp().getWidth(), getMainApp().getCurrentHeight() / 2, 0xffff00ff);
+		screen.drawLine(getMainApp().getWidth() / 2, 0, getMainApp().getWidth() / 2, getMainApp().getCurrentHeight(), 0xffff00ff);
+
+//		screen.drawCircle(getMainApp().getCurrentWidth() / 2, getMainApp().getCurrentHeight() / 2, 360 / 45, 248, 0, 0xff000000);
+		
 //		screen.drawSprite(50, 0, Test.hsv, rot);
 //		screen.drawSprite(256, 256, Test.hsv, rot);
 //		FunRenderMethods.renderPulsatingSquare(screen, 256, 256, rot, Test.hsv, Test.hsv.getWidth(), 0, 0, Test.hsv.getWidth(), Test.hsv.getHeight());
