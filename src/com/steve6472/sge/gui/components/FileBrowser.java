@@ -168,6 +168,18 @@ public class FileBrowser extends Component
 		listFilesFromCurrentPath();
 	}
 	
+	public void lockDirectory()
+	{
+		goTo.disable();
+		back.disable();
+	}
+	
+	public void unlockDirectory()
+	{
+		goTo.enable();
+		back.enable();
+	}
+	
 	public String getCurrentPath()
 	{
 		return currentPath;

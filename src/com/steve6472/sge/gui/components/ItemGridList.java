@@ -1,6 +1,15 @@
 package com.steve6472.sge.gui.components;
 
 import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.opengl.GL11.GL_CURRENT_BIT;
+import static org.lwjgl.opengl.GL11.GL_POINTS;
+import static org.lwjgl.opengl.GL11.glBegin;
+import static org.lwjgl.opengl.GL11.glEnd;
+import static org.lwjgl.opengl.GL11.glPopAttrib;
+import static org.lwjgl.opengl.GL11.glPopMatrix;
+import static org.lwjgl.opengl.GL11.glPushAttrib;
+import static org.lwjgl.opengl.GL11.glPushMatrix;
+import static org.lwjgl.opengl.GL11.glVertex2i;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +33,7 @@ public class ItemGridList extends Component
 	int scroll = 0;
 	int hovered = 0;
 	int selected = 0;
+	boolean textureRender = false;
 	
 	private boolean upEnabled = true, downEnabled = true, upHovered = false, downHovered = false;
 	
@@ -96,9 +106,30 @@ public class ItemGridList extends Component
 		Sprite sprite = item.sprite;
 
 		if (sprite != null)
-			screen.drawSprite(getX() + 2 + i * getWidth(),
-					getY() + j * getHeight() + (getHeight() / 2 - items.get(y + scroll).sprite.getHeight() / 2), items.get((y + scroll)).sprite,
-					Screen.getColor(item.getRed(), item.getGreen(), item.getBlue(), item.getAlpha()));
+			if (textureRender)
+			{
+				glPushMatrix();
+				glPushAttrib(GL_CURRENT_BIT);
+				glBegin(GL_POINTS);
+				Sprite s = items.get((y + scroll)).sprite;
+				for (int x = 0; x < s.getWidth(); x++)
+				{
+					for (int Y = 0; Y < s.getHeight(); Y++)
+					{
+						Screen.color(s.getPixels()[x + Y * s.getWidth()]);
+						glVertex2i(x + getX() + 2 + i * getWidth(),
+								Y + getY() + j * getHeight() + (getHeight() / 2 - s.getHeight() / 2) + 1);
+					}
+				}
+				glEnd();
+				glPopAttrib();
+				glPopMatrix();
+			} else
+			{
+				screen.drawSprite(getX() + 2 + i * getWidth(),
+						getY() + j * getHeight() + (getHeight() / 2 - items.get(y + scroll).sprite.getHeight() / 2), items.get((y + scroll)).sprite,
+						Screen.getColor(item.getRed(), item.getGreen(), item.getBlue(), item.getAlpha()));
+			}
 
 		if (hovered == y)
 			screen.fillRect(getX() + i * getWidth(), getY() + j * getHeight(), getWidth(), getHeight(), Util.HOVERED_OVERLAY);
@@ -182,6 +213,8 @@ public class ItemGridList extends Component
 	
 	public Item getSelectedItem()
 	{
+		if (items.size() == 0)
+			return null;
 		return items.get(selected);
 	}
 	
@@ -261,6 +294,11 @@ public class ItemGridList extends Component
 	{
 		addItem(text, null);
 	}
+
+	public void addItem(Sprite sprite)
+	{
+		addItem("", sprite);
+	}
 	
 	public void removeItem(int index)
 	{
@@ -302,6 +340,15 @@ public class ItemGridList extends Component
 	public void addChangeEvent(ChangeEvent ce)
 	{
 		changeEvents.add(ce);
+	}
+	
+	/**
+	 * Renders pixel by pixel... Laggy as hell!
+	 * @param textureRender
+	 */
+	public void setTextureRender(boolean textureRender)
+	{
+		this.textureRender = textureRender;
 	}
 	
 	public List<Item> getItems()

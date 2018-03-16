@@ -447,7 +447,7 @@ public class Util
 			e.printStackTrace();
 		}
 		
-		return (String[]) lines.toArray();
+		return lines.toArray(new String[0]);
 	}
 	
 	public static void save(File file, String...text)
@@ -650,6 +650,11 @@ public class Util
 	public static long maxl(long a, long b)
 	{
 		return Math.max(a, b);
+	}
+	
+	public static double getRandomAngle()
+	{
+		return getRandomDouble(360, 0);
 	}
 
 	

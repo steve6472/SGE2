@@ -20,6 +20,7 @@ public class AngledParticle extends Particle
 		this.angle = angle;
 	}
 
+	@Override
 	protected void move()
 	{
 		if (!isDead())
@@ -30,6 +31,16 @@ public class AngledParticle extends Particle
 				setDead();
 			checkPos();
 		}
+	}
+	
+	public double getAngle()
+	{
+		return angle;
+	}
+	
+	public void setAngle(double angle)
+	{
+		this.angle = angle;
 	}
 
 }

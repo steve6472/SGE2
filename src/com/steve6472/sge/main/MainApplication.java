@@ -101,8 +101,8 @@ public abstract class MainApplication
 	}
 	
 	private double fps;
-
-	private void loop() 
+	
+	protected void preLoop()
 	{
 		GL.createCapabilities();
 		
@@ -124,6 +124,10 @@ public abstract class MainApplication
 		*/
 		//Set background color I guess
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	}
+
+	private final void loop() 
+	{
 		
 		this.screen = new Screen();
 		this.mouseHandler = new MouseHandler(window, this);
@@ -132,7 +136,7 @@ public abstract class MainApplication
 
 		keyHandler.addKeyCallback((key, sancode, action, mods) ->
 		{
-			if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
+			if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE && escExit())
 				glfwSetWindowShouldClose(window, true);
 		});
 		
@@ -194,6 +198,7 @@ public abstract class MainApplication
         System.out.println("LWJGL " + Version.getVersion() + "!");
 	 */
     	initApplication();
+    	preLoop();
         loop();
         
         try
@@ -222,6 +227,8 @@ public abstract class MainApplication
     public abstract int getHeight();
     
     public abstract void exit();
+    
+    protected boolean escExit() { return true; }
     
     public abstract String getTitle();
     

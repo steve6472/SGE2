@@ -40,16 +40,6 @@ public class Button extends Component implements IFocusable
 	{
 		
 	}
-
-	public Button(int x, int y, int width, int height, String text)
-	{
-		super();
-		this.x = x;
-		this.y = y;
-		this.width = width;
-		this.height = height;
-		this.text = text;
-	}
 	
 	@Override
 	public void init(MainApplication game)
@@ -153,7 +143,11 @@ public class Button extends Component implements IFocusable
 			}
 		}
 		
-
+		renderText(screen);
+	}
+	
+	protected void renderText(Screen screen)
+	{
 		if (renderFont)
 		{
 			if (text != null)

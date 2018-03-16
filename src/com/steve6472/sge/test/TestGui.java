@@ -10,6 +10,7 @@ package com.steve6472.sge.test;
 import static org.lwjgl.opengl.GL11.*;
 
 import com.steve6472.sge.gfx.Screen;
+import com.steve6472.sge.gfx.Shader;
 import com.steve6472.sge.gui.Gui;
 import com.steve6472.sge.gui.GuiUtils;
 import com.steve6472.sge.gui.components.Background;
@@ -145,6 +146,8 @@ public class TestGui extends Gui
 	}
 	
 	float rot = 0f;
+	
+	Shader shader = new Shader("shaders\\screen");
 
 	@Override
 	public void render(Screen screen)
@@ -153,15 +156,14 @@ public class TestGui extends Gui
 		
 		rot += 1f;
 		
-		
 //		screen.drawSprite(256, 256, Test.sprite, 64 + 256, 16 + 256, 32 * 4, 32, slider.getValue(), 4, 1, false, true, 0, 0, 0xffff00ff, 0xffffffff, 0xffffffff, 0xffffffff);
 
 		screen.drawRotatedPartOfTexture(getMainApp().getWidth() / 2 - 16, getMainApp().getCurrentHeight() / 2 - 16, Test.atlas, rot, 32, 32, 4, 3);
 		
 //		glLoadIdentity();
 
-		screen.drawLine(0, getMainApp().getCurrentHeight() / 2, getMainApp().getWidth(), getMainApp().getCurrentHeight() / 2, 0xffff00ff);
-		screen.drawLine(getMainApp().getWidth() / 2, 0, getMainApp().getWidth() / 2, getMainApp().getCurrentHeight(), 0xffff00ff);
+//		screen.drawLine(0, getMainApp().getCurrentHeight() / 2, getMainApp().getWidth(), getMainApp().getCurrentHeight() / 2, 0xffff00ff);
+//		screen.drawLine(getMainApp().getWidth() / 2, 0, getMainApp().getWidth() / 2, getMainApp().getCurrentHeight(), 0xffff00ff);
 
 //		screen.drawCircle(getMainApp().getCurrentWidth() / 2, getMainApp().getCurrentHeight() / 2, 360 / 45, 248, 0, 0xff000000);
 		

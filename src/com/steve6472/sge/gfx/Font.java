@@ -26,7 +26,7 @@ public class Font
 		font = new Sprite("font.png");
 	}
 	
-	public void render(String text, int x, int y, int size, float red, float green, float blue)
+	public void renderFont(String text, int x, int y, int size, float red, float green, float blue, boolean shade)
 	{
 		if (text == null || text.isEmpty())
 			return;
@@ -34,6 +34,7 @@ public class Font
 		glMatrixMode(GL_TEXTURE);
 		
 		glPushMatrix();
+		glPushAttrib(GL_CURRENT_BIT);
 		glScalef(1f / (float) font.getWidth() / size, 1f / (float) font.getHeight() / size, 1f);
 		glEnable(GL_TEXTURE_2D);
 		font.bind();
@@ -45,8 +46,11 @@ public class Font
 				int char_index = chars.indexOf(text.charAt(i));
 				if (char_index >= 0)
 				{
-					glColor3f(0.21f * red, 0.21f * green, 0.21f * blue);
-					renderChar(x + (8 * i * size) + size, y + size, char_index, size);
+					if (shade)
+					{
+						glColor3f(0.21f * red, 0.21f * green, 0.21f * blue);
+						renderChar(x + (8 * i * size) + size, y + size, char_index, size);
+					}
 					glColor3f(red, green, blue);
 					renderChar(x + (8 * i * size), y, char_index, size);
 				}
@@ -55,19 +59,40 @@ public class Font
 		glEnd();
 		glDisable(GL_TEXTURE_2D);
 		glScalef((float) font.getWidth(), (float) font.getHeight(), 1f);
+		glPopAttrib();
 		glPopMatrix();
 		
 		glMatrixMode(GL_MODELVIEW);
 	}
 	
+	public void render(String text, int x, int y, int size, boolean shade)
+	{
+		render(text, x, y, size, 1f, 1f, 1f, shade);
+	}
+	
+	public void render(String text, int x, int y, float red, float green, float blue, boolean shade)
+	{
+		render(text, x, y, 1, red, green, blue, shade);
+	}
+	
+	public void render(String text, int x, int y, int size, float red, float green, float blue, boolean shade)
+	{
+		renderFont(text, x, y, size, red, green, blue, shade);
+	}
+	
 	public void render(String text, int x, int y, int size)
 	{
-		render(text, x, y, size, 1f, 1f, 1f);
+		render(text, x, y, size, 1f, 1f, 1f, true);
 	}
 	
 	public void render(String text, int x, int y, float red, float green, float blue)
 	{
-		render(text, x, y, 1, red, green, blue);
+		render(text, x, y, 1, red, green, blue, true);
+	}
+	
+	public void render(String text, int x, int y, int size, float red, float green, float blue)
+	{
+		render(text, x, y, size, red, green, blue, true);
 	}
 	
 	public void render(String text, int x, int y)

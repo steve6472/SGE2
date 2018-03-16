@@ -1,11 +1,13 @@
 package com.steve6472.sge.gui.components;
 
 import com.steve6472.sge.gfx.Sprite;
+import com.steve6472.sge.gfx.Texture;
 
 public class Item
 {
 	protected String text = "";
 	protected Sprite sprite;
+	protected Texture texture;
 	int xOffset = 2;
 	int yOffset = 0;
 	float red, green, blue, alpha;
@@ -20,6 +22,11 @@ public class Item
 		this.green = green;
 		this.blue = blue;
 		this.alpha = alpha;
+	}
+	
+	public Sprite getSprite()
+	{
+		return sprite;
 	}
 
 	public String getText()

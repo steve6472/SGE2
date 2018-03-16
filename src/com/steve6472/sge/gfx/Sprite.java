@@ -1,6 +1,7 @@
 package com.steve6472.sge.gfx;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.*;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -16,8 +17,8 @@ import com.steve6472.sge.main.MainApplication;
 
 public class Sprite
 {
-	private int id, width, height;
-	private int[] pixels;
+	protected int id, width, height;
+	protected int[] pixels;
 	
 	public Sprite()
 	{
@@ -64,7 +65,7 @@ public class Sprite
 		create(pixels, width, height);
 	}
 
-	private void create(int[] pixels_raw, int width, int height)
+	protected void create(int[] pixels_raw, int width, int height)
 	{
 		this.width = width;
 		this.height = height;
@@ -87,7 +88,7 @@ public class Sprite
             {
                 int pixel = pixels_raw[y * width + x];
 //				int pixel = pixels_raw[i + j * width];
-//				this.pixels[i * width + j] = pixel;
+				this.pixels[y * width + x] = pixel;
 				pixels.put((byte) ((pixel >> 16) & 0xFF)); // RED
 				pixels.put((byte) ((pixel >> 8) & 0xFF)); // GREEN
 				pixels.put((byte) ((pixel) & 0xFF)); // BLUE
@@ -136,8 +137,17 @@ public class Sprite
 
 	public void bind()
 	{
+		bind(0);
+	}
+
+	public void bind(int sampler)
+	{
 		if (id != -1)
+		{
+			if (sampler >= 0 && sampler <= 31)
+				glActiveTexture(GL_TEXTURE0 + sampler);
 			glBindTexture(GL_TEXTURE_2D, id);
+		}
 	}
 	
 	public int getWidth()
@@ -166,6 +176,17 @@ public class Sprite
 		return "Sprite [id=" + id + ", width=" + width + ", height=" + height + "]";
 	}
 	
-	
+	public BufferedImage toBufferedImage()
+	{
+		BufferedImage img = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+		for (int i = 0; i < width; i++)
+		{
+			for (int j = 0; j < height; j++)
+			{
+				img.setRGB(i, j, pixels[i + j * width]);
+			}
+		}
+		return img;
+	}
 	
 }

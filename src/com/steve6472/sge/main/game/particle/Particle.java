@@ -99,5 +99,25 @@ public class Particle extends Killable implements IObject, Cloneable, Serializab
 			return null;
 		}
 	}
+	
+	public int getIntX()
+	{
+		return pos.getIntX();
+	}
+	
+	public int getIntY()
+	{
+		return pos.getIntY();
+	}
+	
+	public double getX()
+	{
+		return pos.getX();
+	}
+	
+	public double getY()
+	{
+		return pos.getY();
+	}
 
 }
