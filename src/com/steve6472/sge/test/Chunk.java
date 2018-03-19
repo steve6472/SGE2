@@ -20,7 +20,7 @@ public class Chunk
 	public float x, y;
 	MainApplication ma;
 	Camera camera;
-	int chunkSize = 32;
+	int chunkSize = 8;
 	
 	public Chunk(MainApplication ma, Camera camera)
 	{
@@ -31,6 +31,7 @@ public class Chunk
 		for (int i = 0; i < arr.length; i++)
 		{
 			arr[i] = Util.getRandomInt(7, 0);
+//			arr[i] = 0;
 		}
 	}
 	
@@ -59,13 +60,14 @@ public class Chunk
 		{
 			for (int y = minY; y < maxY; y++)
 			{
-				renderTile(x, y, arr[x + y * chunkSize], ShaderTest2.matTest, pro, camera);
+				renderTile(x, y, arr[x + y * chunkSize], ShaderTest2.matTest, pro, camera, Util.getRandomInt(3, 0, Util.locationValue(x, y)));
 			}
 		}
 	}
 	
-	private void renderTile(float x, float y, int tileId, Shader shader, Matrix4f worldMat, Camera camera)
+	private void renderTile(float x, float y, int tileId, Shader shader, Matrix4f worldMat, Camera camera, int rotation)
 	{
+//		rotation = 3;
 		float tileIndexX = (tileId % 4) / 4f;
 		float tileIndexY = (tileId / 4) / 4f;
 		
@@ -76,17 +78,15 @@ public class Chunk
 		target.mul(tilePos);
 		
 		shader.setUniform2f("texture", tileIndexX, tileIndexY);
-		/*
-		 * This rotation can be used but.... 
-		 * I have to somehow calculate the new position of tile 
-		 * [1,1] => 90° => [2,1]
-		 * [0,0] => 90° => [3,0]
-		 * [1,1] => 180° => [2,2]
-		 * ...
-		 */
-		shader.setUniform1f("angle", (float) Math.toRadians(90 * 0));
 		
-		ShaderTest2.matTest.setUniformMat4f("projection", target);
-		ShaderTest2.matModel.render();
+		shader.setUniformMat4f("projection", target);
+		
+		switch(rotation)
+		{
+			default: ShaderTest2.matModel0.render(); break;
+			case 1 : ShaderTest2.matModel1.render(); break;
+			case 2 : ShaderTest2.matModel2.render(); break;
+			case 3 : ShaderTest2.matModel3.render(); break;
+		}
 	}
 }

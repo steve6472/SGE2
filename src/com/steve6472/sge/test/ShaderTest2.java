@@ -9,7 +9,6 @@ package com.steve6472.sge.test;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
-import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL;
 
 import com.steve6472.sge.gfx.Model;
@@ -22,11 +21,11 @@ import com.steve6472.sge.main.Util;
 public class ShaderTest2 extends MainApplication
 {
 
-	Shader base;
-	Model back;
+//	Shader base;
+//	Model back;
 	Sprite sprite;
 	public static Sprite smallAtlas;
-	public static Model matModel;
+	public static Model matModel0, matModel1, matModel2, matModel3;
 	public static Shader matTest;
 	
 	float scale;
@@ -41,14 +40,19 @@ public class ShaderTest2 extends MainApplication
 	public void init()
 	{
 		matTest = new Shader("shaders\\basev2");
-		base = new Shader("shaders\\base");
+//		base = new Shader("shaders\\base");
+		
 		sprite = new Sprite("*grass.png");
 		smallAtlas = new Sprite("*smallAtlas.png");
-		back = new Model(fillScreen(), createBasicTexture(), createNonColoredArray());
-		matModel = new Model(fillScreen(), createTexture(32f, 32f, smallAtlas), createNonColoredArray());
+//		back = new Model(fillScreen(), createBasicTexture(), createNonColoredArray());
+		matModel0 = new Model(fillScreen(), createTexture(32f, 32f, smallAtlas), createNonColoredArray());
+		matModel1 = new Model(fillScreen(), createTexture1(32f, 32f, smallAtlas), createNonColoredArray());
+		matModel2 = new Model(fillScreen(), createTexture2(32f, 32f, smallAtlas), createNonColoredArray());
+		/* Creating colorful shader actually works! */
+		matModel3 = new Model(fillScreen(), createTexture3(32f, 32f, smallAtlas), createNonColoredArray());
 		
 		scale = 16;
-		speed = 1f / 32f;
+		speed = 1f / 16f;
 		camera = new Camera();
 		camera.setSize(getCurrentWidth(), getCurrentHeight());
 		chunk = new Chunk(this, camera);
@@ -61,6 +65,12 @@ public class ShaderTest2 extends MainApplication
 	@Override
 	public void tick()
 	{
+		/* 
+		 * Scale should work only by 16 (16 - 32 - 48 - 64 - 96 - 128)
+		 * The reason is texture bleeding (bleading idk)
+		 * On any onter values the texture WILL bleed
+		 * Plaese fix it my future me!
+		 */
 		if (isKeyPressed(GLFW_KEY_KP_ADD))
 			scale += 1;
 		if (isKeyPressed(GLFW_KEY_KP_SUBTRACT))
@@ -98,7 +108,7 @@ public class ShaderTest2 extends MainApplication
 		chunk.y = transY;
 		chunk.scale = scale;
 		
-		glfwSetWindowTitle(window, /*"UPS:" + getFPS() + */"Scale:" + scale + " Speed:" + speed);
+		glfwSetWindowTitle(window, /*"UPS:" + getFPS() + */"Scale:" + scale + " Speed:" + speed + " X/Y:" + transX + "/" + transY);
 	}
 	
 	@Override
@@ -203,9 +213,63 @@ public class ShaderTest2 extends MainApplication
 				};
 	}
 	
+	public static float[] createTexture1(float w, float h, Sprite sprite)
+	{
+		float W = w / (float) sprite.getWidth();
+		float H = h / (float) sprite.getHeight();
+		System.out.println(W + " " + H);
+		
+		return new float[]
+				{
+					0, 0,
+					0, H,
+					W, H,
+					
+					W, H,
+					W, 0,
+					0, 0,
+				};
+	}
+	
+	public static float[] createTexture2(float w, float h, Sprite sprite)
+	{
+		float W = w / (float) sprite.getWidth();
+		float H = h / (float) sprite.getHeight();
+		System.out.println(W + " " + H);
+		
+		return new float[]
+				{
+					0, 0,
+					W, 0,
+					W, H,
+					
+					W, H,
+					0, H,
+					0, 0,
+				};
+	}
+	
+	public static float[] createTexture3(float w, float h, Sprite sprite)
+	{
+		float W = w / (float) sprite.getWidth();
+		float H = h / (float) sprite.getHeight();
+		System.out.println(W + " " + H);
+		
+		return new float[]
+				{
+					W, H,
+					H, 0,
+					0, 0,
+					
+					0, 0,
+					0, W,
+					W, H,
+				};
+	}
+	
 	public static float[] createBasicTexture()
 	{
-		float[] texture = new float[]
+		return  new float[]
 				{
 					1, 1,
 					0, 1,
@@ -215,7 +279,6 @@ public class ShaderTest2 extends MainApplication
 					1, 0,
 					1, 1,
 				};
-		return texture;
 	}
 	
 	public static float[] createNonColoredArray()
