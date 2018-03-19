@@ -399,6 +399,11 @@ public class Util
 		return Math.min(Math.max(number, min), max);
 	}
 
+	public static float getNumberBetween(float min, float max, float number)
+	{
+		return Math.min(Math.max(number, min), max);
+	}
+
 	public static int getNumberBetween(int min, int max, int number)
 	{
 		return Math.min(Math.max(number, min), max);

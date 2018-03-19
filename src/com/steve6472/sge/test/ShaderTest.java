@@ -31,13 +31,17 @@ public class ShaderTest extends MainApplication
 	float red;
 	float green;
 	float blue;
+	float alpha;
 	float radius;
+	float softness;
 	
 	/**
 	 * 0 = red
 	 * 1 = green
 	 * 2 = blue
 	 * 3 = radius
+	 * 4 = softness
+	 * 5 = alpha
 	 */
 	byte mode = 0;
 	
@@ -54,24 +58,44 @@ public class ShaderTest extends MainApplication
 			mode = 2;
 		else if (isKeyPressed(GLFW_KEY_F))
 			mode = 3;
-		
-		if (isKeyPressed(GLFW_KEY_KP_ADD) && mode == 0)
+		else if (isKeyPressed(GLFW_KEY_S))
+			mode = 4;
+		else if (isKeyPressed(GLFW_KEY_A))
+			mode = 5;
+
+		if (isKeyPressed(GLFW_KEY_KP_ADD))
+		{
+		if (mode == 0)
 			red = Math.min(1f, red + 0.01f);
-		else if (isKeyPressed(GLFW_KEY_KP_ADD) && mode == 1)
+		else if (mode == 1)
 			green = Math.min(1f, green + 0.01f);
-		else if (isKeyPressed(GLFW_KEY_KP_ADD) && mode == 2)
+		else if (mode == 2)
 			blue = Math.min(1f, blue + 0.01f);
-		else if (isKeyPressed(GLFW_KEY_KP_ADD) && mode == 3)
-			radius += 5f;
+		else if (mode == 3)
+			radius += 0.01f;
+		else if (mode == 4)
+			softness += 0.01f;
+		else if (mode == 5)
+			alpha = Math.min(1f, alpha + 0.01f);
+		}
 		
-		if (isKeyPressed(GLFW_KEY_KP_SUBTRACT) && mode == 0)
-			red = Math.max(0f, red - 0.01f);
-		else if (isKeyPressed(GLFW_KEY_KP_SUBTRACT) && mode == 1)
-			green = Math.max(0f, green - 0.01f);
-		else if (isKeyPressed(GLFW_KEY_KP_SUBTRACT) && mode == 2)
-			blue = Math.max(0f, blue - 0.01f);
-		else if (isKeyPressed(GLFW_KEY_KP_SUBTRACT) && mode == 3)
-			radius -= 5f;
+		if (isKeyPressed(GLFW_KEY_KP_SUBTRACT))
+		{
+			if (mode == 0)
+				red = Math.max(0f, red - 0.01f);
+			else if (mode == 1)
+				green = Math.max(0f, green - 0.01f);
+			else if (mode == 2)
+				blue = Math.max(0f, blue - 0.01f);
+			else if (mode == 3)
+				radius = Math.max(radius - 0.01f, 0);
+			else if (mode == 4)
+				softness -= 0.01f;
+			else if (mode == 5)
+				alpha = Math.max(0f, alpha - 0.01f);
+		}
+		
+		glfwSetWindowTitle(window, "R: " + red + " G:" + green + " B:" + blue + " A:" + alpha + " Rad:" + radius + " S:" + softness);
 	}
 
 	Shader lightShader, base;
@@ -84,13 +108,14 @@ public class ShaderTest extends MainApplication
 		red = 1f;
 		green = 1f;
 		blue = 1f;
-		radius = 100f;
+		alpha = 0.25f;
+		radius = 0.5f;
 		
 		lights = new ArrayList<Light>();
 		createBigQuad();
-		lightShader = new Shader("shaders\\light");
+		lightShader = new Shader("shaders\\lightv2");
 		base = new Shader("shaders\\base");
-		sprite = new Sprite("*black.png");
+		sprite = new Sprite("*grass.png");
 		back = new Model(fillScreen(), createBasicTexture(), createNonColoredArray());
 		lightModel = new Model(fillScreen(), createBasicTexture(), createNonColoredArray());
 		
@@ -215,7 +240,8 @@ public class ShaderTest extends MainApplication
 		lightShader.bind();
 		lightShader.setUniform2f("res", getCurrentWidth(), getCurrentHeight());
 		lightShader.setUniform1f("radius", radius);
-		lightShader.setUniform3f("lightColor", red, green, blue);
+		lightShader.setUniform1f("softness", radius - softness);
+		lightShader.setUniform4f("lightColor", red, green, blue, alpha);
 		
 		lightShader.setUniform2f("lightLocation", X, Y);
 		
