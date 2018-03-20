@@ -39,6 +39,7 @@ public abstract class MainApplication
 	IntBuffer windowYBuffer, windowHeightBuffer;
 	
 	private List<Gui> guis;
+	List<WindowSizeCallback> windowSizeCallbacks;
 	
 	double lastTime = glfwGetTime();
 	int nbFrames = 0;
@@ -91,14 +92,27 @@ public abstract class MainApplication
 			@Override
 			public void invoke(long window, int width, int height)
 			{
+				windowSizeCallbacks.forEach(c -> invoke(width, height));
+			}
+        });
+	}
+	
+	protected void addBasicResizeOrtho()
+	{
+		addWindowSizeCallback((width, height) -> 
+							  {
 				glViewport(0, 0, width, height);
 				glMatrixMode(GL_PROJECTION);
 				glLoadIdentity();
 				glOrtho(0, width, height, 0, -1, 1); // 2D projection matrix
-
 				glMatrixMode(GL_MODELVIEW);
-			}
-        });
+				});
+
+	}
+	
+	public void addWindowSizeCallback(WindowSizeCallback callback)
+	{
+		this.windowSizeCallbacks.add(callback);
 	}
 	
 	private double fps;
