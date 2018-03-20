@@ -81,6 +81,7 @@ public abstract class MainApplication
 		glfwMakeContextCurrent(window);
 		
 		//Enable V-Sync
+		//Apperently enabled by default but shhhhhut up
 		glfwSwapInterval(1);
 
 		glfwShowWindow(window);
@@ -108,22 +109,39 @@ public abstract class MainApplication
 		
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
-	    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		glMatrixMode(GL_PROJECTION);
-		glOrtho(0, getWidth(), getHeight(), 0, -1, 1); // 2D projection matrix
-		glMatrixMode(GL_MODELVIEW);
+		//TODO: This method might not be the one I want to use...
+		//See ShaderTest2 for the right one
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
-		/*
+		createPixelOrtho();
+		
+		//Set background color I guess
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	}
+	
+	public void printOpenGLData()
+	{
 		System.out.println("----------------------------");
 		System.out.println("OpenGL Version : " + glGetString(GL_VERSION));
 		System.out.println("OpenGL Max Texture Size : " + glGetInteger(GL_MAX_TEXTURE_SIZE));
 		System.out.println("OpenGL Vendor : " + glGetString(GL_VENDOR));
 		System.out.println("OpenGL Renderer : " + glGetString(GL_RENDERER));
 		System.out.println("----------------------------");
-		*/
-		//Set background color I guess
-		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	}
+	
+	public void createPixelOrtho()
+	{
+		glMatrixMode(GL_PROJECTION);
+		glOrtho(0, getWidth(), getHeight(), 0, -1, 1); // 2D projection matrix
+		glMatrixMode(GL_MODELVIEW);
+	}
+	
+	public void resetOrtho()
+	{
+		glMatrixMode(GL_PROJECTION);
+		//TODO: Test this method
+		glOrtho(-1, 1, -1, 1, -1, 1); // 2D projection matrix
+		glMatrixMode(GL_MODELVIEW);
 	}
 
 	private final void loop() 
