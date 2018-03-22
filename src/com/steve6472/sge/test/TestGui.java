@@ -7,10 +7,9 @@
 
 package com.steve6472.sge.test;
 
-import static org.lwjgl.opengl.GL11.*;
+import org.lwjgl.glfw.GLFW;
 
 import com.steve6472.sge.gfx.Screen;
-import com.steve6472.sge.gfx.Shader;
 import com.steve6472.sge.gui.Gui;
 import com.steve6472.sge.gui.GuiUtils;
 import com.steve6472.sge.gui.components.Background;
@@ -24,6 +23,7 @@ import com.steve6472.sge.gui.components.ProgressBar;
 import com.steve6472.sge.gui.components.Slider;
 import com.steve6472.sge.gui.components.TextField;
 import com.steve6472.sge.main.MainApplication;
+import com.steve6472.sge.main.callbacks.KeyCallback;
 
 public class TestGui extends Gui
 {
@@ -115,29 +115,26 @@ public class TestGui extends Gui
 		FileBrowser fileBrowser = new FileBrowser();
 		addComponent(fileBrowser);
 		fileBrowser.setLocation(630, 30);
-		
-//		removeAllComponents();
-	}
 
-	{
-		String[] types =
-		//		  0						      1				                           2							3				4
-		{ " wdith, height ", " rotation, translateX, translateY ", " repeatX, repeatY, repeat, scaleX, scaleY ", " flip ", "c00, c10, c11, c01 " };
-		int[][] methods =
+		getMainApp().getKeyHandler().addKeyCallback(new KeyCallback()
 		{
-//				{0, 1, 2, 3, 4, 5},
-//				{0, 1, 2, 3, 4},
-				{0, 1, 2, 3},
-				{0, 1, 2},
-				{0, 1},
-				{0},
-				{0, 1, 3, 4},
-				{0, 2, 3, 4},
-				{0, 3, 4},
-				{0, 4},
-				{0, 2}, 
-				{0, 3},
-		};
+			@Override
+			public void invoke(int key, int scancode, int action, int mods)
+			{
+				if (action == GLFW.GLFW_PRESS)
+				{
+					if (key == GLFW.GLFW_KEY_SPACE)
+					{
+						getMainApp().createPixelOrtho();
+					} else if (key == GLFW.GLFW_KEY_ENTER)
+					{
+						getMainApp().resetOrtho();
+					}
+				}
+			}
+		});
+
+//		removeAllComponents();
 	}
 
 	@Override
@@ -147,7 +144,7 @@ public class TestGui extends Gui
 	
 	float rot = 0f;
 	
-	Shader shader = new Shader("shaders\\screen");
+//	Shader shader = new Shader("shaders\\screen");
 
 	@Override
 	public void render(Screen screen)
@@ -158,7 +155,7 @@ public class TestGui extends Gui
 		
 //		screen.drawSprite(256, 256, Test.sprite, 64 + 256, 16 + 256, 32 * 4, 32, slider.getValue(), 4, 1, false, true, 0, 0, 0xffff00ff, 0xffffffff, 0xffffffff, 0xffffffff);
 
-		screen.drawRotatedPartOfTexture(getMainApp().getWidth() / 2 - 16, getMainApp().getCurrentHeight() / 2 - 16, Test.atlas, rot, 32, 32, 4, 3);
+//		screen.drawRotatedPartOfTexture(getMainApp().getWidth() / 2 - 16, getMainApp().getCurrentHeight() / 2 - 16, Test.atlas, rot, 32, 32, 4, 3);
 		
 //		glLoadIdentity();
 

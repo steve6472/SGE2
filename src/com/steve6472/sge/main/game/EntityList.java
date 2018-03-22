@@ -31,7 +31,7 @@ public class EntityList implements Serializable
 		try
 		{
 			BaseEntity e = getEntities().get(id).newInstance();
-			e.setGame(game);
+			e.setMainApp(game);
 			e.setEntityList(this);
 			e.initEntity(game, objects);
 			e.setId(id);

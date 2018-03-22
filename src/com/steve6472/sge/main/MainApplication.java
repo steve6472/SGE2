@@ -25,6 +25,7 @@ import com.steve6472.sge.gfx.Font;
 import com.steve6472.sge.gfx.Screen;
 import com.steve6472.sge.gfx.Sprite;
 import com.steve6472.sge.gui.Gui;
+import com.steve6472.sge.main.callbacks.WindowSizeCallback;
 import com.steve6472.sge.main.game.Vec2;
 
 public abstract class MainApplication
@@ -92,21 +93,21 @@ public abstract class MainApplication
 			@Override
 			public void invoke(long window, int width, int height)
 			{
-				windowSizeCallbacks.forEach(c -> invoke(width, height));
+				windowSizeCallbacks.forEach(c -> c.invoke(width, height));
 			}
         });
 	}
 	
 	protected void addBasicResizeOrtho()
 	{
-		addWindowSizeCallback((width, height) -> 
-							  {
-				glViewport(0, 0, width, height);
-				glMatrixMode(GL_PROJECTION);
-				glLoadIdentity();
-				glOrtho(0, width, height, 0, -1, 1); // 2D projection matrix
-				glMatrixMode(GL_MODELVIEW);
-				});
+		addWindowSizeCallback((width, height) ->
+		{
+			glViewport(0, 0, width, height);
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			glOrtho(0, width, height, 0, -1, 1); // 2D projection matrix
+			glMatrixMode(GL_MODELVIEW);
+		});
 
 	}
 	
@@ -146,13 +147,16 @@ public abstract class MainApplication
 	public void createPixelOrtho()
 	{
 		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
 		glOrtho(0, getWidth(), getHeight(), 0, -1, 1); // 2D projection matrix
 		glMatrixMode(GL_MODELVIEW);
+		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	}
 	
 	public void resetOrtho()
 	{
 		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
 		//TODO: Test this method
 		glOrtho(-1, 1, -1, 1, -1, 1); // 2D projection matrix
 		glMatrixMode(GL_MODELVIEW);
@@ -229,6 +233,7 @@ public abstract class MainApplication
 	{/*
         System.out.println("LWJGL " + Version.getVersion() + "!");
 	 */
+		this.windowSizeCallbacks = new ArrayList<WindowSizeCallback>();
     	initApplication();
     	preLoop();
         loop();

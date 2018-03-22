@@ -108,7 +108,7 @@ public class ShaderTest2 extends MainApplication
 		chunk.y = transY;
 		chunk.scale = scale;
 		
-		glfwSetWindowTitle(window, /*"UPS:" + getFPS() + */"Scale:" + scale + " Speed:" + speed + " X/Y:" + transX + "/" + transY);
+		glfwSetWindowTitle(window, "UPS:" + getFPS() + "Scale:" + scale + " Speed:" + speed + " X/Y:" + transX + "/" + transY);
 	}
 	
 	@Override
@@ -156,6 +156,8 @@ public class ShaderTest2 extends MainApplication
 	    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glMatrixMode(GL_MODELVIEW);
+		
+		addBasicResizeOrtho();
 		
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 	}

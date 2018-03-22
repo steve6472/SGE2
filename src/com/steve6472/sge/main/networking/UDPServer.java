@@ -12,6 +12,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.steve6472.sge.main.Util;
@@ -80,9 +81,9 @@ public abstract class UDPServer extends Thread
 				
 			} else
 			{
-//				System.out.println("Server > " + msg);
+				System.out.println("Server > " + msg.length());
 				
-				recievePacket(msg, p);
+				recievePacket(p.getData(), p);
 			}
 		}
 	}
@@ -97,55 +98,50 @@ public abstract class UDPServer extends Thread
 		clients.add(new ConnectedClient(ip, port));
 	}
 	
-	public final void sendPacket(Packet<? extends IPacketHandler> packet)
+	public static byte[] setPacket(String id, Packet<? extends IPacketHandler> packet)
 	{
 		DataStream stream = new DataStream();
 		packet.output(stream);
-		String data = Util.toString(stream);
+		String serialized = Util.toString(stream);
+		byte[] compressed = Util.compress(serialized);
+		byte[] combined = Util.combineArrays(id.getBytes(), compressed);
+		return combined;
+	}
+	
+	public final void sendPacket(Packet<? extends IPacketHandler> packet)
+	{
 		String id = Packet.getPacketIdHex(Packet.getPacketId(packet));
-		sendDataToAllClients((id + data).getBytes());
+		sendDataToAllClients(setPacket(id, packet));
 	}
 	
 	public final void sendPacketWithException(Packet<? extends IPacketHandler> packet, DatagramPacket p)
 	{
-		DataStream stream = new DataStream();
-		packet.output(stream);
-		String data = Util.toString(stream);
 		String id = Packet.getPacketIdHex(Packet.getPacketId(packet));
-		sendDataToAllClientsWithException((id + data).getBytes(), p.getAddress(), p.getPort());
+		sendDataToAllClientsWithException(setPacket(id, packet), p.getAddress(), p.getPort());
 	}
 	
 	public final void sendPacket(Packet<? extends IPacketHandler> packet, InetAddress ip, int port)
 	{
-		DataStream stream = new DataStream();
-		packet.output(stream);
-		String data = Util.toString(stream);
 		String id = Packet.getPacketIdHex(Packet.getPacketId(packet));
-		sendData((id + data).getBytes(), ip, port);
+		sendData(setPacket(id, packet), ip, port);
 	}
 	
 	public final void sendPacket(Packet<? extends IPacketHandler> packet, DatagramPacket p)
 	{
-		DataStream stream = new DataStream();
-		packet.output(stream);
-		String data = Util.toString(stream);
 		String id = Packet.getPacketIdHex(Packet.getPacketId(packet));
-		sendData((id + data).getBytes(), p.getAddress(), p.getPort());
+		sendData(setPacket(id, packet), p.getAddress(), p.getPort());
 	}
 	
-	public final void recievePacket(String msg, DatagramPacket p)
+	public final void recievePacket(byte[] data, DatagramPacket p)
 	{
-		//Get hex Id from message
-		String hexId = msg.substring(0, 4);
-		
-		//Get Serialized data from message
-		String dataString = msg.substring(4);
-		
-		//get Data from message
-		DataStream data = (DataStream) Util.fromString(dataString);
+		String recievedId = new String(data).substring(0, 4);
+		byte[] recievedArray = Arrays.copyOfRange(data, 4, data.length);
+		String decompressed = Util.decompress(recievedArray);
+		Object deserialized = Util.fromString(decompressed);
+		DataStream stream = (DataStream) deserialized;
 		
 		//get Id from message
-		int id = Util.getIntFromHex(hexId);
+		int id = Util.getIntFromHex(recievedId);
 		
 		//Get packet by ID
 		Packet<? extends IPacketHandler> packet = Packet.getPacket(id);
@@ -155,10 +151,9 @@ public abstract class UDPServer extends Thread
 			return;
 		
 		//Write data back to packet
-		packet.input(data);
+		packet.input(stream);
 		
 		//Handle packet
-//		handlePacket(packet, id, data);
 		handlePacket(packet, id, p);
 	}
 	

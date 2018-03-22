@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.util.Arrays;
 
 import com.steve6472.sge.main.Util;
 import com.steve6472.sge.main.networking.packet.DataStream;
@@ -73,24 +74,37 @@ public abstract class UDPClient extends Thread
 				e.printStackTrace();
 			}
 			
-			String msg = new String(p.getData()).trim();
+			byte[] recieved = p.getData();
 			
-//			System.out.println("Client > " + msg);
+			String msg = new String(recieved).trim();
 			
-			recievePacket(msg, p);
+			System.out.println("Client > " + msg.length());
+			
+			recievePacket(recieved, p);
 		}
 	}
 	
-	public void recievePacket(String msg, DatagramPacket p)
+	public void recievePacket(byte[] data, DatagramPacket p)
 	{
-		String hexId = msg.substring(0, 4);
-		String dataString = msg.substring(4);
-		DataStream data = (DataStream) Util.fromString(dataString);
-		int id = Util.getIntFromHex(hexId);
-		Packet<?> packet = Packet.getPacket(id);
+		String recievedId = new String(data).substring(0, 4);
+		byte[] recievedArray = Arrays.copyOfRange(data, 4, data.length);
+		String decompressed = Util.decompress(recievedArray);
+		Object deserialized = Util.fromString(decompressed);
+		DataStream stream = (DataStream) deserialized;
+		
+		//get Id from message
+		int id = Util.getIntFromHex(recievedId);
+		
+		//Get packet by ID
+		Packet<? extends IPacketHandler> packet = Packet.getPacket(id);
+		
+		//Skip invalid packet
 		if (packet == null)
 			return;
-		packet.input(data);
+		
+		//Write data back to packet
+		packet.input(stream);
+		
 		handlePacket(packet, id, p);
 		
 	}
@@ -105,11 +119,8 @@ public abstract class UDPClient extends Thread
 	
 	public void sendPacket(Packet<?> packet)
 	{
-		DataStream stream = new DataStream();
-		packet.output(stream);
-		String data = Util.toString(stream);
 		String id = Packet.getPacketIdHex(Packet.getPacketId(packet));
-		sendData((id + data).getBytes());
+		sendData(UDPServer.setPacket(id, packet));
 	}
 
 	protected void sendData(byte[] data)

@@ -155,7 +155,7 @@ public abstract class BaseEntity extends Killable implements IObject, Cloneable,
 	
 	public void setEntityList(EntityList entityList) { this.entityList = entityList; }
 	
-	public void setGame(MainApplication game) { this.mainApp = game; }
+	public void setMainApp(MainApplication game) { this.mainApp = game; }
 
 	/**
 	 * If loc (Vec2) is null will create new Vec2!
@@ -280,7 +280,7 @@ interface IInit
 {
 	/**
 	 * Called when creating the entity
-	 * @param mainApp
+	 * @param mainApp is apperently useless
 	 */
 	public void initEntity(MainApplication mainApp, Object... objects);
 	

@@ -128,6 +128,8 @@ public class ShaderTest extends MainApplication
 					lights.add(new Light(red, green, blue, radius, new Vec2(x, -y + getCurrentHeight())));
 			}
 		});
+		
+		addBasicResizeOrtho();
 	}
 
 	private void createBigQuad()

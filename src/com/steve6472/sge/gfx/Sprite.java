@@ -35,7 +35,7 @@ public class Sprite
 	public Sprite(File file)
 	{
 		BufferedImage image = load(file);
-		System.out.println(image.getWidth() * image.getHeight() + " " + file.getAbsolutePath());
+//		System.out.println(image.getWidth() * image.getHeight() + " " + file.getAbsolutePath());
 		create(image.getRGB(0, 0, image.getWidth(), image.getHeight(), null, 0, image.getWidth()), image.getWidth(), image.getHeight());
 	}
 	

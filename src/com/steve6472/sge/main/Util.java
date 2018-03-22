@@ -7,15 +7,19 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
 
 import com.steve6472.sge.main.game.AABB;
 import com.steve6472.sge.main.game.Vec2;
@@ -463,7 +467,20 @@ public class Util
 			{
 				out.println(s);
 			}
-			
+		} catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public static void saveS(File file, Serializable...text)
+	{
+		try (PrintWriter out = new PrintWriter(file))
+		{
+			for (Serializable s : text)
+			{
+				out.println(toString(s));
+			}
 		} catch (FileNotFoundException e)
 		{
 			e.printStackTrace();
@@ -661,7 +678,78 @@ public class Util
 	{
 		return getRandomDouble(360, 0);
 	}
+	
+	/**
+	 * Code stolen from https://gist.github.com/yfnick/227e0c12957a329ad138
+	 * Thank you for creating this code!
+	 * @param data
+	 * @return
+	 */
+	public static byte[] compress(String data)
+	{
+		try
+		{
+			ByteArrayOutputStream bos = new ByteArrayOutputStream(data.length());
+			GZIPOutputStream gzip = new GZIPOutputStream(bos);
+			gzip.write(data.getBytes());
+			gzip.close();
+			byte[] compressed = bos.toByteArray();
+			bos.close();
+			return compressed;
+		} catch (IOException ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
+	}
 
+	/**
+	 * Code stolen from https://gist.github.com/yfnick/227e0c12957a329ad138
+	 * Thank you for creating this code!
+	 * @param compressed
+	 * @return
+	 */
+	public static String decompress(byte[] compressed)
+	{
+		try
+		{
+			ByteArrayInputStream bis = new ByteArrayInputStream(compressed);
+			GZIPInputStream gis = new GZIPInputStream(bis);
+			BufferedReader br = new BufferedReader(new InputStreamReader(gis, "UTF-8"));
+			StringBuilder sb = new StringBuilder();
+			String line;
+			while ((line = br.readLine()) != null)
+			{
+				sb.append(line);
+			}
+			br.close();
+			gis.close();
+			bis.close();
+			return sb.toString();
+		} catch (IOException ex)
+		{
+			ex.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
+	 * Stolen from @author https://stackoverflow.com/a/80503
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public static byte[] combineArrays(byte[] a, byte[] b) 
+	{
+	    int aLen = a.length;
+	    int bLen = b.length;
+
+	    byte[] c = (byte[]) Array.newInstance(a.getClass().getComponentType(), aLen + bLen);
+	    System.arraycopy(a, 0, c, 0, aLen);
+	    System.arraycopy(b, 0, c, aLen, bLen);
+
+	    return c;
+	}
 	
 /*
 	public static double getRandomCircleX(double radius)
