@@ -28,57 +28,70 @@ public class DataStream implements Serializable
 	 * Writing
 	 */
 	
-	public void writeBoolean(boolean o) { data.add(o); }
-	public void writeBooleanArr(boolean[] a) { data.add(a); }
+	public DataStream writeByte(byte o) 			{ data.add(o); return this; }
+	public DataStream writeByteArr(byte[] a) 		{ data.add(a); return this; }
 	
-	public void writeChar(char o) { data.add(o); }
-	public void writeCharArr(char[] a) { data.add(a); }
+	public DataStream writeBoolean(boolean o) 		{ data.add(o); return this; }
+	public DataStream writeBooleanArr(boolean[] a) 	{ data.add(a); return this; }
 	
-	public void writeString(String o) { data.add(o); }
-	public void writeStringArr(String[] a) { data.add(a); }
+	public DataStream writeChar(char o) 			{ data.add(o); return this; }
+	public DataStream writeCharArr(char[] a) 		{ data.add(a); return this; }
 	
-	public void writeDouble(double o) { data.add(o); }
-	public void writeDoubleArr(double[] a) { data.add(a); }
+	public DataStream writeString(String o) 		{ data.add(o); return this; }
+	public DataStream writeStringArr(String[] a) 	{ data.add(a); return this; }
 	
-	public void writeInt(int o) { data.add(o); }
-	public void writeIntArr(int[] a) { data.add(a); }
+	public DataStream writeDouble(double o) 		{ data.add(o); return this; }
+	public DataStream writeDoubleArr(double[] a)	{ data.add(a); return this; }
 	
-	public void writeLong(long o) { data.add(o); }
-	public void writeLongArr(long[] a) { data.add(a); }
+	public DataStream writeFloat(float o) 			{ data.add(o); return this; }
+	public DataStream writeFloatArr(float[] a)		{ data.add(a); return this; }
 	
-	public void writeObject(Object o) { data.add(o); }
-	public void writeObjectArr(Object[] a) { data.add(a); }
+	public DataStream writeInt(int o) 				{ data.add(o); return this; }
+	public DataStream writeIntArr(int[] a) 			{ data.add(a); return this; }
+	
+	public DataStream writeLong(long o) 			{ data.add(o); return this; }
+	public DataStream writeLongArr(long[] a) 		{ data.add(a); return this; }
+	
+	public DataStream writeObject(Object o) 		{ data.add(o); return this; }
+	public DataStream writeObjectArr(Object[] a) 	{ data.add(a); return this; }
 	
 	/*
 	 * Reading
 	 */
 	
-	public boolean readBoolean() { return (boolean) read(Boolean.class); }
-	public boolean[] readBooleanArr() { return (boolean[]) read(boolean[].class); }
+	public byte readByte() 				{ return read(Byte.class); }
+	public byte[] readByteArr() 		{ return read(byte[].class); }
 	
-	public char readChar() { return (char) read(Character.class); }
-	public char[] readCharArr() { return (char[]) read(char[].class); }
+	public boolean readBoolean() 		{ return read(Boolean.class); }
+	public boolean[] readBooleanArr() 	{ return read(boolean[].class); }
 	
-	public String readString() { return (String) read(String.class); }
-	public String[] readStringArr() { return (String[]) read(String[].class); }
+	public char readChar() 				{ return read(Character.class); }
+	public char[] readCharArr() 		{ return read(char[].class); }
 	
-	public double readDouble() { return (double) read(Double.class); }
-	public double[] readDoubleArr() { return (double[]) read(double[].class); }
+	public String readString() 			{ return read(String.class); }
+	public String[] readStringArr() 	{ return read(String[].class); }
 	
-	public int readInt() { return (int) read(Integer.class); }
-	public int[] readIntArr() { return (int[]) read(int[].class); }
+	public double readDouble() 			{ return read(Double.class); }
+	public double[] readDoubleArr() 	{ return read(double[].class); }
 	
-	public long readLong() { return (long) read(Long.class); }
-	public long[] readLongArr() { return (long[]) read(long[].class); }
+	public float readFloat() 			{ return read(Float.class); }
+	public float[] readFloatArr() 		{ return read(float[].class); }
 	
-	public Object readObject() { return (Object) read(Object.class); }
-	public Object[] readObjectArr() { return (Object[]) read(Object[].class); }
+	public int readInt() 				{ return read(Integer.class); }
+	public int[] readIntArr() 			{ return read(int[].class); }
+	
+	public long readLong() 				{ return read(Long.class); }
+	public long[] readLongArr() 		{ return read(long[].class); }
+	
+	public Object readObject() 			{ return read(Object.class); }
+	public Object[] readObjectArr() 	{ return read(Object[].class); }
 	
 	/*
 	 * Methods
 	 */
 	
-	private Object read(Class<?> clazz)
+	@SuppressWarnings("unchecked")
+	private <T> T read(Class<T> clazz)
 	{
 		for (Iterator<Object> iter = data.iterator(); iter.hasNext();)
 		{
@@ -93,15 +106,25 @@ public class DataStream implements Serializable
 			if (clazz.isInstance(o))
 			{
 				iter.remove();
-				return o;
+				return (T) o;
 			}
 		}
 		return null;
 	}
 	
+	public boolean isEmpty()
+	{
+		return data.isEmpty();
+	}
+	
 	public void printData()
 	{
 		System.out.println(Arrays.toString(data.toArray()));
+	}
+	
+	public List<Object> getData()
+	{
+		return data;
 	}
 	
 	

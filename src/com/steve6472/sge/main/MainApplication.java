@@ -11,15 +11,22 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 
 import com.steve6472.sge.gfx.Font;
 import com.steve6472.sge.gfx.Screen;
@@ -124,8 +131,6 @@ public abstract class MainApplication
 		
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
-		//TODO: This method might not be the one I want to use...
-		//See ShaderTest2 for the right one
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
 		createPixelOrtho();
@@ -160,6 +165,41 @@ public abstract class MainApplication
 		//TODO: Test this method
 		glOrtho(-1, 1, -1, 1, -1, 1); // 2D projection matrix
 		glMatrixMode(GL_MODELVIEW);
+	}
+	
+	public void takeScreenshot()
+	{
+		File file = new File("screenshots");
+		if (!file.exists())
+		{
+			file.mkdirs();
+		}
+		try
+		{
+			GL11.glReadBuffer(GL11.GL_FRONT);
+			int width = getCurrentWidth();
+			int height = getCurrentHeight();
+			int bpp = 4;
+			ByteBuffer buffer = BufferUtils.createByteBuffer(width * height * bpp);
+			GL11.glReadPixels(0, 0, width, height, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
+			BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+			for (int x = 0; x < width; x++)
+			{
+				for (int y = 0; y < height; y++)
+				{
+					int i = (x + (width * y)) * bpp;
+					int r = buffer.get(i) & 0xFF;
+					int g = buffer.get(i + 1) & 0xFF;
+					int b = buffer.get(i + 2) & 0xFF;
+					image.setRGB(x, height - (y + 1), (0xFF << 24) | (r << 16) | (g << 8) | b);
+				}
+			}
+			ImageIO.write(image, "PNG", new File(String.format("screenshots\\" + Util.getFormatedTime() + ".png")));
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	private final void loop() 

@@ -78,7 +78,7 @@ public abstract class UDPClient extends Thread
 			
 			String msg = new String(recieved).trim();
 			
-			System.out.println("Client > " + msg.length());
+			System.out.println("Client " + Util.getFormatedTime() + "> " + msg.substring(0, 4));
 			
 			recievePacket(recieved, p);
 		}

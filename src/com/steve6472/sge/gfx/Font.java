@@ -15,7 +15,7 @@ import com.steve6472.sge.main.game.Vec2;
 public class Font
 {
 	
-	Sprite font;
+	Sprite font, invertedFont;
 	Screen screen;
 	public static final String chars = 	"ABCDEFGHIJKLMNOPQRSTUVWXYZ&♥|�* abcdefghijklmnopqrstuvwxyz      " + 
 										"0123456789.,:;'\"!?$%()-=+/><_#§\\@                             ";
@@ -24,6 +24,7 @@ public class Font
 	{
 		this.screen = screen;
 		font = new Sprite("font.png");
+		invertedFont = new Sprite("invertedFont.png");
 	}
 	
 	public void renderFont(String text, int x, int y, int size, float red, float green, float blue, boolean shade)
@@ -141,6 +142,16 @@ public class Font
 	public static Vec2 stringCenter(AABB recSize, String text, int fontSize)
 	{
 		return new Vec2(recSize.from.getX() + (recSize.getWidth() / 2) - ((text.length() * (8 * fontSize)) / 2), recSize.from.getY() + (recSize.getHeight() / 2) - (4 * fontSize));
+	}
+	
+	public Sprite getFont()
+	{
+		return font;
+	}
+	
+	public Sprite getInvertedFont()
+	{
+		return invertedFont;
 	}
 
 }

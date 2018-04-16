@@ -81,69 +81,78 @@ public class Shader
 		System.out.println("Created shader from " + fileName + " vs:" + vs + " fs:" + fs + " program:" + program);
 	}
 	
-	public void setUniform1f(String name, float v1)
+	public Shader setUniform1f(String name, float v1)
 	{
 		int location = glGetUniformLocation(program, name);
 		if (location != -1)
 			glUniform1f(location, v1);
+		return this;
 	}
 	
-	public void setUniform2f(String name, float v1, float v2)
+	public Shader setUniform2f(String name, float v1, float v2)
 	{
 		int location = glGetUniformLocation(program, name);
 		if (location != -1)
 			glUniform2f(location, v1, v2);
+		return this;
 	}
 	
-	public void setUniform3f(String name, float v1, float v2, float v3)
+	public Shader setUniform3f(String name, float v1, float v2, float v3)
 	{
 		int location = glGetUniformLocation(program, name);
 		if (location != -1)
 			glUniform3f(location, v1, v2, v3);
+		return this;
 	}
 	
-	public void setUniform4f(String name, float v1, float v2, float v3, float v4)
+	public Shader setUniform4f(String name, float v1, float v2, float v3, float v4)
 	{
 		int location = glGetUniformLocation(program, name);
 		if (location != -1)
 			glUniform4f(location, v1, v2, v3, v4);
+		return this;
 	}
 	
-	public void setUniform1i(String name, int v1)
+	public Shader setUniform1i(String name, int v1)
 	{
 		int location = glGetUniformLocation(program, name);
 		if (location != -1)
 			glUniform1i(location, v1);
+		return this;
 	}
 	
-	public void setUniform2i(String name, int v1, int v2)
+	public Shader setUniform2i(String name, int v1, int v2)
 	{
 		int location = glGetUniformLocation(program, name);
 		if (location != -1)
 			glUniform2i(location, v1, v2);
+		return this;
 	}
 	
-	public void setUniform3i(String name, int v1, int v2, int v3)
+	public Shader setUniform3i(String name, int v1, int v2, int v3)
 	{
 		int location = glGetUniformLocation(program, name);
 		if (location != -1)
 			glUniform3i(location, v1, v2, v3);
+		return this;
 	}
 	
-	public void setUniform4i(String name, int v1, int v2, int v3, int v4)
+	public Shader setUniform4i(String name, int v1, int v2, int v3, int v4)
 	{
 		int location = glGetUniformLocation(program, name);
 		if (location != -1)
 			glUniform4i(location, v1, v2, v3, v4);
+		return this;
 	}
 	
-	public void setUniformMat4f(String name, Matrix4f m1)
+	public Shader setUniformMat4f(String name, Matrix4f m1)
 	{
 		int location = glGetUniformLocation(program, name);
 		FloatBuffer b1 = BufferUtils.createFloatBuffer(16);
 		m1.get(b1);
 		if (location != -1)
 			glUniformMatrix4fv(location, false, b1);
+		return this;
 	}
 	
 	public void bind()

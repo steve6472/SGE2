@@ -81,7 +81,7 @@ public abstract class UDPServer extends Thread
 				
 			} else
 			{
-				System.out.println("Server > " + msg.length());
+				System.out.println("Server " + Util.getFormatedTime() + "> " + msg.substring(0, 4));
 				
 				recievePacket(p.getData(), p);
 			}
@@ -102,6 +102,8 @@ public abstract class UDPServer extends Thread
 	{
 		DataStream stream = new DataStream();
 		packet.output(stream);
+		if (stream.isEmpty())
+			stream = null;
 		String serialized = Util.toString(stream);
 		byte[] compressed = Util.compress(serialized);
 		byte[] combined = Util.combineArrays(id.getBytes(), compressed);

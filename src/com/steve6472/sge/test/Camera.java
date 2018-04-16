@@ -15,6 +15,8 @@ public class Camera
 {
 	private Vec2 pos;
 	private Matrix4f projection;
+	private int width;
+	private int height;
 	
 	public Camera()
 	{
@@ -25,6 +27,8 @@ public class Camera
 	public void setSize(int width, int height)
 	{
 		projection.setOrtho2D(width / 2, -width / 2, -height / 2, height / 2);
+		this.width = width;
+		this.height = height;
 	}
 	
 	public Matrix4f getProjection()
@@ -45,5 +49,15 @@ public class Camera
 	public Vec2 getPosition()
 	{
 		return pos;
+	}
+	
+	public int getWidth()
+	{
+		return width;
+	}
+	
+	public int getHeight()
+	{
+		return height;
 	}
 }

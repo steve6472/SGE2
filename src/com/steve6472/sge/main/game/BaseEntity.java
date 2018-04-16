@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.steve6472.sge.gfx.Sprite;
 import com.steve6472.sge.main.MainApplication;
+import com.steve6472.sge.main.game.inventory.Inventory;
 
 public abstract class BaseEntity extends Killable implements IObject, Cloneable, IInit, Serializable
 {
@@ -13,6 +14,7 @@ public abstract class BaseEntity extends Killable implements IObject, Cloneable,
 	protected Vec2 loc;
 	protected AABB box;
 	protected Sprite sprite;
+	protected Inventory inventory;
 	protected EntityList entityList;
 	protected MainApplication mainApp;
 	protected List<Task> tasks;
@@ -151,6 +153,8 @@ public abstract class BaseEntity extends Killable implements IObject, Cloneable,
 	
 	public void setBox(AABB newBox) { this.box = newBox; }
 	
+	public void setInventory(Inventory inventory) { this.inventory = inventory; }
+	
 	public void setSprite(Sprite sprite) { this.sprite = sprite; }
 	
 	public void setEntityList(EntityList entityList) { this.entityList = entityList; }
@@ -183,6 +187,8 @@ public abstract class BaseEntity extends Killable implements IObject, Cloneable,
 	public final Vec2 getNewLocation() { return loc.clone(); }
 	
 	public final AABB getBox() { return box; }
+	
+	public final Inventory getInventory() { return inventory; };
 	
 	public Sprite getSprite() { if (entityList != null) return entityList.getSprites().get(getId()); else return null; }
 	

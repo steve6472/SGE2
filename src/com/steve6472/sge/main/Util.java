@@ -30,7 +30,13 @@ public class Util
 	public static final int HOVERED_OVERLAY = 0x807f87be;
 	public static final int SELECTED_OVERLAY = 0x806d76ad;
 	public static final double PYThAGORASRATIO = 1.4142135623730950488016887242097;
+	private static final Random random;
 	//1,4142135623730950488016887242097
+	
+	static
+	{
+		random = new Random();
+	}
 	
 	public static String getFormatedTime()
 	{
@@ -56,21 +62,6 @@ public class Util
 		System.err.println(String.format(s, objects));
 	}
 	
-//	/**
-//	 * Prob not gonna use it but I can change it for the Magical Key to work with AABB
-//	 * @param r_1
-//	 * @param r_2
-//	 * @return
-//	 */
-//	public static int getDistance(Rectangle r_1, Rectangle r_2)
-//	{
-//
-//		int a = -((r_1.height / 2 + r_1.y) - (r_2.height / 2 + r_2.y));
-//		int b = -((r_1.width / 2 + r_1.x) - (r_2.width / 2 + r_2.x));
-//		
-//		return (int) Math.sqrt((a * a) + (b * b));
-//	}
-	
 	/**
 	 * @param r_1
 	 * @param r_2
@@ -81,6 +72,15 @@ public class Util
 
 		double a = -((from.getCenterY()) - (to.getCenterY()));
 		double b = -((from.getCenterX()) - (to.getCenterX()));
+		
+		return Math.sqrt((a * a) + (b * b));
+	}
+	
+	public static double getDistance(int fromX, int fromY, int toX, int toY)
+	{
+
+		double a = -((fromY) - (toY));
+		double b = -((fromX) - (toX));
 		
 		return Math.sqrt((a * a) + (b * b));
 	}
@@ -113,8 +113,7 @@ public class Util
 		{
 			return 0;
 		}
-		Random ra = new Random();
-		return ra.nextInt((max - min) + 1) + min;
+		return random.nextInt((max - min) + 1) + min;
 	}
 
 	/**
@@ -153,8 +152,7 @@ public class Util
 		{
 			return 0;
 		}
-		Random ra = new Random();
-		double r = min + (max - min) * ra.nextDouble();
+		double r = min + (max - min) * random.nextDouble();
 		return r;
 	}
 
@@ -216,8 +214,19 @@ public class Util
 		{
 			return 0;
 		}
-		Random ra = new Random();
-		long r = min + (max - min) * ra.nextLong();
+		long r = min + (max - min) * random.nextLong();
+		return r;
+	}
+
+	/**
+	 * 
+	 * @param max
+	 * @param min
+	 * @return if max == min returns max, if max > min returns random number
+	 */
+	public static long getRandomSeed()
+	{
+		long r = Long.MIN_VALUE + (Long.MAX_VALUE - Long.MIN_VALUE) * random.nextLong();
 		return r;
 	}
 
@@ -258,14 +267,26 @@ public class Util
 		{
 			return 0;
 		}
-		Random ra = new Random();
-		float r = min + (max - min) * ra.nextFloat();
+		float r = min + (max - min) * random.nextFloat();
 		return r;
 	}
 	
-	public static boolean decide()
+	public static boolean flipACoin()
 	{
 		return getRandomInt(1, 0) == 1;
+	}
+	
+	@FunctionalInterface
+	public interface Function1
+	{
+		public void apply();
+	}
+	
+	public static void decide(Function1... f1)
+	{
+		int i = Util.getRandomInt(f1.length - 1, 0);
+		
+		f1[i].apply();
 	}
 	
 	/**
@@ -749,6 +770,62 @@ public class Util
 	    System.arraycopy(b, 0, c, aLen, bLen);
 
 	    return c;
+	}
+	
+	/**
+	 * Stolen from @author https://stackoverflow.com/a/80503
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public static <T> T[] combineArrays(T[] a, T[] b) 
+	{
+	    int aLen = a.length;
+	    int bLen = b.length;
+
+	    @SuppressWarnings("unchecked")
+		T[] c = (T[]) Array.newInstance(a.getClass().getComponentType(), aLen + bLen);
+	    System.arraycopy(a, 0, c, 0, aLen);
+	    System.arraycopy(b, 0, c, aLen, bLen);
+
+	    return c;
+	}
+	
+	public static float calculateValue(float time, float endTime, float valueStart, float valueEnd)
+	{
+//		Util.printObjects("### ", time, endTime, valueStart, valueEnd);
+		return (time / endTime) * valueEnd - (time / endTime) * valueStart + valueStart;
+	}
+	
+	public static float brazierCurve(float p0, float p1, float p2, float time, float timeEnd)
+	{
+		float t0 = time;
+		float t1 = timeEnd;
+
+		float y0 = calculateValue(t0, t1, p0, p1);
+
+		float y1 = calculateValue(t0, t1, p1, p2);
+		
+		float py = calculateValue(t0, t1, y0, y1);
+		
+		return py;
+	}
+	
+	public static Vec2 brazierCurve(float p0x, float p0y, float p1x, float p1y, float p2x, float p2y, float time, float timeEnd)
+	{
+		float t0 = time;
+		float t1 = timeEnd;
+
+		float x0 = calculateValue(t0, t1, p0x, p1x);
+		float y0 = calculateValue(t0, t1, p0y, p1y);
+
+		float x1 = calculateValue(t0, t1, p1x, p2x);
+		float y1 = calculateValue(t0, t1, p1y, p2y);
+		
+		float px = calculateValue(t0, t1, x0, x1);
+		float py = calculateValue(t0, t1, y0, y1);
+		
+		return new Vec2(px, py);
 	}
 	
 /*

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.lwjgl.BufferUtils;
+import org.lwjgl.glfw.GLFWCursorEnterCallback;
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
@@ -25,6 +26,8 @@ public class MouseHandler
 {
 	private GLFWMouseButtonCallback mouseButtonCallback;
 	private GLFWCursorPosCallback cursorPosCallback;
+	@SuppressWarnings("unused")
+	private GLFWCursorEnterCallback cursorEnterCallback;
 	
 	DoubleBuffer mouseXBuffer;
 	DoubleBuffer mouseYBuffer;
@@ -33,6 +36,7 @@ public class MouseHandler
 	private final MainApplication mainApp;
 	
 	private boolean mouseTriggered = false;
+	private boolean isCursorInWindow = false;
 	
 	private int pressedMouseX;
 	private int pressedMouseY;
@@ -72,6 +76,14 @@ public class MouseHandler
 			public void invoke(long window, double xpos, double ypos)
 			{
 				cursorPosCallbacks.forEach(c -> c.invoke(xpos, ypos));
+			}
+		});
+		
+		glfwSetCursorEnterCallback(window, cursorEnterCallback = new GLFWCursorEnterCallback()
+		{
+			public void invoke(long window, boolean entered)
+			{
+				isCursorInWindow = entered;
 			}
 		});
 	}
@@ -169,6 +181,11 @@ public class MouseHandler
 	public boolean isMouseHolded()
 	{
 		return getButton() != 0;
+	}
+	
+	public boolean isCursorInWindow()
+	{
+		return isCursorInWindow;
 	}
 	
 	public boolean isMouseTriggered()

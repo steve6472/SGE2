@@ -35,6 +35,11 @@ public class Texture extends Sprite
 		this.width = width;
 		this.height = height;
 	}
+	
+	public Texture(String path)
+	{
+		super(path);
+	}
 
 	public Texture(File file)
 	{

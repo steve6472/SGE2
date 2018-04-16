@@ -9,6 +9,7 @@ package com.steve6472.sge.test;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 
+import org.joml.Vector4f;
 import org.lwjgl.opengl.GL;
 
 import com.steve6472.sge.gfx.Model;
@@ -197,11 +198,41 @@ public class ShaderTest2 extends MainApplication
 		new ShaderTest2();
 	}
 	
+	public static float[] createTexture(float w, float h)
+	{
+		float W = w;
+		float H = h;
+		
+		return new float[]
+				{
+					W, H,
+					0, H,
+					0, 0,
+					
+					0, 0,
+					W, 0,
+					W, H,
+				};
+	}
+	
+	public static float[] createArray(Vector4f v00, Vector4f v10, Vector4f v11, Vector4f v01)
+	{
+		return new float[]
+				{
+					v00.x, v00.y, v00.z, v00.w,
+					v10.x, v10.y, v10.z, v10.w,
+					v11.x, v11.y, v11.z, v11.w,
+
+					v11.x, v11.y, v11.z, v11.w,
+					v01.x, v01.y, v01.z, v01.w,
+					v00.x, v00.y, v00.z, v00.w,
+				};
+	}
+	
 	public static float[] createTexture(float w, float h, Sprite sprite)
 	{
 		float W = w / (float) sprite.getWidth();
 		float H = h / (float) sprite.getHeight();
-		System.out.println(W + " " + H);
 		
 		return new float[]
 				{
@@ -219,7 +250,6 @@ public class ShaderTest2 extends MainApplication
 	{
 		float W = w / (float) sprite.getWidth();
 		float H = h / (float) sprite.getHeight();
-		System.out.println(W + " " + H);
 		
 		return new float[]
 				{
@@ -237,7 +267,6 @@ public class ShaderTest2 extends MainApplication
 	{
 		float W = w / (float) sprite.getWidth();
 		float H = h / (float) sprite.getHeight();
-		System.out.println(W + " " + H);
 		
 		return new float[]
 				{
@@ -255,7 +284,6 @@ public class ShaderTest2 extends MainApplication
 	{
 		float W = w / (float) sprite.getWidth();
 		float H = h / (float) sprite.getHeight();
-		System.out.println(W + " " + H);
 		
 		return new float[]
 				{
@@ -280,6 +308,20 @@ public class ShaderTest2 extends MainApplication
 					0, 0,
 					1, 0,
 					1, 1,
+				};
+	}
+	
+	public static float[] createArray(float v)
+	{
+		return new float[]
+				{
+					v, v, v, 1,
+					v, v, v, 1,
+					v, v, v, 1,
+					
+					v, v, v, 1,
+					v, v, v, 1,
+					v, v, v, 1
 				};
 	}
 	
@@ -326,12 +368,82 @@ public class ShaderTest2 extends MainApplication
 		return new float[]
 					{
 						-1, -1,
-						1, -1,
-						1, 1,
+						+1, -1,
+						+1, +1,
 						
-						1, 1,
-						-1, 1,
+						+1, +1,
+						-1, +1,
 						-1, -1
+					};
+	}
+	
+	public static float[] fillScreen1()
+	{
+		return new float[]
+					{
+						+1, +1,
+						+1, -1,
+						-1, -1,
+						
+						-1, -1,
+						-1, +1,
+						+1, +1
+					};
+	}
+	
+	public static float[] fillScreen2()
+	{
+		return new float[]
+					{
+						+1, +1,
+						-1, +1,
+						-1, -1,
+						
+						-1, -1,
+						+1, -1,
+						+1, +1
+					};
+	}
+
+	public static float[] fillScreen3()
+	{
+		return new float[]
+					{
+						-1, -1,
+						-1, +1,
+						+1, +1,
+						
+						+1, +1,
+						+1, -1,
+						-1, -1
+					};
+	}
+
+	public static float[] fillScreen4()
+	{
+		return new float[]
+					{
+						+1, -1,
+						+1, +1,
+						-1, +1,
+						
+						-1, +1,
+						-1, -1,
+						+1, -1
+					};
+	}
+
+	public static float[] fillScreen5()
+	{
+		return new float[]
+					{
+						-1, +1,
+						+1, +1,
+						+1, -1,
+						
+						+1, -1,
+						-1, -1,
+						-1, +1
 					};
 	}
 }
