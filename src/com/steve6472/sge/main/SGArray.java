@@ -23,6 +23,21 @@ public class SGArray<T> implements Iterable<T>
 		this.size = initialSize;
 		this.array = new Object[initialSize];
 		this.isDynamic = isDynamic;
+		this.fillNull = fillNull;
+	}
+	
+	/**
+	 * Default configuration
+	 * initialSize = 0
+	 * isDynamic = true
+	 * fullNull = false
+	 */
+	public SGArray()
+	{
+		this.size = 0;
+		this.array = new Object[0];
+		this.isDynamic = true;
+		this.fillNull = false;
 	}
 	
 	public void setObject(int index, T o) 	{ set(index, o); }

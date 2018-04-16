@@ -797,7 +797,7 @@ public class Util
 		return (time / endTime) * valueEnd - (time / endTime) * valueStart + valueStart;
 	}
 	
-	public static float brazierCurve(float p0, float p1, float p2, float time, float timeEnd)
+	public static float bezierCurve(float p0, float p1, float p2, float time, float timeEnd)
 	{
 		float t0 = time;
 		float t1 = timeEnd;
@@ -811,7 +811,7 @@ public class Util
 		return py;
 	}
 	
-	public static Vec2 brazierCurve(float p0x, float p0y, float p1x, float p1y, float p2x, float p2y, float time, float timeEnd)
+	public static Vec2 bezierCurve(float p0x, float p0y, float p1x, float p1y, float p2x, float p2y, float time, float timeEnd)
 	{
 		float t0 = time;
 		float t1 = timeEnd;
