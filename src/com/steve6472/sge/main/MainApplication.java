@@ -65,7 +65,7 @@ public abstract class MainApplication
 
 	public long window;
 	
-	Sprite texture1;
+	public static Sprite sprites;
 
 	private void initApplication()
 	{
@@ -124,7 +124,7 @@ public abstract class MainApplication
 	}
 	
 	private double fps;
-	
+
 	protected void preLoop()
 	{
 		GL.createCapabilities();
@@ -164,6 +164,24 @@ public abstract class MainApplication
 		glLoadIdentity();
 		//TODO: Test this method
 		glOrtho(-1, 1, -1, 1, -1, 1); // 2D projection matrix
+		glMatrixMode(GL_MODELVIEW);
+	}
+	
+	/**
+	 * Stolen from https://stackoverflow.com/questions/35216031/displaying-3d-triangle-using-lwjgl-3
+	 * 
+	 * @param fov - Field of vision in degrees in the y direction
+	 * @param aspect - Aspect ratio of the viewport
+	 * @param zNear - The near clipping distance
+	 * @param zFar - The far clipping distance
+	 */
+	public void perspectiveGL(float fov, float aspect, float zNear, float zFar)
+	{
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		float fH = (float) Math.tan(fov / 360 * Math.PI) * zNear;
+		float fW = fH * aspect;
+		glFrustum(-fW, fW, -fH, fH, zNear, zFar);
 		glMatrixMode(GL_MODELVIEW);
 	}
 	
@@ -215,6 +233,8 @@ public abstract class MainApplication
 			if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE && escExit())
 				glfwSetWindowShouldClose(window, true);
 		});
+		
+		sprites = new Sprite("components.png");
 		
 		init();
 

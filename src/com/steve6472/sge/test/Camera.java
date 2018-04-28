@@ -35,7 +35,7 @@ public class Camera
 	{
 		Matrix4f target = new Matrix4f();
 		Matrix4f pos = new Matrix4f().
-				setTranslation((float) this.pos.getX(), (float) this.pos.getY(), 0);
+				setTranslation((float) this.pos.getX(), (float) this.pos.getY(), 0f);
 		
 		target = projection.mul(pos, target);
 		return target;

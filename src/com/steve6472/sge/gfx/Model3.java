@@ -15,16 +15,16 @@ import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
 
-public class Model
+public class Model3
 {
 	private int drawCount;
 	private int vId; //Vertex Id
 	private int tId; //Texture Id
 	private int cId; //Color Id
 	
-	public Model(float[] vertices, float[] texture, float[] colors)
+	public Model3(float[] vertices, float[] texture, float[] colors)
 	{
-		drawCount = vertices.length / 2;
+		drawCount = vertices.length / 3;
 		
 		vId = glGenBuffers();
 		glBindBuffer(GL_ARRAY_BUFFER, vId);
@@ -50,8 +50,8 @@ public class Model
 		glEnableVertexAttribArray(2);
 
 		glBindBuffer(GL_ARRAY_BUFFER, vId);
-		glVertexPointer(2, GL_FLOAT, 0, 0);
-		glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
+		glVertexPointer(3, GL_FLOAT, 0, 0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
 
 		glBindBuffer(GL_ARRAY_BUFFER, tId);
 		glTexCoordPointer(2, GL_INT, 0, 0);
