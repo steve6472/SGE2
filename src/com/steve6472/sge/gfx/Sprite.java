@@ -47,6 +47,7 @@ public class Sprite
 			this.width = s.getWidth();
 			this.height = s.getHeight();
 			this.id = s.getId();
+			this.pixels = s.getPixels();
 		} else
 		{
 			if (!fileName.startsWith("/"))
@@ -72,32 +73,8 @@ public class Sprite
 		
 		pixels = new int[width * height];
 		
-//		int[] pixels_raw = new int[width * height];
-//		pixels_raw = bi.getRGB(0, 0, width, height, null, 0, width);
-
-		ByteBuffer pixels = BufferUtils.createByteBuffer(width * height * 4);
-
-//		for (int i = 0; i < width; i++)
-//		{
-//			for (int j = 0; j < height; j++)
-//			{
-//				int pixel = pixels_raw[i * width + j];
-		for(int y = 0; y < height; y++)
-		{
-            for(int x = 0; x < width; x++)
-            {
-                int pixel = pixels_raw[y * width + x];
-//				int pixel = pixels_raw[i + j * width];
-				this.pixels[y * width + x] = pixel;
-				pixels.put((byte) ((pixel >> 16) & 0xFF)); // RED
-				pixels.put((byte) ((pixel >> 8) & 0xFF)); // GREEN
-				pixels.put((byte) ((pixel) & 0xFF)); // BLUE
-				pixels.put((byte) ((pixel >> 24) & 0xFF)); // ALPHA
-			}
-		}
-
-		pixels.flip();
-
+		ByteBuffer pixels = loadPixels(pixels_raw);
+		
 		id = glGenTextures();
 
 		glBindTexture(GL_TEXTURE_2D, id);
@@ -110,7 +87,29 @@ public class Sprite
 		glDisable(GL_TEXTURE_2D);
 		
 	}
+	
+	public ByteBuffer loadPixels(int[] rawPixels)
+	{
+		ByteBuffer pixels = BufferUtils.createByteBuffer(width * height * 4);
 
+		for(int y = 0; y < height; y++)
+		{
+            for(int x = 0; x < width; x++)
+            {
+                int pixel = rawPixels[y * width + x];
+				this.pixels[y * width + x] = pixel;
+				pixels.put((byte) ((pixel >> 16) & 0xFF)); // RED
+				pixels.put((byte) ((pixel >> 8) & 0xFF)); // GREEN
+				pixels.put((byte) ((pixel) & 0xFF)); // BLUE
+				pixels.put((byte) ((pixel >> 24) & 0xFF)); // ALPHA
+			}
+		}
+
+		pixels.flip();
+		
+		return pixels;
+	}
+	
 	private BufferedImage load(File file)
 	{
 		try
@@ -169,6 +168,16 @@ public class Sprite
 	{
 		return pixels;
 	}
+	
+	public void setPixel(int x, int y, int color)
+	{
+		this.pixels[x + y * width] = color;
+	}
+	
+	public void setPixels(int[] pixels)
+	{
+		this.pixels = pixels;
+	}
 
 	@Override
 	public String toString()
@@ -187,6 +196,52 @@ public class Sprite
 			}
 		}
 		return img;
+	}
+	
+	public void save(File file)
+	{
+		try
+		{
+			ImageIO.write(toBufferedImage(), "PNG", file);
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	public void setSize(int width, int height)
+	{
+		this.width = width;
+		this.height = height;
+	}
+	
+	public void change(int newWidth, int newHeight, int[] newPixels)
+	{
+		setSize(newWidth, newHeight);
+		setPixels(newPixels);
+		
+		glBindTexture(GL_TEXTURE_2D, getId());
+
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, newWidth, newHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, newPixels);
+		
+		glDisable(GL_TEXTURE_2D);
+	}
+	
+	public static int[] fromRGBtoBGR(int[] pixels)
+	{
+		int[] newPixels = new int[pixels.length];
+		
+		for (int i = 0; i < newPixels.length; i++)
+		{
+			int oldPixel = pixels[i];
+			int r = Screen.getRed(oldPixel);
+			int g = Screen.getGreen(oldPixel);
+			int b = Screen.getBlue(oldPixel);
+			int a = Screen.getAlpha(oldPixel);
+			int newPixel = Screen.getColor(b, g, r, a);
+			newPixels[i] = newPixel;
+		}
+		return newPixels;
 	}
 	
 }

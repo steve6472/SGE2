@@ -55,7 +55,10 @@ public class Item implements Serializable
 	{
 		NULL,
 		SWING,
-		STAB;
+		STAB,
+		PLACE,
+		CHOP,
+		MINE
 	}
 	
 	public enum ItemCategory

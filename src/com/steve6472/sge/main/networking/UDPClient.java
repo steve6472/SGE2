@@ -76,9 +76,9 @@ public abstract class UDPClient extends Thread
 			
 			byte[] recieved = p.getData();
 			
-			String msg = new String(recieved).trim();
+//			String msg = new String(recieved).trim();
 			
-			System.out.println("Client " + Util.getFormatedTime() + "> " + msg.substring(0, 4));
+//			System.out.println("Client " + Util.getFormatedTime() + "> " + msg.substring(0, 4));
 			
 			recievePacket(recieved, p);
 		}

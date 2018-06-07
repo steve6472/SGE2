@@ -7,7 +7,7 @@
 
 package com.steve6472.sge.gfx.animations;
 
-public abstract class Animation
+public abstract class Animation implements Cloneable
 {
 	protected long time = 0;
 	
@@ -18,5 +18,21 @@ public abstract class Animation
 	public void tick()
 	{
 		time++;
+	}
+	
+	public abstract int getId();
+	
+	@Override
+	public Animation clone()
+	{
+		try
+		{
+			return (Animation) super.clone();
+		} catch (CloneNotSupportedException ex)
+		{
+			ex.printStackTrace();
+			System.exit(-2);
+			return null;
+		}
 	}
 }

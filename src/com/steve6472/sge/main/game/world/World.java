@@ -24,8 +24,8 @@ public class World
 	 * Static variables
 	 */
 	static boolean inited = false;
-	static int worldWidth;
-	static int worldHeight;
+	public static int worldWidth;
+	public static int worldHeight;
 	
 	public static void initWorlds(int worldWidth, int worldHeight)
 	{
@@ -49,19 +49,35 @@ public class World
 		chunks[x + y * worldWidth] = chunk;
 	}
 	
+	@FunctionalInterface
+	public interface IRender<X, Y, L>
+	{
+		public void apply(X x, Y y, L l);
+	}
+	
+	@FunctionalInterface
+	public interface IRender0<X, Y, L, I>
+	{
+		public void apply(X x, Y y, L l, I i);
+	}
+	
 	public void render(GameCamera camera)
 	{
 		GameTile.prepare();
 		
-		if (camera.getX() != oldX || camera.getY() != oldY)
-		{
-			oldX = camera.getX();
-			oldY = camera.getY();
-			recalculateBounds(camera, 0);
-		}
+		tryRecalculateBounds(camera, 0);
 		
 		renderedTiles = 0;
-
+		
+		iterateVisibleTiles(camera, (x, y, l, id) ->
+		{
+			GameTile.quickRender(x, y, id, camera);
+			renderedTiles++;
+		});
+	}
+	
+	public void iterateVisibleTiles(GameCamera camera, IRender0<Integer, Integer, Integer, Integer> iter)
+	{
 		for (int x = startX; x < endX; x++)
 		{
 			for (int y = startY; y < endY; y++)
@@ -73,13 +89,36 @@ public class World
 				
 				for (int l = 0; l < Chunk.layerCount; l++)
 				{
-					int id = c.getTileIdUnsafe(x / Chunk.chunkWidth, y / Chunk.chunkHeight, l);
+					int id = c.getTileId(x % Chunk.chunkWidth, y % Chunk.chunkHeight, l);
+//					int id = Util.getRandomInt(12, 1);
+//					Util.printObjects(x, y, l, id);
 					if (id != 0)
 					{
-						renderedTiles++;
-						GameTile.quickRender(x, y, id, camera);
+						iter.apply(x, y, l, id);
 					}
 				}
+			}
+		}
+	}
+	
+	public void createBlankChunks()
+	{
+		for (int i = 0; i < worldWidth * worldHeight; i++)
+		{
+			chunks[i] = new Chunk();
+		}
+	}
+	
+	public void createBlankChunks(Class<? extends Chunk> chunk)
+	{
+		for (int i = 0; i < worldWidth * worldHeight; i++)
+		{
+			try
+			{
+				chunks[i] = chunk.newInstance();
+			} catch (InstantiationException | IllegalAccessException e)
+			{
+				e.printStackTrace();
 			}
 		}
 	}
@@ -91,7 +130,113 @@ public class World
 	
 	public int getTileInWorld(int x, int y, int layer)
 	{
-		return getChunkFromTileCoords(x, y).getTileIdUnsafe(x / Chunk.chunkWidth, y / Chunk.chunkHeight, layer);
+		int cx = x / Chunk.chunkWidth;
+		int cy = y / Chunk.chunkHeight;
+		Chunk c = chunks[cx + cy * worldWidth];
+		return c.getTileId(x - cx * Chunk.chunkWidth, y - cy * Chunk.chunkHeight, layer);
+	}
+	
+	public int getTileInWorldSafe(int x, int y, int layer)
+	{
+		int cx = x / Chunk.chunkWidth;
+		int cy = y / Chunk.chunkHeight;
+		if (cx < 0 || cy < 0 || cx > worldWidth || cy > worldHeight)
+			return 0;
+		Chunk c = chunks[cx + cy * worldWidth];
+		if (c != null)
+		{
+			return c.getTileIdSafe(x - cx * Chunk.chunkWidth, y - cy * Chunk.chunkHeight, layer);
+		}
+		else return 0;
+	}
+	
+	public int getTileInWorld(int index, int layer)
+	{
+		int x = index % (Chunk.chunkWidth * World.worldWidth);
+		int y = index / (Chunk.chunkHeight * World.worldHeight);
+		int cx = x / Chunk.chunkWidth;
+		int cy = y / Chunk.chunkHeight;
+		Chunk c = chunks[cx + cy * worldWidth];
+		return c.getTileId(x - cx * Chunk.chunkWidth, y - cy * Chunk.chunkHeight, layer);
+	}
+	
+	public int getTileInWorldSafe(int index, int layer)
+	{
+		int x = index % (Chunk.chunkWidth * World.worldWidth);
+		int y = index / (Chunk.chunkHeight * World.worldHeight);
+		int cx = x / Chunk.chunkWidth;
+		int cy = y / Chunk.chunkHeight;
+		if (cx < 0 || cy < 0 || cx > worldWidth || cy > worldHeight)
+			return 0;
+		Chunk c = chunks[cx + cy * worldWidth];
+		if (c != null)
+		{
+			return c.getTileIdSafe(x - cx * Chunk.chunkWidth, y - cy * Chunk.chunkHeight, layer);
+		} else
+		{
+			return 0;
+		}
+	}
+	
+	public void setTileInWorld(int x, int y, int layer, int id)
+	{
+		int cx = x / Chunk.chunkWidth;
+		int cy = y / Chunk.chunkHeight;
+		Chunk c = chunks[cx + cy * worldWidth];
+		c.setTileId(x - cx * Chunk.chunkWidth, y - cy * Chunk.chunkHeight, layer, id);
+	}
+	
+	public void setTileInWorldSafe(int x, int y, int layer, int id)
+	{
+		int cx = x / Chunk.chunkWidth;
+		int cy = y / Chunk.chunkHeight;
+		if (cx < 0 || cy < 0 || cx > worldWidth || cy > worldHeight)
+			return;
+		Chunk c = chunks[cx + cy * worldWidth];
+		if (c != null)
+		{
+			c.setTileIdSafe(x - cx * Chunk.chunkWidth, y - cy * Chunk.chunkHeight, layer, id);
+		}
+	}
+	
+	public void setTileInWorld(int index, int layer, int id)
+	{
+		int x = index % (Chunk.chunkWidth * World.worldWidth);
+		int y = index / (Chunk.chunkHeight * World.worldHeight);
+		int cx = x / Chunk.chunkWidth;
+		int cy = y / Chunk.chunkHeight;
+		Chunk c = chunks[cx + cy * worldWidth];
+		c.setTileId(x - cx * Chunk.chunkWidth, y - cy * Chunk.chunkHeight, layer, id);
+	}
+	
+	public void setTileInWorldSafe(int index, int layer, int id)
+	{
+		int x = index % (Chunk.chunkWidth * World.worldWidth);
+		int y = index / (Chunk.chunkHeight * World.worldHeight);
+		int cx = x / Chunk.chunkWidth;
+		int cy = y / Chunk.chunkHeight;
+		if (cx < 0 || cy < 0 || cx > worldWidth || cy > worldHeight)
+			return;
+		Chunk c = chunks[cx + cy * worldWidth];
+		if (c != null)
+		{
+			c.setTileIdSafe(x - cx * Chunk.chunkWidth, y - cy * Chunk.chunkHeight, layer, id);
+		}
+	}
+	
+	public void setTiles(int[] tiles, int layer, int chunkX, int chunkY)
+	{
+		chunks[chunkX + chunkY * worldWidth].setTiles(tiles, layer);
+	}
+	
+	public void tryRecalculateBounds(GameCamera camera, int out)
+	{
+		if (camera.getX() != oldX || camera.getY() != oldY)
+		{
+			oldX = camera.getX();
+			oldY = camera.getY();
+			recalculateBounds(camera, out);
+		}
 	}
 	
 	public void recalculateBounds(GameCamera camera, int out)
@@ -102,9 +247,22 @@ public class World
 		int tw = GameTile.tileWidth;
 		int th = GameTile.tileHeight;
 		
-		startX = Util.getNumberBetween(0, width, (camera.getX() + camera.getWidth() / 2) / tw - (camera.getWidth() / 2) / tw + out);
-		startY = Util.getNumberBetween(0, height, (camera.getY() + camera.getHeight() / 2) / th - (camera.getHeight() / 2) / th + out);
-		endX = Util.getNumberBetween(0, width, startX + camera.getWidth() / tw - out * 2 + 1);
-		endY = Util.getNumberBetween(0, height, startY + camera.getHeight() / th - out * 2 + 1);
+		int x = camera.getX();
+		int y = camera.getY();
+		
+		int w = camera.getWidth();
+		int h = camera.getHeight();
+		
+		int mx = w / -tw - 1;
+		int my = h / -th - 1;
+		
+		startX = Util.getNumberBetween(mx,	width, 	(x + w / 2) / tw - (w / 2) / tw + out);
+		startY = Util.getNumberBetween(my,  height, (y + h / 2) / th - (h / 2) / th + out);
+		
+		endX = Util.getNumberBetween(0, 	width, 	startX + w / tw - out * 2 + 1);
+		endY = Util.getNumberBetween(0, 	height, startY + h / th - out * 2 + 1);
+		
+		startX = Math.max(startX, 0);
+		startY = Math.max(startY, 0);
 	}
 }

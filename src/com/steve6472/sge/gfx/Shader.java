@@ -81,6 +81,58 @@ public class Shader
 		System.out.println("Created shader from " + fileName + " vs:" + vs + " fs:" + fs + " program:" + program);
 	}
 	
+	public Shader(String VS, String FS)
+	{
+		program = glCreateProgram();
+		
+		vs = glCreateShader(GL_VERTEX_SHADER);
+		glShaderSource(vs, VS);
+		
+		glCompileShader(vs);
+		
+		if (glGetShaderi(vs, GL_COMPILE_STATUS) != 1)
+		{
+			System.err.println(glGetShaderInfoLog(vs));
+			System.exit(1);
+		}
+		
+		
+		fs = glCreateShader(GL_FRAGMENT_SHADER);
+		glShaderSource(fs, FS);
+		
+		glCompileShader(fs);
+		
+		if (glGetShaderi(fs, GL_COMPILE_STATUS) != 1)
+		{
+			System.err.println(glGetShaderInfoLog(fs));
+			System.exit(1);
+		}
+
+		glAttachShader(program, vs);
+		glAttachShader(program, fs);
+
+		glBindAttribLocation(program, 0, "vertices");
+		glBindAttribLocation(program, 1, "textures");
+		
+		glLinkProgram(program);
+		
+		if (glGetProgrami(program, GL_LINK_STATUS) != 1)
+		{
+			System.err.println(glGetProgramInfoLog(program));
+			System.exit(1);
+		}
+		
+		glValidateProgram(program);
+		
+		if (glGetProgrami(program, GL_VALIDATE_STATUS) != 1)
+		{
+			System.err.println(glGetProgramInfoLog(program));
+			System.exit(1);
+		}
+		
+		System.out.println("Created shader from strings" + " vs:" + vs + " fs:" + fs + " program:" + program);
+	}
+	
 	public Shader setUniform1f(String name, float v1)
 	{
 		int location = glGetUniformLocation(program, name);
@@ -158,6 +210,11 @@ public class Shader
 	public void bind()
 	{
 		glUseProgram(program);
+	}
+	
+	public static void releaseShader()
+	{
+		glUseProgram(0);
 	}
 	
 	private String readFile(String file)

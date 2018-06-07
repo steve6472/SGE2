@@ -11,6 +11,8 @@ import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -47,10 +49,14 @@ public abstract class MainApplication
 	IntBuffer windowYBuffer, windowHeightBuffer;
 	
 	private List<Gui> guis;
-	List<WindowSizeCallback> windowSizeCallbacks;
+	protected List<WindowSizeCallback> windowSizeCallbacks;
+	
+	SGArray<Tick> ticks;
 	
 	double lastTime = glfwGetTime();
 	int nbFrames = 0;
+	
+	static Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	
 	public MainApplication()
 	{
@@ -60,6 +66,8 @@ public abstract class MainApplication
 		
 		windowWidthBuffer = BufferUtils.createIntBuffer(1);
 		windowHeightBuffer = BufferUtils.createIntBuffer(1);
+		
+		ticks = new SGArray<Tick>();
 		run();
 	}
 
@@ -67,7 +75,7 @@ public abstract class MainApplication
 	
 	public static Sprite sprites;
 
-	private void initApplication()
+	protected void initApplication()
 	{
 		GLFWErrorCallback.createPrint(System.err).set();
 
@@ -165,6 +173,19 @@ public abstract class MainApplication
 		//TODO: Test this method
 		glOrtho(-1, 1, -1, 1, -1, 1); // 2D projection matrix
 		glMatrixMode(GL_MODELVIEW);
+	}
+	
+	protected void addBasicResizeOrtho2()
+	{
+		addWindowSizeCallback((width, height) ->
+		{
+			glViewport(0, 0, width, height);
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			glOrtho(-1, 1, -1, 1, -1, 1); // 2D projection matrix
+			glMatrixMode(GL_MODELVIEW);
+		});
+
 	}
 	
 	/**
@@ -289,6 +310,23 @@ public abstract class MainApplication
 			g.renderGui(getScreen());
 	}
 	
+	public void tickTicks()
+	{
+		for (Tick t : ticks)
+			t.tick();
+	}
+	
+	public void addTick(Tick tick)
+	{
+		ticks.addObject(tick);
+	}
+	
+	@FunctionalInterface
+	public interface Tick
+	{
+		public void tick();
+	}
+	
     public void run() 
 	{/*
         System.out.println("LWJGL " + Version.getVersion() + "!");
@@ -336,6 +374,9 @@ public abstract class MainApplication
     public int getWindowY() { return windowYBuffer.get(0); }
     public int getCurrentWidth() { return windowWidthBuffer.get(0); }
     public int getCurrentHeight() { return windowHeightBuffer.get(0); }
+    
+    public int getScreenWidth() { return (int) screenSize.getWidth(); }
+    public int getScreenHeight() { return (int) screenSize.getHeight(); }
     
     public boolean isKeyPressed(int key) { return keyHandler.isKeyPressed(key); }
     

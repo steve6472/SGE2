@@ -273,6 +273,16 @@ public class SArray implements Iterable<Object>
 		size -= 1;
 	}
 	
+	public void swap(int index1, int index2)
+	{
+		checkSize(index1);
+		checkSize(index2);
+		
+		Object temp = getObject(index1);
+		setObject(index1, getObject(index2));
+		setObject(index2, temp);
+	}
+	
 	public SArray copy()
 	{
 		SArray a = new SArray(size, isDynamic, fillNull);

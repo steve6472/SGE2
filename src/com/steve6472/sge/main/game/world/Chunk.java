@@ -15,15 +15,15 @@ public class Chunk
 	/**
 	 * Tile ids
 	 */
-	private SGArray<int[]> map;
+	protected SGArray<int[]> map;
 	
 	/*
 	 * Static Chunk Variables
 	 */
 	static boolean inited = false;
-	static int chunkWidth;
-	static int chunkHeight;
-	static int layerCount;
+	public static int chunkWidth;
+	public static int chunkHeight;
+	public static int layerCount;
 	
 	public static void initChunks(int chunkWidth, int chunkHeight, int layerCount)
 	{
@@ -70,14 +70,14 @@ public class Chunk
 	 * @param x
 	 * @param y
 	 * @param layer
-	 * @return if boundaries are valid return id. -1 othervise
+	 * @return if boundaries are valid return id. 0 othervise
 	 */
-	public int getTileId(int x, int y, int layer)
+	public int getTileIdSafe(int x, int y, int layer)
 	{
-		return isCoordInBounds(x, y, layer) ? map.getObject(layer)[x + y * chunkWidth] : -1;
+		return isCoordInBounds(x, y, layer) ? map.getObject(layer)[x + y * chunkWidth] : 0;
 	}
 	
-	public int getTileIdUnsafe(int x, int y, int layer)
+	public int getTileId(int x, int y, int layer)
 	{
 		return map.getObject(layer)[x + y * chunkWidth];
 	}
@@ -90,16 +90,31 @@ public class Chunk
 	 * @param id
 	 * @return true if tile has been succesfuly setted. False in case of negative or too big coordinates.
 	 */
-	public boolean setTileId(int x, int y, int layer, int id)
+	public boolean setTileIdSafe(int x, int y, int layer, int id)
 	{
 		boolean flag = isCoordInBounds(x, y, layer);
 		if (flag)
 			map.getObject(layer)[x + y * chunkWidth] = id;
 		return flag;
 	}
+
+	public void setTileId(int x, int y, int layer, int id)
+	{
+		map.getObject(layer)[x + y * chunkWidth] = id;
+	}
 	
 	public boolean isCoordInBounds(int x, int y, int layer)
 	{
 		return (Util.isNumberInRange(0, chunkWidth, x) && Util.isNumberInRange(0, chunkHeight, y) && Util.isNumberInRange(0, layerCount, layer));
+	}
+	
+	public SGArray<int[]> getMap()
+	{
+		return map;
+	}
+	
+	public void setTiles(int[] tiles, int layer)
+	{
+		map.setObject(layer, tiles);
 	}
 }

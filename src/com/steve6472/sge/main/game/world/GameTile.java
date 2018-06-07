@@ -28,8 +28,8 @@ public class GameTile
 	 */
 	static boolean inited = false;
 	static Atlas tileAtlas;
-	static int tileWidth;
-	static int tileHeight;
+	public static int tileWidth;
+	public static int tileHeight;
 	static Model tileModel;
 	public static Shader baseShader;
 	static float startX;
@@ -52,7 +52,7 @@ public class GameTile
 	{
 		GameTile.tileAtlas.getAtlas().bind(0);
 		GameTile.baseShader.bind();
-		baseShader.setUniform1f("sampler", 0);
+		GameTile.baseShader.setUniform1f("sampler", 0);
 	}
 	
 	public static void quickRender(float x, float y, int tileId, GameCamera camera)

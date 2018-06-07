@@ -48,7 +48,7 @@ public class Model
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
-
+		
 		glBindBuffer(GL_ARRAY_BUFFER, vId);
 		glVertexPointer(2, GL_FLOAT, 0, 0);
 		glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);

@@ -81,7 +81,7 @@ public abstract class UDPServer extends Thread
 				
 			} else
 			{
-				System.out.println("Server " + Util.getFormatedTime() + "> " + msg.substring(0, 4));
+//				System.out.println("Server " + Util.getFormatedTime() + "> " + msg.substring(0, 4));
 				
 				recievePacket(p.getData(), p);
 			}

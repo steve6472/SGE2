@@ -7,6 +7,7 @@ import java.util.List;
 import com.steve6472.sge.gfx.Sprite;
 import com.steve6472.sge.main.MainApplication;
 import com.steve6472.sge.main.game.inventory.Inventory;
+import com.steve6472.sge.main.game.inventory.ItemSlot;
 
 public abstract class BaseEntity extends Killable implements IObject, Cloneable, IInit, Serializable
 {
@@ -153,7 +154,7 @@ public abstract class BaseEntity extends Killable implements IObject, Cloneable,
 	
 	public void setBox(AABB newBox) { this.box = newBox; }
 	
-	public void setInventory(Inventory inventory) { this.inventory = inventory; }
+	public <T extends ItemSlot> void setInventory(Inventory<T> inventory) { this.inventory = inventory; }
 	
 	public void setSprite(Sprite sprite) { this.sprite = sprite; }
 	

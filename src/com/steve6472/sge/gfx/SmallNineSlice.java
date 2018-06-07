@@ -223,7 +223,7 @@ public class SmallNineSlice
 		if (shader != null)
 		{
 			shader.setUniform2f("texture", indexX, indexY);
-			shader.setUniform4f("col", Helper.getRed(), Helper.getGreen(), Helper.getBlue(), Helper.getAlpha());
+//			shader.setUniform4f("col", Helper.getRed(), Helper.getGreen(), Helper.getBlue(), Helper.getAlpha());
 			
 			shader.setUniformMat4f("projection", target);
 		}

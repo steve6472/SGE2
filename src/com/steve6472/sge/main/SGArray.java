@@ -7,20 +7,20 @@
 
 package com.steve6472.sge.main;
 
+import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public class SGArray<T> implements Iterable<T>
 {
-	int size;
 	Object[] array;
 	boolean isDynamic;
 	boolean fillNull;
 	
 	public SGArray(int initialSize, boolean isDynamic, boolean fillNull)
 	{
-		this.size = initialSize;
 		this.array = new Object[initialSize];
 		this.isDynamic = isDynamic;
 		this.fillNull = fillNull;
@@ -34,7 +34,6 @@ public class SGArray<T> implements Iterable<T>
 	 */
 	public SGArray()
 	{
-		this.size = 0;
 		this.array = new Object[0];
 		this.isDynamic = true;
 		this.fillNull = false;
@@ -62,7 +61,7 @@ public class SGArray<T> implements Iterable<T>
 		if (fillNull)
 		{
 			int nullIndex = -1;
-			for (int i = 0; i < size - 1; i++)
+			for (int i = 0; i < getSize() - 1; i++)
 			{
 				if (array[i] == null)
 				{
@@ -72,8 +71,8 @@ public class SGArray<T> implements Iterable<T>
 			}
 			if (nullIndex == -1)
 			{
-				setSize(size + 1);
-				array[size - 1] = o;
+				setSize(getSize() + 1);
+				array[getSize() - 1] = o;
 			} else
 			{
 				array[nullIndex] = o;
@@ -81,8 +80,8 @@ public class SGArray<T> implements Iterable<T>
 		}
 		else
 		{
-			setSize(size + 1);
-			array[size - 1] = o;
+			setSize(getSize() + 1);
+			array[getSize() - 1] = o;
 		}
 	}
 	
@@ -90,7 +89,7 @@ public class SGArray<T> implements Iterable<T>
 	{
 		SArray nulls = new SArray(0, true, false);
 		
-		for (int i = 0; i < size; i++)
+		for (int i = 0; i < getSize(); i++)
 		{
 			if (array[i] == null)
 				nulls.addObject(i);
@@ -104,29 +103,48 @@ public class SGArray<T> implements Iterable<T>
 		}
 	}
 	
+	public void clear()
+	{
+		array = new Object[0];
+	}
+	
+	public void clear(int newSize)
+	{
+		array = new Object[newSize];
+	}
+	
 	public void reverseArray()
 	{
 		for (int i = 0; i < array.length / 2; i++)
 		{
 			Object temp = array[i];
-			array[i] = array[size - i - 1];
-			array[size - i - 1] = temp;
+			array[i] = array[getSize() - i - 1];
+			array[getSize() - i - 1] = temp;
 		}
 	}
 	
 	private void checkSize(int index)
 	{
-		if (size < 0 || (!isDynamic && index > this.size))
+		if (getSize() < 0 || (!isDynamic && index > this.getSize()))
 			throw new ArrayIndexOutOfBoundsException(index);
 		
-		if (isDynamic && index > this.size)
+		if (isDynamic && index > this.getSize())
 			setSize(index);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<T> toList()
+	{
+		List<T> list = new ArrayList<T>();
+		for (Object t : array)
+		{
+			list.add((T) t);
+		}
+		return list;
 	}
 	
 	public void setSize(int newSize)
 	{
-		this.size = newSize;
-		
 		Object[] newArray = new Object[newSize];
 		
 		System.arraycopy(array, 0, newArray, 0, newSize - 1);
@@ -138,24 +156,24 @@ public class SGArray<T> implements Iterable<T>
 	{
 		if (index == 0)
 		{
-			Object[] newArray = new Object[size - 1];
+			Object[] newArray = new Object[getSize() - 1];
 			
-			System.arraycopy(array, 1, newArray, 0, size - 1);
+			System.arraycopy(array, 1, newArray, 0, getSize() - 1);
 			
 			this.array = newArray;
-		} else if (index == size - 1)
+		} else if (index == getSize() - 1)
 		{
-			Object[] newArray = new Object[size - 1];
+			Object[] newArray = new Object[getSize() - 1];
 			
-			System.arraycopy(array, 0, newArray, 0, size - 1);
+			System.arraycopy(array, 0, newArray, 0, getSize() - 1);
 			
 			this.array = newArray;
 		} else
 		{
-			Object[] newArray = new Object[size - 1];
+			Object[] newArray = new Object[getSize() - 1];
 			
-			int left = -((size - 1) - (size - 1) - index);
-			int right = (size - 1) - index;
+			int left = -((getSize() - 1) - (getSize() - 1) - index);
+			int right = (getSize() - 1) - index;
 
 //			Util.printObjects("Left:", left, "\nRight:", right);
 			
@@ -169,13 +187,11 @@ public class SGArray<T> implements Iterable<T>
 			
 			this.array = newArray;
 		}
-		
-		size -= 1;
 	}
 	
 	public SGArray<T> copy()
 	{
-		SGArray<T> a = new SGArray<T>(size, isDynamic, fillNull);
+		SGArray<T> a = new SGArray<T>(getSize(), isDynamic, fillNull);
 		a.array = array.clone();
 		return a;
 	}
@@ -214,7 +230,7 @@ public class SGArray<T> implements Iterable<T>
 	
 	public int getSize()
 	{
-		return size;
+		return array.length;
 	}
 	
 	private class Itr implements Iterator<T>
@@ -224,7 +240,7 @@ public class SGArray<T> implements Iterable<T>
 		@Override
 		public boolean hasNext()
 		{
-			return index != size;
+			return index != getSize();
 		}
 
 		@SuppressWarnings("unchecked")
@@ -233,7 +249,7 @@ public class SGArray<T> implements Iterable<T>
 		{
 			int i = index;
 			
-			if (i >= size)
+			if (i >= getSize())
 				throw new NoSuchElementException();
 			
             if (i >= array.length)

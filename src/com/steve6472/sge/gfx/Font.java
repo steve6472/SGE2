@@ -163,8 +163,31 @@ public class Font
 		this.screen = screen;
 		font = new Sprite("font.png");
 		invertedFont = new Sprite("invertedFont.png");
-		fontShader = new Shader("shaders\\basev2");
-//		fontModel = new Model(ShaderTest2.fillScreen(), ShaderTest2.createTexture(8, 8, font), ShaderTest2.createArray(0f));
+		String fs = "#version 330 core\n"
+				+ "uniform sampler2D sampler;\n"
+				+ "uniform vec2 texture;\n"
+				+ "in vec4 vColor;\n"
+				+ "in vec2 vTexture;\n"
+				+ "out vec4 fragColor;\n"
+				+ "void main()\n"
+				+ "{\n"
+				+ "fragColor = texture2D(sampler, vTexture + texture) + vColor;\n"
+				+ "}";
+		String vs = "#version 330 core\n"
+				+ "layout(location = 0) in vec2 position;\n"
+				+ "layout(location = 1) in vec2 texture;\n"
+				+ "layout(location = 2) in vec4 color;\n"
+				+ "uniform mat4 projection;\n"
+				+ "out vec4 vColor;\n"
+				+ "out vec2 vTexture;\n"
+				+ "void main()\n"
+				+ "{\n"
+				+ "vColor = color;\n"
+				+ "vTexture = texture;\n"
+				+ "gl_Position = projection *  vec4(position, 0.0, 1.0);\n"
+				+ "}";
+		fontShader = new Shader(vs, fs);
+		fontModel = new Model(ShaderTest2.fillScreen(), ShaderTest2.createTexture(8, 8, font), ShaderTest2.createArray(0f));
 	}
 	
 	public void renderFont(String text, int x, int y, int size, float red, float green, float blue, boolean shade)

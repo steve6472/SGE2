@@ -31,6 +31,12 @@ public class Atlas
 		this.textures = textures;
 	}
 	
+	public Atlas(Sprite sprite, int size)
+	{
+		this.atlas = sprite;
+		this.size = size;
+	}
+	
 	public Sprite getAtlas()
 	{
 		return atlas;

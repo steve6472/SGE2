@@ -98,6 +98,12 @@ public class Helper
 		currentLayer.color(red, green, blue, alpha);
 	}
 	
+	public static void color(int color)
+	{
+		float[] c = Screen.getColors(color);
+		color(c[0], c[1], c[2], c[3]);
+	}
+	
 	public static float getRed() 	{ return currentLayer.color.getObject(0); }
 	public static float getGreen() 	{ return currentLayer.color.getObject(1); }
 	public static float getBlue() 	{ return currentLayer.color.getObject(2); }
@@ -123,4 +129,47 @@ public class Helper
 		}
 		return mat;
 	}
+	
+	public static HelperDataLayer getCurrentLayer()
+	{
+		return currentLayer;
+	}
 }
+
+/*
+Helper.pushLayer();
+
+Helper.translate((float) getWindowX(), (float) getWindowY(), 0);
+
+float w = (float) getScreenWidth() / 2f;
+float h = (float) getScreenWidth() / 1.8f;
+
+float sw = (float) getScreenWidth();
+float ww = (float) getCurrentWidth();
+
+float sh = (float) getScreenHeight();
+float wh = (float) getCurrentHeight();
+
+Helper.translate(w / -(1f + 1f / (sw / ww - 1f)), 0, 0);
+
+Helper.translate(0, h / -(2f + 2f / (sh / wh - 1f)) * 1.012f, 0);
+
+
+Helper.scale((float) getScreenWidth() / 2f, (float) getScreenHeight() / 1.8f, 0);
+
+Matrix4f target = new Matrix4f();
+
+back.bind();
+shader.bind();
+
+camera.getProjection().mul(Helper.toMatrix(), target);
+
+shader.setUniform2f("texture", 0, 0);
+
+shader.setUniformMat4f("projection", target);
+
+model.render();
+
+Helper.popLayer();
+
+GL20.glUseProgram(0);*/

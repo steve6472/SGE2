@@ -336,6 +336,16 @@ public class Util
 		return false;
 	}
 	
+	public static boolean isInRectangle(int rminx, int rminy, int rmaxx, int rmaxy, int px, int py)
+	{
+		return px >= rminx && px <= rmaxx && py >= rminy && py <= rmaxy;
+	}
+	
+	public static boolean isInRectangle(double rminx, double rminy, double rmaxx, double rmaxy, double px, double py)
+	{
+		return px >= rminx && px <= rmaxx && py >= rminy && py <= rmaxy;
+	}
+	
 	public static String getLastClassName(Class<?> clazz) { return clazz.getName().split("\\.")[clazz.getName().split("\\.").length - 1]; }
 
 	public static int getBiggestClosetsSqrt(int count)
@@ -695,6 +705,26 @@ public class Util
 		return Math.max(a, b);
 	}
 	
+	public static int mini(int a, int b)
+	{
+		return Math.min(a, b);
+	}
+	
+	public static double mind(double a, double b)
+	{
+		return Math.min(a, b);
+	}
+	
+	public static float minf(float a, float b)
+	{
+		return Math.min(a, b);
+	}
+	
+	public static long minl(long a, long b)
+	{
+		return Math.min(a, b);
+	}
+	
 	public static double getRandomAngle()
 	{
 		return getRandomDouble(360, 0);
@@ -826,6 +856,16 @@ public class Util
 		float py = calculateValue(t0, t1, y0, y1);
 		
 		return new Vec2(px, py);
+	}
+	
+	public static boolean toBoolean(int i)
+	{
+		return i == 0 ? false : true;
+	}
+	
+	public static int toInt(boolean b)
+	{
+		return b ? 1 : 0;
 	}
 	
 /*

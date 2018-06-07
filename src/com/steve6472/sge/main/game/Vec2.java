@@ -8,11 +8,14 @@ public class Vec2 implements Serializable
 {
 	private static final long serialVersionUID = -6728175878841578459L;
 	private double x, y;
+	private double maxx, minx, maxy, miny;
+	private boolean checkLimit = false;
 	
 	public Vec2()
 	{
 		this.x = 0;
 		this.y = 0;
+		limit();
 	}
 	
 	public Vec2(Vec2 vec2)
@@ -24,6 +27,7 @@ public class Vec2 implements Serializable
 	{
 		this.x = x;
 		this.y = y;
+		limit();
 	}
 	
 	public Vec2 move(Vec2 a)
@@ -35,6 +39,7 @@ public class Vec2 implements Serializable
 	{
 		x += xx;
 		y += yy;
+		limit();
 		return this;
 	}
 	
@@ -42,6 +47,7 @@ public class Vec2 implements Serializable
 	{
 		x += xx * speed;
 		y += yy * speed;
+		limit(); 
 		return this;
 	}
 	
@@ -66,6 +72,70 @@ public class Vec2 implements Serializable
 		return this;
 	}
 	
+	public Vec2 setLimit(double limit)
+	{
+		setLimit(-limit, limit, -limit, limit);
+		return this;
+	}
+	
+	public Vec2 fromAngle(double angle)
+	{
+		return new Vec2(Math.cos(angle), Math.sin(angle));
+	}
+	
+	public Vec2 setLimit(double minx, double maxx, double miny, double maxy)
+	{
+		this.minx = minx;
+		this.maxx = maxx;
+		
+		this.miny = miny;
+		this.maxy = maxy;
+		checkLimit = true;
+		return this;
+	}
+	
+	public boolean checkLimit()
+	{
+		if (!checkLimit) return false;
+		return !Util.isInRectangle(minx, miny, maxx, maxy, x, y);
+	}
+	
+	public void limit()
+	{
+		if (!checkLimit()) return;
+		
+		if (x < minx) x = minx;
+		if (x > maxx) x = maxx;
+		
+		if (y < miny) y = miny;
+		if (y > maxy) y = maxy;
+	}
+	
+	public void limit(double limit)
+	{
+		if (x < -limit) x = -limit;
+		if (x > limit) x = limit;
+		
+		if (y < -limit) y = -limit;
+		if (y > limit) y = limit;
+	}
+	
+	/**
+	 * 
+	 * @param limit
+	 * @return true when out of limit
+	 */
+	public boolean checkLimit(double limit)
+	{
+		if (x < -limit) return true;
+		if (x > limit) return true;
+		
+		if (y < -limit) return true;
+		if (y > limit) return true;
+		
+		return false;
+	}
+	
 	public double getX() { return x; }
 	
 	public double getY() { return y; }
@@ -74,33 +144,33 @@ public class Vec2 implements Serializable
 	
 	public int getIntY() { return (int) y; }
 	
-	public Vec2 setX(double x) { this.x = x; return this; }
+	public Vec2 setX(double x) { this.x = x; limit(); return this; }
 	
-	public Vec2 setY(double y) { this.y = y; return this; }
+	public Vec2 setY(double y) { this.y = y; limit(); return this; }
 
-	public Vec2 up() { this.y--; return this; }
+	public Vec2 up() { this.y--; limit(); return this; }
 
-	public Vec2 down() { this.y++; return this; }
+	public Vec2 down() { this.y++; limit(); return this; }
 
-	public Vec2 left() { this.x--; return this; }
+	public Vec2 left() { this.x--; limit(); return this; }
 
-	public Vec2 right() { this.x++; return this; }
+	public Vec2 right() { this.x++; limit(); return this; }
 
-	public Vec2 up(double d) { this.y -= d; return this; }
+	public Vec2 up(double d) { this.y -= d; limit(); return this; }
 
-	public Vec2 down(double d) { this.y += d; return this; }
+	public Vec2 down(double d) { this.y += d; limit(); return this; }
 
-	public Vec2 left(double d) { this.x -= d; return this; }
+	public Vec2 left(double d) { this.x -= d; limit(); return this; }
 
-	public Vec2 right(double d) { this.x += d; return this; }
+	public Vec2 right(double d) { this.x += d; limit(); return this; }
 	
-	public Vec2 devide(double d) { this.x /= d; this.y /= d; return this; }
+	public Vec2 devide(double d) { this.x /= d; this.y /= d; limit(); return this; }
 	
-	public Vec2 multiply(double m) { this.x /= m; this.y /= m; return this; }
+	public Vec2 multiply(double m) { this.x /= m; this.y /= m; limit(); return this; }
 	
 	public AABB toAABB(double width, double height) { return new AABB(this, width, height); }
 	
-	public void invert() { this.x = -x; this.y = -y; }
+	public void invert() { this.x = -x; this.y = -y; limit(); }
 
 	/**
 	 * 
@@ -114,6 +184,7 @@ public class Vec2 implements Serializable
 	{
 		this.x += add.getX();
 		this.y += add.getY();
+		limit();
 		return this;
 	}
 	
@@ -129,9 +200,9 @@ public class Vec2 implements Serializable
 	public Vec2 setLocation(Vec2 vec2)
 	{
 		if (vec2 == null) 
-			{ setLocation(0, 0); return this; }
+			{ setLocation(0, 0); limit(); return this; }
 		else 
-			{ setLocation(vec2.clone().getX(), vec2.clone().getY()); return this; }
+			{ setLocation(vec2.clone().getX(), vec2.clone().getY()); limit(); return this; }
 	}
 
 	public static Vec2 getVec2InRange(double xmin, double xmax, double ymin, double ymax)

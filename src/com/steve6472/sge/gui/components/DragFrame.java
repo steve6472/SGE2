@@ -27,6 +27,8 @@ public class DragFrame extends Component
 	private int w_posx;
 	private int w_posy;
 	private int buttonEvent;
+
+	private boolean render = true;
 	
 	@Override
 	public void init(MainApplication game)
@@ -61,6 +63,9 @@ public class DragFrame extends Component
 	@Override
 	public void render(Screen screen)
 	{
+		if (!render)
+			return;
+		
 		screen.drawRect(x, y, width, height, 2, 0xff7f7f7f);
 		screen.fillRect(x + 2, y + 2, width - 4, height - 4, 0xff000000);
 		if (text != null && text != "")
@@ -81,6 +86,7 @@ public class DragFrame extends Component
 	{
 		if (!canDrag)
 			return;
+		
 		if (isCursorInComponent() && buttonEvent == 1)
 		{
 			dragging = true;
@@ -140,6 +146,11 @@ public class DragFrame extends Component
 	public boolean isCanDrag()
 	{
 		return canDrag;
+	}
+	
+	public void setRender(boolean render)
+	{
+		this.render = render;
 	}
 
 }

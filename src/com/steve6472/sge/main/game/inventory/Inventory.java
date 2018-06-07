@@ -12,7 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import com.steve6472.sge.main.SGArray;
 import com.steve6472.sge.main.game.BaseEntity;
 
-public class Inventory
+public class Inventory<T extends ItemSlot>
 {
 	/**
 	 * The entity this inventory belongs to
@@ -22,19 +22,51 @@ public class Inventory
 	/*
 	 * This should allow me to add and remove slots on the run!
 	 */
-	SGArray<ItemSlot> slots;
+	SGArray<T> slots;
 	
-	public Inventory(BaseEntity entity, Class<? extends ItemSlot> clazz, String... slotNames)
+	Item nullItem = Item.AIR;
+	
+	@SuppressWarnings("unchecked")
+	public Inventory(BaseEntity entity, Class<? extends ItemSlot> clazz, Item nullItem, String... slotNames)
 	{
 		this.entity = entity;
 		
-		slots = new SGArray<ItemSlot>(slotNames.length, true, false);
+		this.nullItem = nullItem;
+		
+		slots = new SGArray<T>(slotNames.length, true, false);
 		
 		for (int i = 0; i < slotNames.length; i++)
 		{
 			try
 			{
-				slots.setObject(i, clazz.getConstructor(String.class, int.class).newInstance(slotNames[i], i));
+				slots.setObject(i, (T) clazz.getConstructor(String.class, int.class).newInstance(slotNames[i], i));
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
+					| SecurityException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public Inventory(BaseEntity entity, Class<? extends ItemSlot> clazz, String... slotNames)
+	{
+		this(entity, clazz, Item.AIR, slotNames);
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Inventory(BaseEntity entity, Class<? extends ItemSlot> clazz, Item nullItem, int initialSlotCount)
+	{
+		this.entity = entity;
+		
+		this.nullItem = nullItem;
+		
+		slots = new SGArray<T>(initialSlotCount, true, false);
+		
+		for (int i = 0; i < initialSlotCount; i++)
+		{
+			try
+			{
+				slots.setObject(i, (T) clazz.getConstructor(String.class, int.class).newInstance("" + i, i));
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 					| SecurityException e)
 			{
@@ -45,21 +77,7 @@ public class Inventory
 	
 	public Inventory(BaseEntity entity, Class<? extends ItemSlot> clazz, int initialSlotCount)
 	{
-		this.entity = entity;
-		
-		slots = new SGArray<ItemSlot>(initialSlotCount, true, false);
-		
-		for (int i = 0; i < initialSlotCount; i++)
-		{
-			try
-			{
-				slots.setObject(i, clazz.getConstructor(String.class, int.class).newInstance("" + i, i));
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
-					| SecurityException e)
-			{
-				e.printStackTrace();
-			}
-		}
+		this(entity, clazz, Item.AIR, initialSlotCount);
 	}
 	
 	/*
@@ -112,7 +130,7 @@ public class Inventory
 		return items;
 	}
 	
-	public final SGArray<ItemSlot> getSlots()
+	public final SGArray<T> getSlots()
 	{
 		return slots;
 	}
@@ -131,7 +149,7 @@ public class Inventory
 		return -1;
 	}
 	
-	public final ItemSlot getSlot(int id)
+	public final T getSlot(int id)
 	{
 		return slots.getObject(id);
 	}
