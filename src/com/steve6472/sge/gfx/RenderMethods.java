@@ -14,7 +14,6 @@ import com.steve6472.sge.gfx.Model;
 import com.steve6472.sge.gfx.Shader;
 import com.steve6472.sge.gfx.Sprite;
 import com.steve6472.sge.main.Util;
-import com.steve6472.sge.test.Camera;
 import com.steve6472.sge.test.ShaderTest2;
 
 public class RenderMethods

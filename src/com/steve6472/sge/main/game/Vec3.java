@@ -177,7 +177,7 @@ public class Vec3 implements Serializable
 	@Override
 	public String toString()
 	{
-		return "Vec2 [x=" + x + ", y=" + y + ", z=" + z + "]";
+		return "Vec3 [x=" + x + ", y=" + y + ", z=" + z + "]";
 	}
 	
 	public String format()

@@ -81,7 +81,7 @@ public class Model3
 	@Override
 	public String toString()
 	{
-		return "Model [drawCount=" + drawCount + ", vId=" + vId + ", tId=" + tId + ", cId=" + cId + "]";
+		return "Model3 [drawCount=" + drawCount + ", vId=" + vId + ", tId=" + tId + ", cId=" + cId + "]";
 	}
 	
 	

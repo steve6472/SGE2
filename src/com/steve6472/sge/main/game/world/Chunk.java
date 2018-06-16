@@ -7,6 +7,10 @@
 
 package com.steve6472.sge.main.game.world;
 
+import java.util.List;
+
+import com.steve6472.sge.gfx.Camera;
+import com.steve6472.sge.gfx.Model;
 import com.steve6472.sge.main.SGArray;
 import com.steve6472.sge.main.Util;
 
@@ -25,6 +29,14 @@ public class Chunk
 	public static int chunkHeight;
 	public static int layerCount;
 	
+	/*
+	 * Chunk specific data 
+	 */
+	Model model;
+	float[] vertices;
+	float[] textures;
+	float[] colors;
+	
 	public static void initChunks(int chunkWidth, int chunkHeight, int layerCount)
 	{
 		Chunk.inited = true;
@@ -40,12 +52,117 @@ public class Chunk
 		{
 			map.setObject(l, new int[chunkWidth * chunkHeight]);
 		}
+		
+		gen(chunkWidth, chunkHeight);
+		
+		vertices = toFloat(ver);
+		textures = toFloat(tex);
+		colors = toFloat(col);
+		
+		model = new Model(vertices, textures, colors);
+		
+		ver.clear();
+		tex.clear();
+		col.clear();
+	}
+	
+	private float[] toFloat(List<Float> list)
+	{
+		float[] f = new float[list.size()];
+		for (int i = 0; i < list.size(); i++)
+		{
+			f[i] = list.get(i);
+		}
+		return f;
+	}
+	
+	List<Float> ver;
+	List<Float> tex;
+	List<Float> col;
+	
+	public void gen(int sizeX, int sizeZ)
+	{
+		ver.clear();
+		tex.clear();
+		col.clear();
+
+		for (float i = 0; i < sizeX; i++)
+		{
+			for (float j = 0; j < sizeZ; j++)
+			{
+				float inX = 0;
+				float inY = 0;
+			
+				inX++;
+				inY++;
+				
+				float sx = 1f / (GameTile.tileAtlas.getAtlas().getWidth() / GameTile.tileWidth);
+				float sy = 1f / (GameTile.tileAtlas.getAtlas().getHeight() / GameTile.tileHeight);
+				
+				float x = sx * inX;
+				float y = sy * inY;
+				
+				float X = sx * (inX - 1);
+				float Y = sy * (inY - 1);
+				
+				add(0 + i, 0 + j, X, y);
+				add(1 + i, 0 + j, x, y);
+				add(1 + i, 1 + j, x, Y);
+				add(0 + i, 1 + j, X, Y);
+			}
+		}
+	}
+	
+	private void add(float x, float y, float tx, float ty)
+	{
+		ver.add(x);
+		ver.add(y);
+		
+		tex.add(tx);
+		tex.add(ty);
+
+		col.add(0f);
+		col.add(0f);
+		col.add(0f);
+		col.add(0f);
+	}
+	
+	private void set(int x_, int y_, int ix, int iy)
+	{
+		int i = 4;
+		
+		float inX = ix;
+		float inY = iy;
+	
+		inX++;
+		inY++;
+		
+		float sx = 1f / (GameTile.tileAtlas.getAtlas().getWidth() / GameTile.tileWidth);
+		float sy = 1f / (GameTile.tileAtlas.getAtlas().getHeight() / GameTile.tileHeight);
+		
+		float x = sx * inX;
+		float y = sy * inY;
+		
+		float X = sx * (inX - 1);
+		float Y = sy * (inY - 1);
+		
+		textures[i * 8 + 0] = X;
+		textures[i * 8 + 1] = y;
+		
+		textures[i * 8 + 2] = x;
+		textures[i * 8 + 3] = y;
+		
+		textures[i * 8 + 4] = x;
+		textures[i * 8 + 5] = Y;
+		
+		textures[i * 8 + 6] = X;
+		textures[i * 8 + 7] = Y;
 	}
 	
 	/**
 	 * Automatically ignores {@code 0} in map
 	 */
-	public void render(GameCamera camera, int offsetX, int offsetY)
+	public void render(Camera camera, int offsetX, int offsetY)
 	{
 		GameTile.prepare();
 
@@ -105,7 +222,7 @@ public class Chunk
 	
 	public boolean isCoordInBounds(int x, int y, int layer)
 	{
-		return (Util.isNumberInRange(0, chunkWidth, x) && Util.isNumberInRange(0, chunkHeight, y) && Util.isNumberInRange(0, layerCount, layer));
+		return (Util.isNumberInRange(0, chunkWidth - 1, x) && Util.isNumberInRange(0, chunkHeight - 1, y) && Util.isNumberInRange(0, layerCount - 1, layer));
 	}
 	
 	public SGArray<int[]> getMap()

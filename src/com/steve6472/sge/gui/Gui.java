@@ -243,4 +243,9 @@ public abstract class Gui implements Serializable
 	{
 		return mainApp;
 	}
+	
+	public MouseHandler getMouseHandler()
+	{
+		return getMainApp().getMouseHandler();
+	}
 }

@@ -16,7 +16,6 @@ import org.joml.Matrix4f;
 import com.steve6472.sge.main.MainApplication;
 import com.steve6472.sge.main.game.AABB;
 import com.steve6472.sge.main.game.Vec2;
-import com.steve6472.sge.test.Camera;
 import com.steve6472.sge.test.ShaderTest2;
 
 public class Font
@@ -155,8 +154,8 @@ public class Font
 	}
 	*/
 	
-	private static Shader fontShader;
-	private static Model fontModel;
+	public static Shader fontShader;
+	public static Model fontModel;
 
 	public Font(Screen screen)
 	{
@@ -187,6 +186,7 @@ public class Font
 				+ "gl_Position = projection *  vec4(position, 0.0, 1.0);\n"
 				+ "}";
 		fontShader = new Shader(vs, fs);
+		fontShader.setUniform1f("sampler", 0);
 		fontModel = new Model(ShaderTest2.fillScreen(), ShaderTest2.createTexture(8, 8, font), ShaderTest2.createArray(0f));
 	}
 	
@@ -257,7 +257,6 @@ public class Font
 			
 		mainApp.getFont().getFont().bind();
 		fontShader.bind();
-		fontShader.setUniform1f("sampler", 0);
 
 		for (int i = 0; i < text.length(); i++)
 		{

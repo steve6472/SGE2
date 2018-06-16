@@ -144,6 +144,10 @@ public class Vec2 implements Serializable
 	
 	public int getIntY() { return (int) y; }
 	
+	public float getFX() { return (float) x; }
+	
+	public float getFY() { return (float) y; }
+	
 	public Vec2 setX(double x) { this.x = x; limit(); return this; }
 	
 	public Vec2 setY(double y) { this.y = y; limit(); return this; }

@@ -12,6 +12,7 @@ import static org.lwjgl.opengl.GL11.*;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL;
 
+import com.steve6472.sge.gfx.Camera;
 import com.steve6472.sge.gfx.Model;
 import com.steve6472.sge.gfx.Screen;
 import com.steve6472.sge.gfx.Shader;

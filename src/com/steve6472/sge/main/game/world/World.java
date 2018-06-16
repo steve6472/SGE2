@@ -7,6 +7,7 @@
 
 package com.steve6472.sge.main.game.world;
 
+import com.steve6472.sge.gfx.Camera;
 import com.steve6472.sge.main.Util;
 
 public class World
@@ -61,7 +62,7 @@ public class World
 		public void apply(X x, Y y, L l, I i);
 	}
 	
-	public void render(GameCamera camera)
+	public void render(Camera camera)
 	{
 		GameTile.prepare();
 		
@@ -69,14 +70,22 @@ public class World
 		
 		renderedTiles = 0;
 		
+		GameTile.startSmartRender();
+		
 		iterateVisibleTiles(camera, (x, y, l, id) ->
 		{
-			GameTile.quickRender(x, y, id, camera);
+//			GameTile.quickRender(x, y, id, camera);
+			GameTile.smartRender(x, y, id, camera);
 			renderedTiles++;
 		});
+
+		GameTile.stopSmartRender();
 	}
 	
-	public void iterateVisibleTiles(GameCamera camera, IRender0<Integer, Integer, Integer, Integer> iter)
+	/**
+	 * x, y, l, id
+	 */
+	public void iterateVisibleTiles(Camera camera, IRender0<Integer, Integer, Integer, Integer> iter)
 	{
 		for (int x = startX; x < endX; x++)
 		{
@@ -90,8 +99,6 @@ public class World
 				for (int l = 0; l < Chunk.layerCount; l++)
 				{
 					int id = c.getTileId(x % Chunk.chunkWidth, y % Chunk.chunkHeight, l);
-//					int id = Util.getRandomInt(12, 1);
-//					Util.printObjects(x, y, l, id);
 					if (id != 0)
 					{
 						iter.apply(x, y, l, id);
@@ -140,7 +147,7 @@ public class World
 	{
 		int cx = x / Chunk.chunkWidth;
 		int cy = y / Chunk.chunkHeight;
-		if (cx < 0 || cy < 0 || cx > worldWidth || cy > worldHeight)
+		if (cx < 0 || cy < 0 || cx > worldWidth - 1 || cy > worldHeight - 1)
 			return 0;
 		Chunk c = chunks[cx + cy * worldWidth];
 		if (c != null)
@@ -229,7 +236,7 @@ public class World
 		chunks[chunkX + chunkY * worldWidth].setTiles(tiles, layer);
 	}
 	
-	public void tryRecalculateBounds(GameCamera camera, int out)
+	public void tryRecalculateBounds(Camera camera, int out)
 	{
 		if (camera.getX() != oldX || camera.getY() != oldY)
 		{
@@ -239,7 +246,7 @@ public class World
 		}
 	}
 	
-	public void recalculateBounds(GameCamera camera, int out)
+	public void recalculateBounds(Camera camera, int out)
 	{
 		int width = Chunk.chunkWidth * World.worldWidth;
 		int height = Chunk.chunkHeight * World.worldHeight;

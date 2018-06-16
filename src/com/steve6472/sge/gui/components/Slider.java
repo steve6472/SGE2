@@ -19,193 +19,7 @@ public class Slider extends Component
 	@Override
 	public void init(MainApplication game)
 	{
-	}
-
-	@Override
-	public void render(Screen screen)
-	{
-		RenderHelper.renderDoubleBorderComponent(screen, this, 0xff000000, 0xff606060, 0xff3f3f3f);
-
-		RenderHelper.renderButton(screen, moveX, getY() - 8, 32, 48, true, hovered);
-		
-	}
-
-	protected void sliderChange()
-	{
-		privateX = getX() - getMouseHandler().getMouseX(); //mouse pos relativly to component
-		
-		changeEvent.forEach((ce) -> ce.change());
-	}
-	
-	private boolean setted = false;
-	private int oldValue = 0;
-	private int moveX = 0;
-	private boolean hovered = false;
-	private boolean lastHovered = false;
-	
-	@Override
-	public void tick()
-	{
-		tickComponents();
-
-		if (!setted)
-		{
-			onMousePressed(c -> privateX = getX() - getMouseHandler().getMouseX());
-		} else
-		{
-			setted = false;
-		}
-		
-		//Over the slider thing
-		hovered = isCursorInComponent(moveX, getY() - 8, 32, 48);
-		
-		if (hovered != lastHovered)
-		{
-			lastHovered = hovered;
-		}
-
-		float max = (float) getMaxValue();
-
-		int valueBuffer = -((int) ((privateX * max) / getWidth())); //Some weird shit
-		
-		int oldValue = getValue();
-		
-		if (valueBuffer > getMaxValue())
-		{
-			value = getMaxValue();
-		} else if (valueBuffer < 0)
-		{
-			value = 0;
-		} else
-		{
-			value = valueBuffer;
-		}
-		
-		if (oldValue != getValue())
-		{
-//			slider.setToolTipText("Value:" + getValue());
-		}
-		
-		moveX = getX() - 16 - privateX; //Center to the slider
-
-		if (privateX + 8 > 0)
-			moveX = getX() - 8;
-
-		if (privateX - 8 < (-getWidth()))
-			moveX = getX() + getWidth() - 24;
-
-		//Cuz of background repaint delay the slider button have little "ghost"
-		
-		if (this.oldValue != value)
-		{
-			this.oldValue = value;
-			changeEvent.forEach(ce -> ce.change());
-		}
-	}
-	
-	/*
-	 * Operators
-	 */
-	
-	/*
-	 * Setters
-	 */
-	
-	public void setValue(int value)
-	{
-		this.value = value;
-		setted = true;
-		privateX = -((int) ((value * getWidth()) / getMaxValue()));
-	}
-	
-	public void setMaxValue(int maxValue)
-	{
-		this.maxValue = maxValue;
-	}
-	
-	public void setMinValue(int minValue)
-	{
-		this.minValue = minValue;
-	}
-	
-	public void setSize(int width)
-	{
-		if (width < 64)
-			width = 64;
-		super.setSize(width, 32);
-	}
-	
-	@Override
-	public void setSize(int width, int height)
-	{
-		setSize(width);
-	}
-	
-	@Override
-	public void setLocation(int x, int y)
-	{
-		this.x = x;
-		this.y = y;
-	}
-	
-	public void addChangeEvent(ChangeEvent ce)
-	{
-		changeEvent.add(ce);
-	}
-	
-	/*
-	 * Getters
-	 */
-	
-	public int getValue()
-	{
-		return value;
-	}
-	
-	public int getMaxValue()
-	{
-		return maxValue;
-	}
-	
-	public int getMinValue()
-	{
-		return minValue;
-	}
-	
-	@Override
-	protected int getMinWidth()
-	{
-		return 64;
-	}
-	
-	@Override
-	protected int getMinHeight()
-	{
-		return 32;
-	}
-}
-
-/*package com.steve6472.sge.gui.components;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import com.steve6472.sge.gfx.RenderHelper;
-import com.steve6472.sge.gfx.Screen;
-import com.steve6472.sge.gui.Component;
-import com.steve6472.sge.main.MainApplication;
-
-public class Slider extends Component
-{
-	private static final long serialVersionUID = 4164297008969991704L;
-	
-	private int value = 0, maxValue = 100, minValue = 0, privateX;
-
-	protected List<ChangeEvent> changeEvent = new ArrayList<ChangeEvent>();
-	
-	@Override
-	public void init(MainApplication game)
-	{
+		recalculate();
 	}
 
 	@Override
@@ -227,41 +41,46 @@ public class Slider extends Component
 	private boolean setted = false;
 	private int oldValue = 0;
 	private int moveX = 0;
-	private boolean hovered = false;
-	private boolean lastHovered = false;
 	private boolean selected = false;
+	private boolean flag0 = false;
 	
 	@Override
 	public void tick()
 	{
 		tickComponents();
 		
-		onMousePressed(c -> selected = isCursorInComponent(getX(), getY(), getWidth(), getHeight()) || isCursorInComponent(moveX, getY() - 8, 32, 48))
+		if (!getMouseHandler().isMouseHolded() && flag0)
+		{
+			flag0 = false;
+			selected = false;
+		}
 		
+		if (getMouseHandler().isMouseHolded())
+		{
+			if (!flag0)
+			{
+				flag0 = true;
+				selected = isCursorInComponent(getX(), getY(), getWidth(), getHeight()) || isCursorInComponent(moveX, getY() - 8, 32, 48);
+			}
+		}
+
 		if (!selected)
 			return;
-/*
+		
 		if (!setted)
 		{
-			onMousePressed(c -> privateX = getX() - getMouseHandler().getMouseX());
+			if (getMouseHandler().isMouseHolded())
+				privateX = getX() - getMouseHandler().getMouseX();
 		} else
 		{
 			setted = false;
-		}*/
+		}
 		
-		//Over the slider thing
-		//hovered = isCursorInComponent(moveX, getY() - 8, 32, 48);
-		/*
-		if (selected != lastHovered)
-		{
-			lastHovered = selected;
-		}*//*
-
 		float max = (float) getMaxValue();
 
 		int valueBuffer = -((int) ((privateX * max) / getWidth())); //Some weird shit
 		
-		int oldValue = getValue();
+//		int oldValue = getValue();
 		
 		if (valueBuffer > getMaxValue())
 		{
@@ -274,10 +93,10 @@ public class Slider extends Component
 			value = valueBuffer;
 		}
 		
-		if (oldValue != getValue())
-		{
+//		if (oldValue != getValue())
+//		{
 //			slider.setToolTipText("Value:" + getValue());
-		}
+//		}
 		
 		moveX = getX() - 16 - privateX; //Center to the slider
 
@@ -287,13 +106,41 @@ public class Slider extends Component
 		if (privateX - 8 < (-getWidth()))
 			moveX = getX() + getWidth() - 24;
 
-		//Cuz of background repaint delay the slider button have little "ghost"
-		
 		if (this.oldValue != value)
 		{
 			this.oldValue = value;
 			changeEvent.forEach(ce -> ce.change());
 		}
+	}
+	
+	public void recalculate()
+	{
+		privateX = -((int) ((value * getWidth()) / getMaxValue()));
+		
+		float max = (float) getMaxValue();
+
+		int valueBuffer = -((int) ((privateX * max) / getWidth())); //Some weird shit
+		
+//		int oldValue = getValue();
+		
+		if (valueBuffer > getMaxValue())
+		{
+			value = getMaxValue();
+		} else if (valueBuffer < 0)
+		{
+			value = 0;
+		} else
+		{
+			value = valueBuffer;
+		}
+		
+		moveX = getX() - 16 - privateX; //Center to the slider
+
+		if (privateX + 8 > 0)
+			moveX = getX() - 8;
+
+		if (privateX - 8 < (-getWidth()))
+			moveX = getX() + getWidth() - 24;
 	}
 	
 	/*
@@ -302,13 +149,13 @@ public class Slider extends Component
 	
 	/*
 	 * Setters
-	 *//*
+	 */
 	
 	public void setValue(int value)
 	{
 		this.value = value;
 		setted = true;
-		privateX = -((int) ((value * getWidth()) / getMaxValue()));
+		recalculate();
 	}
 	
 	public void setMaxValue(int maxValue)
@@ -348,7 +195,7 @@ public class Slider extends Component
 	
 	/*
 	 * Getters
-	 *//*
+	 */
 	
 	public int getValue()
 	{
@@ -378,4 +225,4 @@ public class Slider extends Component
 	}
 }
 
-*/
+

@@ -7,7 +7,7 @@
 
 package com.steve6472.sge.main.game.world;
 
-import com.steve6472.sge.test.Camera;
+import com.steve6472.sge.gfx.Camera;
 
 public class GameCamera extends Camera
 {

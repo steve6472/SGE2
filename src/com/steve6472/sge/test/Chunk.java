@@ -9,6 +9,7 @@ package com.steve6472.sge.test;
 
 import org.joml.Matrix4f;
 
+import com.steve6472.sge.gfx.Camera;
 import com.steve6472.sge.gfx.Shader;
 import com.steve6472.sge.main.MainApplication;
 import com.steve6472.sge.main.Util;

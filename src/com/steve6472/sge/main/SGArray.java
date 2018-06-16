@@ -8,6 +8,7 @@
 package com.steve6472.sge.main;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
@@ -43,20 +44,20 @@ public class SGArray<T> implements Iterable<T>
 	public T getObject(int index) 			{ return get(index); }
 	public void addObject(T o) 				{ add(o); }
 	
-	private void set(int index, T o)
+	public void set(int index, T o)
 	{
 		checkSize(index);
 		array[index] = o;
 	}
 	
 	@SuppressWarnings("unchecked")
-	private T get(int index)
+	public T get(int index)
 	{
 		checkSize(index);
 		return (T) array[index];
 	}
 	
-	private void add(T o)
+	public void add(T o)
 	{
 		if (fillNull)
 		{
@@ -145,11 +146,12 @@ public class SGArray<T> implements Iterable<T>
 	
 	public void setSize(int newSize)
 	{
-		Object[] newArray = new Object[newSize];
-		
-		System.arraycopy(array, 0, newArray, 0, newSize - 1);
-		
-		array = newArray;
+//		Object[] newArray = new Object[newSize];
+//
+//		System.arraycopy(array, 0, newArray, 0, newSize - 1);
+		array = Arrays.copyOf(array, newSize);
+//
+//		array = newArray;
 	}
 	
 	public void remove(int index)
@@ -199,7 +201,24 @@ public class SGArray<T> implements Iterable<T>
 	public void printContent()
 	{
 		for (Object o : array)
-			System.out.println(o);
+			if (o instanceof float[])
+				System.out.println(Arrays.toString((float[]) o));
+			else if (o instanceof double[])
+				System.out.println(Arrays.toString((double[]) o));
+			else if (o instanceof byte[])
+				System.out.println(Arrays.toString((byte[]) o));
+			else if (o instanceof int[])
+				System.out.println(Arrays.toString((int[]) o));
+			else if (o instanceof String[])
+				System.out.println(Arrays.toString((String[]) o));
+			else if (o instanceof Object[])
+				System.out.println(Arrays.toString((Object[]) o));
+			else if (o instanceof long[])
+				System.out.println(Arrays.toString((long[]) o));
+			else if (o instanceof short[])
+				System.out.println(Arrays.toString((short[]) o));
+			else
+				System.out.println(o);
 	}
 
 	@Override
@@ -233,6 +252,13 @@ public class SGArray<T> implements Iterable<T>
 		return array.length;
 	}
 	
+	private int iterIndex = 0;
+	
+	public int getIterIndex()
+	{
+		return iterIndex;
+	}
+	
 	private class Itr implements Iterator<T>
 	{
 		int index;
@@ -254,6 +280,8 @@ public class SGArray<T> implements Iterable<T>
 			
             if (i >= array.length)
                 throw new ConcurrentModificationException();
+            
+            iterIndex = index;
             
             index = i + 1;
             

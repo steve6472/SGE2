@@ -808,6 +808,42 @@ public class Util
 	 * @param b
 	 * @return
 	 */
+	public static float[] combineArrays(float[] a, float[] b) 
+	{
+	    int aLen = a.length;
+	    int bLen = b.length;
+
+	    float[] c = (float[]) Array.newInstance(a.getClass().getComponentType(), aLen + bLen);
+	    System.arraycopy(a, 0, c, 0, aLen);
+	    System.arraycopy(b, 0, c, aLen, bLen);
+
+	    return c;
+	}
+	
+	/**
+	 * Stolen from @author https://stackoverflow.com/a/80503
+	 * @param a
+	 * @param b
+	 * @return
+	 */
+	public static int[] combineArrays(int[] a, int[] b) 
+	{
+	    int aLen = a.length;
+	    int bLen = b.length;
+
+	    int[] c = (int[]) Array.newInstance(a.getClass().getComponentType(), aLen + bLen);
+	    System.arraycopy(a, 0, c, 0, aLen);
+	    System.arraycopy(b, 0, c, aLen, bLen);
+
+	    return c;
+	}
+	
+	/**
+	 * Stolen from @author https://stackoverflow.com/a/80503
+	 * @param a
+	 * @param b
+	 * @return
+	 */
 	public static <T> T[] combineArrays(T[] a, T[] b) 
 	{
 	    int aLen = a.length;
@@ -866,6 +902,11 @@ public class Util
 	public static int toInt(boolean b)
 	{
 		return b ? 1 : 0;
+	}
+	
+	public static float normalise(float x, float minX, float maxX)
+	{
+		return (x - minX) / (maxX - minX);
 	}
 	
 /*

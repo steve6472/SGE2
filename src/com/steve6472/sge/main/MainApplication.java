@@ -139,12 +139,32 @@ public abstract class MainApplication
 		
 		glEnable(GL_TEXTURE_2D);
 		glEnable(GL_BLEND);
+		if (!disableGlDepthTest())
+			glEnable(GL_DEPTH_TEST);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 		
-		createPixelOrtho();
+		if (!disableAutoPixelOrtho())
+		{
+			createPixelOrtho();
+		} else
+		{
+			glMatrixMode(GL_PROJECTION);
+			glLoadIdentity();
+			glMatrixMode(GL_MODELVIEW);
+		}
 		
 		//Set background color I guess
 		glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	}
+	
+	protected boolean disableGlDepthTest()
+	{
+		return false;
+	}
+	
+	protected boolean disableAutoPixelOrtho()
+	{
+		return false;
 	}
 	
 	public void printOpenGLData()
@@ -180,10 +200,10 @@ public abstract class MainApplication
 		addWindowSizeCallback((width, height) ->
 		{
 			glViewport(0, 0, width, height);
-			glMatrixMode(GL_PROJECTION);
-			glLoadIdentity();
-			glOrtho(-1, 1, -1, 1, -1, 1); // 2D projection matrix
-			glMatrixMode(GL_MODELVIEW);
+//			glMatrixMode(GL_PROJECTION);
+//			glLoadIdentity();
+//			glOrtho(-1, 1, -1, 1, -1, 1); // 2D projection matrix
+//			glMatrixMode(GL_MODELVIEW);
 		});
 
 	}
@@ -241,7 +261,7 @@ public abstract class MainApplication
 		}
 	}
 
-	private final void loop() 
+	protected final void loop() 
 	{
 		
 		this.screen = new Screen();

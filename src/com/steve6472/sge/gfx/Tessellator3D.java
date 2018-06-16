@@ -17,8 +17,9 @@ import java.util.List;
 
 import org.lwjgl.BufferUtils;
 
-public class Tessellator
+public class Tessellator3D
 {
+	
 	public List<Float> vertices = new ArrayList<Float>();
 	public List<Integer> texture = new ArrayList<Integer>();
 	public List<Float> color = new ArrayList<Float>();
@@ -34,21 +35,55 @@ public class Tessellator
 	public static final int QUAD_STRIP 			= GL_QUAD_STRIP;			// 8
 	public static final int POLYGON 			= GL_POLYGON;				// 9
 	
-	public static final Tessellator INSTANCE = new Tessellator();
+	public static final Tessellator3D INSTANCE = new Tessellator3D();
 
-	public Tessellator()
+	public Tessellator3D()
 	{
 	}
 	
-	public static Tessellator getInstance()
+	public static Tessellator3D getInstance()
 	{
 		return INSTANCE;
 	}
+	
+	public void put(float[] ver, int[] tex, float[] col)
+	{
+		for (int i = 0; i < ver.length / 3; i++)
+		{
+			if (tex != null && col != null)
+			{
+				put(
+						ver[0 + i * 3], ver[1 + i * 3], ver[2 + i * 3], 
+						tex[0 + i * 2], tex[1 + i * 2], 
+						col[0 + i * 4], col[1 + i * 4], col[2 + i * 4], col[3 + i * 4]
+								);
+			} else if (tex == null && col != null)
+			{
+				put(
+						ver[0 + i * 3], ver[1 + i * 3], ver[2 + i * 3],  
+						col[0 + i * 4], col[1 + i * 4], col[2 + i * 4], col[3 + i * 4]
+								);
+			} else if (col == null && tex != null)
+			{
+				put(
+						ver[0 + i * 3], ver[1 + i * 3], ver[2 + i * 3], 
+						tex[0 + i * 2], tex[1 + i * 2]
+								);
+			} else
+			{
+				put(
+						ver[0 + i * 3], ver[1 + i * 3], ver[2 + i * 3]
+								);
+			}
+			
+		}
+	}
 
-	public void put(float vx, float vy, int tx, int ty, float cr, float cg, float cb, float ca)
+	public void put(float vx, float vy, float vz, int tx, int ty, float cr, float cg, float cb, float ca)
 	{
 		vertices.add(vx);
 		vertices.add(vy);
+		vertices.add(vz);
 		
 		texture.add(tx);
 		texture.add(ty);
@@ -59,22 +94,28 @@ public class Tessellator
 		color.add(ca);
 	}
 	
-	public void put(float vx, float vy, int tx, int ty)
+	public void put(float vx, float vy, float vz, int tx, int ty)
 	{
-		put(vx, vy, tx, ty, 1, 1, 1, 1);
+		put(vx, vy, vz, tx, ty, 1, 1, 1, 1);
 	}
 	
-	public void putPixelPerfect(float vx, float vy, int tx, int ty, float cr, float cg, float cb, float ca, Camera camera)
+	public void put(float vx, float vy, float vz)
 	{
-		float w = 1f / (float) camera.getWidth();
-		float h = 1f / (float) camera.getHeight();
-		
-		put(w * vx * 2f - 1, h * -vy * 2f + 1, tx, ty, cr, cg, cb, ca);
+		put(vx, vy, vz, 0, 0, 1, 1, 1, 1);
+	}
+	
+	public void put(float vx, float vy, float vz, float r, float g, float b, float a)
+	{
+		put(vx, vy, vz, 0, 0, r, g, b, a);
+	}
+	
+	public void put(float vx, float vy, float vz, float r, float g, float b)
+	{
+		put(vx, vy, vz, 0, 0, r, g, b, 1);
 	}
 	
 	public void render(int mode)
 	{
-		
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
@@ -83,8 +124,8 @@ public class Tessellator
 		IntBuffer tex = toIntBuffer(texture);
 		FloatBuffer col = toFloatBuffer(color);
 		
-		glVertexPointer(2, GL_FLOAT, 0, ver);
-		glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, ver);
+		glVertexPointer(3, GL_FLOAT, 0, ver);
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, ver);
 
 		glTexCoordPointer(2, GL_INT, 0, tex);
 		glVertexAttribPointer(1, 2, GL_INT, false, 0, tex);
@@ -92,7 +133,7 @@ public class Tessellator
 		glColorPointer(4, GL_FLOAT, 0, col);
 		glVertexAttribPointer(2, 4, GL_FLOAT, false, 0, col);
 
-		glDrawArrays(mode, 0, vertices.size() / 2);
+		glDrawArrays(mode, 0, vertices.size() / 3);
 		
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
@@ -103,7 +144,29 @@ public class Tessellator
 		texture.clear();
 	}
 	
-	private FloatBuffer toFloatBuffer(List<Float> arr)
+	public void render(int mode, FloatBuffer ver, IntBuffer tex, FloatBuffer col, int size)
+	{
+		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
+		glEnableVertexAttribArray(2);
+
+		glVertexPointer(3, GL_FLOAT, 0, ver);
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, ver);
+
+		glTexCoordPointer(2, GL_INT, 0, tex);
+		glVertexAttribPointer(1, 2, GL_INT, false, 0, tex);
+
+		glColorPointer(4, GL_FLOAT, 0, col);
+		glVertexAttribPointer(2, 4, GL_FLOAT, false, 0, col);
+
+		glDrawArrays(mode, 0, size);
+		
+		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
+	}
+	
+	public static FloatBuffer toFloatBuffer(List<Float> arr)
 	{
 		FloatBuffer buff = BufferUtils.createFloatBuffer(arr.size());
 		
@@ -116,7 +179,7 @@ public class Tessellator
 		return buff;
 	}
 	
-	private IntBuffer toIntBuffer(List<Integer> arr)
+	public static IntBuffer toIntBuffer(List<Integer> arr)
 	{
 		IntBuffer buff = BufferUtils.createIntBuffer(arr.size());
 		
