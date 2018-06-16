@@ -15,7 +15,7 @@ import java.util.List;
 
 import org.lwjgl.BufferUtils;
 
-public class DynamicModel
+public class DynamicModel3D
 {
 	private FloatBuffer vert;
 	private FloatBuffer tex;
@@ -27,14 +27,14 @@ public class DynamicModel
 	
 	boolean generated;
 
-	public DynamicModel()
+	public DynamicModel3D()
 	{
 		vertC = new ArrayList<Float>();
 		texC = new ArrayList<Float>();
 		colorC = new ArrayList<Float>();
 	}
 
-	public DynamicModel(FloatBuffer vert, FloatBuffer tex, FloatBuffer color)
+	public DynamicModel3D(FloatBuffer vert, FloatBuffer tex, FloatBuffer color)
 	{
 		this.vert = vert;
 		this.tex = tex;
@@ -43,29 +43,17 @@ public class DynamicModel
 		generated = true;
 	}
 	
-	public static void start()
-	{
-		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
-		glEnableVertexAttribArray(2);
-	}
-	
-	public static void finish()
-	{
-		glDisableVertexAttribArray(0);
-		glDisableVertexAttribArray(1);
-		glDisableVertexAttribArray(2);
-	}
-	
 	public void render(int mode)
 	{
 		if (!generated)
 			return;
 		
-		start();
+		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
+		glEnableVertexAttribArray(2);
 
-		glVertexPointer(2, GL_FLOAT, 0, vert);
-		glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, vert);
+		glVertexPointer(3, GL_FLOAT, 0, vert);
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, vert);
 
 		glTexCoordPointer(2, GL_FLOAT, 0, tex);
 		glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, tex);
@@ -73,23 +61,11 @@ public class DynamicModel
 		glColorPointer(4, GL_FLOAT, 0, color);
 		glVertexAttribPointer(2, 4, GL_FLOAT, false, 0, color);
 
-		glDrawArrays(mode, 0, vert.capacity() / 2);
+		glDrawArrays(mode, 0, vert.capacity() / 3);
 		
-		finish();
-	}
-	
-	public void render2(int mode)
-	{
-		glVertexPointer(2, GL_FLOAT, 0, vert);
-		glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, vert);
-
-		glTexCoordPointer(2, GL_FLOAT, 0, tex);
-		glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, tex);
-
-		glColorPointer(4, GL_FLOAT, 0, color);
-		glVertexAttribPointer(2, 4, GL_FLOAT, false, 0, color);
-
-		glDrawArrays(mode, 0, vert.capacity() / 2);
+		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
 	}
 
 	public void generate()
@@ -114,10 +90,11 @@ public class DynamicModel
 		return buff;
 	}
 
-	public void add(float vx, float vy, float tx, float ty, float cr, float cg, float cb, float ca)
+	public void add(float vx, float vy, float vz, float tx, float ty, float cr, float cg, float cb, float ca)
 	{
 		vertC.add(vx);
 		vertC.add(vy);
+		vertC.add(vz);
 
 		texC.add(tx);
 		texC.add(ty);
@@ -128,19 +105,19 @@ public class DynamicModel
 		colorC.add(ca);
 	}
 
-	public void add(float vx, float vy, float tx, float ty)
+	public void add(float vx, float vy, float vz, float tx, float ty)
 	{
-		add(vx, vy, tx, ty, 1, 1, 1, 1);
+		add(vx, vy, vz, tx, ty, 1, 1, 1, 1);
 	}
 
-	public void add(float vx, float vy, float cr, float cg, float cb, float ca)
+	public void add(float vx, float vy, float vz, float cr, float cg, float cb, float ca)
 	{
-		add(vx, vy, 0, 0, cr, cg, cb, ca);
+		add(vx, vy, vz, 0, 0, cr, cg, cb, ca);
 	}
 
-	public void add(float vx, float vy, float[] c)
+	public void add(float vx, float vy, float vz, float[] c)
 	{
-		add(vx, vy, 0, 0, c[0], c[1], c[2], c[3]);
+		add(vx, vy, vz, 0, 0, c[0], c[1], c[2], c[3]);
 	}
 	
 	public FloatBuffer getColor()

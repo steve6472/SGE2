@@ -32,18 +32,14 @@ import com.steve6472.sge.test.ShaderTest2;
 public class GameTile
 {
 	/*
-	 * Texture variables
-	 */
-//	int indexX;
-//	int indexY;
-	
-	/*
 	 * Static Tile variables
 	 */
 	static boolean inited = false;
 	static Atlas tileAtlas;
+	
 	public static int tileWidth;
 	public static int tileHeight;
+	
 	static Model tileModel;
 	public static Shader baseShader;
 	static int lastId;
@@ -107,6 +103,18 @@ public class GameTile
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
 		
+		glBindBuffer(GL_ARRAY_BUFFER, tileModel.getvId());
+		glVertexPointer(2, GL_FLOAT, 0, 0);
+		glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, tileModel.gettId());
+		glTexCoordPointer(2, GL_FLOAT, 0, 0);
+		glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, tileModel.getcId());
+		glColorPointer(4, GL_FLOAT, 0, 0);
+		glVertexAttribPointer(2, 4, GL_FLOAT, false, 0, 0);
+		
 		smartRender = true;
 	}
 	
@@ -160,18 +168,6 @@ public class GameTile
 		}
 		
 		baseShader.setUniformMat4f("projection", target);
-		
-		glBindBuffer(GL_ARRAY_BUFFER, tileModel.getvId());
-		glVertexPointer(2, GL_FLOAT, 0, 0);
-		glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
-
-		glBindBuffer(GL_ARRAY_BUFFER, tileModel.gettId());
-		glTexCoordPointer(2, GL_FLOAT, 0, 0);
-		glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0);
-
-		glBindBuffer(GL_ARRAY_BUFFER, tileModel.getcId());
-		glColorPointer(4, GL_FLOAT, 0, 0);
-		glVertexAttribPointer(2, 4, GL_FLOAT, false, 0, 0);
 
 		glDrawArrays(GL_TRIANGLES, 0, tileModel.getDrawCount());
 		

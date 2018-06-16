@@ -25,7 +25,7 @@ import com.steve6472.sge.main.game.GravityUtil;
 import com.steve6472.sge.main.game.world.Chunk;
 import com.steve6472.sge.main.game.world.World;
 import com.steve6472.sge.main.game.world.World.IRender0;
-import com.steve6472.sge.test.DynamicModel;
+import com.steve6472.sge.test.DynamicModel3D;
 
 public class Test3D extends MainApplication
 {
@@ -52,7 +52,7 @@ public class Test3D extends MainApplication
 	static float minY = 0;
 	static float maxY = 0;
 	
-	DynamicModel worldModel;
+	DynamicModel3D worldModel;
 	
 	@Override
 	public void init()
@@ -62,7 +62,7 @@ public class Test3D extends MainApplication
 		sprite = new Sprite("*grass.png");
 		blackPixel = new Sprite(new int[] {0x00000000}, 1, 1);
 		
-		worldModel = new DynamicModel();
+		worldModel = new DynamicModel3D();
 		
 		Chunk.initChunks(16, 16, 16);
 		World.initWorlds(1, 1);
@@ -160,7 +160,7 @@ public class Test3D extends MainApplication
 							}
 						}
 						
-						worldModel = new DynamicModel();
+						worldModel = new DynamicModel3D();
 						
 						System.out.println("Stage 1: " + (System.currentTimeMillis() - start));
 						long S = System.currentTimeMillis();

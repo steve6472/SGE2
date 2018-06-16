@@ -9,6 +9,7 @@ package com.steve6472.sge.main.game.world;
 
 import com.steve6472.sge.gfx.Camera;
 import com.steve6472.sge.main.Util;
+import com.steve6472.sge.test.DynamicModel;
 
 public class World
 {
@@ -19,7 +20,7 @@ public class World
 	int endY;
 	int oldX = Integer.MIN_VALUE;
 	int oldY = Integer.MIN_VALUE;
-	public int renderedTiles = 0;
+	public int renderedChunks = 0;
 	
 	/*
 	 * Static variables
@@ -66,43 +67,41 @@ public class World
 	{
 		GameTile.prepare();
 		
-		tryRecalculateBounds(camera, 0);
+		tryRecalculateBounds(camera, -1);
 		
-		renderedTiles = 0;
+		renderedChunks = 0;
 		
-		GameTile.startSmartRender();
+		DynamicModel.start();
 		
-		iterateVisibleTiles(camera, (x, y, l, id) ->
+		Chunk.prepare();
+		
+		iterateVisibleChunks(camera, (x, y, l, c) ->
 		{
-//			GameTile.quickRender(x, y, id, camera);
-			GameTile.smartRender(x, y, id, camera);
-			renderedTiles++;
+			c.render(camera, camera.getX() + -x * Chunk.chunkWidth * GameTile.tileWidth,
+					camera.getY() + -y * Chunk.chunkHeight * GameTile.tileHeight);
+			renderedChunks++;
 		});
-
-		GameTile.stopSmartRender();
+		
+		DynamicModel.finish();
 	}
 	
 	/**
 	 * x, y, l, id
 	 */
-	public void iterateVisibleTiles(Camera camera, IRender0<Integer, Integer, Integer, Integer> iter)
+	public void iterateVisibleChunks(Camera camera, IRender0<Integer, Integer, Integer, Chunk> iter)
 	{
 		for (int x = startX; x < endX; x++)
 		{
 			for (int y = startY; y < endY; y++)
 			{
-				Chunk c = getChunkFromTileCoords(x, y);
+				Chunk c = getChunk(x, y);
 				
 				if (c == null)
 					continue;
 				
 				for (int l = 0; l < Chunk.layerCount; l++)
 				{
-					int id = c.getTileId(x % Chunk.chunkWidth, y % Chunk.chunkHeight, l);
-					if (id != 0)
-					{
-						iter.apply(x, y, l, id);
-					}
+					iter.apply(x, y, l, c);
 				}
 			}
 		}
@@ -251,8 +250,8 @@ public class World
 		int width = Chunk.chunkWidth * World.worldWidth;
 		int height = Chunk.chunkHeight * World.worldHeight;
 		
-		int tw = GameTile.tileWidth;
-		int th = GameTile.tileHeight;
+		int tw = GameTile.tileWidth * Chunk.chunkWidth;
+		int th = GameTile.tileHeight * Chunk.chunkHeight;
 		
 		int x = camera.getX();
 		int y = camera.getY();

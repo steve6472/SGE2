@@ -7,12 +7,20 @@
 
 package com.steve6472.sge.main.game.world;
 
+import java.nio.FloatBuffer;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.joml.Matrix4f;
+import org.lwjgl.BufferUtils;
+
 import com.steve6472.sge.gfx.Camera;
-import com.steve6472.sge.gfx.Model;
+import com.steve6472.sge.gfx.SavedShaders;
+import com.steve6472.sge.gfx.Shader;
+import com.steve6472.sge.gfx.Tessellator;
 import com.steve6472.sge.main.SGArray;
 import com.steve6472.sge.main.Util;
+import com.steve6472.sge.test.DynamicModel;
 
 public class Chunk
 {
@@ -28,14 +36,12 @@ public class Chunk
 	public static int chunkWidth;
 	public static int chunkHeight;
 	public static int layerCount;
+	static Shader chunkShader;
 	
 	/*
 	 * Chunk specific data 
 	 */
-	Model model;
-	float[] vertices;
-	float[] textures;
-	float[] colors;
+	DynamicModel[] models;
 	
 	public static void initChunks(int chunkWidth, int chunkHeight, int layerCount)
 	{
@@ -43,44 +49,51 @@ public class Chunk
 		Chunk.chunkWidth = Math.min(chunkWidth, 4096);
 		Chunk.chunkHeight = Math.min(chunkHeight, 4096);
 		Chunk.layerCount = Math.min(layerCount, 4096);
+		chunkShader = new Shader(SavedShaders.TESS_VS, SavedShaders.TESS_FS);
 	}
 	
 	public Chunk()
 	{
 		map = new SGArray<int[]>(layerCount, false, false);
+
+		ver = new ArrayList<Float>();
+		tex = new ArrayList<Float>();
+		col = new ArrayList<Float>();
+		
+		models = new DynamicModel[layerCount];
+		
 		for (int l = 0; l < layerCount; l++)
 		{
 			map.setObject(l, new int[chunkWidth * chunkHeight]);
+			
+			gen(chunkWidth, chunkHeight);
+			
+			models[l] = new DynamicModel(toFloatBuffer(ver), toFloatBuffer(tex), toFloatBuffer(col));
 		}
-		
-		gen(chunkWidth, chunkHeight);
-		
-		vertices = toFloat(ver);
-		textures = toFloat(tex);
-		colors = toFloat(col);
-		
-		model = new Model(vertices, textures, colors);
 		
 		ver.clear();
 		tex.clear();
 		col.clear();
 	}
 	
-	private float[] toFloat(List<Float> list)
+	static int chunks = 0;
+	
+	private FloatBuffer toFloatBuffer(List<Float> list)
 	{
-		float[] f = new float[list.size()];
-		for (int i = 0; i < list.size(); i++)
+		FloatBuffer buff = BufferUtils.createFloatBuffer(list.size());
+		for (float f : list)
 		{
-			f[i] = list.get(i);
+			buff.put(f);
 		}
-		return f;
+		buff.flip();
+		return buff;
 	}
 	
 	List<Float> ver;
 	List<Float> tex;
 	List<Float> col;
 	
-	public void gen(int sizeX, int sizeZ)
+	public void gen(int sizeX, int sizeY)
 	{
 		ver.clear();
 		tex.clear();
@@ -88,7 +101,7 @@ public class Chunk
 
 		for (float i = 0; i < sizeX; i++)
 		{
-			for (float j = 0; j < sizeZ; j++)
+			for (float j = sizeY; j > 0 ; j--)
 			{
 				float inX = 0;
 				float inY = 0;
@@ -127,9 +140,9 @@ public class Chunk
 		col.add(0f);
 	}
 	
-	private void set(int x_, int y_, int ix, int iy)
+	private void set(int x, int y, int l, int ix, int iy)
 	{
-		int i = 4;
+		int i = y + x * chunkWidth;
 		
 		float inX = ix;
 		float inY = iy;
@@ -140,23 +153,33 @@ public class Chunk
 		float sx = 1f / (GameTile.tileAtlas.getAtlas().getWidth() / GameTile.tileWidth);
 		float sy = 1f / (GameTile.tileAtlas.getAtlas().getHeight() / GameTile.tileHeight);
 		
-		float x = sx * inX;
-		float y = sy * inY;
+		float x_ = sx * inX;
+		float y_ = sy * inY;
 		
-		float X = sx * (inX - 1);
-		float Y = sy * (inY - 1);
+		float X_ = sx * (inX - 1);
+		float Y_ = sy * (inY - 1);
+
+		models[l].getTex().put(i * 8 + 0, X_);
+		models[l].getTex().put(i * 8 + 1, y_);
 		
-		textures[i * 8 + 0] = X;
-		textures[i * 8 + 1] = y;
+		models[l].getTex().put(i * 8 + 2, x_);
+		models[l].getTex().put(i * 8 + 3, y_);
 		
-		textures[i * 8 + 2] = x;
-		textures[i * 8 + 3] = y;
+		models[l].getTex().put(i * 8 + 4, x_);
+		models[l].getTex().put(i * 8 + 5, Y_);
 		
-		textures[i * 8 + 4] = x;
-		textures[i * 8 + 5] = Y;
-		
-		textures[i * 8 + 6] = X;
-		textures[i * 8 + 7] = Y;
+		models[l].getTex().put(i * 8 + 6, X_);
+		models[l].getTex().put(i * 8 + 7, Y_);
+	}
+	
+	private void set(int x, int y, int l, int index)
+	{
+		set(x, y, l, index % GameTile.tileAtlas.getSize(), index / GameTile.tileAtlas.getSize());
+	}
+	
+	public static void prepare()
+	{
+		chunkShader.bind();
 	}
 	
 	/**
@@ -164,22 +187,22 @@ public class Chunk
 	 */
 	public void render(Camera camera, int offsetX, int offsetY)
 	{
-		GameTile.prepare();
-
-		for (int l = 0; l < layerCount; l++)
-		{
-			for (int x = 0; x < chunkWidth; x++)
-			{
-				for (int y = 0; y < chunkHeight; y++)
-				{
-					int id = map.getObject(l)[x + y * chunkWidth];
-					if (id != 0)
-					{
-						GameTile.quickRender(x + offsetX * chunkWidth, y + offsetY * chunkHeight, id, camera);
-					}
-				}
-			}
-		}
+		float w = (float) camera.getWidth();
+		float h = (float) camera.getHeight();
+		
+		float W = 1f / w * GameTile.tileWidth * 2f;
+		float H = 1f / h * GameTile.tileHeight * 2f;
+		
+		float pixW = 1f / GameTile.tileWidth;
+		float pixH = 1f / GameTile.tileHeight;
+		
+		chunkShader.setUniformMat4f("projection", 
+				new Matrix4f()
+				.scale(W, H, 0)
+				.translate(pixW * -w / 2, -1f + pixH * h / 2 - chunkHeight, 0)
+				.translate((float) offsetX / -32, (float) offsetY / 32, 0));
+		
+		models[0].render2(Tessellator.QUADS);
 	}
 	
 	/**
@@ -211,13 +234,17 @@ public class Chunk
 	{
 		boolean flag = isCoordInBounds(x, y, layer);
 		if (flag)
+		{
 			map.getObject(layer)[x + y * chunkWidth] = id;
+			set(x, y, layer, id);
+		}
 		return flag;
 	}
 
 	public void setTileId(int x, int y, int layer, int id)
 	{
 		map.getObject(layer)[x + y * chunkWidth] = id;
+		set(x, y, layer, id);
 	}
 	
 	public boolean isCoordInBounds(int x, int y, int layer)
@@ -233,5 +260,13 @@ public class Chunk
 	public void setTiles(int[] tiles, int layer)
 	{
 		map.setObject(layer, tiles);
+		
+		for (int i = 0; i < chunkWidth; i++)
+		{
+			for (int j = 0; j < chunkHeight; j++)
+			{
+				set(i, j, layer, tiles[i + j * chunkWidth]);
+			}
+		}
 	}
 }

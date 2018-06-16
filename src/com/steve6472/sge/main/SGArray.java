@@ -53,7 +53,7 @@ public class SGArray<T> implements Iterable<T>
 	@SuppressWarnings("unchecked")
 	public T get(int index)
 	{
-		checkSize(index);
+//		checkSize(index);
 		return (T) array[index];
 	}
 	
