@@ -9,6 +9,7 @@ package com.steve6472.sge.gfx;
 
 import org.joml.Matrix4f;
 
+import com.steve6472.sge.main.MainApplication;
 import com.steve6472.sge.main.game.Vec3;
 
 public class Camera
@@ -22,6 +23,11 @@ public class Camera
 	{
 		pos = new Vec3();
 		projection = new Matrix4f();
+	}
+	
+	public void tick(MainApplication mainApp)
+	{
+		setSize(mainApp.getCurrentWidth(), mainApp.getCurrentHeight());
 	}
 	
 	public void setSize(int width, int height)

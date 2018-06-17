@@ -262,11 +262,11 @@ public class World
 		int mx = w / -tw - 1;
 		int my = h / -th - 1;
 		
-		startX = Util.getNumberBetween(mx,	width, 	(x + w / 2) / tw - (w / 2) / tw + out);
-		startY = Util.getNumberBetween(my,  height, (y + h / 2) / th - (h / 2) / th + out);
+		startX = Util.getNumberBetween(mx, width, (x + w / 2) / tw - (w / 2) / tw + out);
+		startY = Util.getNumberBetween(my, height,(y + h / 2) / th - (h / 2) / th + out);
 		
-		endX = Util.getNumberBetween(0, 	width, 	startX + w / tw - out * 2 + 1);
-		endY = Util.getNumberBetween(0, 	height, startY + h / th - out * 2 + 1);
+		endX = Util.getNumberBetween(0, World.worldWidth, startX + w / tw - out * 2 + 1);
+		endY = Util.getNumberBetween(0, World.worldHeight, startY + h / th - out * 2 + 1);
 		
 		startX = Math.max(startX, 0);
 		startY = Math.max(startY, 0);

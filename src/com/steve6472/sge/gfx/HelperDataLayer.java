@@ -14,11 +14,11 @@ public class HelperDataLayer
 	
 	public HelperDataLayer()
 	{
-		xyz = 		new SGArray<Float>(0, true, false);
-		scalexyz = 	new SGArray<Float>(0, true, false);
-		rotxyz = 	new SGArray<Float>(0, true, false);
-		acts = 		new SGArray<Integer>(0, true, false);
-		color = 	new SGArray<Float>(4, false, false);
+		xyz = 		new SGArray<Float>(0);
+		scalexyz = 	new SGArray<Float>(0);
+		rotxyz = 	new SGArray<Float>(0);
+		acts = 		new SGArray<Integer>(0);
+		color = 	new SGArray<Float>(4);
 		color(0, 0, 0, 0);
 	}
 	

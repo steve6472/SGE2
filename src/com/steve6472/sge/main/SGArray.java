@@ -17,14 +17,11 @@ import java.util.NoSuchElementException;
 public class SGArray<T> implements Iterable<T>
 {
 	Object[] array;
-	boolean isDynamic;
-	boolean fillNull;
+	int size = 0;
 	
-	public SGArray(int initialSize, boolean isDynamic, boolean fillNull)
+	public SGArray(int initialSize)
 	{
 		this.array = new Object[initialSize];
-		this.isDynamic = isDynamic;
-		this.fillNull = fillNull;
 	}
 	
 	/**
@@ -36,8 +33,6 @@ public class SGArray<T> implements Iterable<T>
 	public SGArray()
 	{
 		this.array = new Object[0];
-		this.isDynamic = true;
-		this.fillNull = false;
 	}
 	
 	public void setObject(int index, T o) 	{ set(index, o); }
@@ -53,37 +48,40 @@ public class SGArray<T> implements Iterable<T>
 	@SuppressWarnings("unchecked")
 	public T get(int index)
 	{
-//		checkSize(index);
+		checkSize(index);
 		return (T) array[index];
 	}
 	
 	public void add(T o)
 	{
-		if (fillNull)
-		{
-			int nullIndex = -1;
-			for (int i = 0; i < getSize() - 1; i++)
-			{
-				if (array[i] == null)
-				{
-					nullIndex = i;
-					break;
-				}
-			}
-			if (nullIndex == -1)
-			{
-				setSize(getSize() + 1);
-				array[getSize() - 1] = o;
-			} else
-			{
-				array[nullIndex] = o;
-			}
-		}
-		else
-		{
-			setSize(getSize() + 1);
-			array[getSize() - 1] = o;
-		}
+		setSize(size + 1);
+		array[size++] = o;
+	}
+    private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
+    
+	public void setSize(int newSize)
+	{
+        int oldCapacity = array.length;
+        
+        if (oldCapacity - newSize > 0)
+        	return;
+        
+        int newCapacity = oldCapacity + (oldCapacity >> 1);
+        
+        if (newCapacity - newSize < 0)
+            newCapacity = newSize;
+        
+        if (newCapacity - MAX_ARRAY_SIZE > 0)
+            newCapacity = hugeCapacity(newSize);
+        
+		array = Arrays.copyOf(array, newCapacity);
+	}
+
+	private static int hugeCapacity(int minCapacity)
+	{
+		if (minCapacity < 0) // overflow
+			throw new OutOfMemoryError();
+		return (minCapacity > MAX_ARRAY_SIZE) ? Integer.MAX_VALUE : MAX_ARRAY_SIZE;
 	}
 	
 	public void removeNulls()
@@ -107,11 +105,13 @@ public class SGArray<T> implements Iterable<T>
 	public void clear()
 	{
 		array = new Object[0];
+		size = 0;
 	}
 	
 	public void clear(int newSize)
 	{
 		array = new Object[newSize];
+		size = 0;
 	}
 	
 	public void reverseArray()
@@ -126,11 +126,8 @@ public class SGArray<T> implements Iterable<T>
 	
 	private void checkSize(int index)
 	{
-		if (getSize() < 0 || (!isDynamic && index > this.getSize()))
+		if (index > size || index < 0)
 			throw new ArrayIndexOutOfBoundsException(index);
-		
-		if (isDynamic && index > this.getSize())
-			setSize(index);
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -143,57 +140,21 @@ public class SGArray<T> implements Iterable<T>
 		}
 		return list;
 	}
-	
-	public void setSize(int newSize)
-	{
-//		Object[] newArray = new Object[newSize];
-//
-//		System.arraycopy(array, 0, newArray, 0, newSize - 1);
-		array = Arrays.copyOf(array, newSize);
-//
-//		array = newArray;
-	}
+
 	
 	public void remove(int index)
 	{
-		if (index == 0)
-		{
-			Object[] newArray = new Object[getSize() - 1];
-			
-			System.arraycopy(array, 1, newArray, 0, getSize() - 1);
-			
-			this.array = newArray;
-		} else if (index == getSize() - 1)
-		{
-			Object[] newArray = new Object[getSize() - 1];
-			
-			System.arraycopy(array, 0, newArray, 0, getSize() - 1);
-			
-			this.array = newArray;
-		} else
-		{
-			Object[] newArray = new Object[getSize() - 1];
-			
-			int left = -((getSize() - 1) - (getSize() - 1) - index);
-			int right = (getSize() - 1) - index;
-
-//			Util.printObjects("Left:", left, "\nRight:", right);
-			
-			Object[] leftArray = new Object[left];
-			Object[] rightArray = new Object[right];
-
-			System.arraycopy(array, 0, leftArray, 0, left);
-			System.arraycopy(array, index + 1, rightArray, 0, right);
-
-			newArray = Util.combineArrays(leftArray, rightArray);
-			
-			this.array = newArray;
-		}
+		int numMoved = size - index - 1;
+		
+		if (numMoved > 0)
+			System.arraycopy(array, index + 1, array, index, numMoved);
+		
+		array[--size] = null;
 	}
 	
 	public SGArray<T> copy()
 	{
-		SGArray<T> a = new SGArray<T>(getSize(), isDynamic, fillNull);
+		SGArray<T> a = new SGArray<T>(getSize());
 		a.array = array.clone();
 		return a;
 	}
@@ -227,29 +188,9 @@ public class SGArray<T> implements Iterable<T>
 		return new Itr();
 	}
 	
-	public void setFillNull(boolean fillNull)
-	{
-		this.fillNull = fillNull;
-	}
-	
-	public void setDynamic(boolean isDynamic)
-	{
-		this.isDynamic = isDynamic;
-	}
-	
-	public boolean isDynamic()
-	{
-		return isDynamic;
-	}
-	
-	public boolean isFillNull()
-	{
-		return fillNull;
-	}
-	
 	public int getSize()
 	{
-		return array.length;
+		return size;
 	}
 	
 	private int iterIndex = 0;

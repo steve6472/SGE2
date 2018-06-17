@@ -54,7 +54,7 @@ public class Chunk
 	
 	public Chunk()
 	{
-		map = new SGArray<int[]>(layerCount, false, false);
+		map = new SGArray<int[]>(layerCount);
 
 		ver = new ArrayList<Float>();
 		tex = new ArrayList<Float>();
@@ -200,7 +200,7 @@ public class Chunk
 				new Matrix4f()
 				.scale(W, H, 0)
 				.translate(pixW * -w / 2, -1f + pixH * h / 2 - chunkHeight, 0)
-				.translate((float) offsetX / -32, (float) offsetY / 32, 0));
+				.translate((float) offsetX / -GameTile.tileWidth, (float) offsetY / GameTile.tileHeight, 0));
 		
 		models[0].render2(Tessellator.QUADS);
 	}

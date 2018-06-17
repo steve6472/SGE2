@@ -200,12 +200,7 @@ public abstract class MainApplication
 		addWindowSizeCallback((width, height) ->
 		{
 			glViewport(0, 0, width, height);
-//			glMatrixMode(GL_PROJECTION);
-//			glLoadIdentity();
-//			glOrtho(-1, 1, -1, 1, -1, 1); // 2D projection matrix
-//			glMatrixMode(GL_MODELVIEW);
 		});
-
 	}
 	
 	/**

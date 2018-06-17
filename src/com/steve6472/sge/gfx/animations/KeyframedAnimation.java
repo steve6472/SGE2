@@ -38,7 +38,7 @@ public abstract class KeyframedAnimation extends Animation
 	
 	public KeyframedAnimation()
 	{
-		keyFrames = new SGArray<KeyFrame>(0, true, false);
+		keyFrames = new SGArray<KeyFrame>(0);
 		floats = new SGArray<Float>();
 		setKeyFrames();
 	}

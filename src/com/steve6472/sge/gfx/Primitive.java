@@ -16,7 +16,7 @@ public class Primitive
 	
 	public final int type;
 	
-	public final SGArray<Integer> vertices = new SGArray<Integer>(0, false, false);
+	public final SGArray<Integer> vertices = new SGArray<Integer>(0);
 
 	public Primitive(int type)
 	{

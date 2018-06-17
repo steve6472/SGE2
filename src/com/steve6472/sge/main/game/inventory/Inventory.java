@@ -33,7 +33,7 @@ public class Inventory<T extends ItemSlot>
 		
 		this.nullItem = nullItem;
 		
-		slots = new SGArray<T>(slotNames.length, true, false);
+		slots = new SGArray<T>(slotNames.length);
 		
 		for (int i = 0; i < slotNames.length; i++)
 		{
@@ -60,7 +60,7 @@ public class Inventory<T extends ItemSlot>
 		
 		this.nullItem = nullItem;
 		
-		slots = new SGArray<T>(initialSlotCount, true, false);
+		slots = new SGArray<T>(initialSlotCount);
 		
 		for (int i = 0; i < initialSlotCount; i++)
 		{
