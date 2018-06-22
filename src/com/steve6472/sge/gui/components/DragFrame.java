@@ -101,7 +101,7 @@ public class DragFrame extends Component
 		{
 			w_posx = getMainApp().getWindowX();
 			w_posy = getMainApp().getWindowY();
-			glfwSetWindowPos(getMainApp().getWindow(), w_posx + offset_cpx, w_posy + offset_cpy);
+			glfwSetWindowPos(getMainApp().getWindowId(), w_posx + offset_cpx, w_posy + offset_cpy);
 			offset_cpx = 0;
 			offset_cpy = 0;
 			cp_x += offset_cpx;

@@ -48,7 +48,7 @@ public class GuiUtils
 			@Override
 			public void click()
 			{
-				glfwIconifyWindow(gui.getMainApp().getWindow());
+				glfwIconifyWindow(gui.getMainApp().getWindowId());
 			}
 		});
 		gui.addComponent(minimalize);

@@ -12,7 +12,7 @@ import com.steve6472.sge.gfx.Sprite;
 public class AngledParticle extends Particle
 {
 	private static final long serialVersionUID = -4195764672446043110L;
-	double angle;
+	protected double angle;
 	
 	public AngledParticle(double x, double y, double angle, int life, Sprite sprite)
 	{

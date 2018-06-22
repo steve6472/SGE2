@@ -21,7 +21,7 @@ public class Helper
 	public static void initHelper()
 	{
 		currentLayer = new HelperDataLayer();
-		savedLayers = new SArray(0, false, false);
+		savedLayers = new SArray();
 		currentLayer.color(0, 0, 0, 0);
 		initialised = true;
 	}

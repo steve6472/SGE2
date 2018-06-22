@@ -16,23 +16,16 @@ import java.util.NoSuchElementException;
 
 public class SGArray<T> implements Iterable<T>
 {
-	Object[] array;
-	int size = 0;
+	List<T> array;
 	
 	public SGArray(int initialSize)
 	{
-		this.array = new Object[initialSize];
+		this.array = new ArrayList<T>(initialSize);
 	}
 	
-	/**
-	 * Default configuration
-	 * initialSize = 0
-	 * isDynamic = true
-	 * fullNull = false
-	 */
 	public SGArray()
 	{
-		this.array = new Object[0];
+		this.array = new ArrayList<T>();
 	}
 	
 	public void setObject(int index, T o) 	{ set(index, o); }
@@ -41,56 +34,37 @@ public class SGArray<T> implements Iterable<T>
 	
 	public void set(int index, T o)
 	{
-		checkSize(index);
-		array[index] = o;
+		if (index <= array.size())
+			array.add(null);
+		
+		array.set(index, o);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public T get(int index)
 	{
-		checkSize(index);
-		return (T) array[index];
+		return array.get(index);
+	}
+	
+	public void add(SGArray<T> arr)
+	{
+		for (int i = 0; i < arr.getSize(); i++)
+		{
+			add(arr.get(i));
+		}
 	}
 	
 	public void add(T o)
 	{
-		setSize(size + 1);
-		array[size++] = o;
-	}
-    private static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
-    
-	public void setSize(int newSize)
-	{
-        int oldCapacity = array.length;
-        
-        if (oldCapacity - newSize > 0)
-        	return;
-        
-        int newCapacity = oldCapacity + (oldCapacity >> 1);
-        
-        if (newCapacity - newSize < 0)
-            newCapacity = newSize;
-        
-        if (newCapacity - MAX_ARRAY_SIZE > 0)
-            newCapacity = hugeCapacity(newSize);
-        
-		array = Arrays.copyOf(array, newCapacity);
-	}
-
-	private static int hugeCapacity(int minCapacity)
-	{
-		if (minCapacity < 0) // overflow
-			throw new OutOfMemoryError();
-		return (minCapacity > MAX_ARRAY_SIZE) ? Integer.MAX_VALUE : MAX_ARRAY_SIZE;
+		array.add(o);
 	}
 	
 	public void removeNulls()
 	{
-		SArray nulls = new SArray(0, true, false);
+		SArray nulls = new SArray();
 		
 		for (int i = 0; i < getSize(); i++)
 		{
-			if (array[i] == null)
+			if (array.get(i) == null)
 				nulls.addObject(i);
 		}
 		
@@ -104,64 +78,55 @@ public class SGArray<T> implements Iterable<T>
 	
 	public void clear()
 	{
-		array = new Object[0];
-		size = 0;
-	}
-	
-	public void clear(int newSize)
-	{
-		array = new Object[newSize];
-		size = 0;
+		array.clear();
 	}
 	
 	public void reverseArray()
 	{
-		for (int i = 0; i < array.length / 2; i++)
+		for (int i = 0; i < array.size() / 2; i++)
 		{
-			Object temp = array[i];
-			array[i] = array[getSize() - i - 1];
-			array[getSize() - i - 1] = temp;
+			T temp = array.get(i);
+			array.set(i, array.get(array.size() - i - 1));
+			array.set(getSize() - i - 1, temp);
 		}
 	}
 	
-	private void checkSize(int index)
-	{
-		if (index > size || index < 0)
-			throw new ArrayIndexOutOfBoundsException(index);
-	}
-	
-	@SuppressWarnings("unchecked")
 	public List<T> toList()
 	{
 		List<T> list = new ArrayList<T>();
-		for (Object t : array)
+		for (int i = 0; i < getSize(); i++)
 		{
-			list.add((T) t);
+			list.add(get(i));
 		}
 		return list;
 	}
 
+	public void remove(Object object)
+	{
+		array.remove(object);
+	}
 	
 	public void remove(int index)
 	{
-		int numMoved = size - index - 1;
-		
-		if (numMoved > 0)
-			System.arraycopy(array, index + 1, array, index, numMoved);
-		
-		array[--size] = null;
+		array.remove(index);
 	}
 	
 	public SGArray<T> copy()
 	{
 		SGArray<T> a = new SGArray<T>(getSize());
-		a.array = array.clone();
+		for (T o : array)
+		{
+			a.add(o);
+		}
 		return a;
 	}
 	
 	public void printContent()
 	{
-		for (Object o : array)
+		for (int i = 0; i < array.size(); i++)
+		{
+			Object o = array.get(i);
+			
 			if (o instanceof float[])
 				System.out.println(Arrays.toString((float[]) o));
 			else if (o instanceof double[])
@@ -180,6 +145,8 @@ public class SGArray<T> implements Iterable<T>
 				System.out.println(Arrays.toString((short[]) o));
 			else
 				System.out.println(o);
+		}
+
 	}
 
 	@Override
@@ -190,7 +157,7 @@ public class SGArray<T> implements Iterable<T>
 	
 	public int getSize()
 	{
-		return size;
+		return array.size();
 	}
 	
 	private int iterIndex = 0;
@@ -210,7 +177,6 @@ public class SGArray<T> implements Iterable<T>
 			return index != getSize();
 		}
 
-		@SuppressWarnings("unchecked")
 		@Override
 		public T next()
 		{
@@ -219,14 +185,11 @@ public class SGArray<T> implements Iterable<T>
 			if (i >= getSize())
 				throw new NoSuchElementException();
 			
-            if (i >= array.length)
-                throw new ConcurrentModificationException();
-            
             iterIndex = index;
             
             index = i + 1;
             
-			return (T) array[i];
+			return (T) array.get(i);
 		}
 		
 		@Override

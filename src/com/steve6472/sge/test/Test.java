@@ -94,7 +94,7 @@ public class Test extends MainApplication
 	@Override
 	public void exit()
 	{
-		glfwSetWindowShouldClose(getWindow(), true);
+		glfwSetWindowShouldClose(getWindowId(), true);
 	}
 	
 	public static void main(String[] args)

@@ -9,7 +9,6 @@ package com.steve6472.sge.main;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.system.MemoryUtil.NULL;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -25,7 +24,6 @@ import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
@@ -39,7 +37,7 @@ import com.steve6472.sge.main.game.Vec2;
 
 public abstract class MainApplication
 {
-	
+	private Window window_;
 	private Screen screen;
 	private MouseHandler mouseHandler;
 	private KeyHandler keyHandler;
@@ -88,12 +86,17 @@ public abstract class MainApplication
 		
 		setWindowHints();
 
-		window = glfwCreateWindow(getWidth(), getHeight(), getTitle() != null ? getTitle() : "", NULL, NULL);
-		if (window == NULL)
-			throw new RuntimeException("Failed to create the GLFW window");
+//		window = glfwCreateWindow(getWidth(), getHeight(), getTitle() != null ? getTitle() : "", NULL, NULL);
+//		if (window == NULL)
+//			throw new RuntimeException("Failed to create the GLFW window");
 
-		GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-		glfwSetWindowPos(window, (vidmode.width() - getWidth()) / 2, (vidmode.height() - getHeight()) / 2);
+		window_ = new Window(this, getTitle());
+		
+		window = window_.getWindow();
+		
+		glfwGetWindowSize(window, windowWidthBuffer, windowHeightBuffer);
+
+		window_.centerWindow();
 
 		glfwMakeContextCurrent(window);
 		
@@ -400,8 +403,9 @@ public abstract class MainApplication
     public Font getFont() { return font; }
     public Screen getScreen() { return screen; }
     public Vec2 getCenter() { return new Vec2(getCurrentWidth() / 2, getCurrentHeight() / 2); }
+    public Window getWindow() { return window_; }
     
-    public long getWindow() { return window; }
+    public long getWindowId() { return window; }
     
     public void addGui(Gui gui)
     {

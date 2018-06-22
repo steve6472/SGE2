@@ -7,6 +7,8 @@
 
 package com.steve6472.sge.main.game.world;
 
+import java.lang.reflect.InvocationTargetException;
+
 import com.steve6472.sge.gfx.Camera;
 import com.steve6472.sge.main.Util;
 import com.steve6472.sge.test.DynamicModel;
@@ -111,7 +113,7 @@ public class World
 	{
 		for (int i = 0; i < worldWidth * worldHeight; i++)
 		{
-			chunks[i] = new Chunk();
+			chunks[i] = new Chunk(this);
 		}
 	}
 	
@@ -121,8 +123,8 @@ public class World
 		{
 			try
 			{
-				chunks[i] = chunk.newInstance();
-			} catch (InstantiationException | IllegalAccessException e)
+				chunks[i] = chunk.getConstructor(World.class).newInstance(this);
+			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e)
 			{
 				e.printStackTrace();
 			}

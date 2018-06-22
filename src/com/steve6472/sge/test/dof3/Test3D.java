@@ -21,8 +21,10 @@ import com.steve6472.sge.gfx.Tessellator3D;
 import com.steve6472.sge.main.MainApplication;
 import com.steve6472.sge.main.Util;
 import com.steve6472.sge.main.callbacks.KeyCallback;
+import com.steve6472.sge.main.game.Atlas;
 import com.steve6472.sge.main.game.GravityUtil;
 import com.steve6472.sge.main.game.world.Chunk;
+import com.steve6472.sge.main.game.world.GameTile;
 import com.steve6472.sge.main.game.world.World;
 import com.steve6472.sge.main.game.world.World.IRender0;
 import com.steve6472.sge.test.DynamicModel3D;
@@ -64,9 +66,11 @@ public class Test3D extends MainApplication
 		
 		worldModel = new DynamicModel3D();
 		
+		GameTile.initGameTiles(new Atlas(sprite, 32), 32, 32);
 		Chunk.initChunks(16, 16, 16);
 		World.initWorlds(1, 1);
-		chunk = new Chunk();
+		world = new World();
+		chunk = new Chunk(world);
 		for (int i = 0; i < Chunk.chunkWidth; i++)
 		{
 			for (int j = 0; j < Chunk.chunkHeight; j++)
@@ -84,7 +88,6 @@ public class Test3D extends MainApplication
 		chunk.setTileIdSafe(4, 4, 1, 1);
 		chunk.setTileIdSafe(4, 4, 2, 1);
 		
-		world = new World();
 		world.setChunk(0, 0, chunk);
 		
 		playerLocation = new PlayerLocation();

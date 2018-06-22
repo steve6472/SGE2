@@ -15,7 +15,7 @@ public class SavedShaders
 			+ "uniform sampler2D sampler;												\n"
 			+ "uniform vec2 texture;													\n"
 			+ "uniform vec4 col;														\n"
-			+ ""
+			
 			+ "in vec4 vColor;															\n"
 			+ "in vec2 vTexture;														\n"
 			

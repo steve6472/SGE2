@@ -7,56 +7,23 @@
 
 package com.steve6472.sge.main;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
-
-import com.steve6472.sge.main.game.Vec2;
+import java.util.List;
 
 public class SArray implements Iterable<Object>
 {
-	int size;
-	Object[] array;
-	boolean isDynamic;
-	boolean fillNull;
+	List<Object> array;
 	
-	public static void main(String[] args)
+	public SArray(int initialSize)
 	{
-		SArray arr = new SArray(5, true, false);
-		
-		arr.setObject(2, new Vec2(0, 0));
-		
-		arr.setObjectArr(1, new Object[] {0, 5, 9, new Vec2(9, 1)});
-		
-		arr.addObject(new Vec2(1, 1));
-		
-		arr.setFillNull(true);
-		
-		arr.addObject(new Vec2(2, 2));
-		
-		arr.printContent();
-		
-		arr.remove(2);
-		arr.removeNulls();
-		
-		System.out.println("\n------REMOVE-------\n");
-		
-		
-		for (Object o : arr)
-		{
-			if (o instanceof Object[])
-				System.out.println(Arrays.toString((Object[]) o));
-			else
-				System.out.println(o);
-		}
+		array = new ArrayList<Object>(initialSize);
 	}
 	
-	public SArray(int initialSize, boolean isDynamic, boolean fillNull)
+	public SArray()
 	{
-		this.size = initialSize;
-		this.array = new Object[initialSize];
-		this.isDynamic = isDynamic;
+		array = new ArrayList<Object>();
 	}
 
 	public void setByte(int index, byte o) 			{ set(index, o); }
@@ -137,62 +104,45 @@ public class SArray implements Iterable<Object>
 	public Object[] getObjectArr(int index) 		{ return get(Object[].class, index); }
 	public void addObjectArr(Object[] o) 			{ add(o); }
 	
+	public void setSArray(int index, Object o) 		{ set(index, o); }
+	public Object getSArray(int index) 				{ return get(SArray.class, index); }
+	public void addSArray(Object o) 				{ add(o); }
+	
+	public void setSArrayArr(int index, SArray[] o) { set(index, o); }
+	public SArray[] getSArrayArr(int index) 		{ return get(SArray[].class, index); }
+	public void addSArrayArr(SArray[] o) 			{ add(o); }
+	
 	private void set(int index, Object o)
 	{
-		checkSize(index);
-		array[index] = o;
+		if (index <= array.size())
+			array.add(null);
+		array.set(index, o);
 	}
 	
 	@SuppressWarnings("unchecked")
 	private <T> T get(Class<T> clazz, int index)
 	{
-		checkSize(index);
-		
-		if (array[index] == null)
+		if (array.get(index) == null)
 			throw new NullPointerException("Element at " + index + " is null, expected " + clazz.getName());
 		
-		if (clazz.isInstance(array[index]))
-			return (T) array[index];
+		if (clazz.isInstance(array.get(index)))
+			return (T) array.get(index);
 		else
-			throw new ClassCastException(array[index].getClass().getName() + " is not instance of " + clazz.getName());
+			throw new ClassCastException(array.get(index).getClass().getName() + " is not instance of " + clazz.getName());
 	}
 	
 	private void add(Object o)
 	{
-		if (fillNull)
-		{
-			int nullIndex = -1;
-			for (int i = 0; i < size - 1; i++)
-			{
-				if (array[i] == null)
-				{
-					nullIndex = i;
-					break;
-				}
-			}
-			if (nullIndex == -1)
-			{
-				setSize(size + 1);
-				array[size - 1] = o;
-			} else
-			{
-				array[nullIndex] = o;
-			}
-		}
-		else
-		{
-			setSize(size + 1);
-			array[size - 1] = o;
-		}
+		array.add(o);
 	}
 	
 	public void removeNulls()
 	{
-		SArray nulls = new SArray(0, true, false);
+		SArray nulls = new SArray(0);
 		
-		for (int i = 0; i < size; i++)
+		for (int i = 0; i < array.size(); i++)
 		{
-			if (array[i] == null)
+			if (array.get(i) == null)
 				nulls.addObject(i);
 		}
 		
@@ -206,78 +156,21 @@ public class SArray implements Iterable<Object>
 	
 	public void reverseArray()
 	{
-		for (int i = 0; i < array.length / 2; i++)
+		for (int i = 0; i < array.size() / 2; i++)
 		{
-			Object temp = array[i];
-			array[i] = array[size - i - 1];
-			array[size - i - 1] = temp;
+			Object temp = array.get(i);
+			array.set(i, array.get(array.size() - i - 1));
+			array.set(array.size() - i - 1, temp);
 		}
 	}
-	
-	private void checkSize(int index)
-	{
-		if (size < 0 || (!isDynamic && index > this.size))
-			throw new ArrayIndexOutOfBoundsException(index);
-		
-		if (isDynamic && index > this.size)
-			setSize(index);
-	}
-	
-	public void setSize(int newSize)
-	{
-		this.size = newSize;
-		
-		Object[] newArray = new Object[newSize];
-		
-		System.arraycopy(array, 0, newArray, 0, newSize - 1);
-		
-		array = newArray;
-	}
-	
+
 	public void remove(int index)
 	{
-		if (index == 0)
-		{
-			Object[] newArray = new Object[size - 1];
-			
-			System.arraycopy(array, 1, newArray, 0, size - 1);
-			
-			this.array = newArray;
-		} else if (index == size - 1)
-		{
-			Object[] newArray = new Object[size - 1];
-			
-			System.arraycopy(array, 0, newArray, 0, size - 1);
-			
-			this.array = newArray;
-		} else
-		{
-			Object[] newArray = new Object[size - 1];
-			
-			int left = -((size - 1) - (size - 1) - index);
-			int right = (size - 1) - index;
-
-//			Util.printObjects("Left:", left, "\nRight:", right);
-			
-			Object[] leftArray = new Object[left];
-			Object[] rightArray = new Object[right];
-
-			System.arraycopy(array, 0, leftArray, 0, left);
-			System.arraycopy(array, index + 1, rightArray, 0, right);
-
-			newArray = Util.combineArrays(leftArray, rightArray);
-			
-			this.array = newArray;
-		}
-		
-		size -= 1;
+		array.remove(index);
 	}
 	
 	public void swap(int index1, int index2)
 	{
-		checkSize(index1);
-		checkSize(index2);
-		
 		Object temp = getObject(index1);
 		setObject(index1, getObject(index2));
 		setObject(index2, temp);
@@ -285,8 +178,11 @@ public class SArray implements Iterable<Object>
 	
 	public SArray copy()
 	{
-		SArray a = new SArray(size, isDynamic, fillNull);
-		a.array = array.clone();
+		SArray a = new SArray(array.size());
+		for (Object o : array)
+		{
+			a.add(o);
+		}
 		return a;
 	}
 	
@@ -302,29 +198,9 @@ public class SArray implements Iterable<Object>
 		return new Itr();
 	}
 	
-	public void setFillNull(boolean fillNull)
-	{
-		this.fillNull = fillNull;
-	}
-	
-	public void setDynamic(boolean isDynamic)
-	{
-		this.isDynamic = isDynamic;
-	}
-	
-	public boolean isDynamic()
-	{
-		return isDynamic;
-	}
-	
-	public boolean isFillNull()
-	{
-		return fillNull;
-	}
-	
 	public int getSize()
 	{
-		return size;
+		return array.size();
 	}
 	
 	private class Itr implements Iterator<Object>
@@ -334,7 +210,7 @@ public class SArray implements Iterable<Object>
 		@Override
 		public boolean hasNext()
 		{
-			return index != size;
+			return index != array.size();
 		}
 
 		@Override
@@ -342,15 +218,12 @@ public class SArray implements Iterable<Object>
 		{
 			int i = index;
 			
-			if (i >= size)
-				throw new NoSuchElementException();
-			
-            if (i >= array.length)
+            if (i >= array.size())
                 throw new ConcurrentModificationException();
             
             index = i + 1;
             
-			return array[i];
+			return array.get(i);
 		}
 		
 		@Override

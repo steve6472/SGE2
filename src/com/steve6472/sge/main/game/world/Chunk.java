@@ -42,6 +42,7 @@ public class Chunk
 	 * Chunk specific data 
 	 */
 	DynamicModel[] models;
+	protected World world;
 	
 	public static void initChunks(int chunkWidth, int chunkHeight, int layerCount)
 	{
@@ -52,9 +53,10 @@ public class Chunk
 		chunkShader = new Shader(SavedShaders.TESS_VS, SavedShaders.TESS_FS);
 	}
 	
-	public Chunk()
+	public Chunk(World world)
 	{
 		map = new SGArray<int[]>(layerCount);
+		this.world = world;
 
 		ver = new ArrayList<Float>();
 		tex = new ArrayList<Float>();
@@ -78,7 +80,7 @@ public class Chunk
 	
 	static int chunks = 0;
 	
-	private FloatBuffer toFloatBuffer(List<Float> list)
+	protected FloatBuffer toFloatBuffer(List<Float> list)
 	{
 		FloatBuffer buff = BufferUtils.createFloatBuffer(list.size());
 		for (float f : list)
@@ -89,11 +91,11 @@ public class Chunk
 		return buff;
 	}
 	
-	List<Float> ver;
-	List<Float> tex;
-	List<Float> col;
+	protected List<Float> ver;
+	protected List<Float> tex;
+	protected List<Float> col;
 	
-	public void gen(int sizeX, int sizeY)
+	protected void gen(int sizeX, int sizeY)
 	{
 		ver.clear();
 		tex.clear();
@@ -126,7 +128,7 @@ public class Chunk
 		}
 	}
 	
-	private void add(float x, float y, float tx, float ty)
+	protected void add(float x, float y, float tx, float ty)
 	{
 		ver.add(x);
 		ver.add(y);
