@@ -216,16 +216,43 @@ public class Shader
 	{
 		glUseProgram(0);
 	}
-	
+
 	private String readFile(String file)
 	{
 		String[] arr = Util.loadDataFromFile(file);
 		StringBuilder string = new StringBuilder();
 		for (String s : arr)
 		{
-			string.append(s);
-			string.append("\n");
+			if (s.startsWith("#") && s.substring(0, 8).equals("#include"))
+			{
+				string.append(include(s));
+			} else
+			{
+				string.append(s);
+				string.append("\n");
+			}
 		}
 		return string.toString();
+	}
+	
+	private StringBuilder include(String line)
+	{
+		String path = line.split(" ")[1];
+		String[] arr = Util.loadDataFromFile(path);
+		
+		StringBuilder sb = new StringBuilder();
+		for (String s : arr)
+		{
+			if (s.startsWith("#") && s.substring(0, 8).equals("#include"))
+			{
+				sb.append(include(s));
+			} else
+			{
+				sb.append(s);
+				sb.append("\n");
+			}
+		}
+		
+		return sb;
 	}
 }

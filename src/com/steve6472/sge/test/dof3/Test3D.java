@@ -70,7 +70,7 @@ public class Test3D extends MainApplication
 		Chunk.initChunks(16, 16, 16);
 		World.initWorlds(1, 1);
 		world = new World();
-		chunk = new Chunk(world);
+		chunk = new Chunk(world, 0, 0);
 		for (int i = 0; i < Chunk.chunkWidth; i++)
 		{
 			for (int j = 0; j < Chunk.chunkHeight; j++)

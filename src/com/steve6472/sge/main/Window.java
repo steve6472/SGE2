@@ -41,7 +41,7 @@ public class Window
 	
 	public void setWindowText(String text)
 	{
-		glfwSetWindowTitle(window, text);
+		glfwSetWindowTitle(window, text != null ? text : "");
 	}
 	
 	public void enableVSync(boolean enabled)

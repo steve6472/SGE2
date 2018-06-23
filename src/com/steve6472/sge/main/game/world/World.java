@@ -15,7 +15,7 @@ import com.steve6472.sge.test.DynamicModel;
 
 public class World
 {
-	Chunk[] chunks;
+	protected Chunk[] chunks;
 	int startX;
 	int startY;
 	int endX;
@@ -113,7 +113,7 @@ public class World
 	{
 		for (int i = 0; i < worldWidth * worldHeight; i++)
 		{
-			chunks[i] = new Chunk(this);
+			chunks[i] = new Chunk(this, i % worldWidth, i / worldHeight);
 		}
 	}
 	
@@ -123,7 +123,7 @@ public class World
 		{
 			try
 			{
-				chunks[i] = chunk.getConstructor(World.class).newInstance(this);
+				chunks[i] = chunk.getConstructor(World.class, int.class, int.class).newInstance(this, i % worldWidth, i / worldHeight);
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e)
 			{
 				e.printStackTrace();

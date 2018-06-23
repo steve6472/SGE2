@@ -43,6 +43,7 @@ public class Chunk
 	 */
 	DynamicModel[] models;
 	protected World world;
+	public final int chunkX, chunkY;
 	
 	public static void initChunks(int chunkWidth, int chunkHeight, int layerCount)
 	{
@@ -53,10 +54,13 @@ public class Chunk
 		chunkShader = new Shader(SavedShaders.TESS_VS, SavedShaders.TESS_FS);
 	}
 	
-	public Chunk(World world)
+	public Chunk(World world, int chunkX, int chunkY)
 	{
 		map = new SGArray<int[]>(layerCount);
+		
 		this.world = world;
+		this.chunkX = chunkX;
+		this.chunkY = chunkY;
 
 		ver = new ArrayList<Float>();
 		tex = new ArrayList<Float>();
