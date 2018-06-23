@@ -9,7 +9,6 @@ package com.steve6472.sge.main;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -170,6 +169,7 @@ public class SGArray<T> implements Iterable<T>
 	private class Itr implements Iterator<T>
 	{
 		int index;
+		int lastRet = -1;
 		
 		@Override
 		public boolean hasNext()
@@ -189,13 +189,16 @@ public class SGArray<T> implements Iterable<T>
             
             index = i + 1;
             
+            lastRet = index;
+            
 			return (T) array.get(i);
 		}
 		
 		@Override
 		public void remove()
 		{
-			throw new ConcurrentModificationException();
+			SGArray.this.remove(lastRet);
+			lastRet = -1;
 		}
 		
 	}

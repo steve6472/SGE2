@@ -40,7 +40,7 @@ public class Shader
 		
 		if (glGetShaderi(vs, GL_COMPILE_STATUS) != 1)
 		{
-			System.err.println(glGetShaderInfoLog(vs));
+			System.err.println("VS:\n" + glGetShaderInfoLog(vs));
 			System.exit(1);
 		}
 		
@@ -52,7 +52,7 @@ public class Shader
 		
 		if (glGetShaderi(fs, GL_COMPILE_STATUS) != 1)
 		{
-			System.err.println(glGetShaderInfoLog(fs));
+			System.err.println("FS:\n" + glGetShaderInfoLog(fs));
 			System.exit(1);
 		}
 
@@ -79,6 +79,48 @@ public class Shader
 		}
 		
 		System.out.println("Created shader from " + fileName + " vs:" + vs + " fs:" + fs + " program:" + program);
+	}
+	
+	public void updateShader(String fileName)
+	{
+		glShaderSource(vs, readFile(fileName + ".vs"));
+		
+		glCompileShader(vs);
+		
+		if (glGetShaderi(vs, GL_COMPILE_STATUS) != 1)
+		{
+			System.err.println("VS:\n" + glGetShaderInfoLog(vs));
+			System.exit(1);
+		}
+		
+		
+		glShaderSource(fs, readFile(fileName + ".fs"));
+		
+		glCompileShader(fs);
+		
+		if (glGetShaderi(fs, GL_COMPILE_STATUS) != 1)
+		{
+			System.err.println("FS:\n" + glGetShaderInfoLog(fs));
+			System.exit(1);
+		}
+
+		glLinkProgram(program);
+		
+		if (glGetProgrami(program, GL_LINK_STATUS) != 1)
+		{
+			System.err.println(glGetProgramInfoLog(program));
+			System.exit(1);
+		}
+		
+		glValidateProgram(program);
+		
+		if (glGetProgrami(program, GL_VALIDATE_STATUS) != 1)
+		{
+			System.err.println(glGetProgramInfoLog(program));
+			System.exit(1);
+		}
+		
+		System.out.println("Updated shader from " + fileName + " vs:" + vs + " fs:" + fs + " program:" + program);
 	}
 	
 	public Shader(String VS, String FS)
@@ -228,6 +270,8 @@ public class Shader
 				string.append(include(s));
 			} else
 			{
+				if (s.contains("texture2D"))
+					System.err.println(file + " contains Deprecated 'texture2D'");
 				string.append(s);
 				string.append("\n");
 			}
@@ -248,6 +292,8 @@ public class Shader
 				sb.append(include(s));
 			} else
 			{
+				if (s.contains("texture2D"))
+					System.err.println("#include" + " contains Deprecated 'texture2D'");
 				sb.append(s);
 				sb.append("\n");
 			}

@@ -46,31 +46,61 @@ public class Model
 		System.out.println("Created vId:" + vId + " tId:" + tId + " cId:" + cId);
 	}
 	
-	public void render()
+	public static void start()
 	{
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
-		
-		glBindBuffer(GL_ARRAY_BUFFER, vId);
-		glVertexPointer(2, GL_FLOAT, 0, 0);
-		glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
-
-		glBindBuffer(GL_ARRAY_BUFFER, tId);
-		glTexCoordPointer(2, GL_FLOAT, 0, 0);
-		glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0);
-
-		glBindBuffer(GL_ARRAY_BUFFER, cId);
-		glColorPointer(4, GL_FLOAT, 0, 0);
-		glVertexAttribPointer(2, 4, GL_FLOAT, false, 0, 0);
-
-		glDrawArrays(mode, 0, drawCount);
-		
+	}
+	
+	public static void end()
+	{
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
-
+		
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
 		glDisableVertexAttribArray(2);
+	}
+	
+	public static void bindBuffers(Model model)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, model.getvId());
+		glVertexPointer(2, GL_FLOAT, 0, 0);
+		glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, 0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, model.gettId());
+		glTexCoordPointer(2, GL_FLOAT, 0, 0);
+		glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, 0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, model.getcId());
+		glColorPointer(4, GL_FLOAT, 0, 0);
+		glVertexAttribPointer(2, 4, GL_FLOAT, false, 0, 0);
+	}
+	
+	public void bindBuffers()
+	{
+		bindBuffers(this);
+	}
+	
+	public static void drawArrays(Model model)
+	{
+		glDrawArrays(model.mode, 0, model.getDrawCount());
+	}
+	
+	public void drawArrays()
+	{
+		glDrawArrays(mode, 0, drawCount);
+	}
+	
+	public void render()
+	{
+		start();
+		
+		bindBuffers();
+
+		drawArrays();
+		
+		end();
 	}
 	
 	private FloatBuffer createBuffer(float[] data)

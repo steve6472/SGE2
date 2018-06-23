@@ -23,7 +23,7 @@ public class SavedShaders
 			
 			+ "void main()																\n"
 			+ "{																		\n"
-			+ "		fragColor = texture2D(sampler, vTexture + texture) + col + vColor;	\n"
+			+ "		fragColor = texture(sampler, vTexture + texture) + col + vColor;	\n"
 			+ "}																		\n";
 
 	public static final String TESS_VS = "" +
@@ -59,7 +59,7 @@ public class SavedShaders
 			
 			+ "void main()																\n"
 			+ "{																		\n"
-			+ "		fragColor = texture2D(sampler, vTexture + texture);					\n"
+			+ "		fragColor = texture(sampler, vTexture + texture);					\n"
 			+ "}																		\n";
 
 	public static final String TILE_VS = "" +
@@ -116,6 +116,6 @@ public class SavedShaders
 			
 			+ "void main()																\n"
 			+ "{																		\n"
-			+ "		fragColor = texture2D(sampler, vTexture + texture) + col;			\n"
+			+ "		fragColor = texture(sampler, vTexture + texture) + col;			\n"
 			+ "}																		\n";
 }
