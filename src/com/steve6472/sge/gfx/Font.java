@@ -11,9 +11,6 @@ import static org.lwjgl.opengl.GL11.*;
 
 import java.util.HashMap;
 
-import org.joml.Matrix4f;
-
-import com.steve6472.sge.main.MainApplication;
 import com.steve6472.sge.main.game.AABB;
 import com.steve6472.sge.main.game.Vec2;
 import com.steve6472.sge.test.ShaderTest2;
@@ -87,7 +84,7 @@ public class Font
 		characters.put('t', new Char(51, 't', 7));
 		characters.put('u', new Char(52, 'u', 7));
 		characters.put('v', new Char(53, 'v', 7));
-		characters.put('w', new Char(54, 'w', 7));
+		characters.put('w', new Char(54, 'w', 8));
 		characters.put('x', new Char(55, 'x', 8));
 		characters.put('y', new Char(56, 'y', 7));
 		characters.put('z', new Char(57, 'z', 7));
@@ -132,15 +129,21 @@ public class Font
 		characters.put('[', new Char(100, '[', 5));
 		characters.put(']', new Char(101, ']', 5));
 		characters.put('~', new Char(102, '~', 8));
-		
-		Steve : for(int age = 0; age < 5; age++)
-		{
-			if (age > 18)
-				break Steve;
-			else
-				continue Steve;
-		}
 	}
+	
+	public static int getTextWidth(String text, int fontSize)
+	{
+		int size = 0;
+		for (int i = 0; i < text.length(); i++)
+		{
+			char c = text.charAt(i);
+			Char ch = characters.get(c);
+			size += ch.width * fontSize;
+		}
+		
+		return size;
+	}
+	
 	
 	/*
 	static
@@ -245,47 +248,6 @@ public class Font
 		glPopMatrix();
 		
 		glMatrixMode(GL_MODELVIEW);
-	}
-	
-	public static void drawFont(MainApplication mainApp, String text, int x, int y, Camera camera)
-	{
-		float size = 1 * 4;
-		
-		Matrix4f pro = new Matrix4f()
-				.scale(size)
-				.translate(size * 32 - 1 - (float) x / size, size * 18 - 1 - (float) y / size, 0);
-			
-		mainApp.getFont().getFont().bind();
-		fontShader.bind();
-
-		for (int i = 0; i < text.length(); i++)
-		{
-			int char_index = Font.chars.indexOf(text.charAt(i));
-			if (char_index >= 0)
-			{
-				renderChar(-i * 2, 0, char_index, (int) size, pro, camera, fontShader, fontModel);
-			}
-		}
-	}
-	
-	private static void renderChar(float x, float y, int index, int size, Matrix4f mat, Camera camera, Shader fontShader, Model fontModel)
-	{
-		size = 1;
-		float indexX = (index % 64) / 64f;
-		float indexY = (index / 64) / 64f;
-		
-		Matrix4f tilePos = new Matrix4f().translate(x, y, 0);
-		Matrix4f target = new Matrix4f();
-		
-		camera.getProjection().mul(mat, target);
-		target.mul(tilePos);
-		
-		fontShader.setUniform2f("texture", indexX, indexY);
-		
-		fontShader.setUniformMat4f("projection", target);
-//		fontShader.setUniform4f("col", 0.21f, 0.21f, 0.21f, 1f);
-		
-		fontModel.render();
 	}
 	
 	public void render(String text, int x, int y, int size, boolean shade)

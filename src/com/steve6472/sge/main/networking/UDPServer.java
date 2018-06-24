@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,12 +33,32 @@ public abstract class UDPServer extends Thread
 		
 		try
 		{
+			if (!isPortAviable(port))
+			{
+				System.err.println(port + " is not aviable!");
+				System.exit(2);
+			}
 			this.socket = new DatagramSocket(port);
 			System.out.println("Started server on port " + port + " Ip: " + InetAddress.getLocalHost().getHostAddress());
 		} catch (Exception ex)
 		{
 			ex.printStackTrace();
 		}
+	}
+	
+	public static boolean isPortAviable(int port)
+	{
+		DatagramSocket s = null;
+		try
+		{
+			s = new DatagramSocket(port);
+		} catch (SocketException e)
+		{
+			return false;
+		}
+		
+		s.close();
+		return true;
 	}
 	
 	public void setIPacketHandler(IPacketHandler packetHandler)

@@ -3,6 +3,7 @@ package com.steve6472.sge.gui.components;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.steve6472.sge.gfx.Font;
 import com.steve6472.sge.gfx.RenderHelper;
 import com.steve6472.sge.gfx.Screen;
 import com.steve6472.sge.gfx.Sprite;
@@ -152,7 +153,10 @@ public class Button extends Component implements IFocusable
 		{
 			if (text != null)
 			{
-				getFont().render(text, x + (width / 2) - ((text.length() * (8 * fontSize)) / 2), y + (height / 2) - 4 * fontSize, fontSize, red, green, blue);
+				int fontWidth = Font.getTextWidth(text, fontSize) / 2;
+				System.out.println(text + " " + fontWidth);
+				int fontHeight = ((8 * fontSize)) / 2;
+				getFont().render(text, x + width / 2 - fontWidth, y + height / 2 - fontHeight, fontSize, red, green, blue);
 			}
 		}
 	}

@@ -345,7 +345,7 @@ public abstract class MainApplication
 		public void tick();
 	}
 	
-    public void run() 
+    public void run()
 	{/*
         System.out.println("LWJGL " + Version.getVersion() + "!");
 	 */

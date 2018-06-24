@@ -74,7 +74,6 @@ public class Tessellator
 	
 	public void render(int mode)
 	{
-		
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);

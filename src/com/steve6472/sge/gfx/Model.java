@@ -53,15 +53,6 @@ public class Model
 		glEnableVertexAttribArray(2);
 	}
 	
-	public static void end()
-	{
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		
-		glDisableVertexAttribArray(0);
-		glDisableVertexAttribArray(1);
-		glDisableVertexAttribArray(2);
-	}
-	
 	public static void bindBuffers(Model model)
 	{
 		glBindBuffer(GL_ARRAY_BUFFER, model.getvId());
@@ -89,7 +80,16 @@ public class Model
 	
 	public void drawArrays()
 	{
-		glDrawArrays(mode, 0, drawCount);
+		drawArrays(this);
+	}
+	
+	public static void end()
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		
+		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
 	}
 	
 	public void render()
