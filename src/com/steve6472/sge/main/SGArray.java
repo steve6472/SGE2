@@ -44,6 +44,14 @@ public class SGArray<T> implements Iterable<T>
 		return array.get(index);
 	}
 	
+	public void add(T[] arr)
+	{
+		for (T t : arr)
+		{
+			add(t);
+		}
+	}
+	
 	public void add(SGArray<T> arr)
 	{
 		for (int i = 0; i < arr.getSize(); i++)
