@@ -66,8 +66,8 @@ public class DragFrame extends Component
 		if (!render)
 			return;
 		
-		screen.drawRect(x, y, width, height, 2, 0xff7f7f7f);
-		screen.fillRect(x + 2, y + 2, width - 4, height - 4, 0xff000000);
+		Screen.drawRect(x, y, width, height, 2, 0xff7f7f7f);
+		Screen.fillRect(x + 2, y + 2, width - 4, height - 4, 0xff000000);
 		if (text != null && text != "")
 		{
 			if (renderTextInCenter)

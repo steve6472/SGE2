@@ -46,19 +46,19 @@ public class CheckBox extends Component
 		{
 			if (isHovered)
 			{
-				RenderHelper.renderDoubleBorderComponent(screen, this, 0xff000000, 0xffbdc6ff, 0xff7d87be);
+				RenderHelper.renderDoubleBorderComponent(this, 0xff000000, 0xffbdc6ff, 0xff7d87be);
 			} else
 			{
-				RenderHelper.renderDoubleBorderComponent(screen, this, 0xff000000, 0xffa8a8a8, 0xff6f6f6f);
+				RenderHelper.renderDoubleBorderComponent(this, 0xff000000, 0xffa8a8a8, 0xff6f6f6f);
 			}
 		} else
 		{
-			RenderHelper.renderDoubleBorderComponent(screen, this, 0xff000000, 0xff2b2b2b, 0xff2b2b2b);
+			RenderHelper.renderDoubleBorderComponent(this, 0xff000000, 0xff2b2b2b, 0xff2b2b2b);
 		}
 
 		if (isChecked)
 		{
-			screen.drawSprite(x, y, TYPES[getType()]);
+			Screen.drawSprite(x, y, TYPES[getType()]);
 		}
 	}
 

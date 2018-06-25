@@ -114,14 +114,14 @@ public class HelloLWJGL
 ////		for (int i = 0; i < 34; i++)
 ////			for (int j = 0; j < 19; j++)
 ////					drawQuad(i * texture1.getWidth() + x, j * texture1.getHeight() + y, texture1);
-		screen.fillRect(10, 10, 16, 16, 0xff00ff00);
+		Screen.fillRect(10, 10, 16, 16, 0xff00ff00);
 //		Screen.fillRect(x, y, 32, 32, 0xff00ff00);
 //		Screen.fillRect(mouseX - 16, mouseY - 16, 32, 32, 0xff00ff00);
 //		Screen.drawCircle(WIDTH / 2, HEIGHT / 2, 6, 256, ang);
 		
 		drawQuad(256, 256, texture1);
 //		
-		screen.drawRect(mouseX - 16, mouseY - 16, 32, 32, 2, 0xff00ff00);
+		Screen.drawRect(mouseX - 16, mouseY - 16, 32, 32, 2, 0xff00ff00);
 //		glColor3f(1f, 1f, 1f);
 	}
 

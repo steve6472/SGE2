@@ -25,18 +25,18 @@ public class Slider extends Component
 	@Override
 	public void render(Screen screen)
 	{
-		RenderHelper.renderDoubleBorderComponent(screen, this, 0xff000000, 0xff606060, 0xff3f3f3f);
+		RenderHelper.renderDoubleBorderComponent(this, 0xff000000, 0xff606060, 0xff3f3f3f);
 
-		RenderHelper.renderButton(screen, moveX, getY() - 8, 32, 48, true, selected);
+		RenderHelper.renderButton(moveX, getY() - 8, 32, 48, true, selected);
 		
 	}
 
-	protected void sliderChange()
-	{
-		privateX = getX() - getMouseHandler().getMouseX(); //mouse pos relativly to component
-		
-		changeEvent.forEach((ce) -> ce.change());
-	}
+//	protected void sliderChange()
+//	{
+//		privateX = getX() - getMouseHandler().getMouseX(); //mouse pos relativly to component
+//		
+//		changeEvent.forEach((ce) -> ce.change());
+//	}
 	
 	private boolean setted = false;
 	private int oldValue = 0;
@@ -157,12 +157,15 @@ public class Slider extends Component
 		setted = true;
 		recalculate();
 	}
-	
+
 	public void setMaxValue(int maxValue)
 	{
 		this.maxValue = maxValue;
+		
+		if (value > maxValue)
+			setValue(maxValue);
 	}
-	
+
 	public void setMinValue(int minValue)
 	{
 		this.minValue = minValue;
@@ -179,6 +182,7 @@ public class Slider extends Component
 	public void setSize(int width, int height)
 	{
 		setSize(width);
+		recalculate();
 	}
 	
 	@Override
@@ -186,6 +190,7 @@ public class Slider extends Component
 	{
 		this.x = x;
 		this.y = y;
+		recalculate();
 	}
 	
 	public void addChangeEvent(ChangeEvent ce)

@@ -78,7 +78,7 @@ public class Screen
 		glColor4fv(getColors(color));
 	}
 	
-	public void drawRotatedPartOfTexture(int x, int y, Sprite texture, float rotation, int subImageSizeX, int subImageSizeY, int indexX, int indexY)
+	public static void drawRotatedPartOfTexture(int x, int y, Sprite texture, float rotation, int subImageSizeX, int subImageSizeY, int indexX, int indexY)
 	{
 		float width = texture.getWidth();
 		float height = texture.getHeight();
@@ -135,12 +135,12 @@ public class Screen
 		glPopMatrix();
 	}
 	
-	public void fillRect(int x, int y, int width, int height, int color)
+	public static void fillRect(int x, int y, int width, int height, int color)
 	{
 		fillRect(x, y, width, height, color, color, color, color);
 	}
 	
-	public void fillRect(int x, int y, int width, int height, int c00, int c10, int c11, int c01)
+	public static void fillRect(int x, int y, int width, int height, int c00, int c10, int c11, int c01)
 	{
 		glPushMatrix();
 		glPushAttrib(GL_CURRENT_BIT);
@@ -167,7 +167,7 @@ public class Screen
 		glPopMatrix();
 	}
 	
-	public void drawCircle(int x, int y, int edgeCount, int radius, double addAng, int color)
+	public static void drawCircle(int x, int y, int edgeCount, int radius, double addAng, int color)
 	{
 		glPushMatrix();
 		glPushAttrib(GL_CURRENT_BIT);
@@ -205,12 +205,12 @@ public class Screen
 		glPopMatrix();
 	}
 	
-	public void drawLine(int x1, int y1, int x2, int y2, int color)
+	public static void drawLine(int x1, int y1, int x2, int y2, int color)
 	{
 		drawLine(x1, y1, x2, y2, color, color);
 	}
 	
-	public void drawLine(int x1, int y1, int x2, int y2, int c00, int c11)
+	public static void drawLine(int x1, int y1, int x2, int y2, int c00, int c11)
 	{
 		glPushMatrix();
 		glPushAttrib(GL_CURRENT_BIT);
@@ -226,7 +226,7 @@ public class Screen
 		glPopMatrix();
 	}
 	
-	public void drawPoint(int x, int y, int color)
+	public static void drawPoint(int x, int y, int color)
 	{
 		glPushMatrix();
 		glPushAttrib(GL_CURRENT_BIT);
@@ -240,14 +240,14 @@ public class Screen
 		glPopMatrix();
 	}
 
-	public void fillRect(int x, int y, int width, int height, int color, int maxX, int maxY, int minX, int minY)
+	public static void fillRect(int x, int y, int width, int height, int color, int maxX, int maxY, int minX, int minY)
 	{
 		glPushAttrib(GL_CURRENT_BIT);
 		fillRect(x, y, width, height, maxX, maxY, minX, minY, (X, Y, W, H) -> fillRect(X, Y, W, H, color));
 		glPopAttrib();
 	}
 	
-	public void drawRect(int x, int y, int w, int h, int thickness, int color)
+	public static void drawRect(int x, int y, int w, int h, int thickness, int color)
 	{
 		if (thickness == 0)
 			return;
@@ -303,7 +303,7 @@ public class Screen
 	 * @param y
 	 * @param texture
 	 */
-	public void drawSprite(int x, int y, Sprite texture) 
+	public static void drawSprite(int x, int y, Sprite texture) 
 	{
 		glPushMatrix();
 		glEnable(GL_TEXTURE_2D);
@@ -317,7 +317,7 @@ public class Screen
 		glPopMatrix();
 	}
 	
-	public void drawSprite(int x, int y, Sprite texture, int color)
+	public static void drawSprite(int x, int y, Sprite texture, int color)
 	{
 		float[] colors = getColors(color);
 		glPushMatrix();
@@ -335,7 +335,7 @@ public class Screen
 		glPopMatrix();
 	}
 
-	public void drawSprite(int x, int y, Sprite texture, int indexX, int indexY, int sizeX, int sizeY)
+	public static void drawSprite(int x, int y, Sprite texture, int indexX, int indexY, int sizeX, int sizeY)
 	{
 		glMatrixMode(GL_TEXTURE);
 		glScalef(1f / (float) texture.getWidth(), 1f / (float) texture.getHeight(), 1f);
@@ -369,12 +369,12 @@ public class Screen
 		glScalef((float) texture.getWidth(), (float) texture.getHeight(), 1f);
 	}
 
-	public void drawSprite(int x, int y, Sprite texture, float rotation)
+	public static void drawSprite(int x, int y, Sprite texture, float rotation)
 	{
 		drawSprite(x, y, texture, rotation, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff);
 	}
 	
-	public void drawSprite(int x, int y, Sprite texture, float rotation, int c00, int c10, int c11, int c01)
+	public static void drawSprite(int x, int y, Sprite texture, float rotation, int c00, int c10, int c11, int c01)
 	{
 		glEnable(GL_TEXTURE_2D);
 		glMatrixMode(GL_MODELVIEW);
@@ -433,7 +433,7 @@ public class Screen
 	 * @param c11
 	 * @param c01
 	 */
-	public void drawSprite(int x, int y, Sprite texture, float translateX, float translateY, int width, int height, float rotation, int repeatX,
+	public static void drawSprite(int x, int y, Sprite texture, float translateX, float translateY, int width, int height, float rotation, int repeatX,
 			int repeatY, boolean flip, boolean repeat, float scaleX, float scaleY, int c00, int c10, int c11, int c01)
 	{
 		glMatrixMode(GL_MODELVIEW);
@@ -479,25 +479,25 @@ public class Screen
 		glPopMatrix();
 	}
 
-	public void drawSprite(int x, int y, Sprite texture, float translateX, float translateY, int width, int height, float rotation, int repeatX,
+	public static void drawSprite(int x, int y, Sprite texture, float translateX, float translateY, int width, int height, float rotation, int repeatX,
 			int repeatY, boolean flip, boolean repeat, float scaleX, float scaleY)
 	{
 		drawSprite(x, y, texture, translateX, translateY, width, height, rotation, repeatX, repeatY, flip, repeat, scaleX, scaleY, 0xffffffff,
 				0xffffffff, 0xffffffff, 0xffffffff);
 	}
 	
-	public void drawSprite(int x, int y, Sprite texture, float translateX, float translateY, int width, int height, float rotation, int repeatX,
+	public static void drawSprite(int x, int y, Sprite texture, float translateX, float translateY, int width, int height, float rotation, int repeatX,
 			int repeatY, boolean repeat, int scaleX, int scaleY)
 	{
 		drawSprite(x, y, texture, translateX, translateY, width, height, rotation, repeatX, repeatY, repeat, false, scaleX, scaleY);
 	}
 	
-	public void drawSprite(int x, int y, Sprite texture, float translateX, float translateY, int width, int height, float rotation, int scaleX, int scaleY)
+	public static void drawSprite(int x, int y, Sprite texture, float translateX, float translateY, int width, int height, float rotation, int scaleX, int scaleY)
 	{
 		drawSprite(x, y, texture, translateX, translateY, width, height, rotation, 0, 0, false, scaleX, scaleY);
 	}
 
-	public void drawSprite(int x, int y, Sprite texture, int width, int height)
+	public static void drawSprite(int x, int y, Sprite texture, int width, int height)
 	{
 		glPushMatrix();
 		glEnable(GL_TEXTURE_2D);
@@ -511,7 +511,7 @@ public class Screen
 		glPopMatrix();
 	}
 	
-	public void drawSpriteRepeat(int x, int y, Sprite texture, int repeatX, int repeatY)
+	public static void drawSpriteRepeat(int x, int y, Sprite texture, int repeatX, int repeatY)
 	{
 		glPushMatrix();
 		glEnable(GL_TEXTURE_2D);
@@ -590,7 +590,7 @@ public class Screen
 		di.apply(x, y, width, height);
 	}
 	
-	public void rotateScreen(int x, int y, float rotation)
+	public static void rotateScreen(int x, int y, float rotation)
 	{
 		glMatrixMode(GL_MODELVIEW);
 		glTranslatef(x, y, 0);

@@ -112,10 +112,10 @@ public class Button extends Component implements IFocusable
 		{
 			if (enabled != null)
 			{
-				screen.drawSprite(x + image_offset_x, y + image_offset_y, enabled);
+				Screen.drawSprite(x + image_offset_x, y + image_offset_y, enabled);
 			} else
 			{
-				RenderHelper.renderDoubleBorderComponent(screen, this, RenderHelper.BUTTON_ENABLED_COLORS[0], RenderHelper.BUTTON_ENABLED_COLORS[1],
+				RenderHelper.renderDoubleBorderComponent(this, RenderHelper.BUTTON_ENABLED_COLORS[0], RenderHelper.BUTTON_ENABLED_COLORS[1],
 						RenderHelper.BUTTON_ENABLED_COLORS[2]);
 			}
 		}
@@ -124,10 +124,10 @@ public class Button extends Component implements IFocusable
 		{
 			if (disabled != null)
 			{
-				screen.drawSprite(x + image_offset_x, y + image_offset_y, disabled);
+				Screen.drawSprite(x + image_offset_x, y + image_offset_y, disabled);
 			} else
 			{
-				RenderHelper.renderDoubleBorderComponent(screen, this, RenderHelper.BUTTON_DISABLED_COLORS[0], RenderHelper.BUTTON_DISABLED_COLORS[1],
+				RenderHelper.renderDoubleBorderComponent(this, RenderHelper.BUTTON_DISABLED_COLORS[0], RenderHelper.BUTTON_DISABLED_COLORS[1],
 						RenderHelper.BUTTON_DISABLED_COLORS[2]);
 			}
 		}
@@ -136,10 +136,10 @@ public class Button extends Component implements IFocusable
 		{
 			if (hovered != null)
 			{
-				screen.drawSprite(x + image_offset_x, y + image_offset_y, hovered);
+				Screen.drawSprite(x + image_offset_x, y + image_offset_y, hovered);
 			} else
 			{
-				RenderHelper.renderDoubleBorderComponent(screen, this, RenderHelper.BUTTON_HOVERED_COLORS[0], RenderHelper.BUTTON_HOVERED_COLORS[1],
+				RenderHelper.renderDoubleBorderComponent(this, RenderHelper.BUTTON_HOVERED_COLORS[0], RenderHelper.BUTTON_HOVERED_COLORS[1],
 						RenderHelper.BUTTON_HOVERED_COLORS[2]);
 			}
 		}
@@ -154,7 +154,6 @@ public class Button extends Component implements IFocusable
 			if (text != null)
 			{
 				int fontWidth = Font.getTextWidth(text, fontSize) / 2;
-				System.out.println(text + " " + fontWidth);
 				int fontHeight = ((8 * fontSize)) / 2;
 				getFont().render(text, x + width / 2 - fontWidth, y + height / 2 - fontHeight, fontSize, red, green, blue);
 			}

@@ -149,7 +149,7 @@ public class TestGui extends Gui
 	@Override
 	public void render(Screen screen)
 	{
-		Background.renderFrame(screen, getMainApp());
+		Background.renderFrame(getMainApp());
 		
 		rot += 1f;
 		

@@ -193,7 +193,7 @@ public class FileBrowser extends Component
 	@Override
 	public void render(Screen screen)
 	{
-		RenderHelper.renderSingleBorder(screen, x, y, 256 + 58, 25 * 12 + 16, 0xff3f3f3f, 0xffbfbfbf);
+		RenderHelper.renderSingleBorder(x, y, 256 + 58, 25 * 12 + 16, 0xff3f3f3f, 0xffbfbfbf);
 		renderComponents(screen);
 	}
 
