@@ -41,22 +41,22 @@ public class ItemList extends Component
 			}
 		}
 		// Right "slider"
-		RenderHelper.renderSingleBorder(screen, getX() + getWidth() - 22, getY() + 14, 22, getHeight() * visibleItems - 14 * 2, 0xff7f7f7f, 0xff000000);
+		RenderHelper.renderSingleBorder(getX() + getWidth() - 22, getY() + 14, 22, getHeight() * visibleItems - 14 * 2, 0xff7f7f7f, 0xff000000);
 		
-		RenderHelper.renderButton(screen, getX() + getWidth() - 22, getY(), 22, 14, upEnabled, upHovered);
+		RenderHelper.renderButton(getX() + getWidth() - 22, getY(), 22, 14, upEnabled, upHovered);
 		
-		RenderHelper.renderButton(screen, getX() + getWidth() - 22, getY() + getHeight() * getVisibleItems() - 14, 22, 14, downEnabled, downHovered);
+		RenderHelper.renderButton(getX() + getWidth() - 22, getY() + getHeight() * getVisibleItems() - 14, 22, 14, downEnabled, downHovered);
 	}
 	
 	public void renderItem(int i, Screen screen)
 	{
-		RenderHelper.renderSingleBorder(screen, getX(), getY() + i * getHeight(), getWidth() - 22, getHeight(), 0xff3f3f3f, 0xffbfbfbf);
+		RenderHelper.renderSingleBorder(getX(), getY() + i * getHeight(), getWidth() - 22, getHeight(), 0xff3f3f3f, 0xffbfbfbf);
 
 		if (hovered == i)
-			screen.fillRect(getX(), getY() + i * getHeight(), getWidth() - 22, getHeight(), 0x80777777);
+			Screen.fillRect(getX(), getY() + i * getHeight(), getWidth() - 22, getHeight(), 0x80777777);
 
 		if (selected == i + scroll)
-			screen.fillRect(getX(), getY() + i * getHeight(), getWidth() - 22, getHeight(), 0x80555555);
+			Screen.fillRect(getX(), getY() + i * getHeight(), getWidth() - 22, getHeight(), 0x80555555);
 
 		renderText(screen, i);
 		
@@ -67,7 +67,7 @@ public class ItemList extends Component
 		if (sprite == null)
 			return;
 
-		screen.drawSprite(getX() + item.xOffset, getY() + i * getHeight() + (getHeight() / 2 - sprite.getHeight() / 2 + item.yOffset),
+		Screen.drawSprite(getX() + item.xOffset, getY() + i * getHeight() + (getHeight() / 2 - sprite.getHeight() / 2 + item.yOffset),
 				sprite);
 	}
 

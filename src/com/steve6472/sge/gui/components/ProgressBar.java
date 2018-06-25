@@ -32,7 +32,7 @@ public class ProgressBar extends Component
 	@Override
 	public void render(Screen screen)
 	{
-		RenderHelper.renderDoubleBorderComponent(screen, this, 0xff000000, 0xffa8a8a8, 0xff6f6f6f);
+		RenderHelper.renderDoubleBorderComponent(this, 0xff000000, 0xffa8a8a8, 0xff6f6f6f);
 		renderSlider(screen);
 	}
 	

@@ -29,7 +29,7 @@ public class ToggleButton extends Button
 	protected void renderText(Screen screen)
 	{
 		if (toggled)
-			screen.fillRect(getX(), getY(), getWidth(), getHeight(), Util.SELECTED_OVERLAY);
+			Screen.fillRect(getX(), getY(), getWidth(), getHeight(), Util.SELECTED_OVERLAY);
 		super.renderText(screen);
 	}
 	

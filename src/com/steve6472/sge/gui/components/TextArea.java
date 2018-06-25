@@ -135,8 +135,8 @@ public class TextArea extends Component implements IFocusable, KeyList
 	@Override
 	public void render(Screen screen)
 	{
-		screen.drawRect(x, y, getWidth(), getHeight(), 2, 0xff020202);
-		screen.fillRect(x + 2, y + 2, getWidth() - 4, getHeight() - 4, 0xff414041);
+		Screen.drawRect(x, y, getWidth(), getHeight(), 2, 0xff020202);
+		Screen.fillRect(x + 2, y + 2, getWidth() - 4, getHeight() - 4, 0xff414041);
 
 		for (int i = 0; i < text.size(); i++)
 		{
@@ -161,7 +161,7 @@ public class TextArea extends Component implements IFocusable, KeyList
 					if (showCarret && isFocused)
 					{
 						String l = text.get(carretPositionY).substring(0, carretPositionX);
-						screen.fillRect(Font.getTextWidth(l, 1) + x + 5, carretPositionY * 9 + y + 10, 8, 2, 0xffa9a8aa);
+						Screen.fillRect(Font.getTextWidth(l, 1) + x + 5, carretPositionY * 9 + y + 10, 8, 2, 0xffa9a8aa);
 					}
 				}
 			}

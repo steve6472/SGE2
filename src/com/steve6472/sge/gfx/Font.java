@@ -18,7 +18,7 @@ import com.steve6472.sge.test.ShaderTest2;
 public class Font
 {
 	
-	Sprite font, invertedFont;
+	static Sprite font, invertedFont;
 	Screen screen;
 	public static final String chars = 	"ABCDEFGHIJKLMNOPQRSTUVWXYZ&♥|�* abcdefghijklmnopqrstuvwxyz      " + 
 										"0123456789.,:;'\"!?$%()-=+/><_#§\\@                             ";
@@ -204,7 +204,7 @@ public class Font
 		fontModel = new Model(ShaderTest2.fillScreen(), ShaderTest2.createTexture(8, 8, font), ShaderTest2.createArray(0f));
 	}
 	
-	public void renderFont(String text, int x, int y, int size, float red, float green, float blue, boolean shade)
+	public static void renderFont(String text, int x, int y, int size, float red, float green, float blue, boolean shade)
 	{
 		if (text == null || text.isEmpty())
 			return;
@@ -261,42 +261,42 @@ public class Font
 		glMatrixMode(GL_MODELVIEW);
 	}
 	
-	public void render(String text, int x, int y, int size, boolean shade)
+	public static void render(String text, int x, int y, int size, boolean shade)
 	{
 		render(text, x, y, size, 1f, 1f, 1f, shade);
 	}
 	
-	public void render(String text, int x, int y, float red, float green, float blue, boolean shade)
+	public static void render(String text, int x, int y, float red, float green, float blue, boolean shade)
 	{
 		render(text, x, y, 1, red, green, blue, shade);
 	}
 	
-	public void render(String text, int x, int y, int size, float red, float green, float blue, boolean shade)
+	public static void render(String text, int x, int y, int size, float red, float green, float blue, boolean shade)
 	{
 		renderFont(text, x, y, size, red, green, blue, shade);
 	}
 	
-	public void render(String text, int x, int y, int size)
+	public static void render(String text, int x, int y, int size)
 	{
 		render(text, x, y, size, 1f, 1f, 1f, true);
 	}
 	
-	public void render(String text, int x, int y, float red, float green, float blue)
+	public static void render(String text, int x, int y, float red, float green, float blue)
 	{
 		render(text, x, y, 1, red, green, blue, true);
 	}
 	
-	public void render(String text, int x, int y, int size, float red, float green, float blue)
+	public static void render(String text, int x, int y, int size, float red, float green, float blue)
 	{
 		render(text, x, y, size, red, green, blue, true);
 	}
 	
-	public void render(String text, int x, int y)
+	public static void render(String text, int x, int y)
 	{
 		render(text, x, y, 1);
 	}
 	
-	private void renderChar(int x, int y, int index, int size)
+	private static void renderChar(int x, int y, int index, int size)
 	{
 //		size = 1;
 		int indexX = index % 64 * 8 * size;

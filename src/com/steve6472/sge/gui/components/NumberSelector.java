@@ -94,14 +94,14 @@ public class NumberSelector extends Component
 	@Override
 	public void render(Screen screen)
 	{
-		screen.fillRect(getX(), getY(), getWidth(), getHeight(), 0xffff00ff);
+		Screen.fillRect(getX(), getY(), getWidth(), getHeight(), 0xffff00ff);
 		
-		RenderHelper.renderSingleBorder(screen, getX() + getWidth() / 4, getY(), getWidth() / 2, getHeight(), 0xff7f7f7f, 0xff000000);
+		RenderHelper.renderSingleBorder(getX() + getWidth() / 4, getY(), getWidth() / 2, getHeight(), 0xff7f7f7f, 0xff000000);
 		
-		RenderHelper.renderButton(screen, getX(), getY(), getWidth() / 4, getHeight(), enabled, removeHovered);
+		RenderHelper.renderButton(getX(), getY(), getWidth() / 4, getHeight(), enabled, removeHovered);
 		getFont().render("-", removeCenter.getIntX(), removeCenter.getIntY());
 		
-		RenderHelper.renderButton(screen, getX() + getWidth() / 4 * 3, getY(), getWidth() / 4, getHeight(), enabled, addHovered);
+		RenderHelper.renderButton(getX() + getWidth() / 4 * 3, getY(), getWidth() / 4, getHeight(), enabled, addHovered);
 		getFont().render("+", addCenter.getIntX(), addCenter.getIntY());
 		
 		getFont().render("" + value, getX() + getWidth() / 2 - ("" + value).length() * 4, getY() + getHeight () / 2 - 4);

@@ -8,7 +8,6 @@
 package com.steve6472.sge.gui.components;
 
 import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.glColor3f;
 
 import com.steve6472.sge.gfx.Char;
 import com.steve6472.sge.gfx.Font;
@@ -71,7 +70,7 @@ public class TextField extends Component
 	@Override
 	public void render(Screen screen)
 	{
-		RenderHelper.renderSingleBorder(screen, getX(), getY(), getWidth(), getHeight(), 0xff7f7f7f, 0xff000000);
+		RenderHelper.renderSingleBorder(getX(), getY(), getWidth(), getHeight(), 0xff7f7f7f, 0xff000000);
 		
 		getFont().render(text, getX() + location.getIntX(), getY() + location.getIntY() + 1, fontSize);
 		

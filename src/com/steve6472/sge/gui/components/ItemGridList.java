@@ -88,17 +88,17 @@ public class ItemGridList extends Component
 		
 		int width = getWidth() * getVisibleItemsX();
 		// Right "slider"
-		RenderHelper.renderSingleBorder(screen, getX() + width, getY() + 14, 22, getHeight() * visibleItemsX - 14 * 2, 0xff7f7f7f, 0xff000000);
+		RenderHelper.renderSingleBorder(getX() + width, getY() + 14, 22, getHeight() * visibleItemsX - 14 * 2, 0xff7f7f7f, 0xff000000);
 
-		RenderHelper.renderButton(screen, getX() + width, getY(), 22, 14, upEnabled, upHovered);
+		RenderHelper.renderButton(getX() + width, getY(), 22, 14, upEnabled, upHovered);
 		
-		RenderHelper.renderButton(screen, getX() + width, getY() + getHeight() * getVisibleItemsY() - 14, 22, 14, downEnabled, downHovered);
+		RenderHelper.renderButton(getX() + width, getY() + getHeight() * getVisibleItemsY() - 14, 22, 14, downEnabled, downHovered);
 	}
 	
 	public void renderItem(int i, int j, int y, Screen screen)
 	{
 //		getGame().panelList.getPanelById(0).render(getX() + i * getWidth(), getY() + j * getHeight(), getWidth(), getHeight());
-		RenderHelper.renderSingleBorder(screen, getX() + i * getHeight(), getY() + j * getHeight(), getWidth(), getHeight(), 0xff3f3f3f, 0xffbfbfbf);
+		RenderHelper.renderSingleBorder(getX() + i * getHeight(), getY() + j * getHeight(), getWidth(), getHeight(), 0xff3f3f3f, 0xffbfbfbf);
 
 		
 		Item item = items.get(i + scroll);
@@ -126,16 +126,16 @@ public class ItemGridList extends Component
 				glPopMatrix();
 			} else
 			{
-				screen.drawSprite(getX() + 2 + i * getWidth(),
+				Screen.drawSprite(getX() + 2 + i * getWidth(),
 						getY() + j * getHeight() + (getHeight() / 2 - items.get(y + scroll).sprite.getHeight() / 2), items.get((y + scroll)).sprite,
 						Screen.getColor(item.getRed(), item.getGreen(), item.getBlue(), item.getAlpha()));
 			}
 
 		if (hovered == y)
-			screen.fillRect(getX() + i * getWidth(), getY() + j * getHeight(), getWidth(), getHeight(), Util.HOVERED_OVERLAY);
+			Screen.fillRect(getX() + i * getWidth(), getY() + j * getHeight(), getWidth(), getHeight(), Util.HOVERED_OVERLAY);
 
 		if (selected == y + scroll)
-			screen.fillRect(getX() + i * getWidth(), getY() + j * getHeight(), getWidth(), getHeight(), Util.SELECTED_OVERLAY);
+			Screen.fillRect(getX() + i * getWidth(), getY() + j * getHeight(), getWidth(), getHeight(), Util.SELECTED_OVERLAY);
 	}
 	
 	private int oldHover = -1;

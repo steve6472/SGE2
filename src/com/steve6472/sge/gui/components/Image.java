@@ -28,11 +28,11 @@ public class Image extends Component
 		if (sprite != null)
 		{
 			if (getWidth() == 0 && getHeight() == 0)
-				screen.drawSprite(x, y, sprite);
+				Screen.drawSprite(x, y, sprite);
 			else if (repeat)
-				screen.drawSpriteRepeat(x, y, sprite, getWidth(), getHeight());
+				Screen.drawSpriteRepeat(x, y, sprite, getWidth(), getHeight());
 			else
-				screen.drawSprite(x, y, sprite, getWidth(), getHeight());
+				Screen.drawSprite(x, y, sprite, getWidth(), getHeight());
 		}
 	}
 
