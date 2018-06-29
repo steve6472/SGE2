@@ -100,7 +100,7 @@ public class Font
 		characters.put('8', new Char(72, '8', 8));
 		characters.put('9', new Char(73, '9', 8));
 		
-		characters.put('.', new Char(74, '.', 4));
+		characters.put('.', new Char(74, '.', 5));
 		characters.put(',', new Char(75, ',', 4));
 		characters.put(':', new Char(76, ':', 4));
 		characters.put(';', new Char(77, ';', 4));
@@ -110,14 +110,14 @@ public class Font
 		characters.put('?', new Char(81, '?', 8));
 		characters.put('$', new Char(82, '$', 8));
 		characters.put('%', new Char(83, '%', 8));
-		characters.put('(', new Char(84, '(', 5));
+		characters.put('(', new Char(84, '(', 6));
 		characters.put(')', new Char(85, ')', 5));
 		characters.put('-', new Char(86, '-', 7));
 		characters.put('=', new Char(87, '=', 8));
 		characters.put('+', new Char(88, '+', 8));
 		characters.put('/', new Char(89, '/', 8));
 		characters.put('>', new Char(90, '>', 8));
-		characters.put('<', new Char(91, '<', 7));
+		characters.put('<', new Char(91, '<', 8));
 		characters.put('_', new Char(92, '_', 8));
 		characters.put('#', new Char(93, '#', 7));
 		characters.put('§', new Char(94, '§', 8));
@@ -125,10 +125,11 @@ public class Font
 		
 		characters.put('@', new Char(97, '@', 8));
 		characters.put('}', new Char(98, '}', 5));
-		characters.put('{', new Char(99, '{', 5));
-		characters.put('[', new Char(100, '[', 5));
+		characters.put('{', new Char(99, '{', 6));
+		characters.put('[', new Char(100, '[', 6));
 		characters.put(']', new Char(101, ']', 5));
 		characters.put('~', new Char(102, '~', 8));
+		characters.put('	', new Char(103, '	', 32));
 	}
 	
 	public static int getTextWidth(String text, int fontSize)
@@ -143,19 +144,6 @@ public class Font
 		
 		return size;
 	}
-	
-	
-	/*
-	static
-	{
-		String cha = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		cha = cha.toLowerCase();
-		for (int i = 0; i < cha.length(); i++)
-			{
-			System.out.println("characters.put('" + cha.charAt(i) + "', new Char(" + (i + 7 + 25) + ", '" + cha.charAt(i) + "', 8));");
-			}
-	}
-	*/
 	
 	public static Shader fontShader;
 	public static Model fontModel;
@@ -218,22 +206,6 @@ public class Font
 		font.bind();
 		glBegin(GL_QUADS);
 		{
-			/*
-			for (int i = 0; i < text.length(); i++)
-			{
-				int char_index = chars.indexOf(text.charAt(i));
-				if (char_index >= 0)
-				{
-					if (shade)
-					{
-						glColor3f(0.21f * red, 0.21f * green, 0.21f * blue);
-						renderChar(x + (8 * i * size) + size, y + size, char_index, size);
-					}
-					glColor3f(red, green, blue);
-					renderChar(x + (8 * i * size), y, char_index, size);
-				}
-			}*/
-			
 			int lx = 0;
 			
 			for (int i = 0; i < text.length(); i++)
@@ -296,7 +268,7 @@ public class Font
 		render(text, x, y, 1);
 	}
 	
-	private static void renderChar(int x, int y, int index, int size)
+	public static void renderChar(int x, int y, int index, int size)
 	{
 //		size = 1;
 		int indexX = index % 64 * 8 * size;
@@ -340,7 +312,7 @@ public class Font
 				recSize.from.getY() + (recSize.getHeight() / 2) - (4 * fontSize));
 	}
 	
-	public Sprite getFont()
+	public static Sprite getFont()
 	{
 		return font;
 	}

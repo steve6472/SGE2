@@ -31,12 +31,12 @@ public class CheckBox extends Component
 	public void tick()
 	{
 		isHovered = isCursorInComponent(x, y, 40, 40);
-		
-		if (isHovered && getMouseHandler().isMouseHolded() && !getMouseHandler().isMouseTriggered() && isEnabled())
+
+		onMouseClicked((c) ->
 		{
 			toggle();
 			getMouseHandler().setTrigger(true);
-		}
+		});
 	}
 
 	@Override

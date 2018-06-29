@@ -380,9 +380,18 @@ public class Test3D extends MainApplication
 		{
 			worldModel.render(Tessellator.TRIANGLE_STRIP);
 		}
-
+		Tessellator3D tess = Tessellator3D.INSTANCE;
+		for (int i = 0; i < 16; i++)
+		{
+			for (int j = 0; j < 16; j++)
+			{
+				tess.put(i / 4f, 10, 10 + j / 4f);
+				tess.put(i / 4f, 6, 4 + j / 4f);
+			}
+		}
+		tess.render(Tessellator.LINES);
+		
 //		blackPixel.bind();
-//		Tessellator3D tess = Tessellator3D.INSTANCE;
 		
 //		if (vertices != null)
 //			tess.put(vertices, null, colors);
@@ -412,10 +421,9 @@ public class Test3D extends MainApplication
 //		GL11.glLineWidth(1f);
 
 		sprite.bind();
-		/*
+		
 		iterateVisibleTiles(camera, (x, z, y, id) ->
 		{
-			System.out.println(x + " " + z + " " + y);
 			if (world.getTileInWorldSafe(x + 1, z, y) == 0)
 				Renderer3D.renderArrays(Cube.createSide1CubeFace(0, 1, x, y, z), Cube.tex, Cube.shadeSides());
 			if (world.getTileInWorldSafe(x - 1, z, y) == 0)
@@ -428,7 +436,7 @@ public class Test3D extends MainApplication
 				Renderer3D.renderArrays(Cube.createFrontCubeFace(0, 1, x, y, z), Cube.tex, Cube.shadeFrontBack());
 			if (world.getTileInWorldSafe(x, z - 1, y) == 0)
 				Renderer3D.renderArrays(Cube.createBackCubeFace(0, 1, x, y, z), Cube.tex, Cube.shadeFrontBack());
-		});*/
+		});
 		
 //		renderCuve(0, 0, 0);
 //		renderCuve(1, 0, 0);

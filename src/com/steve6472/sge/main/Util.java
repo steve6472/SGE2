@@ -908,7 +908,37 @@ public class Util
 	{
 		return (x - minX) / (maxX - minX);
 	}
-	
+
+	public static <T> ArrayList<T> insert(T t, List<T> original, int index)
+	{
+		List<T> s = original;
+
+		T add = t;
+
+		// Including
+		int shiftFrom = index;
+
+		List<T> cutLeft = new ArrayList<T>();
+		for (int i = 0; i < shiftFrom; i++)
+		{
+			cutLeft.add(s.get(i));
+		}
+
+		List<T> cutRight = new ArrayList<T>();
+		for (int i = shiftFrom; i < s.size(); i++)
+		{
+			cutRight.add(s.get(i));
+		}
+		
+		ArrayList<T> newArray = new ArrayList<T>();
+
+		newArray.addAll(cutLeft);
+		newArray.add(add);
+		newArray.addAll(cutRight);
+		
+		return newArray;
+	}
+
 /*
 	public static double getRandomCircleX(double radius)
 	{

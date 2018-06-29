@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.steve6472.sge.gfx.Font;
 import com.steve6472.sge.gfx.Screen;
+import com.steve6472.sge.main.KeyHandler;
 import com.steve6472.sge.main.MainApplication;
 import com.steve6472.sge.main.MouseHandler;
 
@@ -88,6 +89,7 @@ public abstract class Gui implements Serializable
 	public final void setVisible(boolean b)
 	{
 		this.isVisible = b;
+		showEvent();
 	}
 
 	/**
@@ -247,5 +249,10 @@ public abstract class Gui implements Serializable
 	public MouseHandler getMouseHandler()
 	{
 		return getMainApp().getMouseHandler();
+	}
+	
+	public KeyHandler getKeyHandler()
+	{
+		return getMainApp().getKeyHandler();
 	}
 }

@@ -37,6 +37,7 @@ public interface KeyList
 	int X = GLFW.GLFW_KEY_X;
 	int Y = GLFW.GLFW_KEY_Y;
 	int Z = GLFW.GLFW_KEY_Z;
+	int SPACE = GLFW.GLFW_KEY_SPACE;
 
 	int KP_0 = GLFW.GLFW_KEY_KP_0;
 	int KP_1 = GLFW.GLFW_KEY_KP_1;
@@ -72,4 +73,11 @@ public interface KeyList
 	int RIGHT = GLFW.GLFW_KEY_RIGHT;
 	int UP = GLFW.GLFW_KEY_UP;
 	int DOWN = GLFW.GLFW_KEY_DOWN;
+
+	int M_SHIFT = GLFW.GLFW_MOD_SHIFT;
+    int M_CONTROL = GLFW.GLFW_MOD_CONTROL;
+    int M_ALT = GLFW.GLFW_MOD_ALT;
+    int RELEASE = GLFW.GLFW_RELEASE;
+    int PRESS = GLFW.GLFW_PRESS;
+    int REPEAT = GLFW.GLFW_REPEAT;
 }
