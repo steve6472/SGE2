@@ -12,7 +12,8 @@ public class Slider extends Component
 {
 	private static final long serialVersionUID = 4164297008969991704L;
 	
-	private int value = 0, maxValue = 100, minValue = 0, privateX;
+	private double value = 0, maxValue = 100, minValue = 0, privateX;
+	public boolean autoInt = false;
 
 	protected List<ChangeEvent> changeEvent = new ArrayList<ChangeEvent>();
 	
@@ -39,7 +40,7 @@ public class Slider extends Component
 //	}
 	
 	private boolean setted = false;
-	private int oldValue = 0;
+	private double oldValue = 0;
 	private int moveX = 0;
 	private boolean selected = false;
 	private boolean flag0 = false;
@@ -76,9 +77,9 @@ public class Slider extends Component
 			setted = false;
 		}
 		
-		float max = (float) getMaxValue();
+		double max = getMaxValue();
 
-		int valueBuffer = -((int) ((privateX * max) / getWidth())); //Some weird shit
+		double valueBuffer = -((privateX * max) / (double) getWidth()); //Some weird shit
 		
 //		int oldValue = getValue();
 		
@@ -98,7 +99,7 @@ public class Slider extends Component
 //			slider.setToolTipText("Value:" + getValue());
 //		}
 		
-		moveX = getX() - 16 - privateX; //Center to the slider
+		moveX = (int) (getX() - 16 - privateX); //Center to the slider
 
 		if (privateX + 8 > 0)
 			moveX = getX() - 8;
@@ -115,13 +116,17 @@ public class Slider extends Component
 	
 	public void recalculate()
 	{
+		if (getMaxValue() == 0)
+		{
+			privateX = -getWidth();
+			return;
+		}
+		
 		privateX = -((int) ((value * getWidth()) / getMaxValue()));
 		
 		float max = (float) getMaxValue();
 
-		int valueBuffer = -((int) ((privateX * max) / getWidth())); //Some weird shit
-		
-//		int oldValue = getValue();
+		double valueBuffer = -((privateX * max) / getWidth()); //Some weird s#*t
 		
 		if (valueBuffer > getMaxValue())
 		{
@@ -134,7 +139,7 @@ public class Slider extends Component
 			value = valueBuffer;
 		}
 		
-		moveX = getX() - 16 - privateX; //Center to the slider
+		moveX = (int) (getX() - 16 - privateX); //Center to the slider
 
 		if (privateX + 8 > 0)
 			moveX = getX() - 8;
@@ -151,14 +156,14 @@ public class Slider extends Component
 	 * Setters
 	 */
 	
-	public void setValue(int value)
+	public void setValue(double value)
 	{
 		this.value = value;
 		setted = true;
 		recalculate();
 	}
 
-	public void setMaxValue(int maxValue)
+	public void setMaxValue(double maxValue)
 	{
 		this.maxValue = maxValue;
 		
@@ -166,7 +171,7 @@ public class Slider extends Component
 			setValue(maxValue);
 	}
 
-	public void setMinValue(int minValue)
+	public void setMinValue(double minValue)
 	{
 		this.minValue = minValue;
 	}
@@ -202,17 +207,22 @@ public class Slider extends Component
 	 * Getters
 	 */
 	
-	public int getValue()
+	public double getValue()
 	{
-		return value;
+		return autoInt ? (int) value : value;
 	}
 	
-	public int getMaxValue()
+	public int getIValue()
+	{
+		return (int) value;
+	}
+	
+	public double getMaxValue()
 	{
 		return maxValue;
 	}
 	
-	public int getMinValue()
+	public double getMinValue()
 	{
 		return minValue;
 	}
@@ -229,5 +239,3 @@ public class Slider extends Component
 		return 32;
 	}
 }
-
-

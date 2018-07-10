@@ -43,31 +43,51 @@ public class DynamicModel3D
 		generated = true;
 	}
 	
+	public static void start()
+	{
+		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
+		glEnableVertexAttribArray(2);
+	}
+	
+	public static void bind(DynamicModel3D model)
+	{
+		glVertexPointer(3, GL_FLOAT, 0, model.vert);
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, model.vert);
+
+		glTexCoordPointer(2, GL_FLOAT, 0, model.tex);
+		glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, model.tex);
+
+		glColorPointer(4, GL_FLOAT, 0, model.color);
+		glVertexAttribPointer(2, 4, GL_FLOAT, false, 0, model.color);
+	}
+	
+	public static void drawArrays(DynamicModel3D model, int mode)
+	{
+		glDrawArrays(mode, 0, model.vert.capacity() / 3);
+	}
+	
+	public static void end()
+	{
+		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
+		glDisableVertexAttribArray(2);
+	}
+	
 	public void render(int mode)
 	{
 		if (!generated)
 			return;
 		
-		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
-		glEnableVertexAttribArray(2);
-
-		glVertexPointer(3, GL_FLOAT, 0, vert);
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, vert);
-
-		glTexCoordPointer(2, GL_FLOAT, 0, tex);
-		glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, tex);
-
-		glColorPointer(4, GL_FLOAT, 0, color);
-		glVertexAttribPointer(2, 4, GL_FLOAT, false, 0, color);
-
-		glDrawArrays(mode, 0, vert.capacity() / 3);
+		start();
 		
-		glDisableVertexAttribArray(0);
-		glDisableVertexAttribArray(1);
-		glDisableVertexAttribArray(2);
-	}
+		bind(this);
 
+		drawArrays(this, mode);
+		
+		end();
+	}
+	
 	public void generate()
 	{
 		vert = toFloatBuffer(vertC);
@@ -75,6 +95,10 @@ public class DynamicModel3D
 		tex = toFloatBuffer(texC);
 
 		color = toFloatBuffer(colorC);
+		
+		vertC.clear();
+		texC.clear();
+		colorC.clear();
 		
 		generated = true;
 	}
@@ -133,5 +157,20 @@ public class DynamicModel3D
 	public FloatBuffer getVert()
 	{
 		return vert;
+	}
+	
+	public void setColor(FloatBuffer color)
+	{
+		this.color = color;
+	}
+	
+	public void setTex(FloatBuffer tex)
+	{
+		this.tex = tex;
+	}
+	
+	public void setVert(FloatBuffer vert)
+	{
+		this.vert = vert;
 	}
 }

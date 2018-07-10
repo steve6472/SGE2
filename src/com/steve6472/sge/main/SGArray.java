@@ -100,14 +100,9 @@ public class SGArray<T> implements Iterable<T>
 	
 	public List<T> toList()
 	{
-		List<T> list = new ArrayList<T>();
-		for (int i = 0; i < getSize(); i++)
-		{
-			list.add(get(i));
-		}
-		return list;
+		return array;
 	}
-
+	
 	public void remove(Object object)
 	{
 		array.remove(object);
@@ -126,6 +121,11 @@ public class SGArray<T> implements Iterable<T>
 			a.add(o);
 		}
 		return a;
+	}
+	
+	public boolean contains(T t)
+	{
+		return array.contains(t);
 	}
 	
 	public void printContent()

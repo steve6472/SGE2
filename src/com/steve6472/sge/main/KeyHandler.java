@@ -17,6 +17,8 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 
 import com.steve6472.sge.main.callbacks.CharCallback;
 import com.steve6472.sge.main.callbacks.KeyCallback;
+import com.steve6472.sge.main.events.CharEvent;
+import com.steve6472.sge.main.events.KeyEvent;
 
 public class KeyHandler
 {
@@ -28,7 +30,7 @@ public class KeyHandler
 	List<KeyCallback> keyCallbacks;
 	List<CharCallback> charCallbacks;
 
-	public KeyHandler(long window)
+	public KeyHandler(long window, MainApplication mainApp)
 	{
 		this.window = window;
 		
@@ -41,6 +43,7 @@ public class KeyHandler
 			public void invoke(long window, int key, int scancode, int action, int mods)
 			{
 				keyCallbacks.forEach(c -> c.invoke(key, scancode, action, mods));
+				mainApp.getEventHandler().runEvent(new KeyEvent(key, scancode, action, mods));
 			}
 		});
 		
@@ -49,6 +52,7 @@ public class KeyHandler
 			public void invoke(long window, int codepoint)
 			{
 				charCallbacks.forEach(c -> c.invoke(codepoint));
+				mainApp.getEventHandler().runEvent(new CharEvent(codepoint));
 			}
 		});
 		

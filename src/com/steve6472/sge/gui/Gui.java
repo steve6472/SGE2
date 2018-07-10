@@ -2,8 +2,6 @@ package com.steve6472.sge.gui;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
 import java.util.List;
 
 import com.steve6472.sge.gfx.Font;
@@ -16,6 +14,7 @@ public abstract class Gui implements Serializable
 {
 	private static final long serialVersionUID = 8547775087992332609L;
 	private List<Component> components = new ArrayList<Component>();
+//	private HashMap<Integer, >
 	private boolean isVisible = true;
 	protected final MainApplication mainApp;
 	protected final Font font;
@@ -52,29 +51,10 @@ public abstract class Gui implements Serializable
 	
 	protected void renderComponents(Screen screen)
 	{
-		try
+		// If GUI is visible render components
+		if (isVisible())
 		{
-			if (isVisible())
-			{
-				for (Component gc : components)
-				{
-					gc.components.forEach((c) ->
-					{
-						if (c.isVisible())
-						{
-							c.render(screen);
-						}
-							
-					});
-					if (gc.isVisible())
-					{
-						gc.render(screen);
-					}
-				}
-			}
-		} catch (ConcurrentModificationException ex)
-		{
-			
+			components.forEach(c -> c.fullRender(screen));
 		}
 	}
 
@@ -141,10 +121,7 @@ public abstract class Gui implements Serializable
 	public void hideGui()
 	{
 		isVisible = false;
-		for (Component gc : components)
-		{
-			gc.hide();
-		}
+		components.forEach(c -> c.setVisible(false));
 		
 		if (canHide)
 			hideEvent();
@@ -153,10 +130,7 @@ public abstract class Gui implements Serializable
 	public void showGui()
 	{
 		isVisible = true;
-		for (Component gc : components)
-		{
-			gc.show();
-		}
+		components.forEach(c -> c.setVisible(true));
 		
 		showEvent();
 	}
@@ -193,15 +167,12 @@ public abstract class Gui implements Serializable
 
 	public void tickComponents()
 	{
-		if (isVisible())
+		for (Component cg : components)
 		{
-			for (Iterator<Component> co = components.iterator(); co.hasNext();)
+//			System.out.println("GUI: " + cg.getClass().getSimpleName() + " " + cg.isVisible());
+			if (cg.isVisible())
 			{
-				Component c = co.next();
-				if (c.isVisible())
-				{
-					c.tick();
-				}
+				cg.fullTick();
 			}
 		}
 	}
@@ -210,9 +181,11 @@ public abstract class Gui implements Serializable
 	{
 		if (component == null)
 			throw new NullPointerException("Component can't be null");
+		
 		component.parentGui = this;
 		component.preInit(mainApp);
 		component.init(mainApp);
+		getMainApp().getEventHandler().register(component);
 		components.add(component);
 	}
 

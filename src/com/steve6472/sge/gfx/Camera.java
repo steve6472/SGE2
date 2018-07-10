@@ -97,16 +97,16 @@ public class Camera
 	
 	public int getX()
 	{
-		return pos.getIntX();
+		return pos.getIX();
 	}
 	
 	public int getY()
 	{
-		return pos.getIntY();
+		return pos.getIY();
 	}
 	
 	public int getZ()
 	{
-		return pos.getIntZ();
+		return pos.getIZ();
 	}
 }

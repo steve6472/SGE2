@@ -130,6 +130,10 @@ public class Font
 		characters.put(']', new Char(101, ']', 5));
 		characters.put('~', new Char(102, '~', 8));
 		characters.put('	', new Char(103, '	', 32));
+		characters.put('\n', new Char(4095, '\n', 8));
+		characters.put('¨', new Char(4095, '¨', 8));
+		characters.put('\u0000', new Char(4094, '\u0000', 8));
+		characters.put('\u0001', new Char(4093, '\u0001', 8));
 	}
 	
 	public static int getTextWidth(String text, int fontSize)
@@ -189,9 +193,33 @@ public class Font
 				+ "}";
 		fontShader = new Shader(vs, fs);
 		fontShader.setUniform1f("sampler", 0);
-		fontModel = new Model(ShaderTest2.fillScreen(), ShaderTest2.createTexture(8, 8, font), ShaderTest2.createArray(0f));
+		int n = -1;
+		int p = 1;
+		float W = 8f / (float) font.getWidth();
+		float H = 8f / (float) font.getHeight();
+		fontModel = new Model(new float[]
+		{  
+				n, p,
+				p, p,
+				p, n, 
+				
+				p, n,
+				n, n,
+				n, p,
+				}, 
+		
+		new float[]
+				{
+					W, 0,
+					0, 0,
+					0, H,
+					
+					0, H,
+					W, H,
+					H, 0,
+				}, ShaderTest2.createArray(0f));
 	}
-	
+
 	public static void renderFont(String text, int x, int y, int size, float red, float green, float blue, boolean shade)
 	{
 		if (text == null || text.isEmpty())
@@ -308,8 +336,21 @@ public class Font
 
 	public static Vec2 stringCenter(AABB recSize, String text, int fontSize)
 	{
-		return new Vec2(recSize.from.getX() + (recSize.getWidth() / 2) - ((text.length() * (8 * fontSize)) / 2),
-				recSize.from.getY() + (recSize.getHeight() / 2) - (4 * fontSize));
+		int fontWidth = getTextWidth(text, fontSize) / 2;
+		int fontHeight = ((8 * fontSize)) / 2;
+		return new Vec2(recSize.from.getX() + recSize.getWidth() / 2 - fontWidth, recSize.from.getY() + recSize.getHeight() / 2 - fontHeight);
+	}
+	
+	public static int stringCenterX(int x, int width, String text, int fontSize)
+	{
+		int fontWidth = getTextWidth(text, fontSize) / 2;
+		return x + width / 2 - fontWidth;
+	}
+	
+	public static int stringCenterY(int y, int height, String text, int fontSize)
+	{
+		int fontHeight = ((8 * fontSize)) / 2;
+		return y + height / 2 - fontHeight;
 	}
 	
 	public static Sprite getFont()

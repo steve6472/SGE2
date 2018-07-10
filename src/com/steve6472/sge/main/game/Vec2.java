@@ -7,7 +7,7 @@ import com.steve6472.sge.main.Util;
 public class Vec2 implements Serializable
 {
 	private static final long serialVersionUID = -6728175878841578459L;
-	private double x, y;
+	public double x, y;
 	private double maxx, minx, maxy, miny;
 	private boolean checkLimit = false;
 	
@@ -140,9 +140,9 @@ public class Vec2 implements Serializable
 	
 	public double getY() { return y; }
 	
-	public int getIntX() { return (int) x; }
+	public int getIX() { return (int) x; }
 	
-	public int getIntY() { return (int) y; }
+	public int getIY() { return (int) y; }
 	
 	public float getFX() { return (float) x; }
 	

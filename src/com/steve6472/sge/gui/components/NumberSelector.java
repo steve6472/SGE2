@@ -99,12 +99,12 @@ public class NumberSelector extends Component
 		RenderHelper.renderSingleBorder(getX() + getWidth() / 4, getY(), getWidth() / 2, getHeight(), 0xff7f7f7f, 0xff000000);
 		
 		RenderHelper.renderButton(getX(), getY(), getWidth() / 4, getHeight(), enabled, removeHovered);
-		getFont().render("-", removeCenter.getIntX(), removeCenter.getIntY());
+		Font.render("-", removeCenter.getIX(), removeCenter.getIY());
 		
 		RenderHelper.renderButton(getX() + getWidth() / 4 * 3, getY(), getWidth() / 4, getHeight(), enabled, addHovered);
-		getFont().render("+", addCenter.getIntX(), addCenter.getIntY());
+		Font.render("+", addCenter.getIX(), addCenter.getIY());
 		
-		getFont().render("" + value, getX() + getWidth() / 2 - ("" + value).length() * 4, getY() + getHeight () / 2 - 4);
+		Font.render("" + value, getX() + getWidth() / 2 - ("" + value).length() * 4, getY() + getHeight () / 2 - 4);
 	}
 
 	/*

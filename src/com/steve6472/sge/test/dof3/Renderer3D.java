@@ -41,18 +41,18 @@ public class Renderer3D
 	{
 		Tessellator3D tess = Tessellator3D.INSTANCE;
 		
-		float size = 512f;
+		float size = 1156f;
 
 		float x = 0, y = 0, z = 0;
 
 		x = playerLocation.getX() * 1f;
-		y = playerLocation.getY() * 1f - 2f * size;
+		y = playerLocation.getY() * 1f;
 		z = playerLocation.getZ() * 1f;
 
 		float p = size;
 		float n = -size;
 		
-		skyboxTop.bind();
+		skyboxBottom.bind();
 		
 		float[] col = new float[] {
 				0, 0, 0, 0, 
@@ -62,14 +62,13 @@ public class Renderer3D
 				0, 0, 0, 0, 
 				0, 0, 0, 0,};
 		
-		tess.put(Cube.createTopCubeFace(n, p, x, y + size * 2f, z), Cube.tex, col);
+		tess.put(Cube.createTopCubeFace(p, n, x, y, z), Cube.tex, col);
 		
 		tess.render(Tessellator.TRIANGLES);
 
+		skyboxTop.bind();
 		
-		skyboxBottom.bind();
-		
-		tess.put(Cube.createBottomCubeFace(n, p, x, y + size * 2f, z), Cube.tex, col);
+		tess.put(Cube.createBottomCubeFace(p, n, x, y, z), Cube.tex, col);
 		
 		tess.render(Tessellator.TRIANGLES);
 		
@@ -77,15 +76,15 @@ public class Renderer3D
 		
 		skyboxSide.bind();
 		
-		tess.put(Cube.createFrontCubeFace(n, p, x, y + size * 2f, z), Cube.tex, col);
-		tess.put(Cube.createBackCubeFace(n, p, x, y + size * 2f, z), Cube.tex, col);
-		tess.put(Cube.createSide1CubeFace(n, p, x, y + size * 2f, z), Cube.tex, col);
-		tess.put(Cube.createSide2CubeFace(n, p, x, y + size * 2f, z), Cube.tex, col);
+		tess.put(Cube.createFrontCubeFace(n, p, x, y, z - size * 2f), Cube.tex, col);
+		tess.put(Cube.createBackCubeFace(n, p, x, y, z + size * 2f), Cube.tex, col);
+		tess.put(Cube.createSide1CubeFace(n, p, x - size * 2f, y, z), Cube.tex, col);
+		tess.put(Cube.createSide2CubeFace(n, p, x + size * 2f, y, z), Cube.tex, col);
 		
 		tess.render(Tessellator.TRIANGLES);
 	}
 	
-	public static void render3DMark(float x, float y, float z)
+	public static void renderAxisHelper(float x, float y, float z)
 	{
 		Tessellator3D tess = Tessellator3D.INSTANCE;
 		
@@ -171,7 +170,7 @@ public class Renderer3D
 				.translate(camera.getWidth() / 2f - size - x, camera.getHeight() / 2f - size - y, 0)
 				.scale(size);
 			
-		mainApp.getFont().getFont().bind();
+		Font.getFont().bind();
 		Font.fontShader.bind();
 
 		for (int i = 0; i < text.length(); i++)
@@ -202,5 +201,49 @@ public class Renderer3D
 //		fontShader.setUniform4f("col", 0.21f, 0.21f, 0.21f, 1f);
 		
 		fontModel.render();
+	}
+	
+	
+	
+	
+	
+	public static void renderCuve(float x, float y, float z)
+	{
+		float n = 0;
+		float p = 1;
+
+		Tessellator3D tess = Tessellator3D.INSTANCE;
+		
+		tess.put(n + x, n + y, p + z, 0, 0, 1);
+		tess.put(p + x, n + y, p + z, 0, 0, 1);
+		tess.put(p + x, p + y, p + z, 0, 0, 1);
+		tess.put(n + x, p + y, p + z, 0, 0, 1);
+
+		tess.put(p + x, n + y, p + z, 1, 0, 0);
+		tess.put(p + x, n + y, n + z, 1, 0, 0);
+		tess.put(p + x, p + y, n + z, 1, 0, 0);
+		tess.put(p + x, p + y, p + z, 1, 0, 0);
+		
+		tess.put(p + x, n + y, n + z);
+		tess.put(n + x, n + y, n + z);
+		tess.put(n + x, p + y, n + z);
+		tess.put(p + x, p + y, n + z);
+		
+		tess.put(n + x, n + y, n + z);
+		tess.put(n + x, n + y, p + z);
+		tess.put(n + x, p + y, p + z);
+		tess.put(n + x, p + y, n + z);
+		
+		tess.put(n + x, p + y, p + z, 0, 1, 0);
+		tess.put(p + x, p + y, p + z, 0, 1, 0);
+		tess.put(p + x, p + y, n + z, 0, 1, 0);
+		tess.put(n + x, p + y, n + z, 0, 1, 0);
+
+		tess.put(n + x, n + y, p + z);
+		tess.put(p + x, n + y, p + z);
+		tess.put(p + x, n + y, n + z);
+		tess.put(n + x, n + y, n + z);
+		
+		tess.render(Tessellator.QUADS);
 	}
 }

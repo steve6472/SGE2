@@ -32,13 +32,14 @@ public class Cube
 		return new float[]
 		{
 				// Back
-				n + x, n + y, n + z,
 				p + x, n + y, n + z,
+				n + x, n + y, n + z,
 				p + x, p + y, n + z,
-
-				p + x, p + y, n + z,
+				
 				n + x, p + y, n + z,
-				n + x, n + y, n + z, };
+				p + x, p + y, n + z,
+				n + x, n + y, n + z,
+				};
 	}
 
 	public static float[] createTopCubeFace(float n, float p, float x, float y, float z)
@@ -46,12 +47,12 @@ public class Cube
 		return new float[]
 		{
 				// Top
-				n + x, p + y, n + z,
 				p + x, p + y, n + z,
+				n + x, p + y, n + z,
 				p + x, p + y, p + z,
 
-				p + x, p + y, p + z,
 				n + x, p + y, p + z,
+				p + x, p + y, p + z,
 				n + x, p + y, n + z, };
 	}
 
@@ -74,12 +75,12 @@ public class Cube
 		return new float[]
 		{
 				// Side 2
-				n + x, n + y, p + z,
 				n + x, n + y, n + z,
+				n + x, n + y, p + z,
 				n + x, p + y, n + z,
 
-				n + x, p + y, n + z,
 				n + x, p + y, p + z,
+				n + x, p + y, n + z,
 				n + x, n + y, p + z, };
 	}
 

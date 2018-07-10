@@ -11,7 +11,6 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;
 
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +19,7 @@ import org.lwjgl.BufferUtils;
 public class Tessellator
 {
 	public List<Float> vertices = new ArrayList<Float>();
-	public List<Integer> texture = new ArrayList<Integer>();
+	public List<Float> texture = new ArrayList<Float>();
 	public List<Float> color = new ArrayList<Float>();
 
 	public static final int POINTS 				= GL_POINTS; 				// 0
@@ -45,7 +44,7 @@ public class Tessellator
 		return INSTANCE;
 	}
 
-	public void put(float vx, float vy, int tx, int ty, float cr, float cg, float cb, float ca)
+	public void put(float vx, float vy, float tx, float ty, float cr, float cg, float cb, float ca)
 	{
 		vertices.add(vx);
 		vertices.add(vy);
@@ -59,12 +58,12 @@ public class Tessellator
 		color.add(ca);
 	}
 	
-	public void put(float vx, float vy, int tx, int ty)
+	public void put(float vx, float vy, float tx, float ty)
 	{
 		put(vx, vy, tx, ty, 1, 1, 1, 1);
 	}
 	
-	public void putPixelPerfect(float vx, float vy, int tx, int ty, float cr, float cg, float cb, float ca, Camera camera)
+	public void putPixelPerfect(float vx, float vy, float tx, float ty, float cr, float cg, float cb, float ca, Camera camera)
 	{
 		float w = 1f / (float) camera.getWidth();
 		float h = 1f / (float) camera.getHeight();
@@ -79,14 +78,14 @@ public class Tessellator
 		glEnableVertexAttribArray(2);
 
 		FloatBuffer ver = toFloatBuffer(vertices);
-		IntBuffer tex = toIntBuffer(texture);
+		FloatBuffer tex = toFloatBuffer(texture);
 		FloatBuffer col = toFloatBuffer(color);
 		
 		glVertexPointer(2, GL_FLOAT, 0, ver);
 		glVertexAttribPointer(0, 2, GL_FLOAT, false, 0, ver);
 
-		glTexCoordPointer(2, GL_INT, 0, tex);
-		glVertexAttribPointer(1, 2, GL_INT, false, 0, tex);
+		glTexCoordPointer(2, GL_FLOAT, 0, tex);
+		glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, tex);
 
 		glColorPointer(4, GL_FLOAT, 0, col);
 		glVertexAttribPointer(2, 4, GL_FLOAT, false, 0, col);
@@ -107,19 +106,6 @@ public class Tessellator
 		FloatBuffer buff = BufferUtils.createFloatBuffer(arr.size());
 		
 		for (float i : arr)
-		{
-			buff.put(i);
-		}
-		buff.flip();
-		
-		return buff;
-	}
-	
-	private IntBuffer toIntBuffer(List<Integer> arr)
-	{
-		IntBuffer buff = BufferUtils.createIntBuffer(arr.size());
-		
-		for (int i : arr)
 		{
 			buff.put(i);
 		}

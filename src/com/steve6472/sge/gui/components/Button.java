@@ -155,7 +155,7 @@ public class Button extends Component implements IFocusable
 			{
 				int fontWidth = Font.getTextWidth(text, fontSize) / 2;
 				int fontHeight = ((8 * fontSize)) / 2;
-				getFont().render(text, x + width / 2 - fontWidth, y + height / 2 - fontHeight, fontSize, red, green, blue);
+				Font.render(text, x + width / 2 - fontWidth, y + height / 2 - fontHeight, fontSize, red, green, blue);
 			}
 		}
 	}

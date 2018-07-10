@@ -444,18 +444,20 @@ public class Util
 		return Math.min(Math.max(number, min), max);
 	}
 
-	
 	public static String[] loadDataFromFile(String path)
 	{
-		File f = new File(path);
-		
+		return loadDataFromFile(new File(path));
+	}
+	
+	public static String[] loadDataFromFile(File path)
+	{
 		List<String> lines = new ArrayList<String>();
 		
-		if (!f.exists())
+		if (!path.exists())
 		{
 			try
 			{
-				f.createNewFile();
+				path.createNewFile();
 			} catch (IOException e1)
 			{
 				e1.printStackTrace();
@@ -464,7 +466,7 @@ public class Util
 		
 		try
 		{
-			BufferedReader br = new BufferedReader(new FileReader(f));
+			BufferedReader br = new BufferedReader(new FileReader(path));
 			
 			boolean endOfTheFile = false;
 			while (!endOfTheFile)
@@ -818,6 +820,16 @@ public class Util
 	    System.arraycopy(b, 0, c, aLen, bLen);
 
 	    return c;
+	}
+	
+	public static float[] combineArrays(float[] a, float[]...fs)
+	{
+		float[] arr = a;
+		for (float[] f : fs)
+		{
+			arr = combineArrays(arr, f);
+		}
+		return arr;
 	}
 	
 	/**

@@ -20,6 +20,9 @@ import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
 import com.steve6472.sge.main.callbacks.CursorPosCallback;
 import com.steve6472.sge.main.callbacks.MouseButtonCallback;
+import com.steve6472.sge.main.events.CursorEnterEvent;
+import com.steve6472.sge.main.events.CursorPosEvent;
+import com.steve6472.sge.main.events.MouseEvent;
 import com.steve6472.sge.main.game.Vec2;
 
 public class MouseHandler
@@ -68,6 +71,7 @@ public class MouseHandler
 			{
 //				System.out.println("Callback=[" + window + ", " + button +", " + action + ", " + mods + "]");
 				mouseButtonCallbacks.forEach(c -> c.invoke(getMouseX(), getMouseY(), button, action, mods));
+				mainApp.getEventHandler().runEvent(new MouseEvent(getMouseX(), getMouseY(), button, action, mods));
 			}
 		});
 		
@@ -76,6 +80,7 @@ public class MouseHandler
 			public void invoke(long window, double xpos, double ypos)
 			{
 				cursorPosCallbacks.forEach(c -> c.invoke(xpos, ypos));
+				mainApp.getEventHandler().runEvent(new CursorPosEvent(xpos, ypos));
 			}
 		});
 		
@@ -84,6 +89,7 @@ public class MouseHandler
 			public void invoke(long window, boolean entered)
 			{
 				isCursorInWindow = entered;
+				mainApp.getEventHandler().runEvent(new CursorEnterEvent(entered));
 			}
 		});
 	}

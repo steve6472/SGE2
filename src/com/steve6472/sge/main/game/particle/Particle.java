@@ -79,7 +79,7 @@ public class Particle extends Killable implements IObject, Cloneable, Serializab
 
 	public void render(Screen screen)
 	{
-		screen.drawSprite(pos.getIntX(), pos.getIntY(), texture);
+		screen.drawSprite(pos.getIX(), pos.getIY(), texture);
 	}
 
 	@Override
@@ -102,12 +102,12 @@ public class Particle extends Killable implements IObject, Cloneable, Serializab
 	
 	public int getIntX()
 	{
-		return pos.getIntX();
+		return pos.getIX();
 	}
 	
 	public int getIntY()
 	{
-		return pos.getIntY();
+		return pos.getIY();
 	}
 	
 	public double getX()

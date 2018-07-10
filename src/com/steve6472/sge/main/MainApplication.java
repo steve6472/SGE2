@@ -33,6 +33,8 @@ import com.steve6472.sge.gfx.Screen;
 import com.steve6472.sge.gfx.Sprite;
 import com.steve6472.sge.gui.Gui;
 import com.steve6472.sge.main.callbacks.WindowSizeCallback;
+import com.steve6472.sge.main.events.EventHandler;
+import com.steve6472.sge.main.events.WindowSizeEvent;
 import com.steve6472.sge.main.game.Vec2;
 
 public abstract class MainApplication
@@ -42,7 +44,8 @@ public abstract class MainApplication
 	private MouseHandler mouseHandler;
 	private KeyHandler keyHandler;
 	private Font font;
-
+	private EventHandler eventHandler;
+	
 	IntBuffer windowXBuffer, windowWidthBuffer;
 	IntBuffer windowYBuffer, windowHeightBuffer;
 	
@@ -59,6 +62,7 @@ public abstract class MainApplication
 	public MainApplication()
 	{
 		guis = new ArrayList<Gui>();
+		eventHandler = new EventHandler();
 		windowXBuffer = BufferUtils.createIntBuffer(1);
 		windowYBuffer = BufferUtils.createIntBuffer(1);
 		
@@ -112,6 +116,7 @@ public abstract class MainApplication
 			public void invoke(long window, int width, int height)
 			{
 				windowSizeCallbacks.forEach(c -> c.invoke(width, height));
+				getEventHandler().runEvent(new WindowSizeEvent(width, height));
 			}
         });
 	}
@@ -264,7 +269,7 @@ public abstract class MainApplication
 		
 		this.screen = new Screen();
 		this.mouseHandler = new MouseHandler(window, this);
-		this.keyHandler = new KeyHandler(window);
+		this.keyHandler = new KeyHandler(window, this);
 		this.font = new Font(screen);
 
 		keyHandler.addKeyCallback((key, sancode, action, mods) ->
@@ -409,6 +414,7 @@ public abstract class MainApplication
     
     public void addGui(Gui gui)
     {
+    	eventHandler.register(gui);
     	this.guis.add(gui);
     }
     
@@ -416,5 +422,10 @@ public abstract class MainApplication
     {
     	return guis;
     }
+    
+    public EventHandler getEventHandler()
+	{
+		return eventHandler;
+	}
     
 }

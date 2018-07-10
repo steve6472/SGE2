@@ -23,6 +23,15 @@ public class Model
 	private int cId; //Color Id
 	private int mode;
 	
+	public Model()
+	{
+		mode = GL_TRIANGLES;
+		vId = glGenBuffers();
+		tId = glGenBuffers();
+		cId = glGenBuffers();
+		System.out.println("Created empty vId:" + vId + " tId:" + tId + " cId:" + cId);
+	}
+	
 	public Model(float[] vertices, float[] texture, float[] colors)
 	{
 		drawCount = vertices.length / 2;
@@ -166,6 +175,27 @@ public class Model
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		
 		drawCount = vertices.length / 2;
+	}
+	
+	/**
+	 * @Deprecated - Just don't use it in acutal program please!
+	 * Use only for testing
+	 */
+	@Deprecated
+	public void changeData(FloatBuffer vertices, FloatBuffer texture, FloatBuffer colors)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, vId);
+		glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ARRAY_BUFFER, tId);
+		glBufferData(GL_ARRAY_BUFFER, texture, GL_STATIC_DRAW);
+
+		glBindBuffer(GL_ARRAY_BUFFER, cId);
+		glBufferData(GL_ARRAY_BUFFER, colors, GL_STATIC_DRAW);
+        
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		
+		drawCount = vertices.capacity() / 2;
 	}
 	
 }

@@ -49,6 +49,11 @@ public class Window
 		glfwSwapInterval(Util.toInt(enabled));
 	}
 	
+	public void setResizable(boolean resizable)
+	{
+		glfwWindowHint(GLFW_RESIZABLE, Util.toInt(resizable));
+	}
+	
 	public void centerWindow()
 	{
 		centerWindow(0);

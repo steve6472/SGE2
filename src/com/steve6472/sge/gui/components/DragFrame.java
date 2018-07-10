@@ -2,6 +2,7 @@ package com.steve6472.sge.gui.components;
 
 import static org.lwjgl.glfw.GLFW.*;
 
+import com.steve6472.sge.gfx.Font;
 import com.steve6472.sge.gfx.Screen;
 import com.steve6472.sge.gui.Component;
 import com.steve6472.sge.main.MainApplication;
@@ -71,10 +72,10 @@ public class DragFrame extends Component
 		if (text != null && text != "")
 		{
 			if (renderTextInCenter)
-				getFont().render(getText(), getX() + getWidth() / 2 - (getText().length() * (8 * textSize)) / 2,
+				Font.render(getText(), getX() + getWidth() / 2 - (getText().length() * (8 * textSize)) / 2,
 						getHeight() / 2 - (8 * textSize) / 2 + 3, textSize);
 			else
-				getFont().render(getText(), getX(), getY() + getHeight() / 2 - (8 * textSize) / 2 + 3, textSize);
+				Font.render(getText(), getX(), getY() + getHeight() / 2 - (8 * textSize) / 2 + 3, textSize);
 
 		}
 	}

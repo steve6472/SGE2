@@ -29,7 +29,10 @@ public class TextField extends Component
 	private boolean showCarret = false;
 	boolean isFocused = false;
 	public boolean isLeft = false;
-
+	public boolean onlyNumbers = false;
+	
+	char[] numbers = "0123456789.-".toCharArray();
+	
 	public TextField()
 	{
 	}
@@ -59,10 +62,70 @@ public class TextField extends Component
 			if (!isFocused)
 				return;
 			
-			text += Character.toChars(codePoint)[0];
-//			location = Font.stringCenter(new AABB(0, 0, width, height), text, fontSize);
+			if (onlyNumbers)
+			{
+				char c = Character.toChars(codePoint)[0];
+				
+				boolean hasDot = false;
+				boolean canAdd = false;
+				boolean stop = false;
+				
+				if (c == '-')
+				{
+					if (text.isEmpty())
+					{
+						text += "-";
+					}
+					stop = true;
+				}
+				
+				if (!stop) for (char t : text.toCharArray())
+				{
+					if (t == '.')
+					{
+						hasDot = true;
+						break;
+					}
+				}
+
+				if (!stop) for (char n : numbers)
+				{
+					if (c == n)
+					{
+						canAdd = true;
+						break;
+					}
+				}
+
+				if (!stop) if (canAdd)
+				{
+					if (c == '.')
+					{
+						if (!hasDot)
+						{
+							text += c;
+						}
+					} else
+					{
+						text += c;
+					}
+				}
+			} else
+			{
+				text += Character.toChars(codePoint)[0];
+			}
+
 			updateLocation();
 		});
+		updateLocation();
+	}
+	
+	public float toFloat()
+	{
+		String t = text.isEmpty() ? "0" : text;
+		if (t.equals("-"))
+			t = "-0";
+		return Float.parseFloat(t);
 	}
 	
 	Vec2 location;
@@ -70,12 +133,13 @@ public class TextField extends Component
 	@Override
 	public void render(Screen screen)
 	{
-		RenderHelper.renderSingleBorder(getX(), getY(), getWidth(), getHeight(), 0xff7f7f7f, 0xff000000);
+		RenderHelper.renderSingleBorder(getX(), getY(), getWidth(), getHeight(), 0xff020202, 0xff414041);
 		
-		getFont().render(text, getX() + location.getIntX(), getY() + location.getIntY() + 1, fontSize);
+		Font.render(text, getX() + location.getIX(), getY() + location.getIY() + 1, fontSize);
 		
 		if (showCarret && isFocused)
-			getFont().render("|", getX() + location.getIntX() + getTextWidth() - fontSize, getY() + location.getIntY() + 1, fontSize);
+			Screen.fillRect(Font.getTextWidth(text, 1) + x + 5, y + 13, 8, 2, 0xffa9a8aa);
+//			Font.render("_", getX() + location.getIntX() + getTextWidth() - fontSize, getY() + location.getIntY() + 1, fontSize);
 	}
 	
 	public int getTextWidth()
@@ -146,9 +210,9 @@ public class TextField extends Component
 	public void updateLocation()
 	{
 		if (!isLeft)
-		location = Font.stringCenter(new AABB(0, 0, width, height), text, fontSize);
-	else
-		location = Font.stringCenter(new AABB(0, 0, width, height), text, fontSize).setX(getHeight() / 5);
+			location = Font.stringCenter(new AABB(0, 0, width, height), text, fontSize);
+		else
+			location = Font.stringCenter(new AABB(0, 0, width, height), text, fontSize).setX(getHeight() / 5);
 	}
 	
 	public void moveCarretLeft() { carretPosition = Math.max(0, carretPosition - 1); carretTick = 0; showCarret = true; };

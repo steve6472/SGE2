@@ -186,7 +186,7 @@ public class AABB implements Serializable
 
 	public void render(Screen screen, int color)
 	{
-		Screen.fillRect(from.getIntX(), from.getIntY(), (int) getWidth(), (int) getHeight(), color);
+		Screen.fillRect(from.getIX(), from.getIY(), (int) getWidth(), (int) getHeight(), color);
 	}
 
 	@Override

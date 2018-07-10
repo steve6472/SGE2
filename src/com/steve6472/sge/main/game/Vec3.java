@@ -7,7 +7,7 @@ import com.steve6472.sge.main.Util;
 public class Vec3 implements Serializable
 {
 	private static final long serialVersionUID = -6728175878841578459L;
-	private double x, y, z;
+	public double x, y, z;
 	
 	public Vec3()
 	{
@@ -84,11 +84,11 @@ public class Vec3 implements Serializable
 	
 	public double getZ() { return z; }
 	
-	public int getIntX() { return (int) x; }
+	public int getIX() { return (int) x; }
 	
-	public int getIntY() { return (int) y; }
+	public int getIY() { return (int) y; }
 	
-	public int getIntZ() { return (int) z; }
+	public int getIZ() { return (int) z; }
 	
 	public float getFX() { return (float) x; }
 	
@@ -121,6 +121,10 @@ public class Vec3 implements Serializable
 	public Vec3 left(double d) { this.x -= d; return this; }
 
 	public Vec3 right(double d) { this.x += d; return this; }
+
+	public Vec3 forward(double d) { this.z -= d; return this; }
+
+	public Vec3 back(double d) { this.z += d; return this; }
 	
 	public Vec3 devide(double d) { this.x /= d; this.y /= d; return this; }
 	

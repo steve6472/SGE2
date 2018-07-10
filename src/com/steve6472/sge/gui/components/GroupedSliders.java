@@ -7,6 +7,7 @@
 
 package com.steve6472.sge.gui.components;
 
+import com.steve6472.sge.gfx.Font;
 import com.steve6472.sge.gfx.RenderHelper;
 import com.steve6472.sge.gfx.Screen;
 import com.steve6472.sge.gui.Component;
@@ -38,7 +39,7 @@ public class GroupedSliders extends Component
 		
 		for (int i = 0; i < texts.length; i++)
 		{
-			getFont().render(texts[i], x + 12, y + 8 + getHeight() / sliders.length * i);
+			Font.render(texts[i], x + 12, y + 8 + getHeight() / sliders.length * i);
 		}
 	}
 
@@ -94,9 +95,14 @@ public class GroupedSliders extends Component
 		texts[index] = text;
 	}
 	
-	public int getValue(int index)
+	public double getValue(int index)
 	{
 		return sliders[index].getValue();
+	}
+	
+	public int getIValue(int index)
+	{
+		return sliders[index].getIValue();
 	}
 	
 	public Slider getSlider(int index)

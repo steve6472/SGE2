@@ -55,19 +55,24 @@ public abstract class Component extends LambdaControl implements Serializable
 	
 	public abstract void tick();
 
-	public boolean isCursorInComponent(int x, int y, int w, int h)
+	protected boolean isCursorInComponent(int x, int y, int w, int h)
 	{
 		if (!isVisible())
 			return false;
 		return (mouseHandler.getMouseX() >= x && mouseHandler.getMouseX() <= w + x) && (mouseHandler.getMouseY() >= y && mouseHandler.getMouseY() <= h + y);
 	}
 
-	public boolean isCursorInComponent()
+	protected boolean isCursorInComponent()
 	{
 		if (!isVisible())
 			return false;
 		return (mouseHandler.getMouseX() >= getX() && mouseHandler.getMouseX() <= getWidth() + getX())
 				&& (mouseHandler.getMouseY() >= getY() && mouseHandler.getMouseY() <= getHeight() + getY());
+	}
+	
+	protected boolean isKeyPressed(int key)
+	{
+		return mainApp.isKeyPressed(key);
 	}
 	
 	/*
@@ -77,33 +82,36 @@ public abstract class Component extends LambdaControl implements Serializable
 	
 	protected void renderComponents(Screen screen)
 	{
-		if (isVisible())
+		for (Component gc : components)
 		{
-			for (Component gc : components)
+			if (gc.isVisible())
 			{
-				if (gc.isVisible())
-				{
-					gc.render(screen);
-				}
+				gc.render(screen);
 			}
 		}
+	}
+
+	public final void fullRender(Screen screen)
+	{
+		if (!isVisible())
+			return;
+		
+		render(screen);
+		renderComponents(screen);
+	}
+	
+	public final void fullTick()
+	{
+		if (!isVisible())
+			return;
+		
+		tick();
+		tickComponents();
 	}
 
 	/*
 	 * Operators
 	 */
-	
-	public void hide()
-	{
-		this.isVisible = false;
-		hideAllComponents();
-	}
-	
-	public void show()
-	{
-		this.isVisible = true;
-		showAllComponents();
-	}
 	
 	public void toggleVisibility()
 	{
@@ -114,9 +122,11 @@ public abstract class Component extends LambdaControl implements Serializable
 	{
 		if (component == null)
 			throw new NullPointerException("Component can't be null");
+		
 		component.parentComponent = this;
 		component.preInit(mainApp);
 		component.init(mainApp);
+		getMainApp().getEventHandler().register(component);
 		components.add(component);
 	}
 	
@@ -137,30 +147,22 @@ public abstract class Component extends LambdaControl implements Serializable
 	
 	protected void hideAllComponents()
 	{
-		for (Component gc : components)
-		{
-			gc.hide();
-		}
+		components.forEach(c -> c.setVisible(false));
 	}
 	
 	protected void showAllComponents()
 	{
-		for (Component gc : components)
-		{
-			gc.show();
-		}
+		components.forEach(c -> c.setVisible(true));
 	}
 
 	protected void tickComponents()
 	{
-		if (isVisible())
+		for (Component gc : components)
 		{
-			for (Component gc : components)
+//			System.out.println("COM: " + gc.getClass().getSimpleName() + " " + gc.isVisible());
+			if (gc.isVisible())
 			{
-				if (gc.isVisible())
-				{
-					gc.tick();
-				}
+				gc.tick();
 			}
 		}
 	}
@@ -173,7 +175,7 @@ public abstract class Component extends LambdaControl implements Serializable
 	{
 		this.isVisible = b;
 		
-		components.forEach((c) -> c.setVisible(b));
+		components.forEach(c -> c.setVisible(b));
 	}
 	
 	public void setLocation(int x, int y)

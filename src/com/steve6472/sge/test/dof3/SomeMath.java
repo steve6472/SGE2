@@ -11,10 +11,10 @@ public class SomeMath
 {
 
 	@SuppressWarnings("unused")
-	private static double bilinearInterpolation(double bottomLeft, double topLeft, double bottomRight, double topRight, double xMin, double xMax,
-			double zMin, double zMax, double x, double z)
+	private static float bilinearInterpolation(float bottomLeft, float topLeft, float bottomRight, float topRight, float xMin, float xMax,
+			float zMin, float zMax, float x, float z)
 	{
-		double width = xMax - xMin, height = zMax - zMin,
+		float width = xMax - xMin, height = zMax - zMin,
 
 				xDistanceToMaxValue = xMax - x, zDistanceToMaxValue = zMax - z,
 
@@ -25,19 +25,19 @@ public class SomeMath
 						+ topLeft * xDistanceToMaxValue * zDistanceToMinValue + topRight * xDistanceToMinValue * zDistanceToMinValue);
 	}
 
-	public static double smoothInterpolation(double bottomLeft, double topLeft, double bottomRight, double topRight, double xMin, double xMax,
-			double zMin, double zMax, double x, double z)
+	public static float smoothInterpolation(float bottomLeft, float topLeft, float bottomRight, float topRight, float xMin, float xMax,
+			float zMin, float zMax, float x, float z)
 	{
-		double width = xMax - xMin, height = zMax - zMin;
-		double xValue = 1 - (x - xMin) / width;
-		double zValue = 1 - (z - zMin) / height;
+		float width = xMax - xMin, height = zMax - zMin;
+		float xValue = 1 - (x - xMin) / width;
+		float zValue = 1 - (z - zMin) / height;
 
-		double a = smoothstep(bottomLeft, bottomRight, xValue);
-		double b = smoothstep(topLeft, topRight, xValue);
+		float a = smoothstep(bottomLeft, bottomRight, xValue);
+		float b = smoothstep(topLeft, topRight, xValue);
 		return smoothstep(a, b, zValue);
 	}
 
-	public static double smoothstep(double edge0, double edge1, double x)
+	public static float smoothstep(float edge0, float edge1, float x)
 	{
 		// Scale, bias and saturate x to 0..1 range
 		x = x * x * (3 - 2 * x);
@@ -45,7 +45,7 @@ public class SomeMath
 		return (edge0 * x) + (edge1 * (1 - x));
 	}
 
-	public static double clamp(double x, double lowerlimit, double upperlimit)
+	public static float clamp(float x, float lowerlimit, float upperlimit)
 	{
 		if (x < lowerlimit)
 			x = lowerlimit;

@@ -20,9 +20,12 @@ public class Noise
 	
 	private double roughness;
 	
-	public Noise(int seed)
+	int CHUNK_SIZE = 32;
+	
+	public Noise(int seed, int chunkSize)
 	{
 		this.seed = seed;
+		this.CHUNK_SIZE = chunkSize;
 	}
 	
 	public Noise()
@@ -39,27 +42,20 @@ public class Noise
 		this.roughness = roughness;
 	}
 	
-	public void setParameters(NoiseParam np)
+	public Noise setParameters(NoiseParam np)
 	{
 		this.octaves = np.octaves;
 		this.amplitude = np.amplitude;
 		this.smoothness = np.smoothness;
 		this.heightOffset = np.heightOffset;
 		this.roughness = np.roughness;
+		return this;
 	}
-	
-	static int CHUNK_SIZE = 32;
-	static int WATER_LEVEL = 64;
 	
 	public double getHeight(int x, int z, int chunkX, int chunkZ)
 	{
 		double newX = (x + chunkX * CHUNK_SIZE);
 		double newZ = (z + chunkZ * CHUNK_SIZE);
-		
-		if (newX < 0 || newZ < 0)
-		{
-			return WATER_LEVEL -1;
-		}
 		
 		double totalValue = 0;
 

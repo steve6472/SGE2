@@ -33,11 +33,14 @@ public class ItemList extends Component
 	@Override
 	public void render(Screen screen)
 	{
+		Screen.drawRect(x, y, width - 20, height * getVisibleItems(), 2, 0xff808080);
+		Screen.fillRect(x + 2, y + 2, width - 24, height * getVisibleItems() - 4, 0xffaeaeae);
+		
 		for (int i = 0; i < visibleItems; i++)
 		{
 			if (!((i + scroll) > (items.size() - 1)))
 			{
-				renderItem(i, screen);
+				renderItem(i);
 			}
 		}
 		// Right "slider"
@@ -48,7 +51,7 @@ public class ItemList extends Component
 		RenderHelper.renderButton(getX() + getWidth() - 22, getY() + getHeight() * getVisibleItems() - 14, 22, 14, downEnabled, downHovered);
 	}
 	
-	public void renderItem(int i, Screen screen)
+	public void renderItem(int i)
 	{
 		RenderHelper.renderSingleBorder(getX(), getY() + i * getHeight(), getWidth() - 22, getHeight(), 0xff3f3f3f, 0xffbfbfbf);
 
@@ -58,7 +61,7 @@ public class ItemList extends Component
 		if (selected == i + scroll)
 			Screen.fillRect(getX(), getY() + i * getHeight(), getWidth() - 22, getHeight(), 0x80555555);
 
-		renderText(screen, i);
+		renderText(i);
 		
 		Item item = items.get(i + scroll);
 		
@@ -137,15 +140,15 @@ public class ItemList extends Component
 		}
 	}
 
-	protected void renderText(Screen screen, int index)
+	protected void renderText(int index)
 	{
 		Item item = items.get(index + scroll);
 		if (item.sprite != null)
-			getFont().render(Font.trim(items.get((index + scroll)).text, width - 34, fontSize),
+			Font.render(Font.trim(items.get((index + scroll)).text, width - 34, fontSize),
 					items.get(index + scroll).sprite.getWidth() + getX() + 4 + item.xOffset, getY() + getHeight() / 2 - 8 / 2 + index * getHeight(),
 					fontSize, item.red, item.green, item.blue);
 		else
-			getFont().render(Font.trim(items.get((index + scroll)).text, width - 34, fontSize), getX() + 4,
+			Font.render(Font.trim(items.get((index + scroll)).text, width - 34, fontSize), getX() + 4,
 					getY() + getHeight() / 2 - 8 / 2 + index * getHeight(), fontSize, item.red, item.green, item.blue);
 	}
 

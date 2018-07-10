@@ -27,8 +27,9 @@ import com.steve6472.sge.main.KeyList;
 import com.steve6472.sge.main.MainApplication;
 import com.steve6472.sge.main.SGArray;
 import com.steve6472.sge.main.Util;
-import com.steve6472.sge.main.callbacks.CharCallback;
-import com.steve6472.sge.main.callbacks.KeyCallback;
+import com.steve6472.sge.main.events.CharEvent;
+import com.steve6472.sge.main.events.Event;
+import com.steve6472.sge.main.events.KeyEvent;
 
 public class TextArea extends Component implements IFocusable, KeyList
 {
@@ -74,128 +75,203 @@ public class TextArea extends Component implements IFocusable, KeyList
 			text.add("");
 	}
 	
+	@Event
+	public void keyCallback(KeyEvent event)
+	{
+		if (!isFocused || !isVisible())
+			return;
+		
+		if (isEnabled() && (event.getAction() == 2 || event.getAction() == 1))
+		{
+			switch (event.getKey())
+			{
+			case ENTER:
+				if (carretPositionX == 0)
+					text = Util.insert("", text, carretPositionY);
+				else if (carretPositionX == text.get(carretPositionY).length())
+					text = Util.insert("", text, carretPositionY + 1);
+				moveCarretDown();
+				break;
+			case TAB:
+				text.set(carretPositionY,
+						text.get(carretPositionY).substring(0, Math.min(carretPositionX, text.get(carretPositionY).length()))
+								+ "	"
+								+ text.get(carretPositionY).substring(Math.min(carretPositionX, text.get(carretPositionY).length())));
+				moveCarretRight();
+				break;
+			case BACKSPACE:
+				//Delete whole line
+				if (getMainApp().isKeyPressed(L_CONTROL))
+				{
+					if (carretPositionX == 0)
+					{
+						//Merge current line with the upper one & move everything underneeth it up
+						text.remove(carretPositionY);
+						text.add("");
+						moveCarretUp();
+						carretPositionX = text.get(carretPositionY).length();
+					} else
+					{
+						String s = text.get(carretPositionY);
+						
+						int break_ = 0;
+						int i0 = 0;
+						
+						main : for (int i = carretPositionX - 2; i >= 0; i--)
+						{
+							char currentChar = s.charAt(i);
+							i0++;
+							for (char b : breaks)
+							{
+								if (currentChar == b)
+								{
+									break_ = i + 1;
+									break main;
+								}
+							}
+						}
+						
+						text.set(carretPositionY, s.substring(0, break_) + s.substring(carretPositionX, s.length()));
+						carretPositionX -= i0;
+						if (text.get(carretPositionY).length() < carretPositionX)
+							carretPositionX = text.get(carretPositionY).length();
+					}
+					break;
+				}
+				String t = text.get(carretPositionY);
+				if (t.equals(""))
+				{
+					text.remove(carretPositionY);
+					
+					if (text.isEmpty())
+						text.add("");
+					
+					moveCarretUp();
+					
+					if (carretPositionY > scrollX && scrollX > 0)
+					{
+						scrollX--;
+					}
+					
+					carretPositionX = text.get(carretPositionY).length();
+					break;
+				}
+				moveCarretLeft();
+				
+				if (text.get(carretPositionY).length() == carretPositionX + 1)
+					text.set(carretPositionY, t.substring(0, t.length() > 0 ? t.length() - 1 : t.length()));
+				else
+					text.set(carretPositionY, text.get(carretPositionY).substring(0, Math.min(carretPositionX, text.get(carretPositionY).length())) + text.get(carretPositionY).substring(Math.min(carretPositionX + 1, text.get(carretPositionY).length())));
+				
+				break;
+			case UP: 	moveCarretUp(); 	break;
+			case DOWN: 	moveCarretDown(); 	break;
+			case LEFT:
+
+				if (getMainApp().isKeyPressed(L_CONTROL) && carretPositionX != 0)
+				{
+					int i0 = 0;
+
+					String s = text.get(carretPositionY);
+
+					main: for (int i = carretPositionX - 2; i >= 0; i--)
+					{
+						char currentChar = s.charAt(i);
+						i0++;
+						for (char b : breaks)
+						{
+							if (currentChar == b)
+							{
+								break main;
+							}
+						}
+					}
+					
+					carretPositionX -= i0;
+					if (carretPositionX == 1)
+						carretPositionX = 0;
+					if (text.get(carretPositionY).length() < carretPositionX)
+						carretPositionX = text.get(carretPositionY).length();
+					
+				} else
+				{
+					moveCarretLeft();
+				}
+				
+				break;
+			case RIGHT:
+				if (getMainApp().isKeyPressed(L_CONTROL) && carretPositionX != text.get(carretPositionY).length())
+				{
+					int i0 = 0;
+
+					String s = text.get(carretPositionY);
+
+					main: for (int i = carretPositionX; i < s.length(); i++)
+					{
+						char currentChar = s.charAt(i);
+						i0++;
+						for (char b : breaks)
+						{
+							if (currentChar == b)
+							{
+								break main;
+							}
+						}
+					}
+					
+					carretPositionX += i0;
+					if (text.get(carretPositionY).length() < carretPositionX)
+						carretPositionX = text.get(carretPositionY).length();
+					
+				} else
+				{
+					moveCarretRight();
+				}
+				break;
+			default: break;
+			}
+		}
+	
+	}
+	
+	@Event
+	public void charEvent(CharEvent event)
+	{
+		if (getMainApp().isKeyPressed(L_CONTROL) || getMainApp().isKeyPressed(R_CONTROL))
+			return;
+		
+		if (!isFocused || !isVisible())
+			return;
+		
+		char c = Character.toChars(event.getCodepoint())[0];
+		
+		if (Font.characters.get(c) == null)
+		{
+			System.out.println("User typed character which is not in List. Ignoring: \'" + c + "\'");
+			return;
+		}
+		
+		if (text.get(carretPositionY).length() >= xLimit)
+			moveCarretDown();
+		
+		text.set(carretPositionY,
+				text.get(carretPositionY).substring(0, Math.min(carretPositionX, text.get(carretPositionY).length()))
+						+ Character.toString(c)
+						+ text.get(carretPositionY).substring(Math.min(carretPositionX, text.get(carretPositionY).length())));
+
+		moveCarretRight();
+		
+		if (text.get(text.size() - 1).length() >= xLimit)
+		{
+			text.set(text.size() - 1, text.get(text.size() - 1).substring(0, xLimit));
+			moveCarretLeft();
+		}
+	
+	}
+	
 	@Override
 	public void init(MainApplication mainApp)
 	{
-		getKeyHandler().addKeyCallback(new KeyCallback()
-		{
-			@Override
-			public void invoke(int key, int scancode, int action, int mods)
-			{
-				if (!isFocused || !isVisible())
-					return;
-				
-				if (isEnabled() && (action == 2 || action == 1))
-				{
-					switch (key)
-					{
-					case ENTER:
-						if (carretPositionX == 0)
-							text = Util.insert("", text, carretPositionY);
-						else if (carretPositionX == text.get(carretPositionY).length())
-							text = Util.insert("", text, carretPositionY + 1);
-						moveCarretDown();
-						break;
-					case BACKSPACE:
-						//Delete whole line
-						if (getMainApp().isKeyPressed(L_CONTROL))
-						{
-							if (carretPositionX == 0)
-							{
-								//Merge current line with the upper one & move everything underneeth it up
-								text.remove(carretPositionY);
-								text.add("");
-								moveCarretUp();
-								carretPositionX = text.get(carretPositionY).length();
-							} else
-							{
-								String s = text.get(carretPositionY);
-								
-								int break_ = 0;
-								
-								main : for (int i = carretPositionX - 2; i >= 0; i--)
-								{
-									char currentChar = s.charAt(i);
-									for (char b : breaks)
-									{
-										if (currentChar == b)
-										{
-											break_ = i + 1;
-											break main;
-										}
-									}
-								}
-								
-								text.set(carretPositionY, s.substring(0, break_));
-								carretPositionX = text.get(carretPositionY).length();
-							}
-							break;
-						}
-						String t = text.get(carretPositionY);
-						if (t.equals(""))
-						{
-							text.remove(carretPositionY);
-							
-							if (text.isEmpty())
-								text.add("");
-							
-							moveCarretUp();
-							
-							if (carretPositionY > scrollX && scrollX > 0)
-							{
-								scrollX--;
-							}
-							
-							carretPositionX = text.get(carretPositionY).length();
-							break;
-						}
-						moveCarretLeft();
-						
-						if (text.get(carretPositionY).length() == carretPositionX + 1)
-							text.set(carretPositionY, t.substring(0, t.length() > 0 ? t.length() - 1 : t.length()));
-						else
-							text.set(carretPositionY, text.get(carretPositionY).substring(0, Math.min(carretPositionX, text.get(carretPositionY).length())) + text.get(carretPositionY).substring(Math.min(carretPositionX + 1, text.get(carretPositionY).length())));
-						
-						break;
-					case UP: 	moveCarretUp(); 	break;
-					case DOWN: 	moveCarretDown(); 	break;
-					case LEFT: 	moveCarretLeft(); 	break;
-					case RIGHT: moveCarretRight(); 	break;
-					default: break;
-					}
-				}
-			}
-		});
-		getKeyHandler().addCharCallback(new CharCallback()
-		{
-			@Override
-			public void invoke(int codePoint)
-			{
-				if (getMainApp().isKeyPressed(L_CONTROL) || getMainApp().isKeyPressed(R_CONTROL))
-					return;
-				
-				if (!isFocused || !isVisible())
-					return;
-				
-				char c = Character.toChars(codePoint)[0];
-				
-				if (text.get(carretPositionY).length() >= xLimit)
-					moveCarretDown();
-				
-				text.set(carretPositionY,
-						text.get(carretPositionY).substring(0, Math.min(carretPositionX, text.get(carretPositionY).length()))
-								+ Character.toString(c)
-								+ text.get(carretPositionY).substring(Math.min(carretPositionX, text.get(carretPositionY).length())));
-
-				moveCarretRight();
-				
-				if (text.get(text.size() - 1).length() >= xLimit)
-				{
-					text.set(text.size() - 1, text.get(text.size() - 1).substring(0, xLimit));
-					moveCarretLeft();
-				}
-			}
-		});
 	}
 
 	@Override
@@ -210,9 +286,6 @@ public class TextArea extends Component implements IFocusable, KeyList
 //			carretPositionY = 0;
 //			text.add("");
 //		}
-		
-//		boolean overUDS = GuiUtils.isCursorInRectangle(getMouseHandler(), x + width - 18, y + 2, 16, height - 22);
-//		boolean overLRS = GuiUtils.isCursorInRectangle(getMouseHandler(), x + 2, y + height - 18, width - 22, 16);
 		
 		double usedX = text.size();
 		double fulX = height - 22;
@@ -482,14 +555,6 @@ public class TextArea extends Component implements IFocusable, KeyList
 	
 	public void addText(String msg)
 	{
-//		for (int i = 0; i < text.size(); i++)
-//		{
-//			if (text.get(i).isEmpty())
-//			{
-//				text.set(i, msg);
-//				return;
-//			}
-//		}
 		text.add(msg);
 	}
 
@@ -570,6 +635,11 @@ public class TextArea extends Component implements IFocusable, KeyList
 	{
 		text.remove(line);
 		text.add("");
+	}
+	
+	public void removeLine(int line)
+	{
+		text.remove(line);
 	}
 
 	public void moveCarretLeft()
@@ -733,6 +803,11 @@ public class TextArea extends Component implements IFocusable, KeyList
 			this.text.add("");
 		}
 		this.text.set(line, text);
+	}
+	
+	public void clearArea()
+	{
+		text.clear();
 	}
 	
 	public void setBaseColor(float r, float g, float b)

@@ -8,10 +8,10 @@
 package com.steve6472.sge.test.dof3;
 
 
-public class OceanBiome extends Biome
+public class Mountians extends Biome
 {
 
-	public OceanBiome()
+	public Mountians()
 	{
 	}
 
@@ -37,14 +37,13 @@ public class OceanBiome extends Biome
 	@Override
 	public NoiseParam getNoiseParam()
 	{
-		return new NoiseParam(7, 10, 55, -8, 0.5);
-//		return new NoiseParam(8, 10, 55, 0, 1.5);
+		return new NoiseParam(15, 40, 55, 20, 0.8);
 	}
 	
 	@Override
 	public boolean getBiome(double value)
 	{
-		return value > 120;
+		return value > 150;
 	}
 	
 	@Override

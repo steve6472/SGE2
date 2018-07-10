@@ -67,8 +67,6 @@ public class World
 	
 	public void render(Camera camera)
 	{
-		GameTile.prepare();
-		
 		tryRecalculateBounds(camera, -1);
 		
 		renderedChunks = 0;
