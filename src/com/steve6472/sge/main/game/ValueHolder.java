@@ -11,7 +11,6 @@ import java.io.Serializable;
 
 public class ValueHolder implements Serializable
 {
-	private static final long serialVersionUID = -140558969222903555L;
 	public Object value = null;
 	
 	protected final Object get()
@@ -35,7 +34,7 @@ public class ValueHolder implements Serializable
 			return false;
 		
 		if (get() instanceof String)
-			return new Boolean((String) get());
+			return Boolean.valueOf((String) get());
 			
 		return (boolean) get();
 	}
@@ -80,7 +79,7 @@ public class ValueHolder implements Serializable
 		if (get() instanceof Integer)
 			return (int) get();
 		
-		return new Integer((String) get());
+		return Integer.valueOf((String) get());
 	}
 	
 	public final int getHexInt()

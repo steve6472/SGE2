@@ -1,148 +1,46 @@
 package com.steve6472.sge.gui.components;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.steve6472.sge.gfx.font.CustomChar;
+import com.steve6472.sge.gfx.font.Font;
 
-import com.steve6472.sge.gfx.RenderHelper;
-import com.steve6472.sge.gfx.Screen;
-import com.steve6472.sge.gfx.Sprite;
-import com.steve6472.sge.gui.Component;
-import com.steve6472.sge.main.MainApplication;
-
-public class CheckBox extends Component
+public class CheckBox extends ToggleButton
 {
 	private static final long serialVersionUID = 7880397321121670923L;
-	private boolean isChecked = false, isEnabled = true, isHovered = false;
-	private int type = 0;
-//	private short idleMouseTime = 0;
+	private Object selectedChar;
 
-	private static final Sprite[] TYPES =
-	{ new Sprite("components/checkBox/checkTypes/type_0.png"), new Sprite("components/checkBox/checkTypes/type_1.png") };
-
-	protected List<ChangeEvent> changeEvent = new ArrayList<ChangeEvent>();
-	
-	@Override
-	public void init(MainApplication game)
+	public CheckBox()
 	{
-		super.setSize(40, 40);
+		selectedChar = CustomChar.CROSS;
 	}
 
 	@Override
-	public void tick()
+	public void renderText()
 	{
-		isHovered = isCursorInComponent(x, y, 40, 40);
+		if (!isToggled())
+			return;
 
-		onMouseClicked((c) ->
-		{
-			toggle();
-			getMouseHandler().setTrigger(true);
-		});
+		int fontWidth;
+			fontWidth = Font.getTextWidth("" + selectedChar, getFontSize()) / 2;
+//		else
+		int fontHeight = ((8 * getFontSize())) / 2;
+
+		if (enabled && !hovered)
+			Font.renderCustom(x + width / 2 - fontWidth, y + height / 2 - fontHeight, getFontSize(), getColor(enabledColor), selectedChar);
+
+		if (!enabled)
+			Font.renderCustom(x + width / 2 - fontWidth, y + height / 2 - fontHeight, getFontSize(), getColor(disabledColor), selectedChar);
+
+		if (enabled && hovered)
+			Font.renderCustom(x + width / 2 - fontWidth, y + height / 2 - fontHeight, getFontSize(), getColor(hoveredColor), selectedChar);
 	}
 
-	@Override
-	public void render(Screen screen)
+	public void setSelectedChar(char c)
 	{
-		if (isEnabled)
-		{
-			if (isHovered)
-			{
-				RenderHelper.renderDoubleBorderComponent(this, 0xff000000, 0xffbdc6ff, 0xff7d87be);
-			} else
-			{
-				RenderHelper.renderDoubleBorderComponent(this, 0xff000000, 0xffa8a8a8, 0xff6f6f6f);
-			}
-		} else
-		{
-			RenderHelper.renderDoubleBorderComponent(this, 0xff000000, 0xff2b2b2b, 0xff2b2b2b);
-		}
-
-		if (isChecked)
-		{
-			Screen.drawSprite(x, y, TYPES[getType()]);
-		}
+		this.selectedChar = c;
 	}
 
-	/*
-	 * Operators
-	 */
-
-	public void enable()
+	public void setSelectedChar(CustomChar c)
 	{
-		isEnabled = true;
-	}
-
-	public void disable()
-	{
-		isEnabled = false;
-	}
-
-	public void check()
-	{
-		isChecked = true;
-	}
-
-	public void uncheck()
-	{
-		isChecked = false;
-	}
-
-	public void toggle()
-	{
-		isChecked = !isChecked;
-		changeEvent.forEach((e) -> e.change());
-	}
-	
-	public void addChangeEvent(ChangeEvent event)
-	{
-		this.changeEvent.add(event);
-	}
-	
-	/*
-	 * Setters
-	 */
-
-	public void setChecked(boolean b)
-	{
-		isChecked = b;
-	}
-
-	public void setEnabled(boolean b)
-	{
-		this.isEnabled = b;
-	}
-
-	public void setType(int b)
-	{
-		this.type = b;
-	}
-	
-	public void setLocation(int x, int y)
-	{
-		this.x = x;
-		this.y = y;
-	}
-	
-	@Override @Deprecated
-	public void setSize(int width, int height)
-	{
-	}
-	
-	/*
-	 * Getters
-	 */
-
-	public int getType()
-	{
-		return type;
-	}
-
-	public boolean isEnabled()
-	{
-		return isEnabled;
-	}
-
-	public boolean isChecked()
-	{
-		return isChecked;
+		this.selectedChar = c;
 	}
 }

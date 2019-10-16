@@ -7,20 +7,20 @@
 
 package com.steve6472.sge.gfx;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.*;
+import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.BufferUtils;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL20.*;
 
 public class Tessellator
 {
-	public List<Float> vertices = new ArrayList<Float>();
-	public List<Float> texture = new ArrayList<Float>();
-	public List<Float> color = new ArrayList<Float>();
+	public List<Float> vertices = new ArrayList<>();
+	public List<Float> texture = new ArrayList<>();
+	public List<Float> color = new ArrayList<>();
 
 	public static final int POINTS 				= GL_POINTS; 				// 0
 	public static final int LINES 				= GL_LINES;					// 1
@@ -63,11 +63,11 @@ public class Tessellator
 		put(vx, vy, tx, ty, 1, 1, 1, 1);
 	}
 	
-	public void putPixelPerfect(float vx, float vy, float tx, float ty, float cr, float cg, float cb, float ca, Camera camera)
+	public void putPixelPerfect(float vx, float vy, float tx, float ty, float cr, float cg, float cb, float ca, float screenWidth, float screenHeight)
 	{
-		float w = 1f / (float) camera.getWidth();
-		float h = 1f / (float) camera.getHeight();
-		
+		float w = 1f / screenWidth;
+		float h = 1f / screenHeight;
+
 		put(w * vx * 2f - 1, h * -vy * 2f + 1, tx, ty, cr, cg, cb, ca);
 	}
 	

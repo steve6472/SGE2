@@ -7,45 +7,44 @@
 
 package com.steve6472.sge.gui.components;
 
-import com.steve6472.sge.gfx.Screen;
-import com.steve6472.sge.main.MainApplication;
-import com.steve6472.sge.main.Util;
+import com.steve6472.sge.gfx.Render;
+import com.steve6472.sge.gfx.font.CustomChar;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class ToggleButton extends Button
 {
 	private static final long serialVersionUID = -6577484150617733324L;
-	private boolean toggled = false;
+	private boolean toggled;
 
 	public ToggleButton(String text)
 	{
 		super(text);
+		toggled = false;
+		addClickEvent(c -> setToggled(!toggled));
+	}
+
+	public ToggleButton(CustomChar text)
+	{
+		super(text);
+		toggled = false;
+		addClickEvent(c -> setToggled(!toggled));
 	}
 
 	public ToggleButton()
 	{
+		toggled = false;
+		addClickEvent(c -> setToggled(!toggled));
 	}
 
 	@Override
-	protected void renderText(Screen screen)
+	protected void renderText()
 	{
 		if (toggled)
-			Screen.fillRect(getX(), getY(), getWidth(), getHeight(), Util.SELECTED_OVERLAY);
-		super.renderText(screen);
-	}
-	
-	@Override
-	public void init(MainApplication game)
-	{
-		super.init(game);
-		
-		addEvent(new ButtonEvents()
-		{
-			@Override
-			public void click()
-			{
-				toggled = !toggled;
-			}
-		});
+			Render.fillRect(getX(), getY(), getWidth(), getHeight(), scheme.hoveredFill.x, scheme.hoveredFill.y, scheme.hoveredFill.z, 0.5f);
+		super.renderText();
 	}
 	
 	public boolean isToggled()
@@ -56,6 +55,19 @@ public class ToggleButton extends Button
 	public void setToggled(boolean toggled)
 	{
 		this.toggled = toggled;
+		runChangeEvents();
+	}
+
+	private List<Consumer<ToggleButton>> changeEvent = new ArrayList<>();
+
+	public void addChangeEvent(Consumer<ToggleButton> event)
+	{
+		this.changeEvent.add(event);
+	}
+
+	protected void runChangeEvents()
+	{
+		changeEvent.forEach(c -> c.accept(this));
 	}
 
 }

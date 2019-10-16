@@ -1,86 +1,109 @@
 package com.steve6472.sge.gui.components;
 
+import com.steve6472.sge.gfx.SpriteRender;
+import com.steve6472.sge.gui.Component;
+import com.steve6472.sge.gui.components.schemes.Scheme;
+import com.steve6472.sge.gui.components.schemes.SchemeSlider;
+import com.steve6472.sge.main.MainApp;
+import com.steve6472.sge.main.events.Event;
+import com.steve6472.sge.main.events.ScrollEvent;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.steve6472.sge.gfx.RenderHelper;
-import com.steve6472.sge.gfx.Screen;
-import com.steve6472.sge.gui.Component;
-import com.steve6472.sge.main.MainApplication;
+import java.util.function.Consumer;
 
 public class Slider extends Component
 {
-	private static final long serialVersionUID = 4164297008969991704L;
-	
 	private double value = 0, maxValue = 100, minValue = 0, privateX;
 	public boolean autoInt = false;
+	protected int bWidth = 32, bHeight = 48;
+	public boolean snap = false;
 
-	protected List<ChangeEvent> changeEvent = new ArrayList<ChangeEvent>();
-	
-	@Override
-	public void init(MainApplication game)
-	{
-		recalculate();
-	}
+	protected List<Consumer<Slider>> changeEvent = new ArrayList<>();
 
-	@Override
-	public void render(Screen screen)
-	{
-		RenderHelper.renderDoubleBorderComponent(this, 0xff000000, 0xff606060, 0xff3f3f3f);
+	public SchemeSlider scheme;
 
-		RenderHelper.renderButton(moveX, getY() - 8, 32, 48, true, selected);
-		
-	}
-
-//	protected void sliderChange()
-//	{
-//		privateX = getX() - getMouseHandler().getMouseX(); //mouse pos relativly to component
-//		
-//		changeEvent.forEach((ce) -> ce.change());
-//	}
-	
 	private boolean setted = false;
 	private double oldValue = 0;
 	private int moveX = 0;
-	private boolean selected = false;
+	protected boolean hovered = false;
+	protected boolean enabled = true;
 	private boolean flag0 = false;
 	
+	@Override
+	public void init(MainApp main)
+	{
+		recalculate();
+		if (scheme == null)
+			setScheme(main.getSchemeRegistry().getCurrentScheme("slider"));
+	}
+
+	public void setScheme(Scheme scheme)
+	{
+		this.scheme = (SchemeSlider) scheme;
+	}
+
+	@Override
+	public void render()
+	{
+		renderBar();
+
+		int x = snap ? ((int) (getIValue() * (getWidth() / getMaxValue())) + getX() - (bWidth / 2)) : moveX;
+
+		if (enabled && !hovered)
+			SpriteRender.renderDoubleBorder(x, getY() + ((height - bHeight) / 2), bWidth, bHeight, scheme.buttonEnabledOutsideBorder, scheme.buttonEnabledInsideBorder, scheme.buttonEnabledFill);
+
+		if (!enabled)
+			SpriteRender.renderDoubleBorder(x, getY() + ((height - bHeight) / 2), bWidth, bHeight, scheme.buttonDisabledOutsideBorder, scheme.buttonDisabledInsideBorder, scheme.buttonDisabledFill);
+
+		if (enabled && hovered)
+			SpriteRender.renderDoubleBorder(x, getY() + ((height - bHeight) / 2), bWidth, bHeight, scheme.buttonHoveredOutsideBorder, scheme.buttonHoveredInsideBorder, scheme.buttonHoveredFill);
+	}
+
+	protected void renderBar()
+	{
+		SpriteRender.renderDoubleBorder(x, y, width, height, scheme.sliderOutsideBorder, scheme.sliderInsideBorder, scheme.sliderFill);
+	}
+
 	@Override
 	public void tick()
 	{
 		tickComponents();
+
+		if (!enabled)
+			return;
 		
-		if (!getMouseHandler().isMouseHolded() && flag0)
+		if (!isLMBHolded() && flag0)
 		{
 			flag0 = false;
-			selected = false;
+			hovered = false;
 		}
 		
-		if (getMouseHandler().isMouseHolded())
+		if (isLMBHolded())
 		{
 			if (!flag0)
 			{
 				flag0 = true;
-				selected = isCursorInComponent(getX(), getY(), getWidth(), getHeight()) || isCursorInComponent(moveX, getY() - 8, 32, 48);
+				hovered = isCursorInComponent(getX(), getY(), getWidth(), getHeight()) || isCursorInComponent(moveX, getY() + ((height - bHeight) / 2), bWidth, bHeight);
 			}
 		}
 
-		if (!selected)
+		if (!hovered)
 			return;
 		
 		if (!setted)
 		{
-			if (getMouseHandler().isMouseHolded())
-				privateX = getX() - getMouseHandler().getMouseX();
+			if (isLMBHolded())
+				privateX = getX() - getMouseX();
 		} else
 		{
 			setted = false;
 		}
-		
+
 		double max = getMaxValue();
 
 		double valueBuffer = -((privateX * max) / (double) getWidth()); //Some weird shit
-		
+
 //		int oldValue = getValue();
 		
 		if (valueBuffer > getMaxValue())
@@ -98,19 +121,19 @@ public class Slider extends Component
 //		{
 //			slider.setToolTipText("Value:" + getValue());
 //		}
-		
-		moveX = (int) (getX() - 16 - privateX); //Center to the slider
 
-		if (privateX + 8 > 0)
-			moveX = getX() - 8;
+		moveX = (int) (getX() - bWidth / 2D - privateX); //Center to the slider
 
-		if (privateX - 8 < (-getWidth()))
-			moveX = getX() + getWidth() - 24;
+		if (privateX + (bWidth / 4) > 0)
+			moveX = getX() - (bWidth / 4);
+
+		if (privateX - (bWidth / 4) < (-getWidth()))
+			moveX = getX() + getWidth() - (bWidth - (bWidth / 4));
 
 		if (this.oldValue != value)
 		{
 			this.oldValue = value;
-			changeEvent.forEach(ce -> ce.change());
+			changeEvent.forEach(c -> c.accept(this));
 		}
 	}
 	
@@ -118,15 +141,15 @@ public class Slider extends Component
 	{
 		if (getMaxValue() == 0)
 		{
-			privateX = -getWidth();
+			privateX = -width;
 			return;
 		}
 		
-		privateX = -((int) ((value * getWidth()) / getMaxValue()));
+		privateX = -((value * getWidth()) / getMaxValue());
 		
 		float max = (float) getMaxValue();
 
-		double valueBuffer = -((privateX * max) / getWidth()); //Some weird s#*t
+		double valueBuffer = -((privateX * max) / (double) width); //Some weird overlays#*t
 		
 		if (valueBuffer > getMaxValue())
 		{
@@ -138,14 +161,21 @@ public class Slider extends Component
 		{
 			value = valueBuffer;
 		}
-		
-		moveX = (int) (getX() - 16 - privateX); //Center to the slider
 
-		if (privateX + 8 > 0)
-			moveX = getX() - 8;
+		moveX = (int) (x - bWidth / 2D - privateX); //Center to the slider
 
-		if (privateX - 8 < (-getWidth()))
-			moveX = getX() + getWidth() - 24;
+		if (privateX + (bWidth / 4) > 0)
+			moveX = x - (bWidth / 4);
+
+		if (privateX - (bWidth / 4) < (-width))
+			moveX = x + width - (bWidth - (bWidth / 4));
+	}
+
+	@Event
+	public void scroll(ScrollEvent e)
+	{
+		if (isEnabled() && (isCursorInComponent() || isCursorInComponent(moveX, getY() + ((height - bHeight) / 2), bWidth, bHeight)))
+			setValue(getValue() - e.getyOffset());
 	}
 	
 	/*
@@ -175,21 +205,25 @@ public class Slider extends Component
 	{
 		this.minValue = minValue;
 	}
-	
-	public void setSize(int width)
-	{
-		if (width < 64)
-			width = 64;
-		super.setSize(width, 32);
-	}
-	
+
 	@Override
 	public void setSize(int width, int height)
 	{
-		setSize(width);
+		super.setSize(width, height);
 		recalculate();
 	}
-	
+
+	public void setButtonSize(int width, int height)
+	{
+		this.bWidth = width;
+		this.bHeight = height;
+	}
+
+	public void setEnabled(boolean enabled)
+	{
+		this.enabled = enabled;
+	}
+
 	@Override
 	public void setLocation(int x, int y)
 	{
@@ -198,7 +232,7 @@ public class Slider extends Component
 		recalculate();
 	}
 	
-	public void addChangeEvent(ChangeEvent ce)
+	public void addChangeEvent(Consumer<Slider> ce)
 	{
 		changeEvent.add(ce);
 	}
@@ -211,10 +245,10 @@ public class Slider extends Component
 	{
 		return autoInt ? (int) value : value;
 	}
-	
+
 	public int getIValue()
 	{
-		return (int) value;
+		return (int) Math.floor(value);
 	}
 	
 	public double getMaxValue()
@@ -226,16 +260,14 @@ public class Slider extends Component
 	{
 		return minValue;
 	}
-	
-	@Override
-	protected int getMinWidth()
+
+	public boolean isHovered()
 	{
-		return 64;
+		return hovered;
 	}
-	
-	@Override
-	protected int getMinHeight()
+
+	public boolean isEnabled()
 	{
-		return 32;
+		return enabled;
 	}
 }

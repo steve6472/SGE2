@@ -1,0 +1,8 @@
+//id = path
+// * at the start of path means inbuilt scheme
+
+button = *dark/button.txt
+background = *dark/background.txt
+slider = *dark/slider.txt
+listItemButton = *dark/listItemButton.txt
+textField = *dark/textField.txt

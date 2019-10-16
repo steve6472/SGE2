@@ -45,4 +45,9 @@ public class MouseEvent extends AbstractEvent
 		return y;
 	}
 
+	@Override
+	public String toString()
+	{
+		return "MouseEvent{" + "x=" + x + ", y=" + y + ", button=" + button + ", action=" + action + ", mods=" + mods + '}';
+	}
 }

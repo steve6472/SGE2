@@ -54,25 +54,25 @@ public class Download extends Observable implements Runnable
         download();
     }
 
-    // Get this download's URL.
+    // Get this download'overlays URL.
     public String getUrl() 
 	{
         return url.toString();
     }
 
-    // Get this download's size.
+    // Get this download'overlays size.
     public int getSize() 
 	{
         return size;
     }
 
-    // Get this download's progress.
+    // Get this download'overlays progress.
     public double getProgress() 
 	{
         return ((double) downloaded / size) * 100;
     }
 
-    // Get this download's status.
+    // Get this download'overlays status.
     public int getStatus() 
 	{
         return status;
@@ -222,7 +222,7 @@ public class Download extends Observable implements Runnable
         }
     }
 
-    // Notify observers that this download's status has changed.
+    // Notify observers that this download'overlays status has changed.
     private void stateChanged() 
 	{
         setChanged();

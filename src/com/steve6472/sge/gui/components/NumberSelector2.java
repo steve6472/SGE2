@@ -1,65 +1,56 @@
 package com.steve6472.sge.gui.components;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
-
-import com.steve6472.sge.gfx.Font;
-import com.steve6472.sge.gfx.RenderHelper;
-import com.steve6472.sge.gfx.Screen;
-import com.steve6472.sge.gui.Component;
-import com.steve6472.sge.main.KeyList;
-import com.steve6472.sge.main.MainApplication;
-import com.steve6472.sge.main.game.AABB;
-import com.steve6472.sge.main.game.Vec2;
-
-public class NumberSelector2 extends Component implements KeyList
-{
+@Deprecated
+public class NumberSelector2// extends Component
+{/*
 	private static final long serialVersionUID = 6097537167658644896L;
-	double leftValue, rightValue, rightMax = 16, leftMax = 16, rightMin = -16, leftMin = -16;
-	private List<ChangeEvent> changeEvents = new ArrayList<ChangeEvent>();
+	private double leftValue, rightValue, rightMax = 16, leftMax = 16, rightMin = -16, leftMin = -16;
+	private List<ChangeEvent> changeEvents = new ArrayList<>();
 	private boolean enabled = true;
+	public int decimal = 4;
 	
 	private boolean addRightHovered, removeRightHovered, round, addLeftHovered, removeLeftHovered;
-	private Vec2 addCenter = new Vec2(), removeCenter = new Vec2();
+	private Vector2f addCenter = new Vector2f(), removeCenter = new Vector2f();
 	
 	@Override
-	public void init(MainApplication game)
+	public void init(MainApp game)
 	{
-		getMouseHandler().addMouseButtonCallback((x, y, button, action, mods) ->
+	}
+
+	@Event
+	public void mouseEvent(MouseEvent event)
+	{
+		if (enabled && event.getAction() == PRESS)
 		{
-			if (enabled && action == PRESS)
+			double modifyValue = 1;
+			if (event.getButton() == 0)
 			{
-				double modifyValue = 1;
-				if (button == 0)
-				{
-					if (isKeyPressed(L_SHIFT)) 		modifyValue = 10;
-					if (isKeyPressed(L_CONTROL)) 	modifyValue = 100;
-					if (isKeyPressed(L_ALT)) 		modifyValue = 1000;
-				}
-				if (button == 1)
-				{
-					modifyValue = 0.1;
-					if (isKeyPressed(L_SHIFT)) 		modifyValue = 0.01;
-					if (isKeyPressed(L_CONTROL)) 	modifyValue = 0.001;
-					if (isKeyPressed(L_ALT)) 		modifyValue = 0.0001;
-				}
-				
-				if (addLeftHovered)
-					addLeftValue(modifyValue);
-				if (removeLeftHovered)
-					removeLeftValue(modifyValue);
-				if (addRightHovered)
-					addRightValue(modifyValue);
-				if (removeRightHovered)
-					removeRightValue(modifyValue);
-				
-				if (addLeftHovered || removeLeftHovered || addRightHovered || removeRightHovered)
-				{
-					changeEvents.forEach((c) -> c.change());
-				}
+				if (isKeyPressed(L_SHIFT)) 		modifyValue = 10;
+				if (isKeyPressed(L_CONTROL)) 	modifyValue = 100;
+				if (isKeyPressed(L_ALT)) 		modifyValue = 1000;
 			}
-		});
+			if (event.getButton() == 1)
+			{
+				modifyValue = 0.1;
+				if (isKeyPressed(L_SHIFT)) 		modifyValue = 0.01;
+				if (isKeyPressed(L_CONTROL)) 	modifyValue = 0.001;
+				if (isKeyPressed(L_ALT)) 		modifyValue = 0.0001;
+			}
+
+			if (addLeftHovered)
+				addLeftValue(modifyValue);
+			if (removeLeftHovered)
+				removeLeftValue(modifyValue);
+			if (addRightHovered)
+				addRightValue(modifyValue);
+			if (removeRightHovered)
+				removeRightValue(modifyValue);
+
+			if (addLeftHovered || removeLeftHovered || addRightHovered || removeRightHovered)
+			{
+				changeEvents.forEach(ChangeEvent::change);
+			}
+		}
 	}
 	
 	@Override
@@ -73,29 +64,31 @@ public class NumberSelector2 extends Component implements KeyList
 	}
 
 	@Override
-	public void render(Screen screen)
+	public void render()
 	{
-		RenderHelper.renderSingleBorder(x + width / 4, y, width / 2, height, 0xff7f7f7f, 0xff000000);
+		UIHelper.renderSingleBorder(x + width / 4, y, width / 2, height, 0xff7f7f7f, 0xff000000);
 
-		RenderHelper.renderButton(x, y, width / 4, height / 2 + 1, enabled, addLeftHovered);
-		RenderHelper.renderButton(x, y + height / 2 - 1, width / 4, height / 2 + 1, enabled, removeLeftHovered);
-		Font.render("\u0000", removeCenter.getIX(), removeCenter.getIY() - 9);
-		Font.render("\u0001", removeCenter.getIX(), removeCenter.getIY() + 9);
+		UIHelper.renderButton(x, y, width / 4, height / 2 + 1, enabled, addLeftHovered);
+		UIHelper.renderButton(x, y + height / 2 - 1, width / 4, height / 2 + 1, enabled, removeLeftHovered);
+		Font.render("\u0000", (int) removeCenter.x(), (int) removeCenter.y() - 9);
+		Font.render("\u0001", (int) removeCenter.x(), (int) removeCenter.y() + 9);
 
-		RenderHelper.renderButton(x + (int) ((double) width / 4d * 3d), y, width / 4, height / 2 + 1, enabled, addRightHovered);
-		RenderHelper.renderButton(x + (int) ((double) width / 4d * 3d), y + height / 2 - 1, width / 4, height / 2 + 1, enabled, removeRightHovered);
-		Font.render("\u0000", addCenter.getIX(), addCenter.getIY() - 9);
-		Font.render("\u0001", addCenter.getIX(), addCenter.getIY() + 9);
+		UIHelper.renderButton(x + (int) ((double) width / 4d * 3d), y, width / 4, height / 2 + 1, enabled, addRightHovered);
+		UIHelper.renderButton(x + (int) ((double) width / 4d * 3d), y + height / 2 - 1, width / 4, height / 2 + 1, enabled, removeRightHovered);
+		Font.render("\u0000", (int) addCenter.x(), (int) addCenter.y() - 9);
+		Font.render("\u0001", (int) addCenter.x(), (int) addCenter.y() + 9);
 		
-		Screen.fillRect(x + width / 4, y + 19, width / 2, 2, 0xff7f7f7f);
+		Render.fillRect(x + width / 4, y + 19, width / 2, 2, 0xff7f7f7f);
+
+		String df = "%." + decimal + "f";
 		
-		Font.render(String.format(Locale.US, "%.4f", leftValue), getX() + getWidth() / 2 - String.format(Locale.US, "%.4f", leftValue).length() * 4, getY() + getHeight () / 2 - 4 - 8);
-		Font.render(String.format(Locale.US, "%.4f", rightValue), getX() + getWidth() / 2 - String.format(Locale.US, "%.4f", rightValue).length() * 4, getY() + getHeight () / 2 - 4 + 9);
+		Font.render(String.format(Locale.US, df, leftValue), getX() + getWidth() / 2 - String.format(Locale.US, df, leftValue).length() * 4, getY() + getHeight () / 2 - 4 - 8);
+		Font.render(String.format(Locale.US, df, rightValue), getX() + getWidth() / 2 - String.format(Locale.US, df, rightValue).length() * 4, getY() + getHeight () / 2 - 4 + 9);
 	}
 
 	/*
 	 * Operators
-	 */
+	 *//*
 
 	public void addLeftValue(double i)
 	{
@@ -156,13 +149,13 @@ public class NumberSelector2 extends Component implements KeyList
 	public void setSize(int width, int height)
 	{
 		super.setSize(width, height);
-		removeCenter = Font.stringCenter(new AABB(new Vec2(getX(), getY()), getWidth() / 4, getHeight()), " ", 1);
-		addCenter = Font.stringCenter(new AABB(new Vec2(getX() + getWidth() / 4 * 3, getY()), getWidth() / 4, getHeight()), " ", 1);
+		Font.stringCenter(x, y, width / 4, height, " ", 1, removeCenter);
+		Font.stringCenter(x + (width / 4 * 3), y, width / 4, height, " ", 1, addCenter);
 	}
 	
 	/*
 	 * Setters
-	 */
+	 *//*
 
 	public void setLeftValue(double value)
 	{
@@ -194,11 +187,6 @@ public class NumberSelector2 extends Component implements KeyList
 		this.rightMin = rightMin;
 	}
 	
-	public void setLocation(int x, int y)
-	{
-		super.setLocation(x, y);
-	}
-	
 	public void setEnabled(boolean enabled)
 	{
 		this.enabled = enabled;
@@ -211,7 +199,7 @@ public class NumberSelector2 extends Component implements KeyList
 	
 	/*
 	 * Getters
-	 */
+	 *//*
 	
 	public double getLeftMax()
 	{
@@ -251,5 +239,5 @@ public class NumberSelector2 extends Component implements KeyList
 	public boolean isRound()
 	{
 		return round;
-	}
+	}*/
 }

@@ -7,14 +7,14 @@
 
 package com.steve6472.sge.gfx;
 
-import static org.lwjgl.opengl.GL20.*;
-
-import java.nio.FloatBuffer;
-
+import com.steve6472.sge.main.Util;
+import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 
-import com.steve6472.sge.main.Util;
+import java.nio.FloatBuffer;
+
+import static org.lwjgl.opengl.GL20.*;
 
 /**
  * 
@@ -34,14 +34,16 @@ public class Shader
 		program = glCreateProgram();
 		
 		vs = glCreateShader(GL_VERTEX_SHADER);
-		glShaderSource(vs, readFile(fileName + ".vs"));
+		String vsS = readFile(fileName + ".vs");
+		glShaderSource(vs, vsS);
 		
 		glCompileShader(vs);
 		
 		if (glGetShaderi(vs, GL_COMPILE_STATUS) != 1)
 		{
+//			System.out.println(vsS);
 			System.err.println("VS:\n" + glGetShaderInfoLog(vs));
-			System.exit(1);
+			throw new ExceptionInInitializerError();
 		}
 		
 		
@@ -53,36 +55,43 @@ public class Shader
 		if (glGetShaderi(fs, GL_COMPILE_STATUS) != 1)
 		{
 			System.err.println("FS:\n" + glGetShaderInfoLog(fs));
-			System.exit(1);
+			throw new ExceptionInInitializerError();
 		}
 
 		glAttachShader(program, vs);
 		glAttachShader(program, fs);
 
-		glBindAttribLocation(program, 0, "vertices");
-		glBindAttribLocation(program, 1, "textures");
+//		glBindAttribLocation(program, 0, "vertices");
+//		glBindAttribLocation(program, 1, "textures");
 		
 		glLinkProgram(program);
 		
 		if (glGetProgrami(program, GL_LINK_STATUS) != 1)
 		{
-			System.err.println(glGetProgramInfoLog(program));
-			System.exit(1);
+			System.err.println("Program:\n" + glGetProgramInfoLog(program));
+			throw new ExceptionInInitializerError();
 		}
 		
 		glValidateProgram(program);
 		
 		if (glGetProgrami(program, GL_VALIDATE_STATUS) != 1)
 		{
-			System.err.println(glGetProgramInfoLog(program));
-			System.exit(1);
+			System.err.println("Program but different:\n" + glGetProgramInfoLog(program));
+			throw new ExceptionInInitializerError();
 		}
 		
-		System.out.println("Created shader from " + fileName + " vs:" + vs + " fs:" + fs + " program:" + program);
+//		System.out.println("Created shader from " + fileName + " vs:" + vs + " fs:" + fs + " program:" + program);
 	}
 	
 	public void updateShader(String fileName)
 	{
+//		glDeleteProgram(program);
+//		glDeleteShader(vs);
+//		glDeleteShader(fs);
+
+//		program = glCreateProgram();
+
+//		vs = glCreateShader(GL_VERTEX_SHADER);
 		glShaderSource(vs, readFile(fileName + ".vs"));
 		
 		glCompileShader(vs);
@@ -90,10 +99,11 @@ public class Shader
 		if (glGetShaderi(vs, GL_COMPILE_STATUS) != 1)
 		{
 			System.err.println("VS:\n" + glGetShaderInfoLog(vs));
-			System.exit(1);
+//			throw new ExceptionInInitializerError();
 		}
-		
-		
+
+
+//		fs = glCreateShader(GL_FRAGMENT_SHADER);
 		glShaderSource(fs, readFile(fileName + ".fs"));
 		
 		glCompileShader(fs);
@@ -101,7 +111,7 @@ public class Shader
 		if (glGetShaderi(fs, GL_COMPILE_STATUS) != 1)
 		{
 			System.err.println("FS:\n" + glGetShaderInfoLog(fs));
-			System.exit(1);
+//			throw new ExceptionInInitializerError();
 		}
 
 		glLinkProgram(program);
@@ -109,7 +119,7 @@ public class Shader
 		if (glGetProgrami(program, GL_LINK_STATUS) != 1)
 		{
 			System.err.println(glGetProgramInfoLog(program));
-			System.exit(1);
+//			throw new ExceptionInInitializerError();
 		}
 		
 		glValidateProgram(program);
@@ -117,10 +127,10 @@ public class Shader
 		if (glGetProgrami(program, GL_VALIDATE_STATUS) != 1)
 		{
 			System.err.println(glGetProgramInfoLog(program));
-			System.exit(1);
+//			throw new ExceptionInInitializerError();
 		}
 		
-		System.out.println("Updated shader from " + fileName + " vs:" + vs + " fs:" + fs + " program:" + program);
+//		System.out.println("Updated shader from " + fileName + " vs:" + vs + " fs:" + fs + " program:" + program);
 	}
 	
 	public Shader(String VS, String FS)
@@ -134,8 +144,8 @@ public class Shader
 		
 		if (glGetShaderi(vs, GL_COMPILE_STATUS) != 1)
 		{
-			System.err.println(glGetShaderInfoLog(vs));
-			System.exit(1);
+			System.err.println("VS:\n" + glGetShaderInfoLog(vs));
+			throw new ExceptionInInitializerError();
 		}
 		
 		
@@ -146,8 +156,8 @@ public class Shader
 		
 		if (glGetShaderi(fs, GL_COMPILE_STATUS) != 1)
 		{
-			System.err.println(glGetShaderInfoLog(fs));
-			System.exit(1);
+			System.err.println("FS:\n" + glGetShaderInfoLog(fs));
+			throw new ExceptionInInitializerError();
 		}
 
 		glAttachShader(program, vs);
@@ -161,7 +171,7 @@ public class Shader
 		if (glGetProgrami(program, GL_LINK_STATUS) != 1)
 		{
 			System.err.println(glGetProgramInfoLog(program));
-			System.exit(1);
+			throw new ExceptionInInitializerError();
 		}
 		
 		glValidateProgram(program);
@@ -169,12 +179,17 @@ public class Shader
 		if (glGetProgrami(program, GL_VALIDATE_STATUS) != 1)
 		{
 			System.err.println(glGetProgramInfoLog(program));
-			System.exit(1);
+			throw new ExceptionInInitializerError();
 		}
 		
-		System.out.println("Created shader from strings" + " vs:" + vs + " fs:" + fs + " program:" + program);
+//		System.out.println("Created shader from strings" + " vs:" + vs + " fs:" + fs + " program:" + program);
 	}
-	
+
+	public int getProgram()
+	{
+		return program;
+	}
+
 	public Shader setUniform1f(String name, float v1)
 	{
 		int location = glGetUniformLocation(program, name);
@@ -238,6 +253,16 @@ public class Shader
 			glUniform4i(location, v1, v2, v3, v4);
 		return this;
 	}
+
+	public Shader setUniformMat3f(String name, Matrix3f m1)
+	{
+		int location = glGetUniformLocation(program, name);
+		FloatBuffer b1 = BufferUtils.createFloatBuffer(9);
+		m1.get(b1);
+		if (location != -1)
+			glUniformMatrix3fv(location, false, b1);
+		return this;
+	}
 	
 	public Shader setUniformMat4f(String name, Matrix4f m1)
 	{
@@ -248,18 +273,33 @@ public class Shader
 			glUniformMatrix4fv(location, false, b1);
 		return this;
 	}
+
+	private static int currentShader;
 	
 	public void bind()
 	{
 		glUseProgram(program);
+		currentShader = program;
 	}
 	
 	public static void releaseShader()
 	{
 		glUseProgram(0);
+		currentShader = 0;
 	}
 
-	private String readFile(String file)
+	public static void bindShader(int id)
+	{
+		glUseProgram(id);
+		currentShader = id;
+	}
+
+	public static int getCurrentShader()
+	{
+		return currentShader;
+	}
+
+	public static String readFile(String file)
 	{
 		String[] arr = Util.loadDataFromFile(file);
 		StringBuilder string = new StringBuilder();
@@ -267,6 +307,7 @@ public class Shader
 		{
 			if (s.startsWith("#") && s.substring(0, 8).equals("#include"))
 			{
+				System.out.println("Including from " + s);
 				string.append(include(s));
 			} else
 			{
@@ -279,7 +320,7 @@ public class Shader
 		return string.toString();
 	}
 	
-	private StringBuilder include(String line)
+	private static StringBuilder include(String line)
 	{
 		String path = line.split(" ")[1];
 		String[] arr = Util.loadDataFromFile(path);

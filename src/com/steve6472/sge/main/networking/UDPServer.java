@@ -7,6 +7,11 @@
 
 package com.steve6472.sge.main.networking;
 
+import com.steve6472.sge.main.Util;
+import com.steve6472.sge.main.networking.packet.DataStream;
+import com.steve6472.sge.main.networking.packet.IPacketHandler;
+import com.steve6472.sge.main.networking.packet.Packet;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -16,11 +21,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.steve6472.sge.main.Util;
-import com.steve6472.sge.main.networking.packet.DataStream;
-import com.steve6472.sge.main.networking.packet.IPacketHandler;
-import com.steve6472.sge.main.networking.packet.Packet;
-
 public abstract class UDPServer extends Thread
 {
 	private DatagramSocket socket;
@@ -29,7 +29,7 @@ public abstract class UDPServer extends Thread
 	
 	public UDPServer(int port)
 	{
-		clients = new ArrayList<ConnectedClient>();
+		clients = new ArrayList<>();
 		
 		try
 		{
@@ -108,7 +108,7 @@ public abstract class UDPServer extends Thread
 			}
 		}
 	}
-	
+
 	public abstract void clientConnectEvent(DatagramPacket packet);
 	
 	public abstract void clientDisconnectEvent(DatagramPacket packet);
@@ -239,5 +239,10 @@ public abstract class UDPServer extends Thread
 		{
 			sendData(data, cc.getIp(), cc.getPort());
 		}
+	}
+
+	public final int getClientCount()
+	{
+		return clients.size();
 	}
 }

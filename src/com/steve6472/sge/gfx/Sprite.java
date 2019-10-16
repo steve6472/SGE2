@@ -1,19 +1,19 @@
 package com.steve6472.sge.gfx;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.*;
+import com.steve6472.sge.main.MainApp;
+import org.lwjgl.BufferUtils;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
-import javax.imageio.ImageIO;
-
-import org.lwjgl.BufferUtils;
-
-import com.steve6472.sge.main.MainApplication;
+import static com.steve6472.sge.main.util.ColorUtil.*;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
+import static org.lwjgl.opengl.GL13.glActiveTexture;
 
 public class Sprite
 {
@@ -35,11 +35,16 @@ public class Sprite
 	public Sprite(File file)
 	{
 		BufferedImage image = load(file);
-//		System.out.println(image.getWidth() * image.getHeight() + " " + file.getAbsolutePath());
+//		System.out.println(image.getWindowWidth() * image.getWindowHeight() + " " + file.getAbsolutePath());
 		create(image.getRGB(0, 0, image.getWidth(), image.getHeight(), null, 0, image.getWidth()), image.getWidth(), image.getHeight());
 	}
 	
 	public Sprite(String fileName)
+	{
+		load(fileName);
+	}
+
+	public void load(String fileName)
 	{
 		if (fileName.startsWith("*"))
 		{
@@ -54,9 +59,9 @@ public class Sprite
 			{
 				fileName = "/" + fileName;
 			}
-			
+
 			fileName = "/textures" + fileName;
-			BufferedImage image = load(MainApplication.class.getResourceAsStream(fileName));
+			BufferedImage image = load(MainApp.class.getResourceAsStream(fileName));
 			create(image.getRGB(0, 0, image.getWidth(), image.getHeight(), null, 0, image.getWidth()), image.getWidth(), image.getHeight());
 		}
 	}
@@ -109,6 +114,16 @@ public class Sprite
 		
 		return pixels;
 	}
+
+	public void deleteSprite()
+	{
+		if (id == -1) return;
+
+		glDeleteTextures(id);
+		id = -1;
+		width = 0;
+		height = 0;
+	}
 	
 	private BufferedImage load(File file)
 	{
@@ -117,6 +132,7 @@ public class Sprite
 			return ImageIO.read(file);
 		} catch (IOException e)
 		{
+			System.err.println(file.getAbsolutePath());
 			e.printStackTrace();
 			return null;
 		}
@@ -140,6 +156,16 @@ public class Sprite
 	}
 
 	public void bind(int sampler)
+	{
+		if (id != -1)
+		{
+			if (sampler >= 0 && sampler <= 31)
+				glActiveTexture(GL_TEXTURE0 + sampler);
+			glBindTexture(GL_TEXTURE_2D, id);
+		}
+	}
+
+	public static void bind(int sampler, int id)
 	{
 		if (id != -1)
 		{
@@ -226,6 +252,16 @@ public class Sprite
 		
 		glDisable(GL_TEXTURE_2D);
 	}
+
+	public void change(boolean nearest)
+	{
+		glBindTexture(GL_TEXTURE_2D, getId());
+
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, nearest ? GL_NEAREST : GL_LINEAR);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, nearest ? GL_NEAREST : GL_LINEAR);
+
+		glDisable(GL_TEXTURE_2D);
+	}
 	
 	public static int[] fromRGBtoBGR(int[] pixels)
 	{
@@ -234,11 +270,11 @@ public class Sprite
 		for (int i = 0; i < newPixels.length; i++)
 		{
 			int oldPixel = pixels[i];
-			int r = Screen.getRed(oldPixel);
-			int g = Screen.getGreen(oldPixel);
-			int b = Screen.getBlue(oldPixel);
-			int a = Screen.getAlpha(oldPixel);
-			int newPixel = Screen.getColor(b, g, r, a);
+			int r = getRed(oldPixel);
+			int g = getGreen(oldPixel);
+			int b = getBlue(oldPixel);
+			int a = getAlpha(oldPixel);
+			int newPixel = getColor(b, g, r, a);
 			newPixels[i] = newPixel;
 		}
 		return newPixels;

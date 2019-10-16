@@ -12,7 +12,8 @@ import com.steve6472.sge.main.Util;
 public enum DataType
 {
 	BOOLEAN(Boolean.class), BYTE(Byte.class), CHAR(Character.class), SHORT(Short.class), INT(Integer.class), LONG(Long.class), FLOAT(
-			Float.class), DOUBLE(Double.class), STRING(String.class), HEX(null), STRINGARRAY(String[].class);
+			Float.class), DOUBLE(Double.class), STRING(String.class), HEX(null), STRINGARRAY(String[].class), INTARRAY(int[].class),
+	NULL(null), OBJECTARRAY(Object[].class);
 
 	protected Class<?> clazz;
 
@@ -23,33 +24,38 @@ public enum DataType
 	
 	public static Object getObject(DataType type, String value)
 	{
-		switch (type)
+		return switch (type)
 		{
-		case BOOLEAN:
-			return new Boolean(value);
-		case BYTE:
-			return new Byte(value);
-		case CHAR:
-			value.charAt(0);
-		case DOUBLE:
-			return new Double(value);
-		case FLOAT:
-			return new Float(value);
-		case HEX:
-			return Util.getIntFromHex(value);
-		case INT:
-			return new Integer(value);
-		case LONG:
-			return new Long(value);
-		case SHORT:
-			return new Short(value);
-		case STRING:
-			return new String(value);
-		case STRINGARRAY:
-			return "---Not supported---";
-		default:
-			return "---This should not happen---";
-		
-		}
+			case BOOLEAN -> Boolean.valueOf(value);
+			case BYTE -> Byte.valueOf(value);
+			case CHAR -> value.charAt(0);
+			case DOUBLE -> Double.valueOf(value);
+			case FLOAT -> Float.valueOf(value);
+			case HEX -> Util.getIntFromHex(value);
+			case INT -> Integer.valueOf(value);
+			case LONG -> Long.valueOf(value);
+			case SHORT -> Short.valueOf(value);
+			case STRING -> value;
+			case NULL -> null;
+			case STRINGARRAY, INTARRAY, OBJECTARRAY -> "---Not supported---";
+			default -> "---This should not happen---";
+		};
+	}
+
+	public static DataType getDataType(Object o)
+	{
+		if (o instanceof Boolean) return BOOLEAN;
+		if (o instanceof Byte) return BYTE;
+		if (o instanceof Character) return CHAR;
+		if (o instanceof Short) return SHORT;
+		if (o instanceof Integer) return INT;
+		if (o instanceof Long) return LONG;
+		if (o instanceof Float) return FLOAT;
+		if (o instanceof Double) return DOUBLE;
+		if (o instanceof String) return STRING;
+		if (o instanceof String[]) return STRINGARRAY;
+		if (o instanceof Integer[] || o instanceof int[]) return INTARRAY;
+		if (o instanceof Object[]) return OBJECTARRAY;
+		return NULL;
 	}
 }

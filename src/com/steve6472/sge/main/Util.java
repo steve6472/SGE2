@@ -1,32 +1,16 @@
 package com.steve6472.sge.main;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
-import java.io.Serializable;
+import com.steve6472.sge.main.util.RandomUtil;
+import org.joml.Vector2f;
+
+import java.io.*;
 import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
-import com.steve6472.sge.main.game.AABB;
-import com.steve6472.sge.main.game.Vec2;
-
 public class Util
 {
-
 	public static final int HOVERED_OVERLAY = 0x807f87be;
 	public static final int SELECTED_OVERLAY = 0x806d76ad;
 	public static final double PYThAGORASRATIO = 1.4142135623730950488016887242097;
@@ -42,298 +26,66 @@ public class Util
 	{
 		return String.format("%tY.%tm.%te-%tH.%tM.%tS", Calendar.getInstance(), Calendar.getInstance(), Calendar.getInstance(), Calendar.getInstance(), Calendar.getInstance(), Calendar.getInstance());
 	}
-	
-	/**
-	 * I just like the method from C++ :D
-	 * @param s
-	 * @param objects
-	 */
-	public static void printf(String s, Object... objects)
-	{
-		System.out.println(String.format(s, objects));
-	}
-	/**
-	 * I just like the method from C++ :D
-	 * @param s
-	 * @param objects
-	 */
-	public static void printfd(String s, Object... objects)
-	{
-		System.err.println(String.format(s, objects));
-	}
-	
-	/**
-	 * @param r_1
-	 * @param r_2
-	 * @return
-	 */
-	public static double getDistance(AABB from, AABB to)
-	{
 
-		double a = -((from.getCenterY()) - (to.getCenterY()));
-		double b = -((from.getCenterX()) - (to.getCenterX()));
-		
-		return Math.sqrt((a * a) + (b * b));
+	public static boolean isEven(int number)
+	{
+		return number % 2 == 0;
 	}
-	
+
 	public static double getDistance(int fromX, int fromY, int toX, int toY)
 	{
-
 		double a = -((fromY) - (toY));
 		double b = -((fromX) - (toX));
 		
 		return Math.sqrt((a * a) + (b * b));
 	}
-	
-	/**
-	 * @return
-	 */
-	public static double getDistance(Vec2 from, Vec2 to)
-	{
 
-		double a = -((from.getY()) - (to.getY()));
-		double b = -((from.getX()) - (to.getX()));
-		
+	public static double getDistance(double fromX, double fromY, double toX, double toY)
+	{
+		double a = -((fromY) - (toY));
+		double b = -((fromX) - (toX));
+
 		return Math.sqrt((a * a) + (b * b));
 	}
 
-	/**
-	 * 
-	 * @param max
-	 * @param min
-	 * @return if max == min returns max, if max > min returns random number
-	 */
-	public static int getRandomInt(int max, int min)
+	public static float getDistance(float fromX, float fromY, float toX, float toY)
 	{
-		if (max == min)
-		{
-			return max;
-		}
-		if (max < min)
-		{
-			return 0;
-		}
-		return random.nextInt((max - min) + 1) + min;
+		float a = -((fromY) - (toY));
+		float b = -((fromX) - (toX));
+
+		return (float) Math.sqrt((a * a) + (b * b));
 	}
 
 	/**
-	 * 
-	 * @param max
-	 * @param min
-	 * @return if max == min returns max, if max > min returns random number
+	 * @return distance between 2 3d points
+	 * Copied from https://stackoverflow.com/a/30599011
 	 */
-	public static int getRandomInt(int max, int min, long seed)
+	public static double getDistance(double fx, double fy, double fz, double tx, double ty, double tz)
 	{
-		if (max == min)
-		{
-			return max;
-		}
-		if (max < min)
-		{
-			return 0;
-		}
-		Random ra = new Random(seed);
-		return ra.nextInt((max - min) + 1) + min;
+		return Math.sqrt(Math.pow(fx - tx, 2) + Math.pow(fy - ty, 2) + Math.pow(fz - tz, 2));
 	}
 
 	/**
-	 * 
-	 * @param max
-	 * @param min
-	 * @return if max == min returns max, if max > min returns random number
+	 * @return distance between 2 3d points
+	 * Copied from https://stackoverflow.com/a/30599011
 	 */
-	public static double getRandomDouble(double max, double min)
+	public static float getDistance(float fx, float fy, float fz, float tx, float ty, float tz)
 	{
-		if (max == min)
-		{
-			return max;
-		}
-		if (max < min)
-		{
-			return 0;
-		}
-		double r = min + (max - min) * random.nextDouble();
-		return r;
+		return (float) Math.sqrt(Math.pow(fx - tx, 2) + Math.pow(fy - ty, 2) + Math.pow(fz - tz, 2));
 	}
+
 
 	/**
 	 * 
-	 * @param max
-	 * @param min
-	 * @return if max == min returns max, if max > min returns random number
-	 */
-	public static double getRandomDouble(double max, double min, long seed)
-	{
-		if (max == min)
-		{
-			return max;
-		}
-		if (max < min)
-		{
-			return 0;
-		}
-		Random ra = new Random(seed);
-		double r = min + (max - min) * ra.nextDouble();
-		return r;
-	}
-
-	/**
-	 * 
-	 * @param max
-	 * @param min
-	 * @return if max == min returns max, if max > min returns random number
-	 */
-	public static long getRandomLong(long max, long min, long seed)
-	{
-		if (max == min)
-		{
-			return max;
-		}
-		if (max < min)
-		{
-			return 0;
-		}
-		Random ra = new Random(seed);
-		long r = min + (max - min) * ra.nextLong();
-		return r;
-	}
-
-	/**
-	 * 
-	 * @param max
-	 * @param min
-	 * @return if max == min returns max, if max > min returns random number
-	 */
-	public static long getRandomLong(long max, long min)
-	{
-		if (max == min)
-		{
-			return max;
-		}
-		if (max < min)
-		{
-			return 0;
-		}
-		long r = min + (max - min) * random.nextLong();
-		return r;
-	}
-
-	/**
-	 * 
-	 * @param max
-	 * @param min
-	 * @return if max == min returns max, if max > min returns random number
-	 */
-	public static long getRandomSeed()
-	{
-		long r = Long.MIN_VALUE + (Long.MAX_VALUE - Long.MIN_VALUE) * random.nextLong();
-		return r;
-	}
-
-	/**
-	 * 
-	 * @param max
-	 * @param min
-	 * @return if max == min returns max, if max > min returns random number
-	 */
-	public static float getRandomFloat(float max, float min, long seed)
-	{
-		if (max == min)
-		{
-			return max;
-		}
-		if (max < min)
-		{
-			return 0;
-		}
-		Random ra = new Random(seed);
-		float r = min + (max - min) * ra.nextFloat();
-		return r;
-	}
-
-	/**
-	 * 
-	 * @param max
-	 * @param min
-	 * @return if max == min returns max, if max > min returns random number
-	 */
-	public static float getRandomFloat(float max, float min)
-	{
-		if (max == min)
-		{
-			return max;
-		}
-		if (max < min)
-		{
-			return 0;
-		}
-		float r = min + (max - min) * random.nextFloat();
-		return r;
-	}
-	
-	public static boolean flipACoin()
-	{
-		return getRandomInt(1, 0) == 1;
-	}
-	
-	@FunctionalInterface
-	public interface Function1
-	{
-		public void apply();
-	}
-	
-	public static void decide(Function1... f1)
-	{
-		int i = Util.getRandomInt(f1.length - 1, 0);
-		
-		f1[i].apply();
-	}
-	
-	/**
-	 * 
-	 * @param falseChance Must be bigger than 0!
-	 * @return
-	 */
-	public static boolean decide(int falseChance)
-	{
-		return getRandomInt(falseChance, 0) == 1;
-	}
-
-	/**
-	 * 
-	 * @param fromx1 From X
-	 * @param fromy1 From Y
-	 * @param fromx2 To X
-	 * @param fromy2 To Y
+	 * @param fromX From X
+	 * @param fromY From Y
+	 * @param toX To X
+	 * @param toY To Y
 	 * @return angle
 	 */
-	public static double countAngle(double fromx1, double fromy1, double fromx2, double fromy2)
+	public static double countAngle(double fromX, double fromY, double toX, double toY)
 	{
-		return -Math.toDegrees(Math.atan2(fromx1 - fromx2, fromy1 - fromy2));
-	}
-	
-	public static double countAngle(Vec2 from, Vec2 to)
-	{
-		return -Math.toDegrees(Math.atan2(from.getX() - to.getX(), from.getY() - to.getY()));
-	}
-
-	public static boolean isInCircle(Vec2 circle, int circleRadius, Vec2 obj)
-	{
-		if (obj == null)
-			return false;
-		if (circle == null)
-			return false;
-		if (circleRadius == 0)
-			return false;
-		
-		double i = (obj.getX() - circle.getX()) * (obj.getX() - circle.getX());
-		double j = (obj.getY() - circle.getY()) * (obj.getY() - circle.getY());
-		double k = Math.sqrt(i + j);
-		if (k <= circleRadius)
-		{
-			return true;
-		}
-		return false;
+		return -Math.toDegrees(Math.atan2(fromX - toX, fromY - toY));
 	}
 	
 	public static boolean isInRectangle(int rminx, int rminy, int rmaxx, int rmaxy, int px, int py)
@@ -345,9 +97,12 @@ public class Util
 	{
 		return px >= rminx && px <= rmaxx && py >= rminy && py <= rmaxy;
 	}
-	
-	public static String getLastClassName(Class<?> clazz) { return clazz.getName().split("\\.")[clazz.getName().split("\\.").length - 1]; }
 
+	public static boolean isCursorInRectangle(MainApp main, int x, int y, int w, int h)
+	{
+		return (main.getMouseX() >= x && main.getMouseX() <= w + x) && (main.getMouseY() >= y && main.getMouseY() <= h + y);
+	}
+	
 	public static int getBiggestClosetsSqrt(int count)
 	{
 		int r = count;
@@ -376,7 +131,19 @@ public class Util
 	{
 		try
 		{
-			new Long(l);
+			Long.valueOf(l);
+			return true;
+		} catch (NumberFormatException ex)
+		{
+			return false;
+		}
+	}
+
+	public static boolean isPointNumber(String l)
+	{
+		try
+		{
+			Double.parseDouble(l);
 			return true;
 		} catch (NumberFormatException ex)
 		{
@@ -388,7 +155,7 @@ public class Util
 	{
 		try
 		{
-			new Double(l);
+			Double.valueOf(l);
 			return true;
 		} catch (NumberFormatException ex)
 		{
@@ -400,10 +167,20 @@ public class Util
 	{
 		return (number >= min && number <= max);
 	}
+
+	public static boolean isNumberInRange(int min, int max, int number)
+	{
+		return (number >= min && number <= max);
+	}
 	
 	public static int getIntFromHex(String hex)
 	{
 		return (int) Long.parseLong(hex, 16);
+	}
+
+	public static String substringEnd(String string, int endIndex)
+	{
+		return string.substring(0, string.length() - endIndex);
 	}
 
 	public static Object[] combine(Object[] arr1, Object[] arr2)
@@ -429,17 +206,17 @@ public class Util
 		}
 	}
 
-	public static double getNumberBetween(double min, double max, double number)
+	public static double clamp(double min, double max, double number)
 	{
 		return Math.min(Math.max(number, min), max);
 	}
 
-	public static float getNumberBetween(float min, float max, float number)
+	public static float clamp(float min, float max, float number)
 	{
 		return Math.min(Math.max(number, min), max);
 	}
 
-	public static int getNumberBetween(int min, int max, int number)
+	public static int clamp(int min, int max, int number)
 	{
 		return Math.min(Math.max(number, min), max);
 	}
@@ -451,8 +228,8 @@ public class Util
 	
 	public static String[] loadDataFromFile(File path)
 	{
-		List<String> lines = new ArrayList<String>();
-		
+		List<String> lines = new ArrayList<>();
+
 		if (!path.exists())
 		{
 			try
@@ -526,7 +303,7 @@ public class Util
 		
 		for (int j = 0; j < i.length; j++)
 		{
-			i[j] = getRandomInt(max, min);
+			i[j] = RandomUtil.randomInt(min, max);
 		}
 		
 		return i;
@@ -535,10 +312,7 @@ public class Util
 
 	/**
 	 * Stolen from https://stackoverflow.com/a/134918
-	 * @param s
-	 * @return
-	 * @throws IOException
-	 * @throws ClassNotFoundException
+	 * @param s overlays
 	 */
 	public static Object fromString(String s)
 	{
@@ -654,7 +428,7 @@ public class Util
 			height = -height;
 		}
 		
-		// Don't render if x or y are outside selected box
+		// Don't renderSprite if x or y are outside selected box
 		// Can be here even thou original width or height were negative cuz I changed it.
 		if (x > maxX) return;
 		if (y > maxY) return;
@@ -669,7 +443,7 @@ public class Util
 		if (width == 0 || height == 0)
 			return;
 
-		// Render
+		// ComponentRender
 		for (int i = 0; i < width; i++)
 		{
 			for (int j = 0; j < height; j++)
@@ -684,7 +458,7 @@ public class Util
 		long seed = y;
 		seed = x + (seed << 32); // make x and z semi-independent parts of the seed
 		Random r = new Random(seed);
-		return getRandomLong(Long.MAX_VALUE, Long.MIN_VALUE, r.nextLong());
+		return RandomUtil.randomLong(Long.MIN_VALUE, Long.MAX_VALUE, r.nextLong());
 	}
 	
 	public static int maxi(int a, int b)
@@ -729,9 +503,14 @@ public class Util
 	
 	public static double getRandomAngle()
 	{
-		return getRandomDouble(360, 0);
+		return RandomUtil.randomDouble(0, 360);
 	}
-	
+
+	public static double getRandomAngleRAD()
+	{
+		return RandomUtil.randomDouble(0, 2 * Math.PI);
+	}
+
 	/**
 	 * Code stolen from https://gist.github.com/yfnick/227e0c12957a329ad138
 	 * Thank you for creating this code!
@@ -889,7 +668,7 @@ public class Util
 		return py;
 	}
 	
-	public static Vec2 bezierCurve(float p0x, float p0y, float p1x, float p1y, float p2x, float p2y, float time, float timeEnd)
+	public static Vector2f bezierCurve(float p0x, float p0y, float p1x, float p1y, float p2x, float p2y, float time, float timeEnd)
 	{
 		float t0 = time;
 		float t1 = timeEnd;
@@ -903,7 +682,7 @@ public class Util
 		float px = calculateValue(t0, t1, x0, x1);
 		float py = calculateValue(t0, t1, y0, y1);
 		
-		return new Vec2(px, py);
+		return new Vector2f(px, py);
 	}
 	
 	public static boolean toBoolean(int i)
@@ -923,32 +702,40 @@ public class Util
 
 	public static <T> ArrayList<T> insert(T t, List<T> original, int index)
 	{
-		List<T> s = original;
-
-		T add = t;
-
-		// Including
-		int shiftFrom = index;
-
-		List<T> cutLeft = new ArrayList<T>();
-		for (int i = 0; i < shiftFrom; i++)
+		List<T> cutLeft = new ArrayList<>();
+		for (int i = 0; i < index; i++)
 		{
-			cutLeft.add(s.get(i));
+			cutLeft.add(original.get(i));
 		}
 
-		List<T> cutRight = new ArrayList<T>();
-		for (int i = shiftFrom; i < s.size(); i++)
+		List<T> cutRight = new ArrayList<>();
+		for (int i = index; i < original.size(); i++)
 		{
-			cutRight.add(s.get(i));
+			cutRight.add(original.get(i));
 		}
-		
-		ArrayList<T> newArray = new ArrayList<T>();
 
-		newArray.addAll(cutLeft);
-		newArray.add(add);
+		ArrayList<T> newArray = new ArrayList<>(cutLeft);
+		newArray.add(t);
 		newArray.addAll(cutRight);
 		
 		return newArray;
+	}
+
+	public static String getExtension(String fileName)
+	{
+		char ch;
+		int len;
+		if (fileName == null ||
+				(len = fileName.length()) == 0 ||
+				(ch = fileName.charAt(len - 1)) == '/' || ch=='\\' || //in the case of a directory
+				ch == '.' ) //in the case of . or ..
+			return "";
+		int dotInd = fileName.lastIndexOf('.'),
+				sepInd = Math.max(fileName.lastIndexOf('/'), fileName.lastIndexOf('\\'));
+		if (dotInd <= sepInd)
+			return "";
+		else
+			return fileName.substring(dotInd+1).toLowerCase();
 	}
 
 /*

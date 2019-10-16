@@ -1,34 +1,34 @@
 package com.steve6472.sge.gui;
 
+import com.steve6472.sge.gui.components.context.ContextMenu;
+import com.steve6472.sge.gui.components.dialog.Dialog;
+import com.steve6472.sge.main.KeyHandler;
+import com.steve6472.sge.main.MainApp;
+import com.steve6472.sge.main.MouseHandler;
+import com.steve6472.sge.main.events.AbstractEvent;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.steve6472.sge.gfx.Font;
-import com.steve6472.sge.gfx.Screen;
-import com.steve6472.sge.main.KeyHandler;
-import com.steve6472.sge.main.MainApplication;
-import com.steve6472.sge.main.MouseHandler;
-
 public abstract class Gui implements Serializable
 {
-	private static final long serialVersionUID = 8547775087992332609L;
-	private List<Component> components = new ArrayList<Component>();
-//	private HashMap<Integer, >
+	private List<Component> components = new ArrayList<>();
 	private boolean isVisible = true;
-	protected final MainApplication mainApp;
-	protected final Font font;
+	protected final MainApp mainApp;
 	/**
-	 * If true it will render components last
+	 * If true it will renderSprite components last
 	 */
 	private boolean switchedRender = false;
-	private boolean canHide = false;
+	private boolean canHide;
 
-	public Gui(MainApplication mainApp)
+	/* Context Menu */
+	protected ContextMenu contextMenu;
+
+	public Gui(MainApp mainApp)
 	{
 		this.mainApp = mainApp;
 		mainApp.addGui(this);
-		font = mainApp.getFont();
 		hideGui();
 		canHide = true;
 		createGui();
@@ -38,23 +38,23 @@ public abstract class Gui implements Serializable
 
 	public abstract void guiTick();
 
-	public abstract void render(Screen screen);
+	public abstract void render();
 
-	public void showEvent() {};
+	public void showEvent() {}
 
-	public void hideEvent() {};
+	public void hideEvent() {}
 	
 	public void switchRender()
 	{
 		switchedRender = !switchedRender;
 	}
 	
-	protected void renderComponents(Screen screen)
+	protected void renderComponents()
 	{
-		// If GUI is visible render components
+		// If GUI is visible renderSprite components
 		if (isVisible())
 		{
-			components.forEach(c -> c.fullRender(screen));
+			components.forEach(Component::fullRender);
 		}
 	}
 
@@ -73,55 +73,12 @@ public abstract class Gui implements Serializable
 	}
 
 	/**
-	 * Opens & recreates the GUI (Best for debugging)
-	 * Cleares components list!
-	 * 
-	 * @param game
-	 * @param gui
-	 *            Class of the GUI (I suppose that you don't have 2 same guis
-	 *            but if so it will open the last registrated);
-	 */
-	public static final void openGui(MainApplication game, Class<? extends Gui> gui)
-	{
-		int index = 0;
-		int i = 0;
-		for (Gui g : game.getGuis())
-		{
-			if (g.getClass().getName().equals(gui.getName()))
-			{
-				index = i;
-			}
-			i++;
-		}
-		// Removing KeyListener from any IFocusables (Without this code the textfield
-		// would have more & more keyListeners resulting in typing multiple keys
-		// at once)
-//		for (Component c : game.guis.get(index).components)
-//		{
-//			if (c instanceof IFocusable)
-//			{
-//				for (Iterator<KeyListener> li = game.getKeyHandler().getListeners().iterator(); li.hasNext();)
-//				{
-//					KeyListener l = li.next();
-//					if (l.ifocusable == c)
-//					{
-//						li.remove();
-//					}
-//				}
-//			}
-//		}
-		game.getGuis().get(index).components.clear();
-		game.getGuis().get(index).createGui();
-		game.getGuis().get(index).showGui();
-	}
-	
-	/**
 	 * Calls hideAllComponents();
 	 */
 	public void hideGui()
 	{
 		isVisible = false;
-		components.forEach(c -> c.setVisible(false));
+//		components.forEach(c -> c.setVisible(false));
 		
 		if (canHide)
 			hideEvent();
@@ -130,7 +87,7 @@ public abstract class Gui implements Serializable
 	public void showGui()
 	{
 		isVisible = true;
-		components.forEach(c -> c.setVisible(true));
+//		components.forEach(c -> c.setVisible(true));
 		
 		showEvent();
 	}
@@ -140,29 +97,102 @@ public abstract class Gui implements Serializable
 		return isVisible;
 	}
 
-	public void renderGui(Screen screen)
-	{
-		if (isVisible())
-		{
-			if (switchedRender)
-			{
-				render(screen);
-				renderComponents(screen);
-			} else
-			{
-				renderComponents(screen);
-				render(screen);
-			}
-		}
-	}
-
 	public void tick()
 	{
 		if (isVisible())
 		{
-			tickComponents();
-			guiTick();
+			boolean flag = false;
+			if (contextMenu != null)
+			{
+				if (flag = contextMenu.spoofCursor)
+				{
+					spoofTick(contextMenu.mx, contextMenu.my);
+				}
+				contextMenu.fullTick();
+			}
+
+			for (Dialog c : mainApp.getDialogContainer().dialogs)
+			{
+				if (c.freezeGui())
+				{
+					spoofTick(-1, -1);
+					flag = true;
+				}
+			}
+
+			if (!flag)
+			{
+				tickComponents();
+				guiTick();
+			}
 		}
+	}
+
+	private void spoofTick(int x, int y)
+	{
+		getMouseHandler().spoof(x, y);
+
+		tickComponents();
+		guiTick();
+
+		getMouseHandler().tick();
+	}
+
+	public void renderGui()
+	{
+		if (isVisible())
+		{
+			boolean flag = false;
+			if (contextMenu != null)
+			{
+				if (flag = contextMenu.spoofCursor)
+				{
+					spoofRender(contextMenu.mx, contextMenu.my);
+				}
+			}
+
+			for (Dialog c : mainApp.getDialogContainer().dialogs)
+			{
+				if (c.freezeGui())
+				{
+					spoofRender(-1, -1);
+					flag = true;
+				}
+			}
+
+			if (!flag)
+			{
+				if (switchedRender)
+				{
+					render();
+					renderComponents();
+				} else
+				{
+					renderComponents();
+					render();
+				}
+			}
+
+			if (contextMenu != null)
+				contextMenu.fullRender();
+		}
+	}
+
+	private void spoofRender(int x, int y)
+	{
+		getMouseHandler().spoof(x, y);
+
+		if (switchedRender)
+		{
+			render();
+			renderComponents();
+		} else
+		{
+			renderComponents();
+			render();
+		}
+
+		getMouseHandler().tick();
 	}
 
 	public void tickComponents()
@@ -181,12 +211,35 @@ public abstract class Gui implements Serializable
 	{
 		if (component == null)
 			throw new NullPointerException("Component can't be null");
+
+		if (component instanceof ContextMenu)
+			throw new IllegalArgumentException("Can not add ContextMenu to normal component list. Please use setContextMenu method instead!");
 		
 		component.parentGui = this;
 		component.preInit(mainApp);
 		component.init(mainApp);
 		getMainApp().getEventHandler().register(component);
 		components.add(component);
+
+		/* Reposition Components Children */
+		component.setLocation(component.getX(), component.getY());
+	}
+
+	public void setContextMenu(ContextMenu contextMenu)
+	{
+		if (contextMenu != null)
+		{
+			contextMenu.parentGui = this;
+			contextMenu.preInit(mainApp);
+			contextMenu.init(mainApp);
+			getMainApp().getEventHandler().register(contextMenu);
+		}
+		this.contextMenu = contextMenu;
+	}
+
+	public ContextMenu getContextMenu()
+	{
+		return contextMenu;
 	}
 
 	public void removeComponent(Component component)
@@ -197,6 +250,11 @@ public abstract class Gui implements Serializable
 	public void removeComponent(int index)
 	{
 		components.remove(index);
+	}
+
+	public List<Component> getComponents()
+	{
+		return components;
 	}
 	
 	public int getComponentCount()
@@ -214,7 +272,7 @@ public abstract class Gui implements Serializable
 		return components.get(index);
 	}
 	
-	public MainApplication getMainApp()
+	public MainApp getMainApp()
 	{
 		return mainApp;
 	}
@@ -227,5 +285,10 @@ public abstract class Gui implements Serializable
 	public KeyHandler getKeyHandler()
 	{
 		return getMainApp().getKeyHandler();
+	}
+
+	public void runEvent(AbstractEvent event)
+	{
+		getMainApp().runEvent(event);
 	}
 }

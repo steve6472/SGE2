@@ -1,12 +1,13 @@
 package com.steve6472.sge.gui.components;
 
-//import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.opengl.GL11.*;
-
-import com.steve6472.sge.gfx.RenderHelper;
-import com.steve6472.sge.gfx.Screen;
+import com.steve6472.sge.gfx.Render;
+import com.steve6472.sge.gfx.SpriteRender;
 import com.steve6472.sge.gui.Component;
-import com.steve6472.sge.main.MainApplication;
+import com.steve6472.sge.main.MainApp;
+import com.steve6472.sge.test.Fex;
+
+import static com.steve6472.sge.gfx.Render.color;
+import static org.lwjgl.opengl.GL11.*;
 
 public class ProgressBar extends Component
 {
@@ -25,42 +26,43 @@ public class ProgressBar extends Component
 	int time = 0;
 	
 	@Override
-	public void init(MainApplication game)
+	public void init(MainApp game)
 	{
 	}
 
 	@Override
-	public void render(Screen screen)
+	public void render()
 	{
-		RenderHelper.renderDoubleBorderComponent(this, 0xff000000, 0xffa8a8a8, 0xff6f6f6f);
-		renderSlider(screen);
+//		UIHelper.renderDoubleBorderComponent(this, 0xff000000, 0xffa8a8a8, 0xff6f6f6f);
+		SpriteRender.renderDoubleBorderComponent(this, 0, 0, 0, 1, Fex.Ha8, Fex.Ha8, Fex.Ha8, 1, Fex.H6f, Fex.H6f, Fex.H6f, 1);
+		renderSlider();
 	}
 	
-	private void renderSlider(Screen screen)
+	private void renderSlider()
 	{
 		int borderColor = 0xff9297B3;
 		int fillColor = 0xff7D87BE;
 		glPushMatrix();
 		glPushAttrib(GL_CURRENT_BIT);
 		glBegin(GL_QUADS);
-		Screen.color(borderColor);
-		renderPart(screen, x + 2, y + 2, phantomValue, 2);
-		renderPart(screen, x + 2, y + getHeight() - 4, phantomValue, 2);
-		renderPart(screen, x + 2, y + 4, 2, getHeight() - 8);
+		color(borderColor);
+		renderPart(x + 2, y + 2, phantomValue, 2);
+		renderPart(x + 2, y + getHeight() - 4, phantomValue, 2);
+		renderPart(x + 2, y + 4, 2, getHeight() - 8);
 		if (phantomValue == maxValue)
 		{
-			renderPart(screen, x + getWidth() - 4, y + 4, 2, getHeight() - 8);
+			renderPart(x + getWidth() - 4, y + 4, 2, getHeight() - 8);
 		}
-		Screen.color(fillColor);
-		renderPart(screen, x + 4, y + 4, phantomValue, getHeight() - 8);
+		color(fillColor);
+		renderPart(x + 4, y + 4, phantomValue, getHeight() - 8);
 		glEnd();
 		glPopAttrib();
 		glPopMatrix();
 	}
 	
-	private void renderPart(Screen screen, int x, int y, int w, int h)
+	private void renderPart(int x, int y, int w, int h)
 	{
-		Screen.fillRawRect(x, y, w, h);
+		Render.fillRect(x, y, w, h);
 	}
 
 	@Override

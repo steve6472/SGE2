@@ -7,10 +7,11 @@
 
 package com.steve6472.sge.main.game.inventory;
 
-import java.lang.reflect.InvocationTargetException;
-
-import com.steve6472.sge.main.SGArray;
 import com.steve6472.sge.main.game.BaseEntity;
+
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Inventory<T extends ItemSlot>
 {
@@ -22,9 +23,9 @@ public class Inventory<T extends ItemSlot>
 	/*
 	 * This should allow me to add and remove slots on the run!
 	 */
-	SGArray<T> slots;
+	List<T> slots;
 	
-	Item nullItem = Item.AIR;
+	private Item nullItem = Item.AIR;
 	
 	@SuppressWarnings("unchecked")
 	public Inventory(BaseEntity entity, Class<? extends ItemSlot> clazz, Item nullItem, String... slotNames)
@@ -33,13 +34,13 @@ public class Inventory<T extends ItemSlot>
 		
 		this.nullItem = nullItem;
 		
-		slots = new SGArray<T>(slotNames.length);
+		slots = new ArrayList<>(slotNames.length);
 		
 		for (int i = 0; i < slotNames.length; i++)
 		{
 			try
 			{
-				slots.setObject(i, (T) clazz.getConstructor(String.class, int.class).newInstance(slotNames[i], i));
+				slots.set(i, (T) clazz.getConstructor(String.class, int.class).newInstance(slotNames[i], i));
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 					| SecurityException e)
 			{
@@ -60,13 +61,13 @@ public class Inventory<T extends ItemSlot>
 		
 		this.nullItem = nullItem;
 		
-		slots = new SGArray<T>(initialSlotCount);
+		slots = new ArrayList<T>(initialSlotCount);
 		
 		for (int i = 0; i < initialSlotCount; i++)
 		{
 			try
 			{
-				slots.setObject(i, (T) clazz.getConstructor(String.class, int.class).newInstance("" + i, i));
+				slots.set(i, (T) clazz.getConstructor(String.class, int.class).newInstance("" + i, i));
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException
 					| SecurityException e)
 			{
@@ -79,6 +80,38 @@ public class Inventory<T extends ItemSlot>
 	{
 		this(entity, clazz, Item.AIR, initialSlotCount);
 	}
+
+	public void swapItems(int slotIdFrom, int slotIdTo)
+	{
+		Item item = getItem(slotIdTo);
+		setItem(slotIdTo, getItem(slotIdFrom));
+		setItem(slotIdFrom, item);
+
+		int count = getCount(slotIdTo);
+		getSlot(slotIdTo).setCount(getCount(slotIdFrom));
+		getSlot(slotIdFrom).setCount(count);
+	}
+
+	public void addItem(Item item, int count)
+	{
+		int firstEmpty = -1;
+		int itemSlot = -1;
+		for (int k = 0; k < 20; k++)
+		{
+			if (getItem(k) == item && firstEmpty == -1)
+				firstEmpty = k;
+			if (getItem(k) == item && itemSlot == -1)
+				itemSlot = k;
+		}
+		if (itemSlot != -1)
+		{
+			getSlot(itemSlot).setCount(getSlot(itemSlot).getCount() + count);
+		} else
+		{
+			getSlot(firstEmpty).setCount(getSlot(firstEmpty).getCount() + count);
+			getSlot(firstEmpty).setItem(item);
+		}
+	}
 	
 	/*
 	 * Setting items
@@ -86,12 +119,12 @@ public class Inventory<T extends ItemSlot>
 	
 	public final void setItem(String slotName, Item item)
 	{
-		slots.getObject(getSlotId(slotName)).setItem(item);
+		slots.get(getSlotId(slotName)).setItem(item);
 	}
 	
 	public final void setItem(int slotId, Item item)
 	{
-		slots.getObject(slotId).setItem(item);
+		slots.get(slotId).setItem(item);
 	}
 	
 	/*
@@ -105,7 +138,7 @@ public class Inventory<T extends ItemSlot>
 		if (slotId == -1)
 				throw new NullPointerException(slotName + " doesn't exits!");
 		
-		return slots.getObject(slotId).getItem();
+		return slots.get(slotId).getItem();
 //		
 	}
 
@@ -113,31 +146,36 @@ public class Inventory<T extends ItemSlot>
 	{
 		if (slotId < 0)
 			return Item.AIR;
-		if (slotId > slots.getSize())
+		if (slotId > slots.size())
 			return Item.AIR;
 
-		return slots.getObject(slotId).getItem();
+		return slots.get(slotId).getItem();
+	}
+
+	public final int getCount(int slotId)
+	{
+		return getSlot(slotId).getCount();
 	}
 	
 	public final Item[] getItems()
 	{
-		Item[] items = new Item[slots.getSize()];
+		Item[] items = new Item[slots.size()];
 		
-		for (int i = 0; i < slots.getSize(); i++)
+		for (int i = 0; i < slots.size(); i++)
 		{
-			items[i] = slots.getObject(i).getItem();
+			items[i] = slots.get(i).getItem();
 		}
 		return items;
 	}
-	
-	public final SGArray<T> getSlots()
+
+	public final List<T> getSlots()
 	{
 		return slots;
 	}
 	
 	/**
 	 * 
-	 * @param slotName
+	 * @param slotName slot name
 	 * @return -1 if {@code slotName} doesn't exist
 	 */
 	public final int getSlotId(String slotName)
@@ -151,6 +189,6 @@ public class Inventory<T extends ItemSlot>
 	
 	public final T getSlot(int id)
 	{
-		return slots.getObject(id);
+		return slots.get(id);
 	}
 }

@@ -9,5 +9,5 @@ package com.steve6472.sge.main.periodicTable;
 
 public enum StateOfMatter
 {
-	SOLID, LIQUID, GAS, PLASMA, UNDEFINED;
+	SOLID, LIQUID, GAS, PLASMA, UNDEFINED
 }

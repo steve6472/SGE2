@@ -7,16 +7,16 @@
 
 package com.steve6472.sge.main.networking;
 
+import com.steve6472.sge.main.Util;
+import com.steve6472.sge.main.networking.packet.DataStream;
+import com.steve6472.sge.main.networking.packet.IPacketHandler;
+import com.steve6472.sge.main.networking.packet.Packet;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.Arrays;
-
-import com.steve6472.sge.main.Util;
-import com.steve6472.sge.main.networking.packet.DataStream;
-import com.steve6472.sge.main.networking.packet.IPacketHandler;
-import com.steve6472.sge.main.networking.packet.Packet;
 
 public abstract class UDPClient extends Thread
 {
@@ -63,7 +63,7 @@ public abstract class UDPClient extends Thread
 	{
 		while (true)
 		{
-			byte[] data = null;
+			byte[] data;
 			data = new byte[65535];
 			DatagramPacket p = new DatagramPacket(data, data.length);
 			try
@@ -84,7 +84,7 @@ public abstract class UDPClient extends Thread
 		}
 	}
 	
-	public void recievePacket(byte[] data, DatagramPacket p)
+	private void recievePacket(byte[] data, DatagramPacket p)
 	{
 		String recievedId = new String(data).substring(0, 4);
 		byte[] recievedArray = Arrays.copyOfRange(data, 4, data.length);
@@ -100,7 +100,10 @@ public abstract class UDPClient extends Thread
 		
 		//Skip invalid packet
 		if (packet == null)
+		{
+			System.err.println("Skipping invalid packet with id " + id);
 			return;
+		}
 		
 		//Write data back to packet
 		packet.input(stream);

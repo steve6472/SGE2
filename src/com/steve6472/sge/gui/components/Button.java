@@ -1,182 +1,168 @@
 package com.steve6472.sge.gui.components;
 
+import com.steve6472.sge.gfx.SpriteRender;
+import com.steve6472.sge.gfx.font.CustomChar;
+import com.steve6472.sge.gfx.font.Font;
+import com.steve6472.sge.gui.Component;
+import com.steve6472.sge.gui.components.schemes.Scheme;
+import com.steve6472.sge.gui.components.schemes.SchemeButton;
+import com.steve6472.sge.main.KeyList;
+import com.steve6472.sge.main.MainApp;
+import org.joml.Vector4f;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 
-import com.steve6472.sge.gfx.Font;
-import com.steve6472.sge.gfx.RenderHelper;
-import com.steve6472.sge.gfx.Screen;
-import com.steve6472.sge.gfx.Sprite;
-import com.steve6472.sge.gui.Component;
-import com.steve6472.sge.main.MainApplication;
+import static com.steve6472.sge.main.util.ColorUtil.getColors;
+import static com.steve6472.sge.main.util.ColorUtil.getVectorColor;
 
-public class Button extends Component implements IFocusable
+public class Button extends Component
 {
 	private static final long serialVersionUID = -4734082970298391201L;
-	int fontSize = 1, image_offset_x, image_offset_y;
-	protected Sprite enabled = null, disabled = null, hovered = null;
+	private int fontSize = 1;
 
-	protected boolean enabled_ = true, hovered_ = false;
-
-	public boolean renderFont = true, debug = false;
+	protected boolean enabled = true, hovered = false;
 
 	private String text = "";
-	
+	private Object[] customText;
+
+	public SchemeButton scheme;
+
 	/*
 	 * Font Colors
 	 */
-	private float red = 1f, green = 1f, blue = 1f;
+	public Vector4f enabledColor, disabledColor, hoveredColor;
+//	public float enabledRed, enabledGreen, enabledBlue;
+//	public float disabledRed, disabledGreen, disabledBlue;
+//	public float hoveredRed, hoveredGreen, hoveredBlue;
 
-	/*
-	 * Events
-	 */
-	protected List<ButtonEvents> events = new ArrayList<ButtonEvents>();
-	
 	public Button(String text)
 	{
 		this.text = text;
+		enabledColor = new Vector4f();
+		disabledColor = new Vector4f();
+		hoveredColor = new Vector4f();
+	}
+
+	public Button(CustomChar text)
+	{
+		this.text = text.toString();
+		enabledColor = new Vector4f();
+		disabledColor = new Vector4f();
+		hoveredColor = new Vector4f();
 	}
 	
 	public Button()
 	{
-		
+		enabledColor = new Vector4f();
+		disabledColor = new Vector4f();
+		hoveredColor = new Vector4f();
 	}
 	
 	@Override
-	public void init(MainApplication game)
+	public void init(MainApp main)
 	{
+		if (scheme == null)
+			setScheme(main.getSchemeRegistry().getCurrentScheme("button"));
+	}
+
+	public void setScheme(Scheme scheme)
+	{
+		this.scheme = (SchemeButton) scheme;
+		resetAllColors();
 	}
 	
 	@Override
 	public void tick()
 	{
-		if (isVisible() && enabled_)
+		if (isVisible() && enabled)
 		{
 			boolean isHovered = isCursorInComponent(x, y, width, height);
 			
 			if (isHovered)
 			{
-				if (getMouseHandler().isMouseHolded())
-				{
-					for (ButtonEvents e : events)
-					{
-						e.hold();
-					}
-				}
-				
-				onMouseClicked(b ->
-				{
-					for (ButtonEvents e : events)
-					{
-						e.click();
-					}
-				});
-				hovered_ = true;
-				return;
+				if (isLMBHolded())
+					runHoldEvents();
+
+				hovered = true;
 			} else
 			{
-				hovered_ = false;
+				hovered = false;
 			}
+
+			onMouseClicked(KeyList.LMB, b -> forceDoClick());
 		}
-	}
-	
-	@Override
-	public boolean isFocused()
-	{
-		return isHovered();
 	}
 	
 	public void doClick()
 	{
-		for (ButtonEvents e : events)
+		if (isEnabled())
 		{
-			e.click();
+			forceDoClick();
 		}
 	}
 
-	public void addEvent(ButtonEvents e)
+	/**
+	 * Ignores {@code isEnabled()} and runs all ButtonEvents
+	 */
+	public void forceDoClick()
 	{
-		events.add(e);
+		runClickEvents();
+		runIfClickEvents();
 	}
 
 	@Override
-	public void render(Screen screen)
+	public void render()
 	{
-//		if (debug)
-//		{
-//			screen.fillRect(x, y, width, height, 0xffff22ff);
-//			screen.fillRect(x, y, 1, height, 0xffffff22);
-//		}
+		if (enabled && !hovered)
+			SpriteRender.renderDoubleBorder(x, y, width, height, scheme.enabledOutsideBorder, scheme.enabledInsideBorder, scheme.enabledFill);
 
-		if (enabled_ && !hovered_)
-		{
-			if (enabled != null)
-			{
-				Screen.drawSprite(x + image_offset_x, y + image_offset_y, enabled);
-			} else
-			{
-				RenderHelper.renderDoubleBorderComponent(this, RenderHelper.BUTTON_ENABLED_COLORS[0], RenderHelper.BUTTON_ENABLED_COLORS[1],
-						RenderHelper.BUTTON_ENABLED_COLORS[2]);
-			}
-		}
+		if (!enabled)
+			SpriteRender.renderDoubleBorder(x, y, width, height, scheme.disabledOutsideBorder, scheme.disabledInsideBorder, scheme.disabledFill);
 
-		if (!enabled_)
-		{
-			if (disabled != null)
-			{
-				Screen.drawSprite(x + image_offset_x, y + image_offset_y, disabled);
-			} else
-			{
-				RenderHelper.renderDoubleBorderComponent(this, RenderHelper.BUTTON_DISABLED_COLORS[0], RenderHelper.BUTTON_DISABLED_COLORS[1],
-						RenderHelper.BUTTON_DISABLED_COLORS[2]);
-			}
-		}
+		if (enabled && hovered)
+			SpriteRender.renderDoubleBorder(x, y, width, height, scheme.hoveredOutsideBorder, scheme.hoveredInsideBorder, scheme.hoveredFill);
 
-		if (enabled_ && hovered_)
-		{
-			if (hovered != null)
-			{
-				Screen.drawSprite(x + image_offset_x, y + image_offset_y, hovered);
-			} else
-			{
-				RenderHelper.renderDoubleBorderComponent(this, RenderHelper.BUTTON_HOVERED_COLORS[0], RenderHelper.BUTTON_HOVERED_COLORS[1],
-						RenderHelper.BUTTON_HOVERED_COLORS[2]);
-			}
-		}
-		
-		renderText(screen);
+		renderText();
 	}
 	
-	protected void renderText(Screen screen)
+	protected void renderText()
 	{
-		if (renderFont)
+		if (customText != null)
 		{
-			if (text != null)
-			{
-				int fontWidth = Font.getTextWidth(text, fontSize) / 2;
-				int fontHeight = ((8 * fontSize)) / 2;
-				Font.render(text, x + width / 2 - fontWidth, y + height / 2 - fontHeight, fontSize, red, green, blue);
-			}
+			int fontWidth = Font.getTextWidth(text, fontSize) / 2;
+			int fontHeight = ((8 * fontSize)) / 2;
+
+			if (enabled && !hovered)
+				Font.renderCustom(x + width / 2 - fontWidth, y + height / 2 - fontHeight, fontSize, customText);
+
+			if (!enabled)
+				Font.renderCustom(x + width / 2 - fontWidth, y + height / 2 - fontHeight, fontSize, customText);
+
+			if (enabled && hovered)
+				Font.renderCustom(x + width / 2 - fontWidth, y + height / 2 - fontHeight, fontSize, customText);
+		}
+		else if (text != null)
+		{
+			int fontWidth = Font.getTextWidth(text, fontSize) / 2;
+			int fontHeight = ((8 * fontSize)) / 2;
+
+			if (enabled && !hovered)
+				Font.renderCustom(x + width / 2 - fontWidth, y + height / 2 - fontHeight, fontSize, getColor(enabledColor), text);
+
+			if (!enabled)
+				Font.renderCustom(x + width / 2 - fontWidth, y + height / 2 - fontHeight, fontSize, getColor(disabledColor), text);
+
+			if (enabled && hovered)
+				Font.renderCustom(x + width / 2 - fontWidth, y + height / 2 - fontHeight, fontSize, getColor(hoveredColor), text);
 		}
 	}
-	
-	/*
-	 * Operators
-	 */
 
-	public void enable()
+	protected String getColor(Vector4f c)
 	{
-		this.enabled_ = true;
-	}
-
-	public void disable()
-	{
-		this.enabled_ = false;
-	}
-	
-	public void removeEvents()
-	{
-		events.clear();
+		return "[" + c.x + "," + c.y + "," + c.z + "," + c.w + "]";
 	}
 	
 	/*
@@ -188,9 +174,14 @@ public class Button extends Component implements IFocusable
 		this.text = text;
 	}
 
+	public void setCustomText(Object... customText)
+	{
+		this.customText = customText;
+	}
+
 	public void setEnabled(boolean b)
 	{
-		this.enabled_ = b;
+		this.enabled = b;
 	}
 
 	public void setSize(int w, int h)
@@ -199,45 +190,116 @@ public class Button extends Component implements IFocusable
 		this.height = h;
 	}
 
-	public void setImageOffset(int x, int y)
-	{
-		this.image_offset_x = x;
-		this.image_offset_y = y;
-	}
-
-	public void setHoveredImage(Sprite image)
-	{
-		hovered = image;
-	}
-
-	public void setEnabledImage(Sprite image)
-	{
-		enabled = image;
-	}
-
-	public void setDisabledImage(Sprite image)
-	{
-		disabled = image;
-	}
-
 	public void setFontSize(int s)
 	{
 		fontSize = Math.max(1, s);
 	}
-	
+
 	public void setFontColor(int color)
 	{
-		float[] colors = Screen.getColors(color);
-		red = colors[0];
-		green = colors[1];
-		blue = colors[2];
+		float[] colors = getColors(color);
+		setFontColor(colors[0], colors[1], colors[2]);
 	}
-	
+
+	public void setEnabledFontColor(int color)
+	{
+		enabledColor = new Vector4f(getVectorColor(color), 1.0f);
+//		float[] colors = getColors(color);
+//		enabledRed = colors[0];
+//		enabledGreen = colors[1];
+//		enabledBlue = colors[2];
+	}
+
+	public void setDisabledFontColor(int color)
+	{
+		disabledColor = new Vector4f(getVectorColor(color), 1.0f);
+//		float[] colors = getColors(color);
+//		disabledRed = colors[0];
+//		disabledGreen = colors[1];
+//		disabledBlue = colors[2];
+	}
+
+	public void setHoveredFontColor(int color)
+	{
+		hoveredColor = new Vector4f(getVectorColor(color), 1.0f);
+//		float[] colors = getColors(color);
+//		hoveredRed = colors[0];
+//		hoveredGreen = colors[1];
+//		hoveredBlue = colors[2];
+	}
+
 	public void setFontColor(float red, float green, float blue)
 	{
-		this.red = red;
-		this.green = green;
-		this.blue = blue;
+		setEnabledFontColor(red, green, blue);
+		setDisabledFontColor(red, green, blue);
+		setHoveredFontColor(red, green, blue);
+	}
+	
+	public void setEnabledFontColor(float red, float green, float blue)
+	{
+		enabledColor.x = red;
+		enabledColor.y = green;
+		enabledColor.z = blue;
+//		this.enabledRed = red;
+//		this.enabledGreen = green;
+//		this.enabledBlue = blue;
+	}
+
+	public void setDisabledFontColor(float red, float green, float blue)
+	{
+		disabledColor.x = red;
+		disabledColor.y = green;
+		disabledColor.z = blue;
+//		this.disabledRed = red;
+//		this.disabledGreen = green;
+//		this.disabledBlue = blue;
+	}
+
+	public void setHoveredFontColor(float red, float green, float blue)
+	{
+		hoveredColor.x = red;
+		hoveredColor.y = green;
+		hoveredColor.z = blue;
+//		this.hoveredRed = red;
+//		this.hoveredGreen = green;
+//		this.hoveredBlue = blue;
+	}
+
+	public void resetEnabledColors()
+	{
+		enabledColor.x = scheme.enabledRed;
+		enabledColor.y = scheme.enabledGreen;
+		enabledColor.z = scheme.enabledBlue;
+//		enabledRed = scheme.enabledRed;
+//		enabledGreen = scheme.enabledGreen;
+//		enabledBlue = scheme.enabledBlue;
+	}
+
+	public void resetDisabledColors()
+	{
+		disabledColor.x = scheme.disabledRed;
+		disabledColor.y = scheme.disabledGreen;
+		disabledColor.z = scheme.disabledBlue;
+//		disabledRed = scheme.disabledRed;
+//		disabledGreen = scheme.disabledGreen;
+//		disabledBlue = scheme.disabledBlue;
+	}
+
+	public void resetHoveredColors()
+	{
+		hoveredColor.x = scheme.hoveredRed;
+		hoveredColor.y = scheme.hoveredGreen;
+		hoveredColor.z = scheme.hoveredBlue;
+//		hoveredRed = scheme.hoveredRed;
+//		hoveredGreen = scheme.hoveredGreen;
+//		hoveredBlue = scheme.hoveredBlue;
+	}
+
+	public void resetAllColors()
+	{
+		resetEnabledColors();
+		resetDisabledColors();
+		resetHoveredColors();
 	}
 	
 	/*
@@ -251,7 +313,7 @@ public class Button extends Component implements IFocusable
 
 	public boolean isEnabled()
 	{
-		return enabled_;
+		return enabled;
 	}
 
 	public int getX()
@@ -271,6 +333,70 @@ public class Button extends Component implements IFocusable
 
 	public boolean isHovered()
 	{
-		return hovered_;
+		return hovered;
+	}
+
+	/* Events */
+
+	private List<Consumer<Button>> clickEvents = new ArrayList<>();
+	private List<IfClickEvent> ifClickEvents = new ArrayList<>();
+	private List<Consumer<Button>> holdEvents = new ArrayList<>();
+
+	/* Click Event */
+
+	public void addClickEvent(Consumer<Button> c)
+	{
+		clickEvents.add(c);
+	}
+
+	private void runClickEvents()
+	{
+		clickEvents.forEach(c -> c.accept(this));
+	}
+
+	/* If Click Event */
+
+	/**
+	 * Runs only if condition in <b> f </b> is met
+	 * @param f Condition
+	 * @param c Event
+	 */
+	public void addIfClickEvent(Function<Button, Boolean> f, Consumer<Button> c)
+	{
+		ifClickEvents.add(new IfClickEvent(f, c));
+	}
+
+	private void runIfClickEvents()
+	{
+		ifClickEvents.forEach(c -> {
+			if (c.f.apply(this))
+				c.c.accept(this);
+		});
+	}
+
+	/* Hold Event */
+
+	public void addHoldEvent(Consumer<Button> c)
+	{
+		holdEvents.add(c);
+	}
+
+	private void runHoldEvents()
+	{
+		holdEvents.forEach(c -> c.accept(this));
+	}
+
+	/* Class required for events */
+
+	private class IfClickEvent
+	{
+		Function<Button, Boolean> f;
+		Consumer<Button> c;
+
+		private IfClickEvent(Function<Button, Boolean> f, Consumer<Button> c)
+		{
+			this.f = f;
+			this.c = c;
+		}
 	}
 }

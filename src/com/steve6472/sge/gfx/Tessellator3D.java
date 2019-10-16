@@ -7,22 +7,20 @@
 
 package com.steve6472.sge.gfx;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL20.*;
+import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.BufferUtils;
+import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL20.*;
 
 public class Tessellator3D
 {
-	
-	public List<Float> vertices = new ArrayList<Float>();
-	public List<Integer> texture = new ArrayList<Integer>();
-	public List<Float> color = new ArrayList<Float>();
+	public List<Float> vertices = new ArrayList<>();
+	public List<Float> texture = new ArrayList<>();
+	public List<Float> color = new ArrayList<>();
 
 	public static final int POINTS 				= GL_POINTS; 				// 0
 	public static final int LINES 				= GL_LINES;					// 1
@@ -53,33 +51,33 @@ public class Tessellator3D
 			if (tex != null && col != null)
 			{
 				put(
-						ver[0 + i * 3], ver[1 + i * 3], ver[2 + i * 3], 
-						tex[0 + i * 2], tex[1 + i * 2], 
-						col[0 + i * 4], col[1 + i * 4], col[2 + i * 4], col[3 + i * 4]
+						ver[i * 3], ver[1 + i * 3], ver[2 + i * 3],
+						tex[i * 2], tex[1 + i * 2],
+						col[i * 4], col[1 + i * 4], col[2 + i * 4], col[3 + i * 4]
 								);
 			} else if (tex == null && col != null)
 			{
 				put(
-						ver[0 + i * 3], ver[1 + i * 3], ver[2 + i * 3],  
-						col[0 + i * 4], col[1 + i * 4], col[2 + i * 4], col[3 + i * 4]
+						ver[i * 3], ver[1 + i * 3], ver[2 + i * 3],
+						col[i * 4], col[1 + i * 4], col[2 + i * 4], col[3 + i * 4]
 								);
-			} else if (col == null && tex != null)
+			} else if (tex != null)
 			{
 				put(
-						ver[0 + i * 3], ver[1 + i * 3], ver[2 + i * 3], 
-						tex[0 + i * 2], tex[1 + i * 2]
+						ver[i * 3], ver[1 + i * 3], ver[2 + i * 3],
+						tex[i * 2], tex[1 + i * 2]
 								);
 			} else
 			{
 				put(
-						ver[0 + i * 3], ver[1 + i * 3], ver[2 + i * 3]
+						ver[i * 3], ver[1 + i * 3], ver[2 + i * 3]
 								);
 			}
 			
 		}
 	}
 
-	public void put(float vx, float vy, float vz, int tx, int ty, float cr, float cg, float cb, float ca)
+	public void put(float vx, float vy, float vz, float tx, float ty, float cr, float cg, float cb, float ca)
 	{
 		vertices.add(vx);
 		vertices.add(vy);
@@ -94,7 +92,7 @@ public class Tessellator3D
 		color.add(ca);
 	}
 	
-	public void put(float vx, float vy, float vz, int tx, int ty)
+	public void put(float vx, float vy, float vz, float tx, float ty)
 	{
 		put(vx, vy, vz, tx, ty, 1, 1, 1, 1);
 	}
@@ -121,14 +119,14 @@ public class Tessellator3D
 		glEnableVertexAttribArray(2);
 
 		FloatBuffer ver = toFloatBuffer(vertices);
-		IntBuffer tex = toIntBuffer(texture);
+		FloatBuffer tex = toFloatBuffer(texture);
 		FloatBuffer col = toFloatBuffer(color);
 		
 		glVertexPointer(3, GL_FLOAT, 0, ver);
 		glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, ver);
 
-		glTexCoordPointer(2, GL_INT, 0, tex);
-		glVertexAttribPointer(1, 2, GL_INT, false, 0, tex);
+		glTexCoordPointer(2, GL_FLOAT, 0, tex);
+		glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, tex);
 
 		glColorPointer(4, GL_FLOAT, 0, col);
 		glVertexAttribPointer(2, 4, GL_FLOAT, false, 0, col);
@@ -143,8 +141,15 @@ public class Tessellator3D
 		color.clear();
 		texture.clear();
 	}
+
+	public void clear()
+	{
+		vertices.clear();
+		color.clear();
+		texture.clear();
+	}
 	
-	public void render(int mode, FloatBuffer ver, IntBuffer tex, FloatBuffer col, int size)
+	public void render(int mode, FloatBuffer ver, FloatBuffer tex, FloatBuffer col, int size)
 	{
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
@@ -153,8 +158,8 @@ public class Tessellator3D
 		glVertexPointer(3, GL_FLOAT, 0, ver);
 		glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, ver);
 
-		glTexCoordPointer(2, GL_INT, 0, tex);
-		glVertexAttribPointer(1, 2, GL_INT, false, 0, tex);
+		glTexCoordPointer(2, GL_FLOAT, 0, tex);
+		glVertexAttribPointer(1, 2, GL_FLOAT, false, 0, tex);
 
 		glColorPointer(4, GL_FLOAT, 0, col);
 		glVertexAttribPointer(2, 4, GL_FLOAT, false, 0, col);
@@ -171,27 +176,12 @@ public class Tessellator3D
 		FloatBuffer buff = BufferUtils.createFloatBuffer(arr.size());
 		
 		for (float i : arr)
-		{
 			buff.put(i);
-		}
 		buff.flip();
 		
 		return buff;
 	}
-	
-	public static IntBuffer toIntBuffer(List<Integer> arr)
-	{
-		IntBuffer buff = BufferUtils.createIntBuffer(arr.size());
-		
-		for (int i : arr)
-		{
-			buff.put(i);
-		}
-		buff.flip();
-		
-		return buff;
-	}
-	
+
 	public static int getRenderMode(int index)
 	{
 		switch (index)

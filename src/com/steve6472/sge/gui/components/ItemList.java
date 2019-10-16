@@ -1,234 +1,91 @@
 package com.steve6472.sge.gui.components;
 
+import com.steve6472.sge.gfx.SpriteRender;
+import com.steve6472.sge.gui.Component;
+import com.steve6472.sge.main.MainApp;
+import com.steve6472.sge.main.events.Event;
+import com.steve6472.sge.main.events.ScrollEvent;
+import com.steve6472.sge.test.Fex;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.steve6472.sge.gfx.Font;
-import com.steve6472.sge.gfx.RenderHelper;
-import com.steve6472.sge.gfx.Screen;
-import com.steve6472.sge.gfx.Sprite;
-import com.steve6472.sge.gui.Component;
-import com.steve6472.sge.main.MainApplication;
+import java.util.function.Consumer;
 
 public class ItemList extends Component
 {
+	protected List<ListItem> items;
+	public ScrollBar scrollBar;
+	boolean enabled;
+	boolean multiselect;
 
-	private static final long serialVersionUID = 4821451061681776222L;
-	protected List<Item> items = new ArrayList<Item>();
-	private List<ChangeEvent> changeEvents = new ArrayList<ChangeEvent>();
-	protected int fontSize = 1;
-	protected int visibleItems = 4;
-	protected int scroll = 0;
-	protected int hovered = 0;
-	protected int selected = 0;
-
-	private boolean upEnabled = true, downEnabled = true, upHovered = false, downHovered = false;
-
-	@Override
-	public void init(MainApplication game)
+	public ItemList(int visibleItems)
 	{
-		
+		items = new ArrayList<>();
+		scrollBar = new ScrollBar();
+		scrollBar.visi = visibleItems;
+		enabled = true;
+		multiselect = true;
 	}
 
 	@Override
-	public void render(Screen screen)
+	public void init(MainApp main)
 	{
-		Screen.drawRect(x, y, width - 20, height * getVisibleItems(), 2, 0xff808080);
-		Screen.fillRect(x + 2, y + 2, width - 24, height * getVisibleItems() - 4, 0xffaeaeae);
-		
-		for (int i = 0; i < visibleItems; i++)
-		{
-			if (!((i + scroll) > (items.size() - 1)))
-			{
-				renderItem(i);
-			}
-		}
-		// Right "slider"
-		RenderHelper.renderSingleBorder(getX() + getWidth() - 22, getY() + 14, 22, getHeight() * visibleItems - 14 * 2, 0xff7f7f7f, 0xff000000);
-		
-		RenderHelper.renderButton(getX() + getWidth() - 22, getY(), 22, 14, upEnabled, upHovered);
-		
-		RenderHelper.renderButton(getX() + getWidth() - 22, getY() + getHeight() * getVisibleItems() - 14, 22, 14, downEnabled, downHovered);
-	}
-	
-	public void renderItem(int i)
-	{
-		RenderHelper.renderSingleBorder(getX(), getY() + i * getHeight(), getWidth() - 22, getHeight(), 0xff3f3f3f, 0xffbfbfbf);
-
-		if (hovered == i)
-			Screen.fillRect(getX(), getY() + i * getHeight(), getWidth() - 22, getHeight(), 0x80777777);
-
-		if (selected == i + scroll)
-			Screen.fillRect(getX(), getY() + i * getHeight(), getWidth() - 22, getHeight(), 0x80555555);
-
-		renderText(i);
-		
-		Item item = items.get(i + scroll);
-		
-		Sprite sprite = item.sprite;
-		
-		if (sprite == null)
-			return;
-
-		Screen.drawSprite(getX() + item.xOffset, getY() + i * getHeight() + (getHeight() / 2 - sprite.getHeight() / 2 + item.yOffset),
-				sprite);
+		addComponent(scrollBar);
 	}
 
-	private int oldHover = -1;
-
-	@Override
-	public void tick()
+	public void setScroll(int scroll)
 	{
-		upHovered = isCursorInComponent(getX() + getWidth() - 22, getY(), 22, 14);
-
-		downHovered = isCursorInComponent(getX() + getWidth() - 22, getY() + getHeight() * getVisibleItems() - 14, 22, 14);
-		
-		onMouseClicked(upEnabled && upHovered, (c) ->
-		{
-			scroll--;
-			getMouseHandler().setTrigger(true);
-		});
-
-		if (downHovered)
-		{
-			downHovered = true;
-		} else if (!downHovered)
-		{
-			downHovered = false;
-		} else if (!downHovered)
-		{
-			downHovered = false;
-		}
-		
-		onMouseClicked(downHovered && downEnabled, (c) ->
-		{
-			scroll++;
-			getMouseHandler().setTrigger(true);
-		});
-
-		upEnabled = scroll > 0;
-		downEnabled = scroll < items.size() - visibleItems;
-
-		hovered = -1;
-		for (int i = 0; i < visibleItems; i++)
-		{
-			if (!((i + scroll) > (items.size() - 1)))
-			{
-				int awbud = i;
-				boolean b = isCursorInComponent(getX(), getY() + i * getHeight(), getWidth() - 22, getHeight());
-				if (b)
-				{
-					onMousePressed(b, (c) -> 
-					{
-						if (selected != awbud + scroll)
-						{
-							selected = awbud + scroll;
-							for (ChangeEvent ce : changeEvents)
-							{
-								ce.change();
-							}
-						}
-					});
-					hovered = i;
-					break;
-				}
-			}
-		}
-		if (oldHover != hovered)
-		{
-			oldHover = hovered;
-		}
+		scrollBar.scrl = scroll;
 	}
 
-	protected void renderText(int index)
+	public ListItem addItem(String text)
 	{
-		Item item = items.get(index + scroll);
-		if (item.sprite != null)
-			Font.render(Font.trim(items.get((index + scroll)).text, width - 34, fontSize),
-					items.get(index + scroll).sprite.getWidth() + getX() + 4 + item.xOffset, getY() + getHeight() / 2 - 8 / 2 + index * getHeight(),
-					fontSize, item.red, item.green, item.blue);
-		else
-			Font.render(Font.trim(items.get((index + scroll)).text, width - 34, fontSize), getX() + 4,
-					getY() + getHeight() / 2 - 8 / 2 + index * getHeight(), fontSize, item.red, item.green, item.blue);
+		ListItem item = new ListItem(getMain(), text);
+		items.add(item);
+		scrollBar.used = items.size();
+		return item;
 	}
 
-	public void setSize(int width, int height)
+	public void removeItem(String text)
 	{
-		super.setSize(width, height / visibleItems);
+		items.removeIf(c -> c.text.equals(text));
+		scrollBar.used = items.size();
 	}
 
-	public Sprite getSprite(int index)
-	{
-		return items.get(index).sprite;
-	}
-
-	public List<Item> getItems()
+	public List<ListItem> getItems()
 	{
 		return items;
 	}
-	public void addItem(String text, Sprite sprite, int xOffset, int yOffset, float red, float green, float blue, float alpha)
+
+	public List<ListItem> getSelectedItems()
 	{
-		items.add(new Item(text, sprite, xOffset, yOffset, red, green, blue, alpha));
-	}
-	
-	public void addItem(String text, Sprite sprite, int color)
-	{
-		float[] cs = Screen.getColors(color);
-		addItem(text, sprite, 2, 0, cs[0], cs[1], cs[2], cs[3]);
-	}
-	
-	public void addItem(String text, int color)
-	{
-		float[] cs = Screen.getColors(color);
-		addItem(text, null, 2, 0, cs[0], cs[1], cs[2], cs[3]);
-	}
-	
-	public void addItem(String text, Sprite sprite, int xOffset, int yOffset, int color)
-	{
-		float[] cs = Screen.getColors(color);
-		addItem(text, sprite, xOffset, yOffset, cs[0], cs[1], cs[2], cs[3]);
-	}
-	
-	public void addItem(String text, int xOffset, int yOffset, int color)
-	{
-		float[] cs = Screen.getColors(color);
-		addItem(text, null, xOffset, yOffset, cs[0], cs[1], cs[2], cs[3]);
-	}
-	
-	public void addItem(String text, Sprite sprite, float red, float green, float blue, float alpha)
-	{
-		addItem(text, sprite, 2, 0, red, green, blue, alpha);
-	}
-	
-	public void addItem(String text, float red, float green, float blue, float alpha)
-	{
-		addItem(text, null, 2, 0, red, green, blue, alpha);
+		List<ListItem> list = new ArrayList<>();
+		items.forEach(c -> {
+			if (c.isSelected())
+				list.add(c);
+		});
+		return list;
 	}
 
-	public void addItem(String text, Sprite sprite, int xOffset, int yOffset)
+	public List<Integer> getSelectedItemsIndices()
 	{
-		addItem(text, sprite, xOffset, yOffset, 1f, 1f, 1f, 1f);
+		List<Integer> list = new ArrayList<>();
+		for (int i = 0; i < items.size(); i++)
+		{
+			if (items.get(i).isSelected())
+				list.add(i);
+		}
+		return list;
 	}
 
-	public void addItem(String text, int xOffset, int yOffset)
+	public void unselectAll()
 	{
-		addItem(text, null, xOffset, yOffset, 1f, 1f, 1f, 1f);
-	}
-	
-	public void addItem(String text, Sprite sprite)
-	{
-		addItem(text, sprite, 2, 0);
+		items.forEach(c -> c.setSelected(false));
 	}
 
-	public void addItem(String text)
+	public void select(int index)
 	{
-		addItem(text, null);
-	}
-
-	public void removeItem(int index)
-	{
-		if (index <= items.size())
-			items.remove(index);
+		items.get(index).setSelected(true);
 	}
 
 	public void clear()
@@ -236,47 +93,85 @@ public class ItemList extends Component
 		items.clear();
 	}
 
-	public void setSelectedItem(int index)
+	@Override
+	public void tick()
 	{
-		selected = index < items.size() ? index : items.size() - 1;
-	}
-
-	public void setFontSize(int size)
-	{
-		this.fontSize = size;
-	}
-
-	public void setVisibleItems(int i)
-	{
-		this.visibleItems = i;
-	}
-
-	public int getVisibleItems()
-	{
-		return visibleItems;
-	}
-
-	public String getSelectedItem()
-	{
-		return items.get(selected).text;
-	}
-
-	public int getSelectedIndex()
-	{
-		return selected;
-	}
-
-	public void addChangeEvent(ChangeEvent ce)
-	{
-		changeEvents.add(ce);
-	}
-
-	public void fireChangeEvent()
-	{
-		for (ChangeEvent ce : changeEvents)
+		for (int i = scrollBar.scrl; i < scrollBar.visi + scrollBar.scrl; i++)
 		{
-			ce.change();
+			if (i >= items.size())
+				break;
+			items.get(i).tick(this, i - scrollBar.scrl);
 		}
 	}
 
+	@Override
+	public void render()
+	{
+		SpriteRender.renderSingleBorderComponent(this, 0, 0, 0, 1, Fex.H80, Fex.H80, Fex.H80, Fex.Hff);
+
+		for (int i = scrollBar.scrl; i < scrollBar.visi + scrollBar.scrl; i++)
+		{
+			if (i >= items.size())
+				break;
+			items.get(i).render(this, i - scrollBar.scrl);
+		}
+	}
+
+	@Override
+	public void setVisible(boolean b)
+	{
+		super.setVisible(b);
+		setChildVisibility(b);
+	}
+
+	public void setMultiselect(boolean multiselect)
+	{
+		this.multiselect = multiselect;
+	}
+
+	public boolean isMultiselect()
+	{
+		return multiselect;
+	}
+
+	@Override
+	public void setSize(int width, int height)
+	{
+		super.setSize(width, height);
+		scrollBar.setSize(20, height + 18);
+		scrollBar.setLocation(x + width - 20, y);
+	}
+
+	@Override
+	public void setLocation(int x, int y)
+	{
+		super.setLocation(x, y);
+		scrollBar.setLocation(x + width - 20, y);
+	}
+
+	@Event
+	public void scroll(ScrollEvent event)
+	{
+		if (isCursorInComponent(getX(), getY(), getWidth() - 20, getHeight()))
+			scrollBar.scroll((int) event.getyOffset());
+	}
+
+	public void setVisibleItems(int visibleItems)
+	{
+		scrollBar.visi = visibleItems;
+	}
+
+	/* Events */
+
+	private List<Consumer<ItemList>> events = new ArrayList<>();
+
+	public void addChangeEvent(Consumer<ItemList> c)
+	{
+		events.add(c);
+	}
+
+	void runChangeEvents()
+	{
+		events.forEach(c -> c.accept(this));
+	}
 }

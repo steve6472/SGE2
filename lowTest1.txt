@@ -1,0 +1,30 @@
+waitTime 0
+
+sset 99 Hello World
+print *99
+
+iset 1
+iset 0
+
+name 0 number
+name 1 iteration
+
+add number 1 *number
+print number
+print iteration
+
+goto 25 if iteration >= 5
+goto 12 if number < 3
+goto 20 if number == 3
+
+iset 0 0
+add iteration 1 *iteration
+goto 7
+
+
+sset 99 Bye World
+print *99
+
+stop 0
+
+

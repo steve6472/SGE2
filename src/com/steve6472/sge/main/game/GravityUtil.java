@@ -10,7 +10,7 @@ package com.steve6472.sge.main.game;
 public class GravityUtil
 {
 	/**
-	 * m/s^2
+	 * m/overlays^2
 	 */
 	public static final double NORMAL_GRAVITY = 9.80665;
 	

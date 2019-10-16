@@ -7,32 +7,13 @@
 
 package com.steve6472.sge.gui.components;
 
-import static org.lwjgl.opengl.GL11.*;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
-import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.steve6472.sge.gfx.Char;
-import com.steve6472.sge.gfx.Font;
-import com.steve6472.sge.gfx.Screen;
-import com.steve6472.sge.gui.Component;
-import com.steve6472.sge.gui.GuiUtils;
-import com.steve6472.sge.main.KeyList;
-import com.steve6472.sge.main.MainApplication;
-import com.steve6472.sge.main.SGArray;
-import com.steve6472.sge.main.Util;
-import com.steve6472.sge.main.events.CharEvent;
-import com.steve6472.sge.main.events.Event;
-import com.steve6472.sge.main.events.KeyEvent;
-
-public class TextArea extends Component implements IFocusable, KeyList
+/**
+ * Begone old and not working component!
+ */
+@Deprecated
+public class TextArea/* extends Component implements KeyList*/
 {
+	/*
 	private static final long serialVersionUID = 7783560380863267944L;
 	boolean isFocused = false;
 	private boolean showCarret = false;
@@ -57,19 +38,19 @@ public class TextArea extends Component implements IFocusable, KeyList
 	
 	SGArray<Character> splitters;
 	
-	static char[] breaks = "()[]{}, '+-*/\\.?_!\":;#&@§".toCharArray();
-
+	//static char[] breaks = "()[]{}, '+-*///\\.?_!\":;#&@ï¿½".toCharArray();
+/*
 	public TextArea(int maxY)
 	{
 		super();
 
-		colors = new SGArray<ColorIndex2>();
-		words = new SGArray<ColorIndex>();
+		colors = new SGArray<>();
+		words = new SGArray<>();
 		
-		splitters = new SGArray<Character>();
+		splitters = new SGArray<>();
 		splitters.add(' ');
 		
-		text = new ArrayList<String>();
+		text = new ArrayList<>();
 		
 		for (int i = 0; i <= maxY; i++)
 			text.add("");
@@ -101,7 +82,7 @@ public class TextArea extends Component implements IFocusable, KeyList
 				break;
 			case BACKSPACE:
 				//Delete whole line
-				if (getMainApp().isKeyPressed(L_CONTROL))
+				if (getMain().isKeyPressed(L_CONTROL))
 				{
 					if (carretPositionX == 0)
 					{
@@ -131,7 +112,7 @@ public class TextArea extends Component implements IFocusable, KeyList
 							}
 						}
 						
-						text.set(carretPositionY, s.substring(0, break_) + s.substring(carretPositionX, s.length()));
+						text.set(carretPositionY, s.substring(0, break_) + s.substring(carretPositionX));
 						carretPositionX -= i0;
 						if (text.get(carretPositionY).length() < carretPositionX)
 							carretPositionX = text.get(carretPositionY).length();
@@ -168,7 +149,7 @@ public class TextArea extends Component implements IFocusable, KeyList
 			case DOWN: 	moveCarretDown(); 	break;
 			case LEFT:
 
-				if (getMainApp().isKeyPressed(L_CONTROL) && carretPositionX != 0)
+				if (getMain().isKeyPressed(L_CONTROL) && carretPositionX != 0)
 				{
 					int i0 = 0;
 
@@ -200,7 +181,7 @@ public class TextArea extends Component implements IFocusable, KeyList
 				
 				break;
 			case RIGHT:
-				if (getMainApp().isKeyPressed(L_CONTROL) && carretPositionX != text.get(carretPositionY).length())
+				if (getMain().isKeyPressed(L_CONTROL) && carretPositionX != text.get(carretPositionY).length())
 				{
 					int i0 = 0;
 
@@ -237,7 +218,7 @@ public class TextArea extends Component implements IFocusable, KeyList
 	@Event
 	public void charEvent(CharEvent event)
 	{
-		if (getMainApp().isKeyPressed(L_CONTROL) || getMainApp().isKeyPressed(R_CONTROL))
+		if (getMain().isKeyPressed(L_CONTROL) || getMain().isKeyPressed(R_CONTROL))
 			return;
 		
 		if (!isFocused || !isVisible())
@@ -256,7 +237,7 @@ public class TextArea extends Component implements IFocusable, KeyList
 		
 		text.set(carretPositionY,
 				text.get(carretPositionY).substring(0, Math.min(carretPositionX, text.get(carretPositionY).length()))
-						+ Character.toString(c)
+						+ c
 						+ text.get(carretPositionY).substring(Math.min(carretPositionX, text.get(carretPositionY).length())));
 
 		moveCarretRight();
@@ -270,12 +251,12 @@ public class TextArea extends Component implements IFocusable, KeyList
 	}
 	
 	@Override
-	public void init(MainApplication mainApp)
+	public void init(MainApp mainApp)
 	{
 	}
 
 	@Override
-	public void render(Screen screen)
+	public void renderSprite()
 	{
 		Screen.drawRect(x, y, getWidth(), getHeight(), 2, 0xffff00ff);
 		
@@ -305,7 +286,7 @@ public class TextArea extends Component implements IFocusable, KeyList
 			Screen.fillRect(x + width - 18, y + 2 + xSliderRelX, 16, hei, 0xff8d8c8d);
 		else
 			Screen.fillRect(x + width - 18, y + 2, 16, (int) fulX, 0xff8d8c8d);
-		if (hiddenX > 0 && GuiUtils.isCursorInRectangle(getMouseHandler(), x + width - 18, y + 2 + xSliderRelX, 16, hei))
+		if (hiddenX > 0 && isCursorInRectangle(getMouseHandler(), x + width - 18, y + 2 + xSliderRelX, 16, hei))
 		{
 			Screen.fillRect(x + width - 18, y + 2 + xSliderRelX, 16, hei, 0xffb1b0b1);
 		}
@@ -324,14 +305,14 @@ public class TextArea extends Component implements IFocusable, KeyList
 				int width = 0;
 				String[] text = separateWords(this.text.get(i));
 
-				for (int j = 0; j < text.length; j++)
+				for (String s : text)
 				{
-					width += renderIndexedColors(text[j], screen, x + 3 + width, y + 3 + i * 9 - scrollX * 9, colors);
+					width += renderIndexedColors(s, x + 3 + width, y + 3 + i * 9 - scrollX * 9, colors);
 				}
 			} else
 			{
 				end();
-				Font.render(text.get(i), x + 3, y + 3 + i * 9);
+				Font.renderSprite(text.get(i), x + 3, y + 3 + i * 9);
 				start();
 			}
 		}
@@ -347,6 +328,12 @@ public class TextArea extends Component implements IFocusable, KeyList
 			}
 		}
 	}
+
+	private static boolean isCursorInRectangle(MouseHandler m, int x, int y, int w, int h)
+	{
+		return (m.getMouseX() >= x && m.getMouseX() <= w + x)
+				&& ( m.getMouseY() >= y && m.getMouseY()<= h + y);
+	}
 	
 	int xSliderRelX = 0;
 	int xSliderOldX = 0;
@@ -357,13 +344,13 @@ public class TextArea extends Component implements IFocusable, KeyList
 	{
 		if (!isVisible())
 			return;
-		if (isCursorInComponent() && getMouseHandler().isMouseHolded())
+		if (isCursorInComponent() && isLMBHolded())
 			isFocused = true;
 		
-		if (!isCursorInComponent() && getMouseHandler().isMouseHolded())
+		if (!isCursorInComponent() && isLMBHolded())
 			isFocused = false;
 
-		carretTick += Math.max(60d / Math.max(getMainApp().getFPS(), 1), 1);
+		carretTick += Math.max(60d / Math.max(getMain().getLoopTime(), 1), 1);
 		if (carretTick >= 60)
 		{
 			carretTick = 0;
@@ -374,17 +361,17 @@ public class TextArea extends Component implements IFocusable, KeyList
 		double fulX = height - 22;
 		int hei = Math.max((int) ((maxXVisible / usedX) * fulX), 20);
 		
-		if (GuiUtils.isCursorInRectangle(getMouseHandler(), x + width - 18, y + 2 + xSliderRelX, 16, hei))
+		if (isCursorInRectangle(getMouseHandler(), x + width - 18, y + 2 + xSliderRelX, 16, hei))
 		{
-			if (getMouseHandler().isMouseHolded() && !holded)
+			if (isLMBHolded() && !holded)
 			{
-				xSliderOldX = xSliderRelX - getMouseHandler().getMouseY();
+				xSliderOldX = xSliderRelX - getMouseY();
 				holded = true;
 			}
 		}
 		
-		if (getMouseHandler().isMouseHolded() && holded)
-			xSliderRelX = getMouseHandler().getMouseY() + xSliderOldX;
+		if (isLMBHolded() && holded)
+			xSliderRelX = getMouseY() + xSliderOldX;
 		
 		
 		if (xSliderRelX > (fulX - hei))
@@ -397,7 +384,7 @@ public class TextArea extends Component implements IFocusable, KeyList
 			xSliderRelX = 0;
 		}
 		
-		if (!getMouseHandler().isMouseHolded())
+		if (!isLMBHolded())
 		{
 			holded = false;
 			xSliderOldX = x;
@@ -411,7 +398,7 @@ public class TextArea extends Component implements IFocusable, KeyList
 		scrollX = (int) ((double) xSliderRelX / ((p * fulX) / (usedX - maxXVisible)));
 	}
 	
-	public int renderIndexedColors(String msg, Screen screen, int x, int y, SGArray<ColorIndex2> colorIndexes)
+	public int renderIndexedColors(String msg, int x, int y, SGArray<ColorIndex2> colorIndexes)
 	{
 		if (msg == null)
 			return 0;
@@ -426,7 +413,7 @@ public class TextArea extends Component implements IFocusable, KeyList
 		{
 			if (colorIndexes != null)
 			{
-				main : for (ColorIndex2 o : colorIndexes)
+				for (ColorIndex2 o : colorIndexes)
 				{
 					String st = o.index;
 					if (msg.length() > i + st.length())
@@ -438,7 +425,7 @@ public class TextArea extends Component implements IFocusable, KeyList
 							red = o.red;
 							green = o.green;
 							blue = o.blue;
-							break main;
+							break;
 						}
 					}
 				}
@@ -504,34 +491,31 @@ public class TextArea extends Component implements IFocusable, KeyList
 		
 		glColor3f(red, green, blue);
 		Font.renderChar(x + lx, y, ch.getIndex(), 1);
-		lx += ch.getWidth();
 	}
 	
 	private String[] separateWords(String text)
 	{
-		String toSplit = text;
-		SGArray<String> splitted = new SGArray<String>();
+		SGArray<String> splitted = new SGArray<>();
 
-		String temp = "";
-		for (char c : toSplit.toCharArray())
+		StringBuilder temp = new StringBuilder();
+		for (char c : text.toCharArray())
 		{
 			boolean canAdd = true;
 			for (char s : splitters)
 			{
 				if (c == s)
 				{
-					splitted.add(temp);
+					splitted.add(temp.toString());
 					splitted.add("" + c);
-					temp = "";
+					temp = new StringBuilder();
 					canAdd = false;
 				}
 			}
 			if (canAdd)
-				temp += c;
+				temp.append(c);
 		}
-		splitted.add(temp);
-		temp = "";
-		
+		splitted.add(temp.toString());
+
 		for (int i = 0; i < splitted.getSize(); i++)
 		{
 			String s = splitted.get(i);
@@ -617,7 +601,7 @@ public class TextArea extends Component implements IFocusable, KeyList
 	/*
 	 * Operators
 	 */
-	
+	/*
 	public void clearTextArea()
 	{
 		int size = text.size();
@@ -713,7 +697,7 @@ public class TextArea extends Component implements IFocusable, KeyList
 	/*
 	 * Setters
 	 */
-	
+	/*
 	public void setEnabled(boolean isEnabled)
 	{
 		this.isEnabled = isEnabled;
@@ -776,7 +760,7 @@ public class TextArea extends Component implements IFocusable, KeyList
 	{
 		for (ColorIndex c : this.words)
 		{
-			SGArray<Integer> in = new SGArray<Integer>();
+			SGArray<Integer> in = new SGArray<>();
 			for (int i = 0; i < c.words.getSize(); i++)
 			{
 				String s = c.words.get(i);
@@ -832,13 +816,7 @@ public class TextArea extends Component implements IFocusable, KeyList
 	/*
 	 * Getters
 	 */
-
-	@Override
-	public boolean isFocused()
-	{
-		return isFocused;
-	}
-	
+/*
 	public List<String> getText()
 	{
 		return text;
@@ -862,5 +840,5 @@ public class TextArea extends Component implements IFocusable, KeyList
 	public String getText(int line)
 	{
 		return text.get(line);
-	}
+	}*/
 }

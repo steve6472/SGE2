@@ -4,21 +4,15 @@
 * Project: SGE2
 *
 ***********************/
-
+/*
 package com.steve6472.sge.test;
 
+import com.steve6472.sge.gfx.*;
+import com.steve6472.sge.main.MainApp;
+import javafx.scene.Camera;
 import org.joml.Matrix4f;
 
-import com.steve6472.sge.gfx.Camera;
-import com.steve6472.sge.gfx.Helper;
-import com.steve6472.sge.gfx.Model3;
-import com.steve6472.sge.gfx.SavedShaders;
-import com.steve6472.sge.gfx.Screen;
-import com.steve6472.sge.gfx.Shader;
-import com.steve6472.sge.gfx.Sprite;
-import com.steve6472.sge.main.MainApplication;
-
-public class Test3D_SACRET_VERSION__DO_NOT_TUCH extends MainApplication
+public class Test3D_SACRET_VERSION__DO_NOT_TUCH extends MainApp
 {
 
 	public Test3D_SACRET_VERSION__DO_NOT_TUCH()
@@ -182,7 +176,7 @@ public class Test3D_SACRET_VERSION__DO_NOT_TUCH extends MainApplication
 	@Override
 	public void tick()
 	{
-		camera.setSize(getCurrentWidth(), getCurrentHeight());
+		camera.setSize(getWidth(), getHeight());
 	}
 	
 	float rotX, rotY;
@@ -190,12 +184,12 @@ public class Test3D_SACRET_VERSION__DO_NOT_TUCH extends MainApplication
 	/*
 	 * 9.6.2018
 	 * 22:38:21
-	 * Cube render: successful
+	 * Cube renderSprite: successful
 	 * Yatta!
 	 */
-	
+	/*
 	@Override
-	public void render(Screen screen)
+	public void renderSprite()
 	{
 //		Tessellator3D tess = Tessellator3D.INSTANCE;
 		
@@ -222,7 +216,7 @@ public class Test3D_SACRET_VERSION__DO_NOT_TUCH extends MainApplication
 		shader.setUniformMat4f("transformation",  Helper.toMatrix());
 		shader.setUniformMat4f("projection", createProjectionMatrix());
 		
-		model.render();
+		model.renderSprite();
 		
 		Helper.popLayer();
 	}
@@ -233,7 +227,7 @@ public class Test3D_SACRET_VERSION__DO_NOT_TUCH extends MainApplication
 
 	private Matrix4f createProjectionMatrix()
 	{
-		float aspectRatio = (float) camera.getWidth() / (float) camera.getHeight();
+		float aspectRatio = (float) camera.getWindowWidth() / (float) camera.getWindowHeight();
 		float y_scale = (float) ((1f / Math.tan(Math.toRadians(FOV / 2f))) * aspectRatio);
 		float x_scale = y_scale / aspectRatio;
 		float frustum_length = FAR_PLANE - NEAR_PLANE;
@@ -254,13 +248,13 @@ public class Test3D_SACRET_VERSION__DO_NOT_TUCH extends MainApplication
 	}
 
 	@Override
-	public int getWidth()
+	public int getWindowWidth()
 	{
 		return 16 * 50;
 	}
 
 	@Override
-	public int getHeight()
+	public int getWindowHeight()
 	{
 		return 9 * 50;
 	}
@@ -288,3 +282,4 @@ public class Test3D_SACRET_VERSION__DO_NOT_TUCH extends MainApplication
 	}
 
 }
+*/

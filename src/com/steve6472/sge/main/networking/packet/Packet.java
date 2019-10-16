@@ -13,15 +13,15 @@ import java.util.Map;
 
 public abstract class Packet<T extends IPacketHandler>
 {
-	static Map<Integer, Class<? extends Packet<? extends IPacketHandler>>> packets0;
-	static Map<Class<? extends Packet<? extends IPacketHandler>>, Integer> packets1;
+	private static Map<Integer, Class<? extends Packet<? extends IPacketHandler>>> packets0;
+	private static Map<Class<? extends Packet<? extends IPacketHandler>>, Integer> packets1;
 	
 	private DatagramPacket sender;
 	
 	static
 	{
-		packets0 = new HashMap<Integer, Class<? extends Packet<? extends IPacketHandler>>>();
-		packets1 = new HashMap<Class<? extends Packet<? extends IPacketHandler>>, Integer>();
+		packets0 = new HashMap<>();
+		packets1 = new HashMap<>();
 
 		addPacket(0, ConnectPacket.class);
 		addPacket(1, DisconnectPacket.class);

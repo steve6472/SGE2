@@ -4,9 +4,8 @@ import java.io.Serializable;
 
 public class Tag implements Serializable
 {
-	private static final long serialVersionUID = -1131095891329117005L;
-	public String name = null;
-	public Object value = null;
+	public String name;
+	public Object value;
 	
 	public Tag(String name, Object value)
 	{
@@ -76,7 +75,7 @@ public class Tag implements Serializable
 		if (get() instanceof Integer)
 			return (int) get();
 		
-		return new Integer((String) get());
+		return Integer.valueOf((String) get());
 	}
 	
 	public Tag getTag()

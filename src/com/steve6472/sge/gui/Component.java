@@ -1,45 +1,39 @@
 package com.steve6472.sge.gui;
 
+import com.steve6472.sge.main.KeyHandler;
+import com.steve6472.sge.main.KeyList;
+import com.steve6472.sge.main.MainApp;
+import com.steve6472.sge.main.MouseHandler;
+import com.steve6472.sge.main.events.AbstractEvent;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Consumer;
 
-import com.steve6472.sge.gfx.Font;
-import com.steve6472.sge.gfx.Screen;
-import com.steve6472.sge.main.KeyHandler;
-import com.steve6472.sge.main.MainApplication;
-import com.steve6472.sge.main.MouseHandler;
-
-public abstract class Component extends LambdaControl implements Serializable
+public abstract class Component implements Serializable
 {
-
 	private static final long serialVersionUID = 62938822794527605L;
 	private boolean isVisible = true;
-	protected int x, y, width, height;
-	List<Component> components = new ArrayList<Component>();
+	protected int x, y, width, height, relx, rely;
+	private List<Component> components = new ArrayList<>();
 	protected Gui parentGui;
 	protected Component parentComponent;
 
-	private Font font;
-	private Screen screen;
 	private KeyHandler keyHandler;
 	private MouseHandler mouseHandler;
-	private MainApplication mainApp;
+	private MainApp main;
 	
-	public final void preInit(MainApplication mainApp)
+	public final void preInit(MainApp main)
 	{
-		initLambdaControl(this);
-		this.mainApp = mainApp;
-		if (mainApp != null)
+		this.main = main;
+		if (this.main != null)
 		{
-			this.font = mainApp.getFont();
-			this.screen = mainApp.getScreen();
-			this.keyHandler = mainApp.getKeyHandler();
-			this.mouseHandler = mainApp.getMouseHandler();
+			this.keyHandler = this.main.getKeyHandler();
+			this.mouseHandler = this.main.getMouseHandler();
 		} else
 		{
-			this.font = null;
-			this.screen = null;
 			this.keyHandler = null;
 			this.mouseHandler = null;
 		}
@@ -49,11 +43,11 @@ public abstract class Component extends LambdaControl implements Serializable
 	 * Abstract methods
 	 */
 	
-	public abstract void init(MainApplication game);
-	
-	public abstract void render(Screen screen);
-	
+	public abstract void init(MainApp main);
+
 	public abstract void tick();
+	
+	public abstract void render();
 
 	protected boolean isCursorInComponent(int x, int y, int w, int h)
 	{
@@ -69,35 +63,73 @@ public abstract class Component extends LambdaControl implements Serializable
 		return (mouseHandler.getMouseX() >= getX() && mouseHandler.getMouseX() <= getWidth() + getX())
 				&& (mouseHandler.getMouseY() >= getY() && mouseHandler.getMouseY() <= getHeight() + getY());
 	}
-	
-	protected boolean isKeyPressed(int key)
+
+	private boolean flag;
+
+	protected final void onMouseClicked(int button, final Consumer<Component> action)
 	{
-		return mainApp.isKeyPressed(key);
+		Objects.requireNonNull(action);
+		if (isCursorInComponent())
+		{
+			if (!flag)
+			{
+				if (getMain().getMouseHandler().getButton() == button)
+				{
+					flag = true;
+				}
+			} else
+			{
+				if (getMain().getMouseHandler().getButton() != button)
+				{
+					flag = false;
+					action.accept(this);
+				}
+			}
+		} else
+		{
+			flag = false;
+		}
+	}
+
+	/**
+	 * Runs if mouse is pressed over the component
+	 * @param action - Lambda expresion
+	 */
+	protected final void onMousePressed(int button, final Consumer<Component> action)
+	{
+		Objects.requireNonNull(action);
+		if (getButton() == button)
+		{
+			action.accept(this);
+		}
 	}
 	
 	/*
 	 * RIP ToolTip tick method
 	 * You will prob. never work ever again
+	 *
+	 * Update: It'overlays 14.12.2018 and I did not work on it
+	 * Update: It'overlays 10.02.2019 and I still did not work on it
 	 */
 	
-	protected void renderComponents(Screen screen)
+	protected void renderComponents()
 	{
 		for (Component gc : components)
 		{
 			if (gc.isVisible())
 			{
-				gc.render(screen);
+				gc.fullRender();
 			}
 		}
 	}
 
-	public final void fullRender(Screen screen)
+	public final void fullRender()
 	{
 		if (!isVisible())
 			return;
 		
-		render(screen);
-		renderComponents(screen);
+		render();
+		renderComponents();
 	}
 	
 	public final void fullTick()
@@ -124,10 +156,13 @@ public abstract class Component extends LambdaControl implements Serializable
 			throw new NullPointerException("Component can't be null");
 		
 		component.parentComponent = this;
-		component.preInit(mainApp);
-		component.init(mainApp);
-		getMainApp().getEventHandler().register(component);
+		component.preInit(main);
+		component.init(main);
+		getMain().getEventHandler().register(component);
 		components.add(component);
+
+		/* Reposition Components Children */
+		component.setLocation(component.getX(), component.getY());
 	}
 	
 	protected void removeComponent(Component component)
@@ -143,6 +178,11 @@ public abstract class Component extends LambdaControl implements Serializable
 	public Component getComponent(int index)
 	{
 		return components.get(index);
+	}
+
+	public List<Component> getComponents()
+	{
+		return components;
 	}
 	
 	protected void hideAllComponents()
@@ -162,7 +202,7 @@ public abstract class Component extends LambdaControl implements Serializable
 //			System.out.println("COM: " + gc.getClass().getSimpleName() + " " + gc.isVisible());
 			if (gc.isVisible())
 			{
-				gc.tick();
+				gc.fullTick();
 			}
 		}
 	}
@@ -175,6 +215,11 @@ public abstract class Component extends LambdaControl implements Serializable
 	{
 		this.isVisible = b;
 		
+//		components.forEach(c -> c.setVisible(b));
+	}
+
+	public void setChildVisibility(boolean b)
+	{
 		components.forEach(c -> c.setVisible(b));
 	}
 	
@@ -185,8 +230,14 @@ public abstract class Component extends LambdaControl implements Serializable
 		
 		for (Component gc : components)
 		{
-			gc.setLocation(x + gc.getX(), y + gc.getY());
+			gc.setLocation(gc.relx + getX(), gc.rely + getY());
 		}
+	}
+
+	public void setRelativeLocation(int x, int y)
+	{
+		this.relx = x;
+		this.rely = y;
 	}
 	
 	public void setSize(int width, int height)
@@ -195,10 +246,10 @@ public abstract class Component extends LambdaControl implements Serializable
 		this.height = height;
 		
 		if (width < getMinWidth())
-			width = getMinWidth();
+			this.width = getMinWidth();
 
 		if (height < getMinHeight())
-			height = getMinHeight();
+			this.height = getMinHeight();
 	}
 
 	/*
@@ -230,17 +281,18 @@ public abstract class Component extends LambdaControl implements Serializable
 	{
 		return x;
 	}
-	
 	public int getY()
 	{
 		return y;
 	}
+
+	public int getRelX() { return relx; }
+	public int getRelY() { return rely; }
 	
 	protected int getMinWidth()
 	{
 		return 0;
 	}
-	
 	protected int getMinHeight()
 	{
 		return 0;
@@ -250,29 +302,36 @@ public abstract class Component extends LambdaControl implements Serializable
 	{
 		return keyHandler;
 	}
-	
+
+	protected boolean isKeyPressed(int key)
+	{
+		return main.isKeyPressed(key);
+	}
+
 	public MouseHandler getMouseHandler()
 	{
 		return mouseHandler;
 	}
+
+	protected int getMouseX() { return getMouseHandler().getMouseX(); }
+	protected int getMouseY() { return getMouseHandler().getMouseY(); }
+	protected int getButton() { return getMouseHandler().getButton(); }
+	protected boolean isLMBHolded() { return getButton() == KeyList.LMB; }
+	protected boolean isMMBHolded() { return getButton() == KeyList.MMB; }
+	protected boolean isRMBHolded() { return getButton() == KeyList.RMB; }
 	
 	public Gui getParentGui()
 	{
 		return parentGui;
 	}
 	
-	public Screen getScreen()
+	public MainApp getMain()
 	{
-		return screen;
+		return main;
 	}
-	
-	public Font getFont()
+
+	public void runEvent(AbstractEvent event)
 	{
-		return font;
-	}
-	
-	public MainApplication getMainApp()
-	{
-		return mainApp;
+		getMain().runEvent(event);
 	}
 }

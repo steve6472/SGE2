@@ -1,0 +1,151 @@
+//0 used for output text
+
+sset 0
+name 0 t
+
+iset 3 1
+name 3 playerName
+
+sset 4
+name 4 playerOne
+
+sset 5
+name 5 playerTwo
+
+
+
+// Welcome Message
+println 'Welcome!'
+
+print 'Please enter your name player '
+println playerName
+
+// Name input
+sset 1
+sinput 1
+
+// Confirm
+print 'Welcome '
+println *1
+println 'Do you wish to save this name ?   1/0 (Yes/No)'
+
+iset 2
+name 2 answer
+iinput 2
+goto 21 if answer == 0
+
+// If Else
+goto 41 if *3 == 1
+sassign *1 *playerTwo
+goto 42 if *3 == 2
+sassign *1 *playerOne
+
+println 'Name saved!'
+println ''
+
+add playerName 1 *playerName
+goto 20 if *3 == 2
+
+// Names have been selected. Start game!
+
+iset 100
+name 100 scorePlayerOne
+
+iset 101
+name 101 scorePlayerTwo
+
+iset 33
+iset 34
+iset 35
+iset 43
+iset 44
+iset 45
+iset 53
+iset 54
+iset 55
+
+iassign 1 *playerName
+
+//First line
+println ''
+print *33
+print ' | '
+print *43
+print ' | '
+print *53
+
+//Second line
+println ''
+print '- + - + -'
+
+//Third line
+println ''
+print *34
+print ' | '
+print *44
+print ' | '
+print *54
+
+//Forth line
+println ''
+print '- + - + -'
+
+//Fifth line
+println ''
+print *35
+print ' | '
+print *45
+print ' | '
+print *55
+
+println ''
+
+// If Else
+goto 105 if *3 == 1 else 107
+print playerOne
+goto 108
+print playerTwo
+
+print ' (Player '
+print playerName
+println ') Plese select your position (xy -> 00 is top left corner, 22 is bottom right corner)'
+
+iinput 2
+add answer 33 *answer
+
+
+iassign playerName answer
+
+goto 120 if *3 == 1 else 122
+iset 3 2
+goto 123
+iset 3 1
+
+
+goto 68
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+sset 0
+println t
+println t
+println t
+println 'End'
+stop 0

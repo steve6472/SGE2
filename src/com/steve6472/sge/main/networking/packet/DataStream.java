@@ -21,7 +21,7 @@ public class DataStream implements Serializable
 	
 	public DataStream()
 	{
-		data = new ArrayList<Object>();
+		data = new ArrayList<>();
 	}
 	
 	/*

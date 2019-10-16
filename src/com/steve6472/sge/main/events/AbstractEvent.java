@@ -9,5 +9,4 @@ package com.steve6472.sge.main.events;
 
 public class AbstractEvent
 {
-	
 }

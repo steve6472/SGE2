@@ -7,15 +7,10 @@
 
 package com.steve6472.sge.gui.components;
 
-import com.steve6472.sge.gfx.Font;
-import com.steve6472.sge.gfx.RenderHelper;
-import com.steve6472.sge.gfx.Screen;
-import com.steve6472.sge.gui.Component;
-import com.steve6472.sge.main.MainApplication;
-
-public class GroupedSliders extends Component
+@Deprecated
+public class GroupedSliders// extends Component
 {
-	
+	/*
 	private static final long serialVersionUID = -8308406769388191L;
 	Slider[] sliders;
 	String[] texts;
@@ -26,16 +21,16 @@ public class GroupedSliders extends Component
 	}
 
 	@Override
-	public void init(MainApplication game)
+	public void init(MainApp game)
 	{
 	}
 
 	@Override
-	public void render(Screen screen)
+	public void render()
 	{
-		RenderHelper.renderSingleBorderComponent(screen, this, 0xff3f3f3f, 0xffbfbfbf);
+		UIHelper.renderSingleBorderComponent(this, 0xff3f3f3f, 0xffbfbfbf);
 		
-		renderComponents(screen);
+		renderComponents();
 		
 		for (int i = 0; i < texts.length; i++)
 		{
@@ -77,7 +72,7 @@ public class GroupedSliders extends Component
 	/**
 	 * One Slider takes 75 pixels
 	 * @param i
-	 */
+	 *//*
 	public void setSliderCount(int i)
 	{
 		sliders = new Slider[i];
@@ -121,5 +116,5 @@ public class GroupedSliders extends Component
 	}
 	
 	
-
+*/
 }

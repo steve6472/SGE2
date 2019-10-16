@@ -1,0 +1,32 @@
+iset 16 8
+add 9 *16 16
+add *16 -2 16
+
+
+
+
+iset 0
+iset 1 -20
+iassign *16 0
+goto 18
+
+
+
+
+
+
+iset 16
+add *0 *1 16
+println *16
+
+
+
+
+
+
+
+println ''
+println ''
+println ''
+println 'End'
+stop 0

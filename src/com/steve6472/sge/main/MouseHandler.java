@@ -7,36 +7,19 @@
 
 package com.steve6472.sge.main;
 
-import static org.lwjgl.glfw.GLFW.*;
+import org.lwjgl.BufferUtils;
 
 import java.nio.DoubleBuffer;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.lwjgl.BufferUtils;
-import org.lwjgl.glfw.GLFWCursorEnterCallback;
-import org.lwjgl.glfw.GLFWCursorPosCallback;
-import org.lwjgl.glfw.GLFWMouseButtonCallback;
-
-import com.steve6472.sge.main.callbacks.CursorPosCallback;
-import com.steve6472.sge.main.callbacks.MouseButtonCallback;
-import com.steve6472.sge.main.events.CursorEnterEvent;
-import com.steve6472.sge.main.events.CursorPosEvent;
-import com.steve6472.sge.main.events.MouseEvent;
-import com.steve6472.sge.main.game.Vec2;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class MouseHandler
 {
-	private GLFWMouseButtonCallback mouseButtonCallback;
-	private GLFWCursorPosCallback cursorPosCallback;
-	@SuppressWarnings("unused")
-	private GLFWCursorEnterCallback cursorEnterCallback;
-	
-	DoubleBuffer mouseXBuffer;
-	DoubleBuffer mouseYBuffer;
+	private DoubleBuffer mouseXBuffer;
+	private DoubleBuffer mouseYBuffer;
 	
 	private final long window;
-	private final MainApplication mainApp;
+	private final MainApp mainApp;
 	
 	private boolean mouseTriggered = false;
 	private boolean isCursorInWindow = false;
@@ -50,51 +33,48 @@ public class MouseHandler
 	private int mouseXOnScreen;
 	private int mouseYOnScreen;
 	
-	List<MouseButtonCallback> mouseButtonCallbacks;
-	List<CursorPosCallback> cursorPosCallbacks;
-
-	public MouseHandler(long window, MainApplication mainApp)
+	public MouseHandler(long window, MainApp mainApp)
 	{
 		this.window = window;
 		this.mainApp = mainApp;
 		
 		mouseXBuffer = BufferUtils.createDoubleBuffer(1);
 		mouseYBuffer = BufferUtils.createDoubleBuffer(1);
-		
-		mouseButtonCallbacks = new ArrayList<MouseButtonCallback>();
-		cursorPosCallbacks = new ArrayList<CursorPosCallback>();
-		
-		glfwSetMouseButtonCallback(window, mouseButtonCallback = new GLFWMouseButtonCallback()
-		{
-			@Override
-			public void invoke(long window, int button, int action, int mods)
-			{
-//				System.out.println("Callback=[" + window + ", " + button +", " + action + ", " + mods + "]");
-				mouseButtonCallbacks.forEach(c -> c.invoke(getMouseX(), getMouseY(), button, action, mods));
-				mainApp.getEventHandler().runEvent(new MouseEvent(getMouseX(), getMouseY(), button, action, mods));
-			}
-		});
-		
-		glfwSetCursorPosCallback(window, cursorPosCallback = new GLFWCursorPosCallback()
-		{
-			public void invoke(long window, double xpos, double ypos)
-			{
-				cursorPosCallbacks.forEach(c -> c.invoke(xpos, ypos));
-				mainApp.getEventHandler().runEvent(new CursorPosEvent(xpos, ypos));
-			}
-		});
-		
-		glfwSetCursorEnterCallback(window, cursorEnterCallback = new GLFWCursorEnterCallback()
-		{
-			public void invoke(long window, boolean entered)
-			{
-				isCursorInWindow = entered;
-				mainApp.getEventHandler().runEvent(new CursorEnterEvent(entered));
-			}
-		});
 	}
 	
 	private boolean wasHolded = false;
+
+	public void spoof(int mouseX, int mouseY)
+	{
+		mouseXBuffer.put(0, mouseX);
+		mouseYBuffer.put(0, mouseY);
+
+		mouseXOnScreen = mainApp.getWindowX() + getMouseX();
+		mouseYOnScreen = mainApp.getWindowY() + getMouseY();
+
+		if (!wasHolded)
+		{
+			if (isMouseHolded())
+			{
+				pressedMouseX = getMouseX();
+				pressedMouseY = getMouseY();
+				pressedMouseXOnScreen = mainApp.getWindowX() + pressedMouseX;
+				pressedMouseYOnScreen = mainApp.getWindowY() + pressedMouseY;
+
+				wasHolded = true;
+			}
+		}
+
+		if (!isMouseHolded())
+		{
+			setTrigger(false);
+		}
+
+		if (wasHolded && !isMouseHolded())
+		{
+			wasHolded = false;
+		}
+	}
 	
 	public void tick()
 	{
@@ -171,22 +151,39 @@ public class MouseHandler
 	{
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == GLFW_PRESS)
 		{
-			return 1;
+			return GLFW_MOUSE_BUTTON_1;
 		}
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) == GLFW_PRESS)
 		{
-			return 2;
+			return GLFW_MOUSE_BUTTON_2;
 		}
 		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_3) == GLFW_PRESS)
 		{
-			return 3;
+			return GLFW_MOUSE_BUTTON_3;
 		}
-		return 0;
+		return -1;
+	}
+
+	public int getButton(int action)
+	{
+		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_1) == action)
+		{
+			return GLFW_MOUSE_BUTTON_1;
+		}
+		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_2) == action)
+		{
+			return GLFW_MOUSE_BUTTON_2;
+		}
+		if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_3) == action)
+		{
+			return GLFW_MOUSE_BUTTON_3;
+		}
+		return -1;
 	}
 	
 	public boolean isMouseHolded()
 	{
-		return getButton() != 0;
+		return getButton() != -1;
 	}
 	
 	public boolean isCursorInWindow()
@@ -213,27 +210,4 @@ public class MouseHandler
 	{
 		mouseTriggered = triggered;
 	}
-	
-	public Vec2 toVec() { return new Vec2(getMouseX(), getMouseY()); }
-	
-	public void addMouseButtonCallback(MouseButtonCallback callback)
-	{
-		this.mouseButtonCallbacks.add(callback);
-	}
-	
-	public void addCursorPosCallback(CursorPosCallback callback)
-	{
-		this.cursorPosCallbacks.add(callback);
-	}
-	
-	public GLFWMouseButtonCallback getMouseButtonCallback()
-	{
-		return mouseButtonCallback;
-	}
-	
-	public GLFWCursorPosCallback getCursorPosCallback()
-	{
-		return cursorPosCallback;
-	}
-	
 }
