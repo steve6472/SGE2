@@ -17,6 +17,16 @@ public interface IPosition3f
 		getPosition().set(x, y, z);
 	}
 
+	default void addPosition(float x, float y, float z)
+	{
+		getPosition().add(x, y, z);
+	}
+
+	default void addPosition(Vector3f position)
+	{
+		getPosition().add(position);
+	}
+
 	default void setPosition(Vector3f position) { getPosition().set(position); }
 
 	default float getX()

@@ -111,12 +111,6 @@ public class MessageDialog extends AdvancedMoveableDialog
 	}
 
 	@Override
-	protected boolean canMove()
-	{
-		return isCursorInComponent(x, y, width, 18);
-	}
-
-	@Override
 	public boolean disableEvents()
 	{
 		return true;
@@ -126,10 +120,5 @@ public class MessageDialog extends AdvancedMoveableDialog
 	protected boolean keepInWindow()
 	{
 		return true;
-	}
-
-	private boolean isCursorInComponent(int x, int y, int w, int h)
-	{
-		return (getMouseHandler().getMouseX() >= x && getMouseHandler().getMouseX() <= w + x) && (getMouseHandler().getMouseY() >= y && getMouseHandler().getMouseY() <= h + y);
 	}
 }

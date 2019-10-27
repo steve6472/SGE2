@@ -98,6 +98,7 @@ public abstract class MainApp
 		if (!glfwInit())
 			throw new IllegalStateException("Unable to initialize GLFW");
 
+		setWindowHints();
 		window = new Window(this, getTitle(), startInFullscreen());
 
 		for (int flag : getFlags())

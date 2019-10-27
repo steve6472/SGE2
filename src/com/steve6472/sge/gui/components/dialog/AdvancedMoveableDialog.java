@@ -13,12 +13,6 @@ import com.steve6472.sge.test.Fex;
  ***********************/
 public abstract class AdvancedMoveableDialog extends MoveableDialog
 {
-//	@Override
-//	public void init(MainApp main)
-//	{
-//		setSize(300, 136);
-//	}
-
 	/**
 	 * Creates 'X' button in top right corner of the dialog
 	 * Should be called only after setting the size
@@ -40,8 +34,6 @@ public abstract class AdvancedMoveableDialog extends MoveableDialog
 	{
 		SpriteRender.renderSingleBorder(x, y + 18, width, height - 18, 0, 0, 0, 1, Fex.H70, Fex.H70, Fex.H70, Fex.Hff);
 		SpriteRender.renderSingleBorder(x, y, width, 20, 0, 0, 0, 1, Fex.H35, Fex.H35, Fex.H35, Fex.Hff);
-//		UIHelper.renderSingleBorder(x, y + 18, width, height - 18, 0xff000000, 0xff707070);
-//		UIHelper.renderSingleBorder(x, y, width, 20, 0xff000000, 0xff353535);
 
 		if (title != null && !title.isEmpty())
 			Font.render(title, x + 4, y + 6);
@@ -50,11 +42,11 @@ public abstract class AdvancedMoveableDialog extends MoveableDialog
 	@Override
 	protected boolean canMove()
 	{
-		return isCursorInComponent(x, y, width, 18);
+		return isCursorInComponent(x, y, width, 19);
 	}
 
-	private boolean isCursorInComponent(int x, int y, int w, int h)
+	protected boolean isCursorInComponent(int x, int y, int w, int h)
 	{
-		return (getMouseHandler().getMouseX() >= x && getMouseHandler().getMouseX() <= w + x) && (getMouseHandler().getMouseY() >= y && getMouseHandler().getMouseY() <= h + y);
+		return (getMouseHandler().getMouseX() >= x && getMouseHandler().getMouseX() < w + x) && (getMouseHandler().getMouseY() >= y && getMouseHandler().getMouseY() <= h + y);
 	}
 }
