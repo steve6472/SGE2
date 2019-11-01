@@ -116,10 +116,10 @@ public class PositionDialog extends PlannerDialog
 	{
 		if (flag)
 		{
-			button.setFontColor(0.2f, 0.9f, 0.2f);
+			button.getScheme().setFontColor(0.2f, 0.9f, 0.2f);
 		} else
 		{
-			button.setFontColor(0.9f, 0.2f, 0.2f);
+			button.getScheme().setFontColor(0.9f, 0.2f, 0.2f);
 		}
 	}
 

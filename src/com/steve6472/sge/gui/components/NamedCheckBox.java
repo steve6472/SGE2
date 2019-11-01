@@ -38,13 +38,13 @@ public class NamedCheckBox extends ToggleButton
 		height = boxHeight;
 
 		if (enabled && !hovered)
-			SpriteRender.renderSingleBorder(x, y, width, height, scheme.enabledOutsideBorder, scheme.enabledFill);
+			SpriteRender.renderSingleBorder(x, y, width, height, getScheme().enabledOutsideBorder, getScheme().enabledFill);
 
 		if (!enabled)
-			SpriteRender.renderSingleBorder(x, y, width, height, scheme.disabledOutsideBorder, scheme.disabledFill);
+			SpriteRender.renderSingleBorder(x, y, width, height, getScheme().disabledOutsideBorder, getScheme().disabledFill);
 
 		if (enabled && hovered)
-			SpriteRender.renderSingleBorder(x, y, width, height, scheme.hoveredOutsideBorder, scheme.hoveredFill);
+			SpriteRender.renderSingleBorder(x, y, width, height, getScheme().hoveredOutsideBorder, getScheme().hoveredFill);
 
 		renderText();
 
@@ -63,13 +63,13 @@ public class NamedCheckBox extends ToggleButton
 		int fontHeight = ((8 * getFontSize())) / 2;
 
 		if (enabled && !hovered)
-			Font.renderCustom(x + width / 2 - fontWidth, y + height / 2 - fontHeight, getFontSize(), shadow(), getColor(enabledColor), selectedChar);
+			Font.renderCustom(x + width / 2 - fontWidth, y + height / 2 - fontHeight, getFontSize(), shadow(), getScheme().enabled, selectedChar);
 
 		if (!enabled)
-			Font.renderCustom(x + width / 2 - fontWidth, y + height / 2 - fontHeight, getFontSize(), shadow(), getColor(disabledColor), selectedChar);
+			Font.renderCustom(x + width / 2 - fontWidth, y + height / 2 - fontHeight, getFontSize(), shadow(), getScheme().disabled, selectedChar);
 
 		if (enabled && hovered)
-			Font.renderCustom(x + width / 2 - fontWidth, y + height / 2 - fontHeight, getFontSize(), shadow(), getColor(hoveredColor), selectedChar);
+			Font.renderCustom(x + width / 2 - fontWidth, y + height / 2 - fontHeight, getFontSize(), shadow(), getScheme().hovered, selectedChar);
 	}
 
 	private String shadow()

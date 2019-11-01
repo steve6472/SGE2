@@ -1,5 +1,6 @@
 package com.steve6472.sge.gui.components.schemes;
 
+import com.steve6472.sge.main.util.ColorUtil;
 import com.steve6472.sss2.SSS;
 import org.joml.Vector4f;
 
@@ -32,24 +33,46 @@ public class SchemeSlider extends Scheme
 	{
 		SSS sss = SchemeLoader.load(path);
 
-		buttonEnabledOutsideBorder  = toVector(sss.getHexInt("buttonEnabledOutsideBorder"));
-		buttonEnabledInsideBorder   = toVector(sss.getHexInt("buttonEnabledInsideBorder"));
-		buttonEnabledFill           = toVector(sss.getHexInt("buttonEnabledFill"));
+		buttonEnabledOutsideBorder  = ColorUtil.getVector4Color(sss.getHexInt("buttonEnabledOutsideBorder"));
+		buttonEnabledInsideBorder   = ColorUtil.getVector4Color(sss.getHexInt("buttonEnabledInsideBorder"));
+		buttonEnabledFill           = ColorUtil.getVector4Color(sss.getHexInt("buttonEnabledFill"));
 
-		buttonDisabledOutsideBorder = toVector(sss.getHexInt("buttonDisabledOutsideBorder"));
-		buttonDisabledInsideBorder  = toVector(sss.getHexInt("buttonDisabledInsideBorder"));
-		buttonDisabledFill          = toVector(sss.getHexInt("buttonDisabledFill"));
+		buttonDisabledOutsideBorder = ColorUtil.getVector4Color(sss.getHexInt("buttonDisabledOutsideBorder"));
+		buttonDisabledInsideBorder  = ColorUtil.getVector4Color(sss.getHexInt("buttonDisabledInsideBorder"));
+		buttonDisabledFill          = ColorUtil.getVector4Color(sss.getHexInt("buttonDisabledFill"));
 
-		buttonHoveredOutsideBorder  = toVector(sss.getHexInt("buttonHoveredOutsideBorder"));
-		buttonHoveredInsideBorder   = toVector(sss.getHexInt("buttonHoveredInsideBorder"));
-		buttonHoveredFill           = toVector(sss.getHexInt("buttonHoveredFill"));
+		buttonHoveredOutsideBorder  = ColorUtil.getVector4Color(sss.getHexInt("buttonHoveredOutsideBorder"));
+		buttonHoveredInsideBorder   = ColorUtil.getVector4Color(sss.getHexInt("buttonHoveredInsideBorder"));
+		buttonHoveredFill           = ColorUtil.getVector4Color(sss.getHexInt("buttonHoveredFill"));
 
-		sliderOutsideBorder         = toVector(sss.getHexInt("sliderOutsideBorder"));
-		sliderInsideBorder          = toVector(sss.getHexInt("sliderInsideBorder"));
+		sliderOutsideBorder         = ColorUtil.getVector4Color(sss.getHexInt("sliderOutsideBorder"));
+		sliderInsideBorder          = ColorUtil.getVector4Color(sss.getHexInt("sliderInsideBorder"));
 
-		sliderFill                  = toVector(sss.getHexInt("sliderFill"));
+		sliderFill                  = ColorUtil.getVector4Color(sss.getHexInt("sliderFill"));
 
 		return this;
+	}
+
+	public SchemeSlider()
+	{
+	}
+
+	@SuppressWarnings("IncompleteCopyConstructor")
+	public SchemeSlider(SchemeSlider other)
+	{
+		super(other);
+		this.buttonEnabledOutsideBorder = new Vector4f(other.buttonEnabledOutsideBorder);
+		this.buttonEnabledInsideBorder = new Vector4f(other.buttonEnabledInsideBorder);
+		this.buttonEnabledFill = new Vector4f(other.buttonEnabledFill);
+		this.buttonDisabledOutsideBorder = new Vector4f(other.buttonDisabledOutsideBorder);
+		this.buttonDisabledInsideBorder = new Vector4f(other.buttonDisabledInsideBorder);
+		this.buttonDisabledFill = new Vector4f(other.buttonDisabledFill);
+		this.buttonHoveredOutsideBorder = new Vector4f(other.buttonHoveredOutsideBorder);
+		this.buttonHoveredInsideBorder = new Vector4f(other.buttonHoveredInsideBorder);
+		this.buttonHoveredFill = new Vector4f(other.buttonHoveredFill);
+		this.sliderOutsideBorder = new Vector4f(other.sliderOutsideBorder);
+		this.sliderInsideBorder = new Vector4f(other.sliderInsideBorder);
+		this.sliderFill = new Vector4f(other.sliderFill);
 	}
 
 	public String getId()

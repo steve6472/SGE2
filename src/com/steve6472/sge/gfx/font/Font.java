@@ -11,6 +11,7 @@ import com.steve6472.sge.gfx.*;
 import com.steve6472.sge.gfx.shaders.FontShader;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
+import org.joml.Vector3f;
 
 import java.util.HashMap;
 
@@ -257,7 +258,7 @@ public class Font
 					ch = EMPTY;
 
 				float indexX = ch.getIndex() % 64 * 8;
-				float indexY = ch.getIndex() / 64 * 8;
+				float indexY = (ch.getIndex() >> 6) * 8;
 				float dx = indexX / (float) font.getWidth();
 				float dy = indexY / (float) font.getHeight();
 
@@ -581,6 +582,11 @@ public class Font
 		render(text, x, y, size, red, green, blue, true);
 	}
 
+	public static void render(String text, int x, int y, int size, Vector3f color)
+	{
+		render(text, x, y, size, color.x, color.y, color.z);
+	}
+
 	public static void render(String text, int x, int y)
 	{
 		render(text, x, y, 1);
@@ -644,7 +650,6 @@ public class Font
 		}
 		tessellator.begin(temp * 6 * 2); // Char count * vertex count * shade
 
-
 		for (Object o : text)
 		{
 			if (o == null)
@@ -684,7 +689,7 @@ public class Font
 					CustomChar ch = CustomChar.values()[Integer.parseInt(t)];
 
 					float indexX = ch.getIndex() % 64 * 8;
-					float indexY = ch.getIndex() / 64 * 8;
+					float indexY = (ch.getIndex() >> 6) * 8;
 					float dx = indexX / (float) font.getWidth();
 					float dy = indexY / (float) font.getHeight();
 
@@ -776,7 +781,7 @@ public class Font
 					ch = EMPTY;
 
 				float indexX = ch.getIndex() % 64 * 8;
-				float indexY = ch.getIndex() / 64 * 8;
+				float indexY = (ch.getIndex() >> 6) * 8;
 				float dx = indexX / (float) font.getWidth();
 				float dy = indexY / (float) font.getHeight();
 

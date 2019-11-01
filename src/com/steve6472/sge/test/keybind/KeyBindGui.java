@@ -12,6 +12,7 @@ import com.steve6472.sge.gui.Gui;
 import com.steve6472.sge.gui.components.Background;
 import com.steve6472.sge.gui.components.Button;
 import com.steve6472.sge.gui.components.ScrollBar;
+import com.steve6472.sge.gui.components.schemes.SchemeButton;
 import com.steve6472.sge.main.KeyNamer;
 import com.steve6472.sge.main.MainApp;
 import com.steve6472.sge.main.events.Event;
@@ -52,7 +53,7 @@ public class KeyBindGui extends Gui
 		b.setSize(200, 40);
 		b.addIfClickEvent(f -> activeButton != b, c -> {
 			b.setText("> " + b.getText() + " <");
-			b.setFontColor(1f, 0.7f, 0f);
+			b.getScheme().setFontColor(1f, 0.7f, 0f);
 			activeButton = b;
 			keyId = entry.id;
 		});
@@ -64,7 +65,7 @@ public class KeyBindGui extends Gui
 		r.setSize(120, 40);
 		r.addClickEvent(c -> {
 			b.setText(KeyNamer.getName(entry.defaultKey));
-			b.resetAllColors();
+			b.setScheme(MainApp.getSchemeRegistry().copyDefaultScheme(SchemeButton.class));
 			activeButton = null;
 			keyId = -1;
 		});
@@ -110,7 +111,7 @@ public class KeyBindGui extends Gui
 			activeButton.setText(KeyNamer.getName(event.getButton()));
 			keys.get(keyId).key = event.getButton();
 			keys.get(keyId).type = EntryType.MOUSE;
-			activeButton.resetAllColors();
+			activeButton.setScheme(MainApp.getSchemeRegistry().copyDefaultScheme(SchemeButton.class));
 			activeButton = null;
 			keyId = -1;
 		}
@@ -128,7 +129,7 @@ public class KeyBindGui extends Gui
 			activeButton.setText(KeyNamer.getName(event.getKey()));
 			keys.get(keyId).key = event.getKey();
 			keys.get(keyId).type = EntryType.KEYBOARD;
-			activeButton.resetAllColors();
+			activeButton.setScheme(MainApp.getSchemeRegistry().copyDefaultScheme(SchemeButton.class));
 			activeButton = null;
 			keyId = -1;
 		}

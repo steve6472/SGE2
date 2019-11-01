@@ -10,16 +10,8 @@ hoveredOutsideBorder   = ff000000
 hoveredInsideBorder    = ff2060a0
 hoveredFill            = ff004080
 
-enabledRed    = ffcccccc
-enabledGreen  = ffcccccc
-enabledBlue   = ffcccccc
-
-disabledRed   = ff808080
-disabledGreen = ff808080
-disabledBlue  = ff808080
-
-hoveredRed    = ffffffff
-hoveredGreen  = ffffffff
-hoveredBlue   = ffffffff
+enabledTextColor = ffcccccc
+disabledTextColor = ff808080
+hoveredTextColor = ffffffff
 
 selectedOutline = 668080f0

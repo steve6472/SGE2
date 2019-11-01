@@ -2,24 +2,23 @@ package com.steve6472.sge.gui.components;
 
 import com.steve6472.sge.gfx.SpriteRender;
 import com.steve6472.sge.gui.Component;
-import com.steve6472.sge.gui.components.schemes.Scheme;
+import com.steve6472.sge.gui.components.schemes.IScheme;
 import com.steve6472.sge.gui.components.schemes.SchemeSlider;
 import com.steve6472.sge.main.MainApp;
+import com.steve6472.sge.main.Procedure;
 import com.steve6472.sge.main.events.Event;
 import com.steve6472.sge.main.events.ScrollEvent;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SliderVertical extends Component
+public class SliderVertical extends Component implements IScheme<SchemeSlider>
 {
 	private static final long serialVersionUID = 4164297008969991704L;
 	
 	private double value = 0, maxValue = 100, minValue = 0, privateY;
 	public boolean autoInt = false;
 	private int bWidth = 32, bHeight = 48;
-
-	protected List<ChangeEvent> changeEvent = new ArrayList<>();
 
 	public SchemeSlider scheme;
 
@@ -29,18 +28,16 @@ public class SliderVertical extends Component
 	protected boolean hovered = false;
 	protected boolean enabled = true;
 	private boolean flag0 = false;
-	
+
+	public SliderVertical()
+	{
+		setScheme(MainApp.getSchemeRegistry().copyDefaultScheme(SchemeSlider.class));
+	}
+
 	@Override
 	public void init(MainApp main)
 	{
 		recalculate();
-		if (scheme == null)
-			setScheme(main.getSchemeRegistry().getCurrentScheme("slider"));
-	}
-
-	public void setScheme(Scheme scheme)
-	{
-		this.scheme = (SchemeSlider) scheme;
 	}
 
 	@Override
@@ -119,18 +116,18 @@ public class SliderVertical extends Component
 			value = valueBuffer;
 		}
 		
-		moveY = (int) (getY() - bHeight / 2D - privateY); //Center to the slider
+		moveY = (int) (getY() - bHeight / 2d - privateY); //Center to the slider
 
-		if (privateY + (bHeight / 4) > 0)
+		if (privateY + (bHeight >> 2) > 0)
 			moveY = getY() - (bHeight / 4);
 
-		if (privateY - (bHeight / 4) < (-getHeight()))
+		if (privateY - (bHeight >> 2) < (-getHeight()))
 			moveY = getY() + getHeight() - (bHeight - (bHeight / 4));
 
 		if (this.oldValue != value)
 		{
 			this.oldValue = value;
-			changeEvent.forEach(ChangeEvent::change);
+			changeEvent.forEach(Procedure::process);
 		}
 	}
 	
@@ -161,10 +158,10 @@ public class SliderVertical extends Component
 		
 		moveY = (int) (getX() - bHeight / 2D - privateY); //Center to the slider
 
-		if (privateY + (bHeight / 4) > 0)
+		if (privateY + (bHeight >> 2) > 0)
 			moveY = getX() - (bHeight / 4);
 
-		if (privateY - (bHeight / 4) < (-getHeight()))
+		if (privateY - (bHeight >> 2) < (-getHeight()))
 			moveY = getY() + getHeight() - (bHeight - (bHeight / 4));
 	}
 
@@ -231,11 +228,6 @@ public class SliderVertical extends Component
 		recalculate();
 	}
 	
-	public void addChangeEvent(ChangeEvent ce)
-	{
-		changeEvent.add(ce);
-	}
-	
 	/*
 	 * Getters
 	 */
@@ -268,5 +260,26 @@ public class SliderVertical extends Component
 	public boolean isEnabled()
 	{
 		return enabled;
+	}
+
+	/* Events */
+
+	protected List<Procedure> changeEvent = new ArrayList<>();
+
+	public void addChangeEvent(Procedure ce)
+	{
+		changeEvent.add(ce);
+	}
+
+	@Override
+	public SchemeSlider getScheme()
+	{
+		return scheme;
+	}
+
+	@Override
+	public void setScheme(SchemeSlider scheme)
+	{
+		this.scheme = scheme;
 	}
 }

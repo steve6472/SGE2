@@ -1,5 +1,6 @@
 package com.steve6472.sge.gui.components.schemes;
 
+import com.steve6472.sge.main.util.ColorUtil;
 import com.steve6472.sss2.SSS;
 import org.joml.Vector4f;
 
@@ -18,15 +19,24 @@ public class SchemeBackground extends Scheme
 	{
 		SSS sss = SchemeLoader.load(path);
 
-		int outsideBorder = sss.getHexInt("outsideBorder");
-		int insideBorder  = sss.getHexInt("insideBorder");
-		int fill          = sss.getHexInt("fill");
-
-		this.outsideBorder = toVector(outsideBorder);
-		this.insideBorder = toVector(insideBorder);
-		this.fill = toVector(fill);
+		this.outsideBorder = ColorUtil.getVector4Color(sss.getHexInt("outsideBorder"));
+		this.insideBorder = ColorUtil.getVector4Color(sss.getHexInt("insideBorder"));
+		this.fill = ColorUtil.getVector4Color(sss.getHexInt("fill"));
 
 		return this;
+	}
+
+	public SchemeBackground()
+	{
+	}
+
+	@SuppressWarnings("IncompleteCopyConstructor")
+	public SchemeBackground(SchemeBackground other)
+	{
+		super(other);
+		this.outsideBorder = new Vector4f(other.outsideBorder);
+		this.insideBorder = new Vector4f(other.insideBorder);
+		this.fill = new Vector4f(other.fill);
 	}
 
 	@Override

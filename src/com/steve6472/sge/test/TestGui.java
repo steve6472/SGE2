@@ -100,8 +100,7 @@ public class TestGui extends Gui
 		};
 		buttonEnabledLight.setLocation(140, 20);
 		buttonEnabledLight.setSize(100, 30);
-		buttonEnabledLight.scheme = schemeButtonLight;
-		buttonEnabledLight.resetAllColors();
+		buttonEnabledLight.setScheme(schemeButtonLight);
 		addComponent(buttonEnabledLight);
 
 		Button buttonHoveredLight = new Button("Hovered")
@@ -115,23 +114,20 @@ public class TestGui extends Gui
 		};
 		buttonHoveredLight.setLocation(140, 60);
 		buttonHoveredLight.setSize(100, 30);
-		buttonHoveredLight.scheme = schemeButtonLight;
-		buttonHoveredLight.resetAllColors();
+		buttonHoveredLight.setScheme(schemeButtonLight);
 		addComponent(buttonHoveredLight);
 
 		Button buttonDisabledLight = new Button("Disabled");
 		buttonDisabledLight.setLocation(140, 100);
 		buttonDisabledLight.setSize(100, 30);
 		buttonDisabledLight.setEnabled(false);
-		buttonDisabledLight.scheme = schemeButtonLight;
-		buttonDisabledLight.resetAllColors();
+		buttonDisabledLight.setScheme(schemeButtonLight);
 		addComponent(buttonDisabledLight);
 
 		Button buttonLignt = new Button("Light");
 		buttonLignt.setLocation(140, 140);
 		buttonLignt.setSize(100, 30);
-		buttonLignt.scheme = schemeButtonLight;
-		buttonLignt.resetAllColors();
+		buttonLignt.setScheme(schemeButtonLight);
 		buttonLignt.addClickEvent(c ->
 				mainApp.showDialog(new FileSelectorDialog("D:\\Minecraft\\.minecraft").setIdealAccept(a -> System.out.println(a.getAbsolutePath()))).center());
 		addComponent(buttonLignt);
@@ -275,8 +271,8 @@ public class TestGui extends Gui
 		for (int i = 0; i < 8; i++)
 		{
 			ListItem li = lightItemList.addItem("Item #" + i);
-			li.scheme = schemeListItemButtonLight;
-			li.resetAllColors();
+			li.setScheme(schemeListItemButtonLight);
+			li.setScheme(MainApp.getSchemeRegistry().copyDefaultScheme(SchemeListItemButton.class));
 
 //			li.addClickEvent(c -> c.setText("Item #" + Util.getRandomInt(64, 0)));
 //			li.addIfClickEvent(ListItem::isSelected, c -> c.setSelected(false));

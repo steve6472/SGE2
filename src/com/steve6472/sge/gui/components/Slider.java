@@ -2,7 +2,7 @@ package com.steve6472.sge.gui.components;
 
 import com.steve6472.sge.gfx.SpriteRender;
 import com.steve6472.sge.gui.Component;
-import com.steve6472.sge.gui.components.schemes.Scheme;
+import com.steve6472.sge.gui.components.schemes.IScheme;
 import com.steve6472.sge.gui.components.schemes.SchemeSlider;
 import com.steve6472.sge.main.MainApp;
 import com.steve6472.sge.main.events.Event;
@@ -12,14 +12,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-public class Slider extends Component
+public class Slider extends Component implements IScheme<SchemeSlider>
 {
 	private double value = 0, maxValue = 100, minValue = 0, privateX;
 	public boolean autoInt = false;
 	protected int bWidth = 32, bHeight = 48;
 	public boolean snap = false;
-
-	protected List<Consumer<Slider>> changeEvent = new ArrayList<>();
 
 	public SchemeSlider scheme;
 
@@ -29,18 +27,16 @@ public class Slider extends Component
 	protected boolean hovered = false;
 	protected boolean enabled = true;
 	private boolean flag0 = false;
-	
+
+	public Slider()
+	{
+		setScheme(MainApp.getSchemeRegistry().copyDefaultScheme(SchemeSlider.class));
+	}
+
 	@Override
 	public void init(MainApp main)
 	{
 		recalculate();
-		if (scheme == null)
-			setScheme(main.getSchemeRegistry().getCurrentScheme("slider"));
-	}
-
-	public void setScheme(Scheme scheme)
-	{
-		this.scheme = (SchemeSlider) scheme;
 	}
 
 	@Override
@@ -232,11 +228,6 @@ public class Slider extends Component
 		recalculate();
 	}
 	
-	public void addChangeEvent(Consumer<Slider> ce)
-	{
-		changeEvent.add(ce);
-	}
-	
 	/*
 	 * Getters
 	 */
@@ -269,5 +260,26 @@ public class Slider extends Component
 	public boolean isEnabled()
 	{
 		return enabled;
+	}
+
+	@Override
+	public SchemeSlider getScheme()
+	{
+		return scheme;
+	}
+
+	@Override
+	public void setScheme(SchemeSlider scheme)
+	{
+		this.scheme = scheme;
+	}
+
+	/* Events */
+
+	protected List<Consumer<Slider>> changeEvent = new ArrayList<>();
+
+	public void addChangeEvent(Consumer<Slider> ce)
+	{
+		changeEvent.add(ce);
 	}
 }

@@ -39,7 +39,6 @@ public abstract class MainApp
 	private MouseHandler mouseHandler;
 	private KeyHandler keyHandler;
 	private EventHandler eventHandler;
-	private SchemeRegistry schemeRegistry;
 
 	private SpriteRender spriteRender;
 
@@ -60,6 +59,8 @@ public abstract class MainApp
 	private float fps;
 	private long lastFps;
 
+	private static SchemeRegistry schemeRegistry;
+
 	public MainApp()
 	{
 		guis = new ArrayList<>();
@@ -76,17 +77,16 @@ public abstract class MainApp
 
 		eventHandler.addForcedObject(this);
 
-
 		run();
 	}
 
 	protected void registerSchemes()
 	{
-		schemeRegistry.registerScheme(new SchemeButton());
-		schemeRegistry.registerScheme(new SchemeBackground());
-		schemeRegistry.registerScheme(new SchemeSlider());
-		schemeRegistry.registerScheme(new SchemeListItemButton());
-		schemeRegistry.registerScheme(new SchemeTextField());
+		schemeRegistry.registerScheme(SchemeButton.class, new SchemeButton(), SchemeButton::new);
+		schemeRegistry.registerScheme(SchemeBackground.class, new SchemeBackground(), SchemeBackground::new);
+		schemeRegistry.registerScheme(SchemeSlider.class, new SchemeSlider(), SchemeSlider::new);
+		schemeRegistry.registerScheme(SchemeListItemButton.class, new SchemeListItemButton(), SchemeListItemButton::new);
+		schemeRegistry.registerScheme(SchemeTextField.class, new SchemeTextField(), SchemeTextField::new);
 	}
 
 	public long windowId;
@@ -539,7 +539,7 @@ public abstract class MainApp
 	{
 		return eventHandler;
 	}
-	public SchemeRegistry getSchemeRegistry()
+	public static SchemeRegistry getSchemeRegistry()
 	{
     	return schemeRegistry;
     }

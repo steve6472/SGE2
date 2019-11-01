@@ -4,10 +4,11 @@ import com.steve6472.sge.gfx.SpriteRender;
 import com.steve6472.sge.gfx.font.CustomChar;
 import com.steve6472.sge.gfx.font.Font;
 import com.steve6472.sge.gui.Component;
-import com.steve6472.sge.gui.components.schemes.Scheme;
+import com.steve6472.sge.gui.components.schemes.IScheme;
 import com.steve6472.sge.gui.components.schemes.SchemeButton;
 import com.steve6472.sge.main.KeyList;
 import com.steve6472.sge.main.MainApp;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 import java.util.ArrayList;
@@ -15,65 +16,41 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static com.steve6472.sge.main.util.ColorUtil.getColors;
-import static com.steve6472.sge.main.util.ColorUtil.getVectorColor;
-
-public class Button extends Component
+public class Button extends Component implements IScheme<SchemeButton>
 {
 	private static final long serialVersionUID = -4734082970298391201L;
 	private int fontSize = 1;
 
 	protected boolean enabled = true, hovered = false;
 
-	private String text = "";
+	private String text;
 	private Object[] customText;
 
-	public SchemeButton scheme;
+	private SchemeButton scheme;
 
-	/*
-	 * Font Colors
-	 */
-	public Vector4f enabledColor, disabledColor, hoveredColor;
-//	public float enabledRed, enabledGreen, enabledBlue;
-//	public float disabledRed, disabledGreen, disabledBlue;
-//	public float hoveredRed, hoveredGreen, hoveredBlue;
+	public Button()
+	{
+		setScheme(MainApp.getSchemeRegistry().copyDefaultScheme(SchemeButton.class));
+	}
 
 	public Button(String text)
 	{
+		setScheme(MainApp.getSchemeRegistry().copyDefaultScheme(SchemeButton.class));
 		this.text = text;
-		enabledColor = new Vector4f();
-		disabledColor = new Vector4f();
-		hoveredColor = new Vector4f();
 	}
 
 	public Button(CustomChar text)
 	{
+		setScheme(MainApp.getSchemeRegistry().copyDefaultScheme(SchemeButton.class));
 		this.text = text.toString();
-		enabledColor = new Vector4f();
-		disabledColor = new Vector4f();
-		hoveredColor = new Vector4f();
 	}
-	
-	public Button()
-	{
-		enabledColor = new Vector4f();
-		disabledColor = new Vector4f();
-		hoveredColor = new Vector4f();
-	}
-	
+
 	@Override
 	public void init(MainApp main)
 	{
-		if (scheme == null)
-			setScheme(main.getSchemeRegistry().getCurrentScheme("button"));
+
 	}
 
-	public void setScheme(Scheme scheme)
-	{
-		this.scheme = (SchemeButton) scheme;
-		resetAllColors();
-	}
-	
 	@Override
 	public void tick()
 	{
@@ -150,19 +127,24 @@ public class Button extends Component
 			int fontHeight = ((8 * fontSize)) / 2;
 
 			if (enabled && !hovered)
-				Font.renderCustom(x + width / 2 - fontWidth, y + height / 2 - fontHeight, fontSize, getColor(enabledColor), text);
+				Font.renderCustom(x + width / 2 - fontWidth, y + height / 2 - fontHeight, fontSize, getColor(getScheme().enabled), text);
 
 			if (!enabled)
-				Font.renderCustom(x + width / 2 - fontWidth, y + height / 2 - fontHeight, fontSize, getColor(disabledColor), text);
+				Font.renderCustom(x + width / 2 - fontWidth, y + height / 2 - fontHeight, fontSize, getColor(getScheme().disabled), text);
 
 			if (enabled && hovered)
-				Font.renderCustom(x + width / 2 - fontWidth, y + height / 2 - fontHeight, fontSize, getColor(hoveredColor), text);
+				Font.renderCustom(x + width / 2 - fontWidth, y + height / 2 - fontHeight, fontSize, getColor(getScheme().hovered), text);
 		}
 	}
 
 	protected String getColor(Vector4f c)
 	{
 		return "[" + c.x + "," + c.y + "," + c.z + "," + c.w + "]";
+	}
+
+	protected String getColor(Vector3f c)
+	{
+		return "[" + c.x + "," + c.y + "," + c.z + ",1.0]";
 	}
 	
 	/*
@@ -195,113 +177,6 @@ public class Button extends Component
 		fontSize = Math.max(1, s);
 	}
 
-	public void setFontColor(int color)
-	{
-		float[] colors = getColors(color);
-		setFontColor(colors[0], colors[1], colors[2]);
-	}
-
-	public void setEnabledFontColor(int color)
-	{
-		enabledColor = new Vector4f(getVectorColor(color), 1.0f);
-//		float[] colors = getColors(color);
-//		enabledRed = colors[0];
-//		enabledGreen = colors[1];
-//		enabledBlue = colors[2];
-	}
-
-	public void setDisabledFontColor(int color)
-	{
-		disabledColor = new Vector4f(getVectorColor(color), 1.0f);
-//		float[] colors = getColors(color);
-//		disabledRed = colors[0];
-//		disabledGreen = colors[1];
-//		disabledBlue = colors[2];
-	}
-
-	public void setHoveredFontColor(int color)
-	{
-		hoveredColor = new Vector4f(getVectorColor(color), 1.0f);
-//		float[] colors = getColors(color);
-//		hoveredRed = colors[0];
-//		hoveredGreen = colors[1];
-//		hoveredBlue = colors[2];
-	}
-
-	public void setFontColor(float red, float green, float blue)
-	{
-		setEnabledFontColor(red, green, blue);
-		setDisabledFontColor(red, green, blue);
-		setHoveredFontColor(red, green, blue);
-	}
-	
-	public void setEnabledFontColor(float red, float green, float blue)
-	{
-		enabledColor.x = red;
-		enabledColor.y = green;
-		enabledColor.z = blue;
-//		this.enabledRed = red;
-//		this.enabledGreen = green;
-//		this.enabledBlue = blue;
-	}
-
-	public void setDisabledFontColor(float red, float green, float blue)
-	{
-		disabledColor.x = red;
-		disabledColor.y = green;
-		disabledColor.z = blue;
-//		this.disabledRed = red;
-//		this.disabledGreen = green;
-//		this.disabledBlue = blue;
-	}
-
-	public void setHoveredFontColor(float red, float green, float blue)
-	{
-		hoveredColor.x = red;
-		hoveredColor.y = green;
-		hoveredColor.z = blue;
-//		this.hoveredRed = red;
-//		this.hoveredGreen = green;
-//		this.hoveredBlue = blue;
-	}
-
-	public void resetEnabledColors()
-	{
-		enabledColor.x = scheme.enabledRed;
-		enabledColor.y = scheme.enabledGreen;
-		enabledColor.z = scheme.enabledBlue;
-//		enabledRed = scheme.enabledRed;
-//		enabledGreen = scheme.enabledGreen;
-//		enabledBlue = scheme.enabledBlue;
-	}
-
-	public void resetDisabledColors()
-	{
-		disabledColor.x = scheme.disabledRed;
-		disabledColor.y = scheme.disabledGreen;
-		disabledColor.z = scheme.disabledBlue;
-//		disabledRed = scheme.disabledRed;
-//		disabledGreen = scheme.disabledGreen;
-//		disabledBlue = scheme.disabledBlue;
-	}
-
-	public void resetHoveredColors()
-	{
-		hoveredColor.x = scheme.hoveredRed;
-		hoveredColor.y = scheme.hoveredGreen;
-		hoveredColor.z = scheme.hoveredBlue;
-//		hoveredRed = scheme.hoveredRed;
-//		hoveredGreen = scheme.hoveredGreen;
-//		hoveredBlue = scheme.hoveredBlue;
-	}
-
-	public void resetAllColors()
-	{
-		resetEnabledColors();
-		resetDisabledColors();
-		resetHoveredColors();
-	}
-	
 	/*
 	 * Getters
 	 */
@@ -334,6 +209,18 @@ public class Button extends Component
 	public boolean isHovered()
 	{
 		return hovered;
+	}
+
+	@Override
+	public void setScheme(SchemeButton scheme)
+	{
+		this.scheme = scheme;
+	}
+
+	@Override
+	public SchemeButton getScheme()
+	{
+		return scheme;
 	}
 
 	/* Events */
@@ -388,7 +275,7 @@ public class Button extends Component
 
 	/* Class required for events */
 
-	private class IfClickEvent
+	private static class IfClickEvent
 	{
 		Function<Button, Boolean> f;
 		Consumer<Button> c;

@@ -40,7 +40,7 @@ public class ItemList extends Component
 
 	public ListItem addItem(String text)
 	{
-		ListItem item = new ListItem(getMain(), text);
+		ListItem item = new ListItem(text);
 		items.add(item);
 		scrollBar.used = items.size();
 		return item;

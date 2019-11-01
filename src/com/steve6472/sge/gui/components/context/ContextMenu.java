@@ -67,7 +67,6 @@ public class ContextMenu extends Component
 		if (darkenGui)
 			Render.fillRect(0, 0, getMain().getWidth(), getMain().getHeight(), 0x80101010);
 
-//		UIHelper.renderSingleBorder(x, y, width, height, 0xff000000, 0xff404040);
 		SpriteRender.renderSingleBorder(x, y, width, height, 0, 0, 0, 1, Fex.H40, Fex.H40, Fex.H40, Fex.Hff);
 		int y = 0;
 		for (ContextMenuItem menuItem : menuItems)

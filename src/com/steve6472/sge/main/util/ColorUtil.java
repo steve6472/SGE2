@@ -47,9 +47,14 @@ public class ColorUtil
 		return new float[] { (float) getRed(color) / 255f, (float) getGreen(color) / 255f, (float) getBlue(color) / 255f, (float) getAlpha(color) / 255f };
 	}
 
-	public static Vector3f getVectorColor(int color)
+	public static Vector3f getVector3Color(int color)
 	{
 		return new Vector3f((float) getRed(color) / 255f, (float) getGreen(color) / 255f, (float) getBlue(color) / 255f);
+	}
+
+	public static Vector4f getVector4Color(int color)
+	{
+		return new Vector4f((float) getRed(color) / 255f, (float) getGreen(color) / 255f, (float) getBlue(color) / 255f, (float) getAlpha(color) / 255f);
 	}
 	
 	public static int getRed(int color)

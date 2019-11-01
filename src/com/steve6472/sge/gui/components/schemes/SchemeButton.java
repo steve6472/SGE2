@@ -1,9 +1,9 @@
 package com.steve6472.sge.gui.components.schemes;
 
+import com.steve6472.sge.main.util.ColorUtil;
 import com.steve6472.sss2.SSS;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
-
-import static com.steve6472.sge.main.util.ColorUtil.*;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -25,49 +25,82 @@ public class SchemeButton extends Scheme
 	public Vector4f hoveredInsideBorder;
 	public Vector4f hoveredFill;
 
-	public float enabledRed;
-	public float enabledGreen;
-	public float enabledBlue;
-
-	public float disabledRed;
-	public float disabledGreen;
-	public float disabledBlue;
-
-	public float hoveredRed;
-	public float hoveredGreen;
-	public float hoveredBlue;
+	public Vector3f enabled;
+	public Vector3f disabled;
+	public Vector3f hovered;
 
 	@Override
 	public SchemeButton load(String path)
 	{
-		//		SSS sss = SchemeLoader.load(true, "light", "button.txt");
 		SSS sss = SchemeLoader.load(path);
 
-		enabledOutsideBorder  = toVector(sss.getHexInt("enabledOutsideBorder"));
-		enabledInsideBorder   = toVector(sss.getHexInt("enabledInsideBorder"));
-		enabledFill           = toVector(sss.getHexInt("enabledFill"));
+		enabledOutsideBorder  = ColorUtil.getVector4Color(sss.getHexInt("enabledOutsideBorder"));
+		enabledInsideBorder   = ColorUtil.getVector4Color(sss.getHexInt("enabledInsideBorder"));
+		enabledFill           = ColorUtil.getVector4Color(sss.getHexInt("enabledFill"));
 
-		disabledOutsideBorder = toVector(sss.getHexInt("disabledOutsideBorder"));
-		disabledInsideBorder  = toVector(sss.getHexInt("disabledInsideBorder"));
-		disabledFill          = toVector(sss.getHexInt("disabledFill"));
+		disabledOutsideBorder = ColorUtil.getVector4Color(sss.getHexInt("disabledOutsideBorder"));
+		disabledInsideBorder  = ColorUtil.getVector4Color(sss.getHexInt("disabledInsideBorder"));
+		disabledFill          = ColorUtil.getVector4Color(sss.getHexInt("disabledFill"));
 
-		hoveredOutsideBorder  = toVector(sss.getHexInt("hoveredOutsideBorder"));
-		hoveredInsideBorder   = toVector(sss.getHexInt("hoveredInsideBorder"));
-		hoveredFill           = toVector(sss.getHexInt("hoveredFill"));
+		hoveredOutsideBorder  = ColorUtil.getVector4Color(sss.getHexInt("hoveredOutsideBorder"));
+		hoveredInsideBorder   = ColorUtil.getVector4Color(sss.getHexInt("hoveredInsideBorder"));
+		hoveredFill           = ColorUtil.getVector4Color(sss.getHexInt("hoveredFill"));
 
-		enabledRed    = getRed(sss.getHexInt("enabledRed")) / 255f;
-		enabledGreen  = getGreen(sss.getHexInt("enabledGreen")) / 255f;
-		enabledBlue   = getBlue(sss.getHexInt("enabledBlue")) / 255f;
-
-		disabledRed   = getRed(sss.getHexInt("disabledRed")) / 255f;
-		disabledGreen = getGreen(sss.getHexInt("disabledGreen")) / 255f;
-		disabledBlue  = getBlue(sss.getHexInt("disabledBlue")) / 255f;
-
-		hoveredRed    = getRed(sss.getHexInt("hoveredRed")) / 255f;
-		hoveredGreen  = getGreen(sss.getHexInt("hoveredGreen")) / 255f;
-		hoveredBlue   = getBlue(sss.getHexInt("hoveredBlue")) / 255f;
+		enabled    = ColorUtil.getVector3Color(sss.getHexInt("enabledTextColor"));
+		disabled   = ColorUtil.getVector3Color(sss.getHexInt("disabledTextColor"));
+		hovered    = ColorUtil.getVector3Color(sss.getHexInt("hoveredTextColor"));
 
 		return this;
+	}
+
+	public void setFontColor(float red, float green, float blue)
+	{
+		setEnabledFontColor(red, green, blue);
+		setDisabledFontColor(red, green, blue);
+		setHoveredFontColor(red, green, blue);
+	}
+
+	public void setEnabledFontColor(float red, float green, float blue)
+	{
+		enabled.x = red;
+		enabled.y = green;
+		enabled.z = blue;
+	}
+
+	public void setDisabledFontColor(float red, float green, float blue)
+	{
+		disabled.x = red;
+		disabled.y = green;
+		disabled.z = blue;
+	}
+
+	public void setHoveredFontColor(float red, float green, float blue)
+	{
+		hovered.x = red;
+		hovered.y = green;
+		hovered.z = blue;
+	}
+
+	public SchemeButton()
+	{
+	}
+
+	@SuppressWarnings("IncompleteCopyConstructor")
+	public SchemeButton(SchemeButton other)
+	{
+		super(other);
+		this.enabledOutsideBorder = new Vector4f(other.enabledOutsideBorder);
+		this.enabledInsideBorder = new Vector4f(other.enabledInsideBorder);
+		this.enabledFill = new Vector4f(other.enabledFill);
+		this.disabledOutsideBorder = new Vector4f(other.disabledOutsideBorder);
+		this.disabledInsideBorder = new Vector4f(other.disabledInsideBorder);
+		this.disabledFill = new Vector4f(other.disabledFill);
+		this.hoveredOutsideBorder = new Vector4f(other.hoveredOutsideBorder);
+		this.hoveredInsideBorder = new Vector4f(other.hoveredInsideBorder);
+		this.hoveredFill = new Vector4f(other.hoveredFill);
+		this.enabled = new Vector3f(other.enabled);
+		this.disabled = new Vector3f(other.disabled);
+		this.hovered = new Vector3f(other.hovered);
 	}
 
 	public String getId()

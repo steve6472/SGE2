@@ -43,7 +43,7 @@ public class ToggleButton extends Button
 	protected void renderText()
 	{
 		if (toggled)
-			Render.fillRect(getX(), getY(), getWidth(), getHeight(), scheme.hoveredFill.x, scheme.hoveredFill.y, scheme.hoveredFill.z, 0.5f);
+			Render.fillRect(getX(), getY(), getWidth(), getHeight(), getScheme().hoveredFill.x, getScheme().hoveredFill.y, getScheme().hoveredFill.z, 0.5f);
 		super.renderText();
 	}
 	

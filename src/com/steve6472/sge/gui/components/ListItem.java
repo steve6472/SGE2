@@ -2,6 +2,7 @@ package com.steve6472.sge.gui.components;
 
 import com.steve6472.sge.gfx.SpriteRender;
 import com.steve6472.sge.gfx.font.Font;
+import com.steve6472.sge.gui.components.schemes.IScheme;
 import com.steve6472.sge.gui.components.schemes.SchemeListItemButton;
 import com.steve6472.sge.main.KeyList;
 import com.steve6472.sge.main.MainApp;
@@ -11,29 +12,24 @@ import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static com.steve6472.sge.main.util.ColorUtil.getColors;
-
-public class ListItem
+public class ListItem implements IScheme<SchemeListItemButton>
 {
-	public SchemeListItemButton scheme;
+	private SchemeListItemButton scheme;
 	String text;
 	private boolean hovered;
 	private boolean selected;
 	private boolean flag;
 	private int fontSize;
 
-	/*
-	 * Font Colors
-	 */
-	public float enabledRed, enabledGreen, enabledBlue;
-	public float disabledRed, disabledGreen, disabledBlue;
-	public float hoveredRed, hoveredGreen, hoveredBlue;
+	public ListItem()
+	{
+		scheme = MainApp.getSchemeRegistry().copyDefaultScheme(SchemeListItemButton.class);
+	}
 
-	public ListItem(MainApp main, String text)
+	public ListItem(String text)
 	{
 		this.text = text;
-		scheme = (SchemeListItemButton) main.getSchemeRegistry().getCurrentScheme("listItemButton");
-		resetAllColors();
+		scheme = MainApp.getSchemeRegistry().copyDefaultScheme(SchemeListItemButton.class);
 		fontSize = 1;
 	}
 
@@ -155,13 +151,13 @@ public class ListItem
 		int fontHeight = ((8 * fontSize)) / 2;
 
 		if (itemList.enabled && !hovered)
-			Font.render(text, ix + iw / 2 - fontWidth, iy + ih / 2 - fontHeight, fontSize, enabledRed, enabledGreen, enabledBlue);
+			Font.render(text, ix + iw / 2 - fontWidth, iy + ih / 2 - fontHeight, fontSize, getScheme().enabled);
 
 		if (!itemList.enabled)
-			Font.render(text, ix + iw / 2 - fontWidth, iy + ih / 2 - fontHeight, fontSize, disabledRed, disabledGreen, disabledBlue);
+			Font.render(text, ix + iw / 2 - fontWidth, iy + ih / 2 - fontHeight, fontSize, getScheme().disabled);
 
 		if (itemList.enabled && (hovered || selected))
-			Font.render(text, ix + iw / 2 - fontWidth, iy + ih / 2 - fontHeight, fontSize, hoveredRed, hoveredGreen, hoveredBlue);
+			Font.render(text, ix + iw / 2 - fontWidth, iy + ih / 2 - fontHeight, fontSize, getScheme().hovered);
 	}
 
 	public void renderFrame(int ix, int iy, int iw, int ih)
@@ -236,90 +232,16 @@ public class ListItem
 		this.fontSize = fontSize;
 	}
 
-	public void setFontColor(int color)
+	@Override
+	public SchemeListItemButton getScheme()
 	{
-		float[] colors = getColors(color);
-		setFontColor(colors[0], colors[1], colors[2]);
+		return scheme;
 	}
 
-	public void setEnabledFontColor(int color)
+	@Override
+	public void setScheme(SchemeListItemButton scheme)
 	{
-		float[] colors = getColors(color);
-		enabledRed = colors[0];
-		enabledGreen = colors[1];
-		enabledBlue = colors[2];
-	}
-
-	public void setDisabledFontColor(int color)
-	{
-		float[] colors = getColors(color);
-		disabledRed = colors[0];
-		disabledGreen = colors[1];
-		disabledBlue = colors[2];
-	}
-
-	public void setHoveredFontColor(int color)
-	{
-		float[] colors = getColors(color);
-		hoveredRed = colors[0];
-		hoveredGreen = colors[1];
-		hoveredBlue = colors[2];
-	}
-
-	public void setFontColor(float red, float green, float blue)
-	{
-		setEnabledFontColor(red, green, blue);
-		setDisabledFontColor(red, green, blue);
-		setHoveredFontColor(red, green, blue);
-	}
-
-	public void setEnabledFontColor(float red, float green, float blue)
-	{
-		this.enabledRed = red;
-		this.enabledGreen = green;
-		this.enabledBlue = blue;
-	}
-
-	public void setDisabledFontColor(float red, float green, float blue)
-	{
-		this.disabledRed = red;
-		this.disabledGreen = green;
-		this.disabledBlue = blue;
-	}
-
-	public void setHoveredFontColor(float red, float green, float blue)
-	{
-		this.hoveredRed = red;
-		this.hoveredGreen = green;
-		this.hoveredBlue = blue;
-	}
-
-	public void resetEnabledColors()
-	{
-		enabledRed = scheme.enabledRed;
-		enabledGreen = scheme.enabledGreen;
-		enabledBlue = scheme.enabledBlue;
-	}
-
-	public void resetDisabledColors()
-	{
-		disabledRed = scheme.disabledRed;
-		disabledGreen = scheme.disabledGreen;
-		disabledBlue = scheme.disabledBlue;
-	}
-
-	public void resetHoveredColors()
-	{
-		hoveredRed = scheme.hoveredRed;
-		hoveredGreen = scheme.hoveredGreen;
-		hoveredBlue = scheme.hoveredBlue;
-	}
-
-	public void resetAllColors()
-	{
-		resetEnabledColors();
-		resetDisabledColors();
-		resetHoveredColors();
+		this.scheme = scheme;
 	}
 
 	/* Events */

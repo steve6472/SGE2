@@ -10,7 +10,7 @@ package com.steve6472.sge.gui.components;
 import com.steve6472.sge.gfx.SpriteRender;
 import com.steve6472.sge.gfx.font.Font;
 import com.steve6472.sge.gui.Component;
-import com.steve6472.sge.gui.components.schemes.Scheme;
+import com.steve6472.sge.gui.components.schemes.IScheme;
 import com.steve6472.sge.gui.components.schemes.SchemeTextField;
 import com.steve6472.sge.main.KeyList;
 import com.steve6472.sge.main.MainApp;
@@ -23,10 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
-public class TextField extends Component
+public class TextField extends Component implements IScheme<SchemeTextField>
 {
-	private static final long serialVersionUID = 1235988307289728893L;
-	
 	private String text = "";
 	protected int fontSize = 1;
 	private int carretPosition = 0;
@@ -41,18 +39,13 @@ public class TextField extends Component
 	
 	public TextField()
 	{
+		setScheme(MainApp.getSchemeRegistry().copyDefaultScheme(SchemeTextField.class));
 	}
 
 	@Override
 	public void init(MainApp main)
 	{
-		if (scheme == null)
-			setScheme(main.getSchemeRegistry().getCurrentScheme("textField"));
-	}
 
-	public void setScheme(Scheme scheme)
-	{
-		this.scheme = (SchemeTextField) scheme;
 	}
 
 	@Event
@@ -89,10 +82,10 @@ public class TextField extends Component
 			{
 				switch (event.getKey())
 				{
-					case KeyList.LEFT: moveCarretLeft(); resetSelection(); break;
-					case KeyList.RIGHT: moveCarretRight(); resetSelection(); break;
-					case KeyList.END: carretPosition = text.length(); resetSelection(); break;
-					case KeyList.HOME: carretPosition = 0; resetSelection(); break;
+					case KeyList.LEFT ->  { moveCarretLeft();               resetSelection(); }
+					case KeyList.RIGHT -> { moveCarretRight();              resetSelection(); }
+					case KeyList.END ->   { carretPosition = text.length(); resetSelection(); }
+					case KeyList.HOME ->  { carretPosition = 0;             resetSelection(); }
 				}
 			}
 			else
@@ -176,14 +169,13 @@ public class TextField extends Component
 	{
 		SpriteRender.renderSingleBorder(
 			x, y, width, height,
-			scheme.borderRed, scheme.borderGreen, scheme.borderBlue, scheme.borderAlpha,
-			scheme.fillRed, scheme.fillGreen, scheme.fillBlue, scheme.fillAlpha
+			scheme.border,
+			scheme.fill
 		);
 	}
 
 	protected void renderText()
 	{
-
 		int fontHeight = ((8 * fontSize)) / 2;
 		int ty = y + height / 2 - fontHeight;
 
@@ -195,20 +187,19 @@ public class TextField extends Component
 
 			int textSize = Font.getTextWidth(middle, fontSize);
 			int textStart = Font.getTextWidth(left, fontSize);
-			//			Render.fillRect(x + (height - 8 * fontSize) / 2 + textStart, y + 2, textSize, height - 4, scheme.selectFill);
 			SpriteRender.fillRect(
 				x + (height - 8 * fontSize) / 2 + textStart, y + 2, textSize, height - 4,
-				scheme.selectFillRed, scheme.selectFillGreen, scheme.selectFillBlue, scheme.selectFillAlpha
+				scheme.selectFill
 			);
 
 			int tx = x + (height - 8 * fontSize) / 2;
 
-			Font.render(left, tx, ty, fontSize, scheme.textColorRed, scheme.textColorGreen, scheme.textColorBlue);
-			Font.render(middle, tx + textStart, ty, fontSize, scheme.selectedTextColorRed, scheme.selectedTextColorGreen, scheme.selectedTextColorBlue);
-			Font.render(right, tx + textStart + textSize, ty, fontSize, scheme.textColorRed, scheme.textColorGreen, scheme.textColorBlue);
+			Font.render(left, tx, ty, fontSize, scheme.textColor);
+			Font.render(middle, tx + textStart, ty, fontSize, scheme.selectedTextColor);
+			Font.render(right, tx + textStart + textSize, ty, fontSize, scheme.textColor);
 		} else
 		{
-			Font.render(text, x + (height - 8 * fontSize) / 2, y + height / 2 - fontHeight, fontSize, scheme.textColorRed, scheme.textColorGreen, scheme.textColorBlue);
+			Font.render(text, x + (height - 8 * fontSize) / 2, y + height / 2 - fontHeight, fontSize, scheme.textColor);
 		}
 
 		if (showCarret && isFocused && isEditable)
@@ -221,23 +212,19 @@ public class TextField extends Component
 			{
 				cx = textWidth + x + fontSize * 3 + 2;
 			}
-			//			Render.startFillRect();
 			if (carretPosition == text.length())
 			{
 				SpriteRender.fillRect(
 					cx, cy, carretWidth, 2 * fontSize,
-					scheme.carretColorRed, scheme.carretColorGreen, scheme.carretColorBlue, scheme.carretColorAlpha
+					scheme.carretColor
 				);
-				//				Render.fillRect_(cx, cy, carretWidth, 2 * fontSize, scheme.carretColor);
 			} else
 			{
-				//				Render.fillRect_(cx, ty, fontSize, 8 * fontSize, scheme.carretColor);
 				SpriteRender.fillRect(
 					cx, ty, fontSize, 8 * fontSize,
-					scheme.carretColorRed, scheme.carretColorGreen, scheme.carretColorBlue, scheme.carretColorAlpha
+					scheme.carretColor
 				);
 			}
-			//			Render.endFillRect();
 		}
 	}
 
@@ -341,6 +328,18 @@ public class TextField extends Component
 		setCarretPosition(text.length());
 	}
 
+	@Override
+	public SchemeTextField getScheme()
+	{
+		return scheme;
+	}
+
+	@Override
+	public void setScheme(SchemeTextField scheme)
+	{
+		this.scheme = scheme;
+	}
+
 	/* Events */
 
 	private List<BiConsumer<TextField, Character>> typeEvents = new ArrayList<>();
@@ -365,5 +364,4 @@ public class TextField extends Component
 	{
 		keyEvents.forEach(c -> c.accept(this, key));
 	}
-
 }

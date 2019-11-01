@@ -14,41 +14,71 @@ import java.util.HashMap;
  ***********************/
 public class SchemeRegistry
 {
-	private HashMap<String, Scheme> schemeHashMap = new HashMap<>();
+	private HashMap<Class<? extends Scheme>, Factory> schemes = new HashMap<>();
+	private HashMap<Class<? extends Scheme>, Scheme> defaultSchemes = new HashMap<>();
 
 	public void loadCurrentSchemes()
 	{
 		File f = new File("schemes/currentSchemes.txt");
 
-		//Create new files with dark scheme as default
+		createDefault(f);
+		loadDefaultSchemes(f);
+	}
+
+	private void createDefault(File f)
+	{
 		if (!f.getParentFile().exists())
 		{
 			f.getParentFile().mkdirs();
 			SSS sss = new SSS(f);
-			for (String s : schemeHashMap.keySet())
+			for (Scheme s : defaultSchemes.values())
 			{
-				sss.add(s, "*dark/" + s + ".txt");
+				sss.add(s.getId(), "*dark/" + s.getId() + ".txt");
 			}
 			sss.save(f);
 		}
+	}
 
+	private void loadDefaultSchemes(File f)
+	{
 		SSS sss = new SSS(f);
-		for (ValueHolder vh : sss)
+		for (Scheme s : defaultSchemes.values())
 		{
-			schemeHashMap.get(vh.getName()).load(vh.getString());
+			for (ValueHolder vh : sss)
+			{
+				if (s.getId().equals(vh.getName()))
+				{
+					s.load(vh.getString());
+				}
+			}
 		}
 	}
 
-	public void registerScheme(Scheme scheme)
+	public <T extends Scheme> void registerScheme(Class<T> clazz, Scheme defaultScheme, Factory<T> factory)
 	{
-		if (schemeHashMap.containsValue(scheme))
-			throw new IllegalArgumentException("Duplicate scheme:" + scheme);
-		else
-			schemeHashMap.put(scheme.getId(), scheme);
+		if (schemes.containsValue(clazz))
+		{
+			throw new IllegalArgumentException("Duplicate scheme:" + clazz);
+		} else
+		{
+			schemes.put(clazz, factory);
+			defaultSchemes.put(clazz, defaultScheme);
+		}
 	}
 
-	public Scheme getCurrentScheme(String id)
+	public <T extends Scheme> T copyDefaultScheme(Class<T> scheme)
 	{
-		return schemeHashMap.get(id);
+		return (T) schemes.get(scheme).create(defaultSchemes.get(scheme));
+	}
+
+	public <T extends Scheme> Scheme getDefaultScheme(Class<T> scheme)
+	{
+		return defaultSchemes.get(scheme);
+	}
+
+	@FunctionalInterface
+	public interface Factory<T extends Scheme>
+	{
+		T create(T other);
 	}
 }
