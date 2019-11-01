@@ -606,6 +606,7 @@ public class Font
 	 *             Space: [x10] [y16]
 	 *             New line: \n (doesn't need new entry)
 	 *             Shade: [s1] [s0] (true, false)
+	 *             Format: new Object[] { "format string %d", new Object[] { variables } }
 	 */
 	public static void renderCustom(int x, int y, float size, Object... text)
 	{
@@ -655,7 +656,16 @@ public class Font
 			if (o == null)
 				continue;
 
-			String s = o.toString();
+			String s;
+
+			if (o instanceof Object[])
+			{
+				Object[] a = (Object[]) o;
+				s = String.format((String) a[0], (Object[]) a[1]);
+			} else
+			{
+				s = o.toString();
+			}
 
 			if (s == null || s.isEmpty())
 				continue;
