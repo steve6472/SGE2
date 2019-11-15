@@ -12,10 +12,10 @@ import org.joml.Vector3f;
  ***********************/
 public class Camera implements IPosition3f
 {
-	private Vector3f position;
-	private float yaw, pitch, roll;
-	private boolean canMoveHead = true;
-	private Matrix4f viewMatrix;
+	protected Vector3f position;
+	protected float yaw, pitch, roll;
+	protected boolean canMoveHead = true;
+	protected Matrix4f viewMatrix;
 
 	public Camera()
 	{

@@ -108,8 +108,8 @@ public class SpriteRender
 
 		vao = createVAO();
 
-		v_vbo = storeDataInAttributeList(0, 2, new float[] { -1, +1, -1, -1, +1, -1, +1, -1, +1, +1, -1, +1 });
-		t_vbo = storeDataInAttributeList(1, 2, new float[] { 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1 });
+		v_vbo = storeFloatDataInAttributeList(0, 2, new float[] { -1, +1, -1, -1, +1, -1, +1, -1, +1, +1, -1, +1 });
+		t_vbo = storeFloatDataInAttributeList(1, 2, new float[] { 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1 });
 
 		unbindVAO();
 

@@ -97,6 +97,14 @@ public class SmartSave
 							}
 							break i;
 						}
+						case 16 -> {
+							short[] i = new short[valueLength];
+							for (int j = 0; j < i.length; j++)
+							{
+								i[j] = dataInputStream.readShort();
+							}
+							break i;
+						}
 						default -> null;
 					};
 			readData.put(name, val);
@@ -131,6 +139,14 @@ public class SmartSave
 				for (int item : a)
 				{
 					os.writeInt(item);
+				}
+			}
+			case SHORTARRAY -> {
+				short[] a = ((short[]) value);
+				os.writeInt(a.length);
+				for (int item : a)
+				{
+					os.writeShort(item);
 				}
 			}
 			default -> throw new IllegalStateException("Unexpected value: " + DataType.getDataType(value));

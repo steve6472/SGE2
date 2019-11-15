@@ -44,13 +44,13 @@ public class Chunk2D
 		vao = VertexObjectCreator.createVAO();
 
 		List<Float> vertices = buildVertices();
-		v_vbo = VertexObjectCreator.storeDataInAttributeList(0, 2, vertices);
+		v_vbo = VertexObjectCreator.storeFloatDataInAttributeList(0, 2, vertices);
 
 		for (int i = 0; i < textureLayers; i++)
 		{
 			int[] tiles = new int[chunkSize * chunkSize];
 			List<Float> textures = buildTextures(tiles);
-			int t_vbo = VertexObjectCreator.storeDataInAttributeList(1 + i, 2, textures);
+			int t_vbo = VertexObjectCreator.storeFloatDataInAttributeList(1 + i, 2, textures);
 			Layer l = new Layer(tiles, t_vbo);
 			layers.add(l);
 		}
@@ -129,7 +129,7 @@ public class Chunk2D
 		for (int i = 0; i < layers.size(); i++)
 		{
 			List<Float> textures = buildTextures(layers.get(i).getTiles());
-			VertexObjectCreator.storeDataInAttributeList(1 + i, 2, layers.get(i).getVbo(), textures);
+			VertexObjectCreator.storeFloatDataInAttributeList(1 + i, 2, layers.get(i).getVbo(), textures);
 		}
 		VertexObjectCreator.unbindVAO();
 	}
@@ -138,7 +138,7 @@ public class Chunk2D
 	{
 		VertexObjectCreator.bindVAO(vao);
 		List<Float> textures = buildTextures(layers.get(layer).getTiles());
-		VertexObjectCreator.storeDataInAttributeList(1 + layer, 2, layers.get(layer).getVbo(), textures);
+		VertexObjectCreator.storeFloatDataInAttributeList(1 + layer, 2, layers.get(layer).getVbo(), textures);
 		VertexObjectCreator.unbindVAO();
 	}
 

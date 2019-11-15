@@ -11,9 +11,23 @@ import com.steve6472.sge.main.Util;
 
 public enum DataType
 {
-	BOOLEAN(Boolean.class), BYTE(Byte.class), CHAR(Character.class), SHORT(Short.class), INT(Integer.class), LONG(Long.class), FLOAT(
-			Float.class), DOUBLE(Double.class), STRING(String.class), HEX(null), STRINGARRAY(String[].class), INTARRAY(int[].class),
-	NULL(null), OBJECTARRAY(Object[].class);
+	BOOLEAN(Boolean.class),
+	BYTE(Byte.class),
+	CHAR(Character.class),
+	SHORT(Short.class),
+	INT(Integer.class),
+	LONG(Long.class),
+	FLOAT(Float.class),
+	DOUBLE(Double.class),
+	STRING(String.class),
+	HEX(null),
+	STRINGARRAY(String[].class),
+	INTARRAY(int[].class),
+	NULL(null),
+	OBJECTARRAY(Object[].class),
+	INTARRAY2D(int[][].class),
+	INTARRAY3D(int[][][].class),
+	SHORTARRAY(short[].class);
 
 	protected Class<?> clazz;
 
@@ -37,7 +51,7 @@ public enum DataType
 			case SHORT -> Short.valueOf(value);
 			case STRING -> value;
 			case NULL -> null;
-			case STRINGARRAY, INTARRAY, OBJECTARRAY -> "---Not supported---";
+			case STRINGARRAY, INTARRAY, OBJECTARRAY, INTARRAY2D, INTARRAY3D, SHORTARRAY -> "---Not supported---";
 			default -> "---This should not happen---";
 		};
 	}
@@ -55,6 +69,9 @@ public enum DataType
 		if (o instanceof String) return STRING;
 		if (o instanceof String[]) return STRINGARRAY;
 		if (o instanceof Integer[] || o instanceof int[]) return INTARRAY;
+		if (o instanceof Integer[][] || o instanceof int[][]) return INTARRAY2D;
+		if (o instanceof Integer[][][] || o instanceof int[][][]) return INTARRAY3D;
+		if (o instanceof Short[] || o instanceof short[]) return SHORTARRAY;
 		if (o instanceof Object[]) return OBJECTARRAY;
 		return NULL;
 	}
