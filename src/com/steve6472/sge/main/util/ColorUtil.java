@@ -81,4 +81,53 @@ public class ColorUtil
 	{
 		return getColor(color.x, color.y, color.z, color.w);
 	}
+
+	public static int blend(int c1, int c2, double ratio)
+	{
+		if (ratio > 1) ratio = 1;
+		else if (ratio < 0f) ratio = 0;
+
+		int a1 = getAlpha(c1);
+		int r1 = getRed(c1);
+		int g1 = getGreen(c1);
+		int b1 = getBlue(c1);
+
+		int a2 = getAlpha(c2);
+		int r2 = getRed(c2);
+		int g2 = getGreen(c2);
+		int b2 = getBlue(c2);
+
+		int a = (int) (a1 + (a2 - a1) * ratio);
+		int r = (int) (r1 + (r2 - r1) * ratio);
+		int g = (int) (g1 + (g2 - g1) * ratio);
+		int b = (int) (b1 + (b2 - b1) * ratio);
+
+		return a << 24 | r << 16 | g << 8 | b;
+	}
+
+	public static int blendNoAlpha(int c1, int c2, double ratio)
+	{
+		if (ratio > 1) ratio = 1;
+		else if (ratio < 0f) ratio = 0;
+		double iRatio = 1.0 - ratio;
+
+		int r1 = getRed(c1);
+		int g1 = getGreen(c1);
+		int b1 = getBlue(c1);
+
+		int r2 = getRed(c2);
+		int g2 = getGreen(c2);
+		int b2 = getBlue(c2);
+
+//		System.out.println(String.format("C1: %d, %d, %d", r1, g1, b1));
+//		System.out.println(String.format("C2: %d, %d, %d", r2, g2, b2));
+
+		int r = (int) ((r1 * iRatio) + (r2 * ratio));
+		int g = (int) ((g1 * iRatio) + (g2 * ratio));
+		int b = (int) ((b1 * iRatio) + (b2 * ratio));
+
+//		System.out.println(String.format("Mix: %d, %d, %d", r, g, b));
+
+		return (r << 16) | (g << 8) | b;
+	}
 }

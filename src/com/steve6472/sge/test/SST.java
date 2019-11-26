@@ -4,7 +4,6 @@ import com.steve6472.sge.main.smartsave.SmartSave;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -20,12 +19,14 @@ public class SST
 		if (!f.exists()) f.createNewFile();
 
 		SmartSave.openOutput(f);
-		SmartSave.writeData("test", "This is a test string");
-		SmartSave.writeData("lorem", "Lorem Ipsum");
-		SmartSave.writeData("number", 177013);
-		SmartSave.writeData("numbers", new int[] {0, 1, 2, 4, 8, 16, 32, 64});
+		SmartSave.writeData("8", "eight");
+//		SmartSave.writeData("test", "This is a test string");
+//		SmartSave.writeData("lorem", "Lorem Ipsum");
+//		SmartSave.writeData("number", 177013);
+//		SmartSave.writeData("numbers", new int[] {0, 1, 2, 4, 8, 16, 32, 64});
 		SmartSave.closeOutput();
 
+		/*
 		SmartSave.openInput(f);
 		SmartSave.readFull();
 		System.out.println(SmartSave.get("test"));
@@ -33,5 +34,6 @@ public class SST
 		System.out.println(SmartSave.get("number"));
 		System.out.println(Arrays.toString((int[]) SmartSave.get("numbers")));
 		SmartSave.closeInput();
+		*/
 	}
 }

@@ -307,7 +307,7 @@ public class Shader
 		{
 			if (s.startsWith("#") && s.substring(0, 8).equals("#include"))
 			{
-				System.out.println("Including from " + s);
+//				System.out.println("Including from " + s.substring(9));
 				string.append(include(s));
 			} else
 			{

@@ -121,6 +121,9 @@ public class SmartSave
 	{
 		switch(DataType.getDataType(value))
 		{
+			/*TODO: replace with os.writeByte(length); as it uses 3 bytes less...
+			 * Also make translator for that...
+			 */
 			case BOOLEAN -> {os.writeInt(1); os.writeBoolean((boolean) value);}
 			case BYTE -> {os.writeInt(1); os.writeByte((byte) value);}
 			case CHAR -> {os.writeInt(2); os.writeChar((char) value);}
