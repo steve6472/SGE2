@@ -42,6 +42,7 @@ public class SpriteRender
 	public static SoftRingShader softRingShader;
 
 	private static boolean manual = false;
+	private static boolean manualSprite = false;
 
 	public SpriteRender(MainApp main)
 	{
@@ -349,17 +350,37 @@ public class SpriteRender
 		start();
 
 		transformation
-				.identity()
-				.translate(spriteWidth * 0.5f - (spriteWidth - width) * 0.5f, spriteHeight * 0.5f - (spriteHeight - height) * 0.5f, 0)
-				.translate(x, y, 0)
-				.rotate((float) Math.toRadians(angRot), 0, 0, 1)
-				.scale(width * 0.5f, height * 0.5f, 1)
-				.scale(1, -1f, 1);
+			.identity()
+			.translate(spriteWidth * 0.5f - (spriteWidth - width) * 0.5f, spriteHeight * 0.5f - (spriteHeight - height) * 0.5f, 0)
+			.translate(x, y, 0)
+			.rotate((float) Math.toRadians(angRot), 0, 0, 1)
+			.scale(width * 0.5f, height * 0.5f, 1)
+			.scale(1, -1f, 1);
 
 		spriteShader.bind();
 		spriteShader.setTransformation(transformation);
 
-		Sprite.bind(0, spriteId);
+		bindSprite(spriteId);
+
+		renderSprite();
+		end();
+	}
+
+	public static void renderSpriteInverted(int x, int y, int width, int height, int spriteId, int spriteWidth, int spriteHeight)
+	{
+		start();
+
+		transformation
+			.identity()
+			.translate(spriteWidth * 0.5f - (spriteWidth - width) * 0.5f, spriteHeight * 0.5f - (spriteHeight - height) * 0.5f, 0)
+			.translate(x, y, 0)
+			.scale(width * 0.5f, height * 0.5f, 1)
+			.scale(1, -1f, 1);
+
+		spriteShader.bind();
+		spriteShader.setTransformation(transformation);
+
+		bindSprite(spriteId);
 
 		renderSprite();
 		end();
@@ -384,7 +405,31 @@ public class SpriteRender
 		spriteShader.bind();
 		spriteShader.setTransformation(transformation);
 
-		Sprite.bind(0, spriteId);
+		bindSprite(spriteId);
+
+		renderSprite();
+		end();
+	}
+
+	public static void renderSprite(int x, int y, int width, int height, Sprite sprite)
+	{
+		renderSprite(x, y, width, height, sprite.id);
+	}
+
+	public static void renderSprite(int x, int y, int width, int height, int spriteId)
+	{
+		start();
+
+		transformation
+			.identity()
+			.translate(width * 0.5f, height * 0.5f, 0)
+			.translate(x, y, 0)
+			.scale(width * 0.5f, height * 0.5f, 1);
+
+		spriteShader.bind();
+		spriteShader.setTransformation(transformation);
+
+		bindSprite(spriteId);
 
 		renderSprite();
 		end();
@@ -405,7 +450,27 @@ public class SpriteRender
 		spriteAtlasShader.setTransformation(transformation);
 		spriteAtlasShader.setUniform(SpriteAtlasShader.SPRITEDATA, tileW, tileH, tileX, tileY);
 
-		Sprite.bind(0, spriteId);
+		bindSprite(spriteId);
+
+		renderSprite();
+		end();
+	}
+
+	public static void renderSpriteFromAtlas(int x, int y, int width, int height, int spriteId, float tileX, float tileY, float tileW, float tileH)
+	{
+		start();
+
+		transformation
+			.identity()
+			.translate(width * 0.5f, height * 0.5f, 0)
+			.translate(x, y, 0)
+			.scale(width * 0.5f, height * 0.5f, 1);
+
+		spriteAtlasShader.bind();
+		spriteAtlasShader.setTransformation(transformation);
+		spriteAtlasShader.setUniform(SpriteAtlasShader.SPRITEDATA, tileW, tileH, tileX / tileW, tileY / tileH);
+
+		bindSprite(spriteId);
 
 		renderSprite();
 		end();
@@ -534,6 +599,7 @@ public class SpriteRender
 		glBindVertexArray(0);
 
 		manual = false;
+		manualSprite = false;
 		Shader.releaseShader();
 
 		glViewport(0, 0, SpriteRender.w, SpriteRender.h);
@@ -541,5 +607,29 @@ public class SpriteRender
 		glLoadIdentity();
 		glOrtho(0, SpriteRender.w, SpriteRender.h, 0, 1, -1); // 2D projection matrix
 		glMatrixMode(GL_MODELVIEW);
+	}
+
+	public static void bindSprite(Sprite sprite)
+	{
+		if (manualSprite) return;
+		sprite.bind(0);
+	}
+
+	public static void manualSprite(Sprite sprite)
+	{
+		manualSprite = true;
+		sprite.bind(0);
+	}
+
+	public static void bindSprite(int spriteId)
+	{
+		if (manualSprite) return;
+		Sprite.bind(0, spriteId);
+	}
+
+	public static void manualSprite(int spriteId)
+	{
+		manualSprite = true;
+		Sprite.bind(0, spriteId);
 	}
 }
