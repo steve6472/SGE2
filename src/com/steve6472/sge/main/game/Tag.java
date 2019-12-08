@@ -6,11 +6,16 @@ public class Tag implements Serializable
 {
 	public String name;
 	public Object value;
-	
+
 	public Tag(String name, Object value)
 	{
 		this.name = name;
 		this.value = value;
+	}
+
+	public Tag(String name)
+	{
+		this.name = name;
 	}
 	
 	public String getName()

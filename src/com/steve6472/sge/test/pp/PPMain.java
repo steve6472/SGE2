@@ -78,13 +78,13 @@ public class PPMain extends MainApp
 
 //		pp.applyEffect(combine, horizontalBlur.getOutTexture(), original.getId());
 
-		SpriteRender.renderSprite(0, 0, getWidth(), getHeight(), 0, pp.combine.getOutTexture(), getWidth(), getHeight());
+		SpriteRender.renderSprite(0, 0, getWidth(), getHeight(), 0, pp.combine.getOutTexture());
 //		SpriteRender.renderSpriteInverted(0, 0, getWidth(), getHeight(), 0, horizontalBlur.getOutTexture(), getWidth(), getHeight());
 //		SpriteRender.renderSpriteInverted(0, 0, getWidth(), getHeight(), 0, combine.getOutTexture(), getWidth(), getHeight());
 //		SpriteRender.renderSpriteInverted(0, 0, getWidth(), getHeight(), 0, brightness.getOutTexture(), getWidth(), getHeight());
 //		SpriteRender.renderSprite(0, 0, getWidth(), getHeight(), 0, original.getId(), getWidth(), getHeight());
 
-		SpriteRender.renderSprite(0, 0, getWidth(), getHeight(), 0, mainFrameBuffer.texture, getWidth(), getHeight());
+		SpriteRender.renderSprite(0, 0, getWidth(), getHeight(), 0, mainFrameBuffer.texture);
 	}
 
 	@Override

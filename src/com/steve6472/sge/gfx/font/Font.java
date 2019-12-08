@@ -606,7 +606,6 @@ public class Font
 	 *             Space: [x10] [y16]
 	 *             New line: \n (doesn't need new entry)
 	 *             Shade: [s1] [s0] (true, false)
-	 *             Format: new Object[] { "format string %d", new Object[] { variables } }
 	 */
 	public static void renderCustom(int x, int y, float size, Object... text)
 	{
@@ -658,10 +657,10 @@ public class Font
 
 			String s;
 
-			if (o instanceof Object[])
+			if (o instanceof Vector3f)
 			{
-				Object[] a = (Object[]) o;
-				s = String.format((String) a[0], (Object[]) a[1]);
+				Vector3f a = (Vector3f) o;
+				s = String.format("[%f,%f,%f]", a.x, a.y, a.z);
 			} else
 			{
 				s = o.toString();

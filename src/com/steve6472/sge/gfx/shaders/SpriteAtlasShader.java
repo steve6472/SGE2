@@ -20,6 +20,6 @@ public class SpriteAtlasShader extends StaticShader2D
 	protected void createUniforms()
 	{
 		addUniform("sampler", SAMPLER = new Type(EnumUniformType.INT_1));
-		addUniform("sampler", SPRITEDATA = new Type(EnumUniformType.FLOAT_4));
+		addUniform("spriteData", SPRITEDATA = new Type(EnumUniformType.FLOAT_4));
 	}
 }

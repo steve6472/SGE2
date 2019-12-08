@@ -138,7 +138,7 @@ public class SpriteRender
 
 		spriteAtlasShader = new SpriteAtlasShader();
 		spriteAtlasShader.bind();
-		spriteShader.setUniform(SpriteAtlasShader.SAMPLER, 0);
+		spriteAtlasShader.setUniform(SpriteAtlasShader.SAMPLER, 0);
 		spriteAtlasShader.setTransformation(transformation);
 
 		circleShader = new CircleShader();
@@ -367,22 +367,43 @@ public class SpriteRender
 
 	public static void renderSprite(int x, int y, int width, int height, float angRot, Sprite sprite)
 	{
-		renderSprite(x, y, width, height, angRot, sprite.id, sprite.width, sprite.height);
+		renderSprite(x, y, width, height, angRot, sprite.id);
 	}
 
-	public static void renderSprite(int x, int y, int width, int height, float angRot, int spriteId, int spriteWidth, int spriteHeight)
+	public static void renderSprite(int x, int y, int width, int height, float angRot, int spriteId)
 	{
 		start();
 
 		transformation
-				.identity()
-				.translate(spriteWidth * 0.5f - (spriteWidth - width) * 0.5f, spriteHeight * 0.5f - (spriteHeight - height) * 0.5f, 0)
-				.translate(x, y, 0)
-				.rotate((float) Math.toRadians(angRot), 0, 0, 1)
-				.scale(width * 0.5f, height * 0.5f, 1);
+			.identity()
+			.translate(width * 0.5f, height * 0.5f, 0)
+			.translate(x, y, 0)
+			.rotate((float) Math.toRadians(angRot), 0, 0, 1)
+			.scale(width * 0.5f, height * 0.5f, 1);
 
 		spriteShader.bind();
 		spriteShader.setTransformation(transformation);
+
+		Sprite.bind(0, spriteId);
+
+		renderSprite();
+		end();
+	}
+
+	public static void renderSpriteFromAtlas(int x, int y, int width, int height, float angRot, int spriteId, float tileX, float tileY, float tileW, float tileH)
+	{
+		start();
+
+		transformation
+			.identity()
+			.translate(width * 0.5f, height * 0.5f, 0)
+			.translate(x, y, 0)
+			.rotate((float) Math.toRadians(angRot), 0, 0, 1)
+			.scale(width * 0.5f, height * 0.5f, 1);
+
+		spriteAtlasShader.bind();
+		spriteAtlasShader.setTransformation(transformation);
+		spriteAtlasShader.setUniform(SpriteAtlasShader.SPRITEDATA, tileW, tileH, tileX, tileY);
 
 		Sprite.bind(0, spriteId);
 

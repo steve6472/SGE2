@@ -49,6 +49,14 @@ public class VertexObjectCreator
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
+	public static void storeFloatDataInAttributeList(int attributeNumber, int size, int vboId, FloatBuffer buffer)
+	{
+		glBindBuffer(GL_ARRAY_BUFFER, vboId);
+		glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
+		glVertexAttribPointer(attributeNumber, size, GL_FLOAT, false, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+	}
+
 	public static int storeFloatDataInAttributeList(int attributeNumber, int size, float[] data)
 	{
 		int vboID = glGenBuffers();
