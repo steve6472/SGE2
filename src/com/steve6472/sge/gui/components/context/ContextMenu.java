@@ -22,9 +22,20 @@ public class ContextMenu extends Component
 	public boolean spoofCursor = false;
 	public boolean canClose = true;
 	public int mx, my;
+	private final String id;
 
+	public ContextMenu(String id)
+	{
+		this.id = id;
+		menuItems = new ArrayList<>();
+	}
+
+	/**
+	 * This ContextMenu can not be added to GUI!
+	 */
 	public ContextMenu()
 	{
+		this.id = null;
 		menuItems = new ArrayList<>();
 	}
 
@@ -137,5 +148,10 @@ public class ContextMenu extends Component
 			return false;
 		return (getMouseX() >= getX() && getMouseX() <= getWidth() + getX())
 				&& (getMouseY() >= getY() && getMouseY() <= getHeight() + getY());
+	}
+
+	public String getId()
+	{
+		return id;
 	}
 }

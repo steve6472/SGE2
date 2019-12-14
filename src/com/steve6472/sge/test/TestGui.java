@@ -293,9 +293,9 @@ public class TestGui extends Gui
 		addComponent(darkTextField_);
 
 		/* Context Menu */
-		ContextMenu contextMenu = new ContextMenu();
+		ContextMenu contextMenu = new ContextMenu("main");
 		contextMenu.setSize(128);
-		addContextMenu("main", contextMenu);
+		addContextMenu(contextMenu);
 		setContextMenu("main");
 
 		ContextMenuButton contextMenuButtonExit = new ContextMenuButton();

@@ -1,9 +1,6 @@
 package com.steve6472.sge.gui;
 
-import com.steve6472.sge.main.KeyHandler;
-import com.steve6472.sge.main.KeyList;
-import com.steve6472.sge.main.MainApp;
-import com.steve6472.sge.main.MouseHandler;
+import com.steve6472.sge.main.*;
 import com.steve6472.sge.main.events.AbstractEvent;
 
 import java.io.Serializable;
@@ -83,6 +80,36 @@ public abstract class Component implements Serializable
 				{
 					flag = false;
 					action.accept(this);
+				}
+			}
+		} else
+		{
+			flag = false;
+		}
+	}
+
+	protected final void onMouseClicked(int button, final Procedure action)
+	{
+		onMouseClicked(isCursorInComponent(), button, action);
+	}
+
+	protected final void onMouseClicked(boolean canClick, int button, final Procedure action)
+	{
+		Objects.requireNonNull(action);
+		if (canClick)
+		{
+			if (!flag)
+			{
+				if (getMain().getMouseHandler().getButton() == button)
+				{
+					flag = true;
+				}
+			} else
+			{
+				if (getMain().getMouseHandler().getButton() != button)
+				{
+					flag = false;
+					action.process();
 				}
 			}
 		} else

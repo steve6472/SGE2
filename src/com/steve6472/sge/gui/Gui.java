@@ -229,17 +229,17 @@ public abstract class Gui implements Serializable
 		component.setLocation(component.getX(), component.getY());
 	}
 
-	public void addContextMenu(String id, ContextMenu contextMenu)
+	public void addContextMenu(ContextMenu contextMenu)
 	{
-		if (contextMenuMap.containsKey(id))
-			throw new IllegalArgumentException("Duplicate ContextMenu id:" + id);
+		if (contextMenuMap.containsKey(contextMenu.getId()))
+			throw new IllegalArgumentException("Duplicate ContextMenu id:" + contextMenu.getId());
 
 		contextMenu.parentGui = this;
 		contextMenu.preInit(mainApp);
 		contextMenu.init(mainApp);
 		getMainApp().getEventHandler().register(contextMenu);
 
-		contextMenuMap.put(id, contextMenu);
+		contextMenuMap.put(contextMenu.getId(), contextMenu);
 	}
 
 	public void setContextMenu(String id)
