@@ -295,7 +295,8 @@ public class TestGui extends Gui
 		/* Context Menu */
 		ContextMenu contextMenu = new ContextMenu();
 		contextMenu.setSize(128);
-		setContextMenu(contextMenu);
+		addContextMenu("main", contextMenu);
+		setContextMenu("main");
 
 		ContextMenuButton contextMenuButtonExit = new ContextMenuButton();
 		contextMenuButtonExit.setName("Exit");

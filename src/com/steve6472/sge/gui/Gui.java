@@ -9,6 +9,7 @@ import com.steve6472.sge.main.events.AbstractEvent;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public abstract class Gui implements Serializable
@@ -17,17 +18,20 @@ public abstract class Gui implements Serializable
 	private boolean isVisible = true;
 	protected final MainApp mainApp;
 	/**
-	 * If true it will renderSprite components last
+	 * If true it will render components last
 	 */
 	private boolean switchedRender = false;
 	private boolean canHide;
 
+	private HashMap<String, ContextMenu> contextMenuMap;
+
 	/* Context Menu */
-	protected ContextMenu contextMenu;
+	protected ContextMenu currentContextMenu;
 
 	public Gui(MainApp mainApp)
 	{
 		this.mainApp = mainApp;
+		contextMenuMap = new HashMap<>();
 		mainApp.addGui(this);
 		hideGui();
 		canHide = true;
@@ -51,7 +55,7 @@ public abstract class Gui implements Serializable
 	
 	protected void renderComponents()
 	{
-		// If GUI is visible renderSprite components
+		// If GUI is visible render components
 		if (isVisible())
 		{
 			components.forEach(Component::fullRender);
@@ -102,13 +106,13 @@ public abstract class Gui implements Serializable
 		if (isVisible())
 		{
 			boolean flag = false;
-			if (contextMenu != null)
+			if (currentContextMenu != null)
 			{
-				if (flag = contextMenu.spoofCursor)
+				if (flag = currentContextMenu.spoofCursor)
 				{
-					spoofTick(contextMenu.mx, contextMenu.my);
+					spoofTick(currentContextMenu.mx, currentContextMenu.my);
 				}
-				contextMenu.fullTick();
+				currentContextMenu.fullTick();
 			}
 
 			for (Dialog c : mainApp.getDialogContainer().dialogs)
@@ -143,11 +147,11 @@ public abstract class Gui implements Serializable
 		if (isVisible())
 		{
 			boolean flag = false;
-			if (contextMenu != null)
+			if (currentContextMenu != null)
 			{
-				if (flag = contextMenu.spoofCursor)
+				if (flag = currentContextMenu.spoofCursor)
 				{
-					spoofRender(contextMenu.mx, contextMenu.my);
+					spoofRender(currentContextMenu.mx, currentContextMenu.my);
 				}
 			}
 
@@ -173,8 +177,8 @@ public abstract class Gui implements Serializable
 				}
 			}
 
-			if (contextMenu != null)
-				contextMenu.fullRender();
+			if (currentContextMenu != null)
+				currentContextMenu.fullRender();
 		}
 	}
 
@@ -225,21 +229,27 @@ public abstract class Gui implements Serializable
 		component.setLocation(component.getX(), component.getY());
 	}
 
-	public void setContextMenu(ContextMenu contextMenu)
+	public void addContextMenu(String id, ContextMenu contextMenu)
 	{
-		if (contextMenu != null)
-		{
-			contextMenu.parentGui = this;
-			contextMenu.preInit(mainApp);
-			contextMenu.init(mainApp);
-			getMainApp().getEventHandler().register(contextMenu);
-		}
-		this.contextMenu = contextMenu;
+		if (contextMenuMap.containsKey(id))
+			throw new IllegalArgumentException("Duplicate ContextMenu id:" + id);
+
+		contextMenu.parentGui = this;
+		contextMenu.preInit(mainApp);
+		contextMenu.init(mainApp);
+		getMainApp().getEventHandler().register(contextMenu);
+
+		contextMenuMap.put(id, contextMenu);
 	}
 
-	public ContextMenu getContextMenu()
+	public void setContextMenu(String id)
 	{
-		return contextMenu;
+		this.currentContextMenu = contextMenuMap.get(id);
+	}
+
+	public ContextMenu getCurrentContextMenu()
+	{
+		return currentContextMenu;
 	}
 
 	public void removeComponent(Component component)
