@@ -20,7 +20,7 @@ public class ComponentRender extends Component
 		void render();
 	}
 	
-	IRender render;
+	private IRender render;
 
 	public ComponentRender(IRender render)
 	{

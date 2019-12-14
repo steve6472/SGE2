@@ -477,6 +477,7 @@ public class TestGui extends Gui
 //				512, 512, 29 * 8, 1 * 8, 8, 8);
 //		SpriteRender.renderDoubleBorder(20, 310, 100, 30);
 
+		/*
 		Object[] os = new Object[512];
 		for (int i = 0; i < 255; i++)
 		{
@@ -484,7 +485,7 @@ public class TestGui extends Gui
 			os[i * 2 + 1] = CustomChar.SINGLE_FUCKING_LINE;
 		}
 
-		Font.renderCustom(7, 480, 2, os);
+		Font.renderCustom(7, 480, 2, os);*/
 
 		planner.render();
 	}

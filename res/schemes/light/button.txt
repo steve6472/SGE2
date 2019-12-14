@@ -21,3 +21,7 @@ disabledBlue  = ffaaaaaa
 hoveredRed    = ffffffff
 hoveredGreen  = ffffffff
 hoveredBlue   = ffffffff
+
+enabledTextColor = ffffffff
+disabledTextColor = ffaaaaaa
+hoveredTextColor = ffffffff

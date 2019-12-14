@@ -22,4 +22,8 @@ hoveredRed    = ffffffff
 hoveredGreen  = ffffffff
 hoveredBlue   = ffffffff
 
+enabledTextColor = ffcccccc
+disabledTextColor = ffaaaaaa
+hoveredTextColor = ffffffff
+
 selectedOutline = 6635b0ff
