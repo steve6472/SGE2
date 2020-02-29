@@ -9,20 +9,15 @@ package com.steve6472.sge.gui.components;
 
 import com.steve6472.sge.gui.Component;
 import com.steve6472.sge.main.MainApp;
+import com.steve6472.sge.main.Procedure;
 
 public class ComponentRender extends Component
 {
 	private static final long serialVersionUID = 3941323655020960510L;
 	
-	@FunctionalInterface
-	public interface IRender
-	{
-		void render();
-	}
-	
-	private IRender render;
+	private Procedure render;
 
-	public ComponentRender(IRender render)
+	public ComponentRender(Procedure render)
 	{
 		this.render = render;
 	}
@@ -35,7 +30,7 @@ public class ComponentRender extends Component
 	@Override
 	public void render()
 	{
-		render.render();
+		render.process();
 	}
 
 	@Override

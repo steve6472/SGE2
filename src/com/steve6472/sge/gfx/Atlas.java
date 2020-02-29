@@ -111,6 +111,7 @@ public class Atlas
 		try
 		{
 			return ImageIO.read(MainApp.class.getResourceAsStream("/textures/" + file.getAbsolutePath().split("\\\\textures\\\\")[1]));
+//			return ImageIO.read(new File("textures/" + file.getAbsolutePath().split("\\\\textures\\\\")[1]));
 		} catch (IOException e)
 		{
 			System.err.println(file.getAbsolutePath().split("/textures/")[1]);

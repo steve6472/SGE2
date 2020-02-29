@@ -130,4 +130,14 @@ public class ColorUtil
 
 		return (r << 16) | (g << 8) | b;
 	}
+
+	public static int dim(int color, double dim)
+	{
+		int r = getRed(color);
+		int g = getGreen(color);
+		int b = getBlue(color);
+		int a = getAlpha(color);
+
+		return getColor((int) (r * dim), (int) (g * dim), (int) (b * dim), (int) (a * dim));
+	}
 }

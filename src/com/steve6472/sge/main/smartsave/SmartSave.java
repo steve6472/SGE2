@@ -38,6 +38,16 @@ public class SmartSave
 		dataOutputStream = new DataOutputStream(new GZIPOutputStream(new FileOutputStream(path)));
 	}
 
+	public static void setDataInputStream(DataInputStream dataInputStream)
+	{
+		SmartSave.dataInputStream = dataInputStream;
+	}
+
+	public static void setDataOutputStream(DataOutputStream dataOutputStream)
+	{
+		SmartSave.dataOutputStream = dataOutputStream;
+	}
+
 	public static void closeInput() throws IOException
 	{
 		readFully = false;
@@ -64,8 +74,6 @@ public class SmartSave
 
 	public static void readFull() throws IOException
 	{
-		readFully = true;
-
 		while (dataInputStream.available() > 0)
 		{
 			int type = dataInputStream.readByte();
@@ -109,6 +117,8 @@ public class SmartSave
 					};
 			readData.put(name, val);
 		}
+
+		readFully = true;
 	}
 
 	public static Object get(String name)

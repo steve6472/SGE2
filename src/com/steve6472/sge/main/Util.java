@@ -756,8 +756,4 @@ public class Util
 		double r = radius * new Random().nextDouble();
 		return r * Math.sin(angle);
 	}*/
-	
-	/**
-	 * TODO: Create regex escape method .$|()[{^?*+\\
-	 */
 }

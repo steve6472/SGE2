@@ -356,7 +356,6 @@ public abstract class MainApp
 			}
 
 
-			//TODO: Render only if window is visible
 			renderStart = System.nanoTime();
 			render();
 			renderEnd = System.nanoTime();
@@ -437,6 +436,7 @@ public abstract class MainApp
     public abstract void exit();
 
     protected boolean startInFullscreen() { return false; }
+	protected boolean enableGLDebug() { return false; }
 
     public abstract String getTitle();
 

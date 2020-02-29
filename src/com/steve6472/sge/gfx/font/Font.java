@@ -137,7 +137,6 @@ public class Font
 		addChar('¨',4095, 8);
 
 		//Special characters
-		//TODO: Fix NumberSelector2
 		addChar('\u0000',4095, 8); // Error Char
 		addChar('\u0001',4094, 8); // Arrow Up
 		addChar('\u0002',4093, 8); // Arrow Down

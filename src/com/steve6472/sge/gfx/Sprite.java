@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
-import static com.steve6472.sge.main.util.ColorUtil.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL13.GL_TEXTURE0;
 import static org.lwjgl.opengl.GL13.glActiveTexture;
@@ -262,22 +261,4 @@ public class Sprite
 
 		glDisable(GL_TEXTURE_2D);
 	}
-	
-	public static int[] fromRGBtoBGR(int[] pixels)
-	{
-		int[] newPixels = new int[pixels.length];
-		
-		for (int i = 0; i < newPixels.length; i++)
-		{
-			int oldPixel = pixels[i];
-			int r = getRed(oldPixel);
-			int g = getGreen(oldPixel);
-			int b = getBlue(oldPixel);
-			int a = getAlpha(oldPixel);
-			int newPixel = getColor(b, g, r, a);
-			newPixels[i] = newPixel;
-		}
-		return newPixels;
-	}
-	
 }

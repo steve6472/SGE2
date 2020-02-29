@@ -345,13 +345,13 @@ public class SpriteRender
 		end();
 	}
 
-	public static void renderSpriteInverted(int x, int y, int width, int height, float angRot, int spriteId, int spriteWidth, int spriteHeight)
+	public static void renderSpriteInverted(int x, int y, int width, int height, float angRot, int spriteId)
 	{
 		start();
 
 		transformation
 			.identity()
-			.translate(spriteWidth * 0.5f - (spriteWidth - width) * 0.5f, spriteHeight * 0.5f - (spriteHeight - height) * 0.5f, 0)
+			.translate(width * 0.5f, height * 0.5f, 0)
 			.translate(x, y, 0)
 			.rotate((float) Math.toRadians(angRot), 0, 0, 1)
 			.scale(width * 0.5f, height * 0.5f, 1)
@@ -366,13 +366,13 @@ public class SpriteRender
 		end();
 	}
 
-	public static void renderSpriteInverted(int x, int y, int width, int height, int spriteId, int spriteWidth, int spriteHeight)
+	public static void renderSpriteInverted(int x, int y, int width, int height, int spriteId)
 	{
 		start();
 
 		transformation
 			.identity()
-			.translate(spriteWidth * 0.5f - (spriteWidth - width) * 0.5f, spriteHeight * 0.5f - (spriteHeight - height) * 0.5f, 0)
+			.translate(width * 0.5f, height * 0.5f, 0)
 			.translate(x, y, 0)
 			.scale(width * 0.5f, height * 0.5f, 1)
 			.scale(1, -1f, 1);
@@ -506,6 +506,13 @@ public class SpriteRender
 	public static void renderSingleBorderComponent(Component component, Vector4f border, Vector4f fill)
 	{
 		SpriteRender.renderSingleBorder(component.getX(), component.getY(), component.getWidth(), component.getHeight(), border, fill);
+	}
+
+	public static void renderFrame(String text, int x, int y, int w, int h, float backRed, float backGreen, float backBlue)
+	{
+		SpriteRender.renderSingleBorder(x, y, w, h, 0.15f, 0.15f, 0.15f, 1f, 0, 0, 0, 0);
+		SpriteRender.fillRect(x + 5, y - 3, Font.getTextWidth(text, 1) + 2, 8, backRed, backGreen, backBlue, 1f);
+		Font.render(text, x + 5, y - 3);
 	}
 
 	public static void renderFrame(String text, int x, int y, int w, int h)

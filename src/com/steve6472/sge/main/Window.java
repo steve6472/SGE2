@@ -11,6 +11,8 @@ import com.steve6472.sge.main.events.*;
 import org.lwjgl.PointerBuffer;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GLUtil;
+import org.lwjgl.system.Callback;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -31,6 +33,7 @@ public class Window
 	private GLFWMouseButtonCallback mouseButtonCallback;
 	private GLFWCursorPosCallback cursorPosCallback;
 	private GLFWCursorEnterCallback cursorEnterCallback;
+	private Callback debugProc;
 
 	public Window(MainApp mainApp, String title, boolean startInFullscreen)
 	{
@@ -67,6 +70,9 @@ public class Window
 		mainApp.windowId = getWindow();
 		glfwShowWindow(window);
 		initCallbacks();
+
+		if (mainApp.enableGLDebug())
+		debugProc = GLUtil.setupDebugMessageCallback();
 	}
 
 	public void destroyWindow()
@@ -84,6 +90,9 @@ public class Window
 		mouseButtonCallback.free();
 		cursorPosCallback.free();
 		cursorEnterCallback.free();
+
+		if (debugProc != null)
+			debugProc.free();
 	}
 
 	public void initCallbacks()

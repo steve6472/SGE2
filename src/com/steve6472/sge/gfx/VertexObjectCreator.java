@@ -136,6 +136,13 @@ public class VertexObjectCreator
 		return vboID;
 	}
 
+	public static int createVBO()
+	{
+		int vboId = glGenBuffers();
+		vbos.add(vboId);
+		return vboId;
+	}
+
 	public static int createVAO()
 	{
 		int vaoID = glGenVertexArrays();
