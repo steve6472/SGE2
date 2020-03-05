@@ -1,4 +1,6 @@
-package com.steve6472.sge.gfx.shaders;
+package com.steve6472.sge.gfx.shaders.shapes;
+
+import com.steve6472.sge.gfx.shaders.StaticShader2D;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -6,7 +8,7 @@ package com.steve6472.sge.gfx.shaders;
  * Project: SGE2
  *
  ***********************/
-public class SoftCircleShader extends StaticShader2D
+public final class SoftCircleShader extends StaticShader2D
 {
 	public static Type FILL, SOFTNESS;
 

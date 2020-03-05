@@ -2,6 +2,7 @@ package com.steve6472.sge.gfx;
 
 import com.steve6472.sge.gfx.font.Font;
 import com.steve6472.sge.gfx.shaders.*;
+import com.steve6472.sge.gfx.shaders.shapes.*;
 import com.steve6472.sge.gui.Component;
 import com.steve6472.sge.gui.components.dialog.Dialog;
 import com.steve6472.sge.main.MainApp;
