@@ -9,6 +9,7 @@ package com.steve6472.sge.gfx.font;
 
 import com.steve6472.sge.gfx.*;
 import com.steve6472.sge.gfx.shaders.FontShader;
+import com.steve6472.sge.gfx.shaders.Shader;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;

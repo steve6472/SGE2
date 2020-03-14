@@ -14,7 +14,7 @@ public final class CircleShader extends StaticShader2D
 
 	public CircleShader()
 	{
-		super("shaders\\components\\circle");
+		super("components\\circle");
 	}
 
 	@Override

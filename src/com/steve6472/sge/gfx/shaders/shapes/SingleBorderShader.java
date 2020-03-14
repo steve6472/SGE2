@@ -14,7 +14,7 @@ public final class SingleBorderShader extends StaticShader2D
 
 	public SingleBorderShader()
 	{
-		super("shaders\\components\\single_border");
+		super("components\\single_border");
 	}
 
 	@Override

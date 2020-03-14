@@ -1,6 +1,6 @@
 package com.steve6472.sge.test.pp;
 
-import com.steve6472.sge.gfx.Shader;
+import com.steve6472.sge.gfx.shaders.Shader;
 import com.steve6472.sge.gfx.Sprite;
 import com.steve6472.sge.gfx.post.Effect;
 
@@ -14,7 +14,7 @@ public class Brightness extends Effect
 {
 	public Brightness(int w, int h)
 	{
-		super(new Shader("shaders\\game_test\\blur\\bright_filter"), w, h);
+		super(Shader.fromFile("shaders\\game_test\\blur\\bright_filter"), w, h);
 		shader.setUniform1i("sampler", 0);
 	}
 

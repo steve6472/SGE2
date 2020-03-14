@@ -9,7 +9,10 @@ import static org.lwjgl.opengl.GL11.*;
  * On date: 19.1.2019
  * Project: SGE2
  *
+ * Deprecated - Uses outdated Immediate Mode
+ *
  ***********************/
+@Deprecated
 public class Render
 {
 	/*

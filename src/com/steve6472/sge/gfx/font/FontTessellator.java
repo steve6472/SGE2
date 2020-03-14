@@ -1,4 +1,6 @@
-package com.steve6472.sge.gfx;
+package com.steve6472.sge.gfx.font;
+
+import com.steve6472.sge.gfx.TessellatorCreator;
 
 import java.nio.FloatBuffer;
 

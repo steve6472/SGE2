@@ -1,6 +1,5 @@
 package com.steve6472.sge.gfx.shaders;
 
-import com.steve6472.sge.gfx.GeometryShader;
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 
@@ -28,7 +27,7 @@ public abstract class StaticGeometryShader3D
 
 	public StaticGeometryShader3D(String path)
 	{
-		shader = new GeometryShader(path);
+		shader = GeometryShader.fromShaders(path);
 		this.path = path;
 
 		transformation = getUniform("transformation");

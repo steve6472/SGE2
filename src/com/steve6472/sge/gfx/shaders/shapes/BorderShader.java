@@ -12,7 +12,7 @@ public final class BorderShader extends StaticShader2D
 {
 	public BorderShader()
 	{
-		super("shaders\\components\\border");
+		super("components\\border");
 	}
 
 	public static Type BORDER;

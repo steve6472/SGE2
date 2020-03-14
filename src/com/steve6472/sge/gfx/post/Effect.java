@@ -1,7 +1,7 @@
 package com.steve6472.sge.gfx.post;
 
 import com.steve6472.sge.gfx.FrameBuffer;
-import com.steve6472.sge.gfx.Shader;
+import com.steve6472.sge.gfx.shaders.Shader;
 
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.glDrawArrays;

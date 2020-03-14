@@ -12,7 +12,7 @@ public class SpriteShader extends StaticShader2D
 
 	public SpriteShader()
 	{
-		super("shaders\\components\\sprite_shader");
+		super("components\\sprite_shader");
 	}
 
 	@Override

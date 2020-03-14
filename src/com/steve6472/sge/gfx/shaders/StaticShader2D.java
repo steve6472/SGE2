@@ -1,6 +1,5 @@
 package com.steve6472.sge.gfx.shaders;
 
-import com.steve6472.sge.gfx.Shader;
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 
@@ -23,7 +22,7 @@ public abstract class StaticShader2D extends StaticShaderBase
 
 	public StaticShader2D(String path)
 	{
-		shader = new Shader(path);
+		shader = Shader.fromShaders(path);
 		this.path = path;
 
 		transformation = getUniform("transformation");

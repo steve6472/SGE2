@@ -14,7 +14,7 @@ public final class SoftRingShader extends StaticShader2D
 
 	public SoftRingShader()
 	{
-		super("shaders\\components\\smooth_ring");
+		super("components\\smooth_ring");
 	}
 
 	@Override

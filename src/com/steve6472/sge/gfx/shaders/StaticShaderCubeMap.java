@@ -9,53 +9,25 @@ import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
- * On date: 13.08.2019
+ * On date: 16.02.2020
  * Project: SJP
  *
  ***********************/
-public abstract class StaticShader3D extends StaticShaderBase
+public abstract class StaticShaderCubeMap extends StaticShaderBase
 {
-	private final int transformation;
 	private final int projection;
 	private final int view;
 
 	private final FloatBuffer matrixBuffer;
 
-	public StaticShader3D(String path)
-	{
-		shader = Shader.fromFile(path);
-		this.path = path;
-
-		transformation = getUniform("transformation");
-		projection = getUniform("projection");
-		view = getUniform("view");
-
-		if (transformation == -1)
-			throw new RuntimeException("Uniform name not found for transformation");
-		if (projection == -1)
-			throw new RuntimeException("Uniform name not found for projection");
-		if (view == -1)
-			throw new RuntimeException("Uniform name not found for view");
-
-		matrixBuffer = BufferUtils.createFloatBuffer(16);
-
-		createUniforms();
-
-		shader.bind();
-		setTransformation(new Matrix4f());
-	}
-
-	public StaticShader3D(String path, boolean resource)
+	public StaticShaderCubeMap(String path)
 	{
 		shader = Shader.fromShaders(path);
 		this.path = path;
 
-		transformation = getUniform("transformation");
 		projection = getUniform("projection");
 		view = getUniform("view");
 
-		if (transformation == -1)
-			throw new RuntimeException("Uniform name not found for transformation");
 		if (projection == -1)
 			throw new RuntimeException("Uniform name not found for projection");
 		if (view == -1)
@@ -66,22 +38,12 @@ public abstract class StaticShader3D extends StaticShaderBase
 		createUniforms();
 
 		shader.bind();
-		setTransformation(new Matrix4f());
 	}
 
 	public void bind(Matrix4f view)
 	{
 		shader.bind();
 		setView(view);
-	}
-
-	/* Base Uniforms */
-
-	public void setTransformation(Matrix4f matrix4f)
-	{
-		matrixBuffer.clear();
-		matrix4f.get(matrixBuffer);
-		glUniformMatrix4fv(transformation, false, matrixBuffer);
 	}
 
 	public void setProjection(Matrix4f matrix4f)

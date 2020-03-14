@@ -17,7 +17,7 @@ public final class DoubleBorderShader extends StaticShader2D
 
 	public DoubleBorderShader()
 	{
-		super("shaders\\components\\double_border");
+		super("components\\double_border");
 	}
 
 	@Override

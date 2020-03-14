@@ -13,7 +13,7 @@ public class SpriteAtlasShader extends StaticShader2D
 
 	public SpriteAtlasShader()
 	{
-		super("shaders\\components\\sprite_atlas_shader");
+		super("components\\sprite_atlas_shader");
 	}
 
 	@Override

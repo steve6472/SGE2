@@ -14,7 +14,7 @@ public final class RingShader extends StaticShader2D
 
 	public RingShader()
 	{
-		super("shaders\\components\\ring");
+		super("components\\ring");
 	}
 
 	@Override

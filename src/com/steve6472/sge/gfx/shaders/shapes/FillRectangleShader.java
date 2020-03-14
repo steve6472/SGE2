@@ -14,7 +14,7 @@ public final class FillRectangleShader extends StaticShader2D
 
 	public FillRectangleShader()
 	{
-		super("shaders\\components\\fill_rectangle");
+		super("components\\fill_rectangle");
 	}
 
 	@Override

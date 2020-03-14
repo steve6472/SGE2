@@ -1,6 +1,5 @@
 package com.steve6472.sge.gfx.shaders;
 
-import com.steve6472.sge.gfx.GeometryShader;
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
 
@@ -28,7 +27,7 @@ public class FontShader
 
 	public FontShader()
 	{
-		shader = new GeometryShader("shaders\\components\\font");
+		shader = GeometryShader.fromShaders("components/font");
 
 		transformation = glGetUniformLocation(shader.getProgram(), "transformation");
 		projection = glGetUniformLocation(shader.getProgram(), "projection");

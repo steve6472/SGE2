@@ -1,6 +1,6 @@
 package com.steve6472.sge.test.pp;
 
-import com.steve6472.sge.gfx.Shader;
+import com.steve6472.sge.gfx.shaders.Shader;
 import com.steve6472.sge.gfx.Sprite;
 import com.steve6472.sge.gfx.post.Effect;
 
@@ -14,9 +14,9 @@ public class VerticalBlur extends Effect
 {
 	public VerticalBlur(int w, int h, int size)
 	{
-		super(new Shader(
-				Shader.readFile("shaders\\game_test\\blur\\" + size + "\\blur_vertical.vs"),
-				Shader.readFile("shaders\\game_test\\blur\\" + size + "\\blur_fs.fs")),
+		super(Shader.fromFile(
+				"shaders\\game_test\\blur\\" + size + "\\blur_vertical.vs",
+				"shaders\\game_test\\blur\\" + size + "\\blur_fs.fs"),
 				w,
 				h);
 	}

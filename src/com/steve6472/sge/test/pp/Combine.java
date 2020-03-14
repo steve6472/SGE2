@@ -1,6 +1,6 @@
 package com.steve6472.sge.test.pp;
 
-import com.steve6472.sge.gfx.Shader;
+import com.steve6472.sge.gfx.shaders.Shader;
 import com.steve6472.sge.gfx.Sprite;
 import com.steve6472.sge.gfx.post.Effect;
 
@@ -14,7 +14,7 @@ public class Combine extends Effect
 {
 	public Combine(int w, int h)
 	{
-		super(new Shader("shaders\\game_test\\game_test_combine"), w, h);
+		super(Shader.fromFile("shaders\\game_test\\game_test_combine"), w, h);
 		shader.setUniform1i("sampler0", 0);
 		shader.setUniform1i("sampler1", 1);
 	}

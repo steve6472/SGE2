@@ -14,7 +14,7 @@ public final class SoftCircleShader extends StaticShader2D
 
 	public SoftCircleShader()
 	{
-		super("shaders\\components\\smooth_circle");
+		super("components\\smooth_circle");
 	}
 
 	@Override

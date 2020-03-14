@@ -1,6 +1,5 @@
 package com.steve6472.sge.gfx.shaders;
 
-import com.steve6472.sge.gfx.Shader;
 import com.steve6472.sge.main.Util;
 
 import static org.lwjgl.opengl.GL20.*;

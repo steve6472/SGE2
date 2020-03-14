@@ -1,6 +1,6 @@
 package com.steve6472.sge.test.pp;
 
-import com.steve6472.sge.gfx.Shader;
+import com.steve6472.sge.gfx.shaders.Shader;
 import com.steve6472.sge.gfx.Sprite;
 import com.steve6472.sge.gfx.post.Effect;
 
@@ -14,7 +14,7 @@ public class ChangeContrast extends Effect
 {
 	public ChangeContrast(int width, int height)
 	{
-		super(new Shader("shaders\\game_test\\contrast"), width, height);
+		super(Shader.fromFile("shaders\\game_test\\contrast"), width, height);
 	}
 
 	@Override
