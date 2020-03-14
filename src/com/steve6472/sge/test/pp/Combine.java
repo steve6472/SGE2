@@ -14,7 +14,7 @@ public class Combine extends Effect
 {
 	public Combine(int w, int h)
 	{
-		super(Shader.fromFile("shaders\\game_test\\game_test_combine"), w, h);
+		super(Shader.fromShaders("game_test/game_test_combine"), w, h);
 		shader.setUniform1i("sampler0", 0);
 		shader.setUniform1i("sampler1", 1);
 	}

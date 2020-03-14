@@ -23,7 +23,7 @@ public abstract class StaticShader3D extends StaticShaderBase
 
 	public StaticShader3D(String path)
 	{
-		shader = Shader.fromFile(path);
+		shader = Shader.fromShaders(path);
 		this.path = path;
 
 		transformation = getUniform("transformation");

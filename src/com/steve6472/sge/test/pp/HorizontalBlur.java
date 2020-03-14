@@ -14,9 +14,9 @@ public class HorizontalBlur extends Effect
 {
 	public HorizontalBlur(int w, int h, int size)
 	{
-		super(Shader.fromFile(
-				"shaders\\game_test\\blur\\" + size + "\\blur_horizontal.vs",
-				"shaders\\game_test\\blur\\" + size + "\\blur_fs.fs"),
+		super(Shader.fromResource(
+				"/shaders/game_test/blur/" + size + "/blur_horizontal.vs",
+				"/shaders/game_test/blur/" + size + "/blur_fs.fs"),
 				w,
 				h);
 	}

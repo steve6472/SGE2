@@ -14,7 +14,7 @@ public class ChangeContrast extends Effect
 {
 	public ChangeContrast(int width, int height)
 	{
-		super(Shader.fromFile("shaders\\game_test\\contrast"), width, height);
+		super(Shader.fromShaders("game_test\\contrast"), width, height);
 	}
 
 	@Override

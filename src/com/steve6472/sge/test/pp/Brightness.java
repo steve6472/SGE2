@@ -14,7 +14,7 @@ public class Brightness extends Effect
 {
 	public Brightness(int w, int h)
 	{
-		super(Shader.fromFile("shaders\\game_test\\blur\\bright_filter"), w, h);
+		super(Shader.fromShaders("game_test\\blur\\bright_filter"), w, h);
 		shader.setUniform1i("sampler", 0);
 	}
 
