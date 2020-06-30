@@ -36,6 +36,21 @@ public abstract class StaticShader2D extends StaticShaderBase
 		setTransformation(new Matrix4f());
 	}
 
+	public StaticShader2D(Shader shader)
+	{
+		this.shader = shader;
+
+		transformation = getUniform("transformation");
+		projection = getUniform("projection");
+
+		matrixBuffer = BufferUtils.createFloatBuffer(16);
+
+		createUniforms();
+
+		shader.bind();
+		setTransformation(new Matrix4f());
+	}
+
 	/* Base Uniforms */
 
 	public void setTransformation(Matrix4f matrix4f)

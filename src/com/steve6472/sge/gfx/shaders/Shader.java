@@ -52,16 +52,22 @@ public class Shader
 
 	public static Shader fromFile(File pathVs, File pathFs)
 	{
-		Shader shader = new Shader();
-		shader.setupIds();
 		try
 		{
-			shader.setupVertexShader(readFile(pathVs));
-			shader.setupFragmentShader(readFile(pathFs));
+			return fromSource(readFile(pathVs), readFile(pathFs));
 		} catch (IOException e)
 		{
 			e.printStackTrace();
+			return null;
 		}
+	}
+
+	public static Shader fromSource(String vertexShader, String fragmentShader)
+	{
+		Shader shader = new Shader();
+		shader.setupIds();
+		shader.setupVertexShader(vertexShader);
+		shader.setupFragmentShader(fragmentShader);
 		shader.setupProgram();
 
 		return shader;

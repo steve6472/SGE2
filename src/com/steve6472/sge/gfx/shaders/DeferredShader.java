@@ -16,6 +16,16 @@ public class DeferredShader extends StaticShader2D
 		super("deferred");
 	}
 
+	public DeferredShader(String path)
+	{
+		super(path);
+	}
+
+	public DeferredShader(Shader shader)
+	{
+		super(shader);
+	}
+
 	public void createLights(int lightCount)
 	{
 		lights = new LightUniform[lightCount];

@@ -82,6 +82,11 @@ public class ColorUtil
 		return getColor(color.x, color.y, color.z, color.w);
 	}
 
+	public static int getColor(Vector3f color)
+	{
+		return getColor(color.x, color.y, color.z, 1f);
+	}
+
 	public static int blend(int c1, int c2, double ratio)
 	{
 		if (ratio > 1) ratio = 1;

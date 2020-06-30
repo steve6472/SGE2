@@ -15,6 +15,11 @@ public class GShader extends StaticShader3D
 		super("g", true);
 	}
 
+	public GShader(String path)
+	{
+		super(path, true);
+	}
+
 	@Override
 	protected void createUniforms()
 	{

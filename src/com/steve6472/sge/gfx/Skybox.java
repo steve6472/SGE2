@@ -2,6 +2,7 @@ package com.steve6472.sge.gfx;
 
 import com.steve6472.sge.gfx.shaders.Shader;
 import com.steve6472.sge.gfx.shaders.SkyboxShader;
+import com.steve6472.sge.gfx.shaders.StaticShaderCubeMap;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
@@ -15,8 +16,8 @@ import static org.lwjgl.opengl.GL11.*;
  ***********************/
 public class Skybox
 {
-	private final StaticCubeMap skyboxTexture;
-	private final SkyboxShader shader;
+	protected final StaticCubeMap skyboxTexture;
+	protected final StaticShaderCubeMap shader;
 
 	private final int vao;
 
@@ -24,14 +25,21 @@ public class Skybox
 	{
 		this.skyboxTexture = skyboxTexture;
 
-		shader = new SkyboxShader();
-		shader.setProjection(projection);
-		shader.setUniform(SkyboxShader.skybox, 0);
-		Shader.releaseShader();
+		shader = createShader(projection);
 
 		vao = VertexObjectCreator.createVAO();
 		setCubeVertices();
 		VertexObjectCreator.unbindVAO();
+	}
+
+	protected StaticShaderCubeMap createShader(Matrix4f projection)
+	{
+		StaticShaderCubeMap shader = new SkyboxShader();
+		shader.setProjection(projection);
+		shader.setUniform(SkyboxShader.skybox, 0);
+		Shader.releaseShader();
+
+		return shader;
 	}
 
 	public void updateProjection(Matrix4f projection)

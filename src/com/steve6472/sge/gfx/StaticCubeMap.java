@@ -79,6 +79,25 @@ public class StaticCubeMap
 		return createResource(images, params);
 	}
 
+	/**
+	 * Defaults to [resource file]/textures/
+	 *
+	 * @param path Path to file with faces (can not be empty)
+	 * @param faces face names
+	 * @param extension extension of texture file png jpg ...
+	 * @param params Texture paramemets
+	 * @return StaticTexture
+	 */
+	public static StaticCubeMap fromTextureFaces(String path, String[] faces, String extension, ResParam... params)
+	{
+		BufferedImage[] images = new BufferedImage[6];
+		for (int i = 0; i < faces.length; i++)
+		{
+			images[i] = loadImage(MainApp.class.getResourceAsStream("/textures/" + path + "/" + faces[i] + "." + extension));
+		}
+		return createResource(images, params);
+	}
+
 	public void bind()
 	{
 		bind(0);
