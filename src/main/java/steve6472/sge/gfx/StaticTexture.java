@@ -63,9 +63,20 @@ public class StaticTexture
 		return createResource(loadImage(MainApp.class.getResourceAsStream("/textures/" + path)), params);
 	}
 
+
 	public int getId()
 	{
 		return id;
+	}
+
+	public int getWidth()
+	{
+		return width;
+	}
+
+	public int getHeight()
+	{
+		return height;
 	}
 
 	public void bind()

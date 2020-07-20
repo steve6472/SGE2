@@ -103,6 +103,16 @@ public class StaticCubeMap
 		return id;
 	}
 
+	public int getWidth()
+	{
+		return width;
+	}
+
+	public int getHeight()
+	{
+		return height;
+	}
+
 	public void bind()
 	{
 		bind(0);

@@ -181,6 +181,14 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="1323" height="225" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1588169710898" />
+    <state x="92" y="92" width="1182" height="544" key="dock-window-1" timestamp="1595257259603">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="92" y="92" width="1182" height="544" key="dock-window-1/0.0.1366.728@0.0.1366.728" timestamp="1595257259603" />
+    <state x="149" y="112" width="1182" height="544" key="dock-window-2" timestamp="1595257259603">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="149" y="112" width="1182" height="544" key="dock-window-2/0.0.1366.728@0.0.1366.728" timestamp="1595257259603" />
     <state x="415" y="115" key="extract.method.dialog" timestamp="1586973824381">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -189,9 +197,9 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="1234" height="646" key="javadoc.popup.new/0.0.1366.728@0.0.1366.728" timestamp="1588167505406" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1595255495194">
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1595257162016">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1595255495194" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1595257162016" />
   </component>
 </project>
