@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="c1bd068a-8a5e-44bc-949b-ef2256b04a80" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="CodeInsightWorkspaceSettings">
+    <option name="optimizeImportsOnTheFly" value="true" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="InstancesTracker">
+    <option name="classes">
+      <map>
+        <entry key="java.nio.DirectByteBuffer" value="CREATION" />
+      </map>
+    </option>
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="vmOptionsForImporter" value="-Xmx768m" />
+      </MavenImportingSettings>
+    </option>
+    <option name="enabledProfiles">
+      <list>
+        <option value="windows" />
+        <option value="windows-amd64" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectId" id="1ZLZwdROFdGzQAcUYDKRqeNUlP3" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="false" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="ignore.preview.features.used" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/resources" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.19655173" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="steve6472.sge.gui.components.context" />
+      <recent name="steve6472.sge.gfx.shaders" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\StevesGameEngine\src\main\resources" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="&quot;C:\Program Files\Java\jdk-14\bin\java.exe&quot; --enable-preview &quot;-javaagent:D:\IntelliJ IDEA Community Edition 201.6487.11\lib\idea_rt.jar=54804:D:\IntelliJ IDEA Community Edition 201.6487.11\bin&quot; -Dfile.encoding=UTF-8 -classpath D:\StevesGameEngine\target\classes;C:\Users\Steve\.m2\repository\org\lwjgl\lwjgl\3.2.1\lwjgl-3.2.1.jar;C:\Users\Steve\.m2\repository\org\lwjgl\lwjgl-glfw\3.1.0\lwjgl-glfw-3.1.0.jar;C:\Users\Steve\.m2\repository\org\lwjgl\lwjgl-opengl\3.1.0\lwjgl-opengl-3.1.0.jar;C:\Users\Steve\.m2\repository\org\joml\joml\1.9.22\joml-1.9.22.jar;C:\Users\Steve\.m2\repository\steve6472\save-system\1.0-SNAPSHOT\save-system-1.0-SNAPSHOT.jar steve6472.sge.test.Test " />
+      <command value="&quot;C:\Program Files\Java\jdk-14\bin\java.exe&quot; --enable-preview -Dorg.lwjgl.util.Debug=true &quot;-javaagent:D:\IntelliJ IDEA Community Edition 201.6487.11\lib\idea_rt.jar=54804:D:\IntelliJ IDEA Community Edition 201.6487.11\bin&quot; -Dfile.encoding=UTF-8 -classpath D:\StevesGameEngine\target\classes;C:\Users\Steve\.m2\repository\org\lwjgl\lwjgl\3.2.1\lwjgl-3.2.1.jar;C:\Users\Steve\.m2\repository\org\lwjgl\lwjgl-glfw\3.1.0\lwjgl-glfw-3.1.0.jar;C:\Users\Steve\.m2\repository\org\lwjgl\lwjgl-opengl\3.1.0\lwjgl-opengl-3.1.0.jar;C:\Users\Steve\.m2\repository\org\joml\joml\1.9.22\joml-1.9.22.jar;C:\Users\Steve\.m2\repository\steve6472\save-system\1.0-SNAPSHOT\save-system-1.0-SNAPSHOT.jar steve6472.sge.test.Test " />
+    </option>
+  </component>
+  <component name="RunManager" selected="Maven.clean compile install">
+    <configuration name="BinaryCalculator" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="steve6472.sge.test.BinaryCalculator" />
+      <module name="StevesGameEngine" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SSTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="steve6472.sge.test.SSTest" />
+      <module name="StevesGameEngine" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="steve6472.sge.test.Test" />
+      <module name="StevesGameEngine" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="clean compile install" type="MavenRunConfiguration" factoryName="Maven">
+      <MavenSettings>
+        <option name="myGeneralSettings" />
+        <option name="myRunnerSettings" />
+        <option name="myRunnerParameters">
+          <MavenRunnerParameters>
+            <option name="profiles">
+              <set />
+            </option>
+            <option name="goals">
+              <list>
+                <option value="clean" />
+                <option value="compile" />
+                <option value="install" />
+              </list>
+            </option>
+            <option name="pomFileName" />
+            <option name="profilesMap">
+              <map />
+            </option>
+            <option name="resolveToWorkspace" value="false" />
+            <option name="workingDirPath" value="$PROJECT_DIR$" />
+          </MavenRunnerParameters>
+        </option>
+      </MavenSettings>
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Test" />
+        <item itemvalue="Application.SSTest" />
+        <item itemvalue="Application.BinaryCalculator" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c1bd068a-8a5e-44bc-949b-ef2256b04a80" name="Default Changelist" comment="" />
+      <created>1584620574213</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1584620574213</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="490" y="65" key="#com.intellij.ide.util.MemberChooser" timestamp="1587903725811">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="490" y="65" key="#com.intellij.ide.util.MemberChooser/0.0.1366.728@0.0.1366.728" timestamp="1587903725811" />
+    <state x="413" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog" timestamp="1587903233069">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="413" y="0" key="#com.intellij.refactoring.rename.AutomaticRenamingDialog/0.0.1366.728@0.0.1366.728" timestamp="1587903233069" />
+    <state x="228" y="118" key="#org.jetbrains.debugger.memory.view.InstancesWindow" timestamp="1588169670412">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="228" y="118" key="#org.jetbrains.debugger.memory.view.InstancesWindow/0.0.1366.728@0.0.1366.728" timestamp="1588169670412" />
+    <state width="1214" height="621" key="GridCell.Tab.0.bottom" timestamp="1595256293909">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1214" height="621" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1595256293909" />
+    <state width="1214" height="621" key="GridCell.Tab.0.center" timestamp="1595256293908">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1214" height="621" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1595256293908" />
+    <state width="1214" height="621" key="GridCell.Tab.0.left" timestamp="1595256293908">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1214" height="621" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1595256293908" />
+    <state width="1214" height="621" key="GridCell.Tab.0.right" timestamp="1595256293909">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1214" height="621" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1595256293909" />
+    <state width="1323" height="225" key="GridCell.Tab.1.bottom" timestamp="1588169710898">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="225" key="GridCell.Tab.1.bottom/0.0.1366.728@0.0.1366.728" timestamp="1588169710898" />
+    <state width="1323" height="225" key="GridCell.Tab.1.center" timestamp="1588169710898">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="225" key="GridCell.Tab.1.center/0.0.1366.728@0.0.1366.728" timestamp="1588169710898" />
+    <state width="1323" height="225" key="GridCell.Tab.1.left" timestamp="1588169710898">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="225" key="GridCell.Tab.1.left/0.0.1366.728@0.0.1366.728" timestamp="1588169710898" />
+    <state width="1323" height="225" key="GridCell.Tab.1.right" timestamp="1588169710898">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1323" height="225" key="GridCell.Tab.1.right/0.0.1366.728@0.0.1366.728" timestamp="1588169710898" />
+    <state x="415" y="115" key="extract.method.dialog" timestamp="1586973824381">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="415" y="115" key="extract.method.dialog/0.0.1366.728@0.0.1366.728" timestamp="1586973824381" />
+    <state width="1234" height="646" key="javadoc.popup.new" timestamp="1588167505406">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state width="1234" height="646" key="javadoc.popup.new/0.0.1366.728@0.0.1366.728" timestamp="1588167505406" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1595255495194">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1595255495194" />
+  </component>
+</project>
