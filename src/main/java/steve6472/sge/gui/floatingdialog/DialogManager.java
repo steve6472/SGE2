@@ -1,12 +1,14 @@
 package steve6472.sge.gui.floatingdialog;
 
 import org.joml.Matrix4f;
-import steve6472.sge.gfx.*;
+import steve6472.sge.gfx.FrameBuffer;
+import steve6472.sge.gfx.StaticTexture;
+import steve6472.sge.gfx.Tessellator;
+import steve6472.sge.gfx.VertexObjectCreator;
 import steve6472.sge.gfx.font.Font;
 import steve6472.sge.gfx.shaders.DialogShader;
 import steve6472.sge.gfx.shaders.Shader;
 import steve6472.sge.main.MainApp;
-import steve6472.sge.main.Util;
 import steve6472.sge.main.events.WindowSizeEvent;
 
 import java.util.ArrayList;
@@ -55,26 +57,18 @@ public class DialogManager
 		return active;
 	}
 
-	public void tick(MainApp main)
+	public void tick()
 	{
 		active = false;
 		for (FloatingDialog dialog : this.dialogs)
 		{
-			if (!dialog.isVisible())
+			if (!dialog.isVisible() || dialog.shouldBeRemoved())
 				continue;
-
-			int mx = Util.clamp(0, dialog.getWidth(), main.getMouseX());
-			int my = Util.clamp(0, dialog.getHeight(), main.getMouseY());
-
 			if (dialog.isActive())
 			{
-				main.getMouseHandler().spoof(mx, my);
 				active = true;
-			} else
-			{
-				main.getMouseHandler().spoof(-1, -1);
+				dialog.tick();
 			}
-			dialog.tick();
 		}
 	}
 
@@ -141,8 +135,6 @@ public class DialogManager
 			dialogMatrix.translate(x, y, z);
 			dialogMatrix.rotate(yaw, 0.0f, 1.0f, 0.0f);
 			dialogMatrix.rotate(pitch, 1.0f, 0.0f, 0.0f);
-//			dialogMatrix.translate(x, y - h / 2.0f, z - w / 2.0f);
-//			dialogMatrix.translate(-x, -y + h / 2.0f, -z + w / 2.0f);
 			dialogMatrix.scale(dialog.getSizeX() * dialog.getScaleModifier(), dialog.getSizeY() * dialog.getScaleModifier(), 0);
 
 			shader.setTransformation(dialogMatrix);
