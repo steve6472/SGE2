@@ -1,10 +1,7 @@
 package steve6472.sge.gui.floatingdialog;
 
 import org.joml.Matrix4f;
-import steve6472.sge.gfx.FrameBuffer;
-import steve6472.sge.gfx.Sprite;
-import steve6472.sge.gfx.Tessellator;
-import steve6472.sge.gfx.VertexObjectCreator;
+import steve6472.sge.gfx.*;
 import steve6472.sge.gfx.font.Font;
 import steve6472.sge.gfx.shaders.DialogShader;
 import steve6472.sge.gfx.shaders.Shader;
@@ -13,9 +10,12 @@ import steve6472.sge.main.Util;
 import steve6472.sge.main.events.WindowSizeEvent;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL30.GL_FRAMEBUFFER;
+import static org.lwjgl.opengl.GL30.glBindFramebuffer;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -78,7 +78,7 @@ public class DialogManager
 		}
 	}
 
-	public void render(MainApp main, DialogShader shader, Matrix4f viewMatrix, float yaw, float pitch)
+	public void render(MainApp main, DialogShader shader, Matrix4f viewMatrix, float yaw, float pitch, int mainBuffer)
 	{
 		shader.bind();
 		shader.setView(viewMatrix);
@@ -88,8 +88,15 @@ public class DialogManager
 		glDisable(GL_DEPTH_TEST);
 		glDisable(GL_CULL_FACE);
 
-		for (FloatingDialog dialog : this.dialogs)
+		for (Iterator<FloatingDialog> iterator = this.dialogs.iterator(); iterator.hasNext(); )
 		{
+			FloatingDialog dialog = iterator.next();
+			if (dialog.shouldBeRemoved())
+			{
+				iterator.remove();
+				continue;
+			}
+
 			if (!dialog.isVisible())
 				continue;
 
@@ -102,16 +109,17 @@ public class DialogManager
 				dialog.getFrameBuffer().bindFrameBuffer(dialog.getWidth(), dialog.getHeight());
 				FrameBuffer.clearCurrentBuffer();
 				dialog.renderGui();
-				dialog.getFrameBuffer().unbindCurrentFrameBuffer(main.getWidth(), main.getHeight());
 			}
 		}
 
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 
+		glViewport(0, 0, main.getWidth(), main.getHeight());
+		glBindFramebuffer(GL_FRAMEBUFFER, mainBuffer);
+
 		Font.update(new Matrix4f().ortho(0.0F, (float)main.getWidth(), (float)main.getHeight(), 0.0F, 1.0F, -1.0F));
 		main.getSpriteRender().basicResizeOrtho(new WindowSizeEvent(main.getWidth(), main.getHeight()));
-		glViewport(0, 0, main.getWidth(), main.getHeight());
 
 		for (FloatingDialog dialog : this.dialogs)
 		{
@@ -125,16 +133,16 @@ public class DialogManager
 			final float x = dialog.getX();
 			final float y = dialog.getY();
 			final float z = dialog.getZ();
-			Sprite.bind(0, dialog.getFrameBuffer().texture);
+			StaticTexture.bind(0, dialog.getFrameBuffer().texture);
 			shader.bind();
 
 			// Make the dialog face the camera
 			dialogMatrix.identity();
 			dialogMatrix.translate(x, y, z);
-			dialogMatrix.translate(x, y - h / 2.0f, z - w / 2.0f);
 			dialogMatrix.rotate(yaw, 0.0f, 1.0f, 0.0f);
 			dialogMatrix.rotate(pitch, 1.0f, 0.0f, 0.0f);
-			dialogMatrix.translate(-x, -y + h / 2.0f, -z + w / 2.0f);
+//			dialogMatrix.translate(x, y - h / 2.0f, z - w / 2.0f);
+//			dialogMatrix.translate(-x, -y + h / 2.0f, -z + w / 2.0f);
 			dialogMatrix.scale(dialog.getSizeX() * dialog.getScaleModifier(), dialog.getSizeY() * dialog.getScaleModifier(), 0);
 
 			shader.setTransformation(dialogMatrix);

@@ -26,8 +26,6 @@ public class Camera implements IPosition3f
 	public int oldx;
 	public int oldy;
 
-	private static final double rad_90 = Math.PI * 0.5;
-
 	public void head(int mouseX, int mouseY, float sensitivity)
 	{
 		if (mouseX != oldx)
@@ -45,8 +43,11 @@ public class Camera implements IPosition3f
 		oldx = mouseX;
 		oldy = mouseY;
 
-		if (pitch > rad_90) pitch = (float) rad_90;
-		if (pitch < -rad_90) pitch = (float) -rad_90;
+		if (pitch > 1.5707963267948966f) pitch = 1.5707963267948966f;
+		if (pitch < -1.5707963267948966f) pitch = -1.5707963267948966f;
+
+		while (yaw > 6.283185307179586f) yaw -= 6.283185307179586f;
+		while (yaw < 0) yaw += 6.283185307179586f;
 	}
 
 	/**

@@ -94,6 +94,16 @@ public class StaticTexture
 		}
 	}
 
+	public static void bind(int sampler, int id)
+	{
+		if (id != -1)
+		{
+			if (sampler >= 0 && sampler <= 31)
+				glActiveTexture(GL_TEXTURE0 + sampler);
+			glBindTexture(GL_TEXTURE_2D, id);
+		}
+	}
+
 	public void delete()
 	{
 		if (id == -1) return;

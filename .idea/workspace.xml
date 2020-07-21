@@ -60,6 +60,8 @@
       <recent name="steve6472.sge.gfx.shaders" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\StevesGameEngine\src\main\resources\shaders" />
+      <recent name="D:\StevesGameEngine\src\main\java\steve6472\sge\gui\floatingdialog" />
       <recent name="D:\StevesGameEngine\src\main\resources" />
     </key>
   </component>
@@ -149,22 +151,22 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state x="228" y="118" key="#org.jetbrains.debugger.memory.view.InstancesWindow/0.0.1366.728@0.0.1366.728" timestamp="1588169670412" />
-    <state width="1214" height="621" key="GridCell.Tab.0.bottom" timestamp="1595257457006">
+    <state width="1214" height="621" key="GridCell.Tab.0.bottom" timestamp="1595350299590">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1214" height="621" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1595257457006" />
-    <state width="1214" height="621" key="GridCell.Tab.0.center" timestamp="1595257457005">
+    <state width="1214" height="621" key="GridCell.Tab.0.bottom/0.0.1366.728@0.0.1366.728" timestamp="1595350299590" />
+    <state width="1214" height="621" key="GridCell.Tab.0.center" timestamp="1595350299590">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1214" height="621" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1595257457005" />
-    <state width="1214" height="621" key="GridCell.Tab.0.left" timestamp="1595257457005">
+    <state width="1214" height="621" key="GridCell.Tab.0.center/0.0.1366.728@0.0.1366.728" timestamp="1595350299590" />
+    <state width="1214" height="621" key="GridCell.Tab.0.left" timestamp="1595350299590">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1214" height="621" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1595257457005" />
-    <state width="1214" height="621" key="GridCell.Tab.0.right" timestamp="1595257457006">
+    <state width="1214" height="621" key="GridCell.Tab.0.left/0.0.1366.728@0.0.1366.728" timestamp="1595350299590" />
+    <state width="1214" height="621" key="GridCell.Tab.0.right" timestamp="1595350299590">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state width="1214" height="621" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1595257457006" />
+    <state width="1214" height="621" key="GridCell.Tab.0.right/0.0.1366.728@0.0.1366.728" timestamp="1595350299590" />
     <state width="1323" height="225" key="GridCell.Tab.1.bottom" timestamp="1588169710898">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
@@ -197,9 +199,20 @@
       <screen x="0" y="0" width="1366" height="728" />
     </state>
     <state width="1234" height="646" key="javadoc.popup.new/0.0.1366.728@0.0.1366.728" timestamp="1588167505406" />
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1595257162016">
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup" timestamp="1595349961388">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1595257162016" />
+    <state x="346" y="49" width="672" height="678" key="search.everywhere.popup/0.0.1366.728@0.0.1366.728" timestamp="1595349961388" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/steve6472/sge/gui/floatingdialog/FloatingDialog.java</url>
+          <line>23</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

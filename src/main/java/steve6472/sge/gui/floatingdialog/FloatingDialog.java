@@ -29,13 +29,28 @@ public abstract class FloatingDialog extends Gui implements IPosition3f
 		this.height = height;
 		position = new Vector3f();
 		frameBuffer = new FrameBuffer(width, height, true);
+		createGUI();
 	}
+
+	/**
+	 * Do NOT use this for gui construcion!
+	 * width & height are not initialized
+	 */
+	@Override
+	@Deprecated
+	public void createGui()
+	{
+
+	}
+
+	public abstract void createGUI();
 
 	public abstract float getSizeX();
 	public abstract float getSizeY();
 
 	public abstract boolean repaint();
 	public abstract boolean isActive();
+	public abstract boolean shouldBeRemoved();
 
 	@Override
 	public Vector3f getPosition()

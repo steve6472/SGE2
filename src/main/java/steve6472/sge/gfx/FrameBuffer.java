@@ -78,7 +78,7 @@ public class FrameBuffer
 
 	public void bindToRead(int colorAttachment)
 	{
-		Sprite.bind(0, texture);
+		StaticTexture.bind(0, texture);
 		GL30.glBindFramebuffer(GL30.GL_READ_FRAMEBUFFER, frameBuffer);
 		GL11.glReadBuffer(GL30.GL_COLOR_ATTACHMENT0 + colorAttachment);
 	}
@@ -90,8 +90,8 @@ public class FrameBuffer
 
 	public void deleteFrameBuffer()
 	{
-		buffers.remove(frameBuffer);
-		textures.remove(texture);
+		buffers.remove((Integer) frameBuffer);
+		textures.remove((Integer) texture);
 
 		glDeleteFramebuffers(frameBuffer);
 		glDeleteTextures(texture);
