@@ -52,6 +52,8 @@ public abstract class FloatingDialog extends Gui implements IPosition3f
 	public abstract boolean isActive();
 	public abstract boolean shouldBeRemoved();
 
+	public void nonactiveTick() {};
+
 	@Override
 	public Vector3f getPosition()
 	{

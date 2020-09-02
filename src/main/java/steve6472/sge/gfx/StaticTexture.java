@@ -51,6 +51,11 @@ public class StaticTexture
 	{
 		return createResource(loadImage(MainApp.class.getResourceAsStream(path)), params);
 	}
+	
+	public static StaticTexture fromBufferedImage(BufferedImage image, ResParam... params)
+	{
+		return createResource(image, params);
+	}
 
 	/**
 	 * Defaults to [resource file]/textures/
@@ -171,10 +176,20 @@ public class StaticTexture
 			for(int x = 0; x < width; x++)
 			{
 				int pixel = rawPixels[y * width + x];
-				pixels.put((byte) ((pixel >> 16) & 0xFF));  // RED
-				pixels.put((byte) ((pixel >> 8) & 0xFF));   // GREEN
-				pixels.put((byte) ((pixel) & 0xFF));        // BLUE
-				pixels.put((byte) ((pixel >> 24) & 0xFF));  // ALPHA
+				byte a = (byte) ((pixel >> 24) & 0xFF);
+				if (a == 0)
+				{
+					pixels.put((byte) 0);
+					pixels.put((byte) 0);
+					pixels.put((byte) 0);
+					pixels.put((byte) 0);
+				} else
+				{
+					pixels.put((byte) ((pixel >> 16) & 0xFF));  // RED
+					pixels.put((byte) ((pixel >> 8) & 0xFF));   // GREEN
+					pixels.put((byte) ((pixel) & 0xFF));        // BLUE
+					pixels.put(a);                              // ALPHA
+				}
 			}
 		}
 

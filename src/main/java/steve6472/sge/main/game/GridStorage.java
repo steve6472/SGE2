@@ -1,6 +1,6 @@
 package steve6472.sge.main.game;
 
-import java.util.HashMap;
+import steve6472.sge.test.LongMap;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -10,11 +10,12 @@ import java.util.HashMap;
  ***********************/
 public class GridStorage<T>
 {
-	private HashMap<Long, T> objects;
+//	private HashMap<Long, T> objects;
+	private LongMap<T> objects;
 
 	public GridStorage()
 	{
-		this.objects = new HashMap<>();
+		this.objects = new LongMap<>();
 	}
 
 	public static long getKey(int x, int z)
@@ -31,12 +32,19 @@ public class GridStorage<T>
 
 	public T get(int x, int z)
 	{
-		return objects.get(getKey(x, z));
+		long key = getKey(x, z);
+
+		if (objects.containsKey(key))
+			return objects.get(getKey(x, z));
+
+		return null;
 	}
 
 	public T get(long key)
 	{
-		return objects.get(key);
+		if (objects.containsKey(key))
+			return objects.get(key);
+		return null;
 	}
 
 	public void put(int x, int z, T obj)
@@ -46,10 +54,12 @@ public class GridStorage<T>
 
 	public void remove(int x, int z)
 	{
-		objects.remove(getKey(x, z));
+		long key = getKey(x, z);
+		if (objects.containsKey(key))
+			objects.remove(key);
 	}
 
-	public HashMap<Long, T> getMap()
+	public LongMap<T> getMap()
 	{
 		return objects;
 	}

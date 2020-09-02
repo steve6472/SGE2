@@ -413,6 +413,26 @@ public class SpriteRender
 		end();
 	}
 
+	public static void renderSprite(float x, float y, int width, int height, float angRot, int spriteId)
+	{
+		start();
+
+		transformation
+			.identity()
+			.translate(width * 0.5f, height * 0.5f, 0)
+			.translate(x, y, 0)
+			.rotate((float) Math.toRadians(angRot), 0, 0, 1)
+			.scale(width * 0.5f, height * 0.5f, 1);
+
+		spriteShader.bind();
+		spriteShader.setTransformation(transformation);
+
+		bindSprite(spriteId);
+
+		renderSprite();
+		end();
+	}
+
 	public static void renderSprite(int x, int y, int width, int height, Sprite sprite)
 	{
 		renderSprite(x, y, width, height, sprite.id);
@@ -459,6 +479,26 @@ public class SpriteRender
 	}
 
 	public static void renderSpriteFromAtlas(int x, int y, int width, int height, int spriteId, float tileX, float tileY, float tileW, float tileH)
+	{
+		start();
+
+		transformation
+			.identity()
+			.translate(width * 0.5f, height * 0.5f, 0)
+			.translate(x, y, 0)
+			.scale(width * 0.5f, height * 0.5f, 1);
+
+		spriteAtlasShader.bind();
+		spriteAtlasShader.setTransformation(transformation);
+		spriteAtlasShader.setUniform(SpriteAtlasShader.SPRITEDATA, tileW, tileH, tileX / tileW, tileY / tileH);
+
+		bindSprite(spriteId);
+
+		renderSprite();
+		end();
+	}
+
+	public static void renderSpriteFromAtlas(float x, float y, int width, int height, int spriteId, float tileX, float tileY, float tileW, float tileH)
 	{
 		start();
 

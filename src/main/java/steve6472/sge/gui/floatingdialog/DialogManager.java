@@ -30,6 +30,7 @@ public class DialogManager
 	private boolean active;
 	private final List<FloatingDialog> dialogs;
 	private final int model;
+	private FloatingDialog firstActiveDialog;
 
 	public DialogManager()
 	{
@@ -57,17 +58,29 @@ public class DialogManager
 		return active;
 	}
 
+	public FloatingDialog getFirstActiveDialog()
+	{
+		return firstActiveDialog;
+	}
+
 	public void tick()
 	{
 		active = false;
+		firstActiveDialog = null;
 		for (FloatingDialog dialog : this.dialogs)
 		{
-			if (!dialog.isVisible() || dialog.shouldBeRemoved())
+			if (dialog.shouldBeRemoved() || !dialog.isVisible())
 				continue;
+
 			if (dialog.isActive())
 			{
+				if (firstActiveDialog == null)
+					firstActiveDialog = dialog;
 				active = true;
 				dialog.tick();
+			} else
+			{
+				dialog.nonactiveTick();
 			}
 		}
 	}

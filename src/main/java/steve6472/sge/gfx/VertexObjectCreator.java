@@ -89,7 +89,7 @@ public class VertexObjectCreator
 		IntBuffer buffer = toIntBuffer(data);
 		glBindBuffer(GL_ARRAY_BUFFER, vboID);
 		glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
-		glVertexAttribPointer(attributeNumber, size, GL_INT, false, 0, 0);
+		glVertexAttribIPointer(attributeNumber, size, GL_INT, 0, 0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		return vboID;
 	}
@@ -99,7 +99,7 @@ public class VertexObjectCreator
 		IntBuffer buffer = toIntBuffer(data);
 		glBindBuffer(GL_ARRAY_BUFFER, vboId);
 		glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
-		glVertexAttribPointer(attributeNumber, size, GL_INT, false, 0, 0);
+		glVertexAttribIPointer(attributeNumber, size, GL_INT, 0, 0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
@@ -110,7 +110,7 @@ public class VertexObjectCreator
 		IntBuffer buffer = toIntBuffer(data);
 		glBindBuffer(GL_ARRAY_BUFFER, vboID);
 		glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
-		glVertexAttribPointer(attributeNumber, size, GL_INT, false, 0, 0);
+		glVertexAttribIPointer(attributeNumber, size, GL_INT, 0, 0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		return vboID;
 	}
@@ -120,7 +120,7 @@ public class VertexObjectCreator
 		IntBuffer buffer = toIntBuffer(data);
 		glBindBuffer(GL_ARRAY_BUFFER, vboId);
 		glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
-		glVertexAttribPointer(attributeNumber, size, GL_INT, false, 0, 0);
+		glVertexAttribIPointer(attributeNumber, size, GL_INT, 0, 0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 	}
 
@@ -131,7 +131,7 @@ public class VertexObjectCreator
 		ByteBuffer buffer = toByteBuffer(data);
 		glBindBuffer(GL_ARRAY_BUFFER, vboID);
 		glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
-		glVertexAttribPointer(attributeNumber, size, GL_BYTE, false, 0, 0);
+		glVertexAttribIPointer(attributeNumber, size, GL_INT, 0, 0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);
 		return vboID;
 	}
