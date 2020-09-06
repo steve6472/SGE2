@@ -1,11 +1,6 @@
 package steve6472.sge.gfx.shaders;
 
 import org.joml.Matrix4f;
-import org.lwjgl.BufferUtils;
-
-import java.nio.FloatBuffer;
-
-import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -15,36 +10,23 @@ import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
  ***********************/
 public abstract class StaticShader2D extends StaticShaderBase
 {
-	private final int transformation;
-	private final int projection;
-
-	private final FloatBuffer matrixBuffer;
+	private final Type transformation;
+	private final Type projection;
 
 	public StaticShader2D(String path)
 	{
-		shader = Shader.fromShaders(path);
+		this(Shader.fromShaders(path));
 		this.path = path;
-
-		transformation = getUniform("transformation");
-		projection = getUniform("projection");
-
-		matrixBuffer = BufferUtils.createFloatBuffer(16);
-
-		createUniforms();
-
-		shader.bind();
-		setTransformation(new Matrix4f());
 	}
 
 	public StaticShader2D(Shader shader)
 	{
 		this.shader = shader;
 
-		transformation = getUniform("transformation");
-		projection = getUniform("projection");
+		addUniform("transformation", transformation = new Type(EnumUniformType.MAT_4));
+		addUniform("projection", projection = new Type(EnumUniformType.MAT_4));
 
-		matrixBuffer = BufferUtils.createFloatBuffer(16);
-
+		initMatrixBuffers();
 		createUniforms();
 
 		shader.bind();
@@ -55,15 +37,11 @@ public abstract class StaticShader2D extends StaticShaderBase
 
 	public void setTransformation(Matrix4f matrix4f)
 	{
-		matrixBuffer.clear();
-		matrix4f.get(matrixBuffer);
-		glUniformMatrix4fv(transformation, false, matrixBuffer);
+		setUniform(transformation, matrix4f);
 	}
 
 	public void setProjection(Matrix4f matrix4f)
 	{
-		matrixBuffer.clear();
-		matrix4f.get(matrixBuffer);
-		glUniformMatrix4fv(projection, false, matrixBuffer);
+		setUniform(projection, matrix4f);
 	}
 }

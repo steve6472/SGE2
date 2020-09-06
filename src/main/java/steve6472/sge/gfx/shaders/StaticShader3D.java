@@ -1,11 +1,6 @@
 package steve6472.sge.gfx.shaders;
 
 import org.joml.Matrix4f;
-import org.lwjgl.BufferUtils;
-
-import java.nio.FloatBuffer;
-
-import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -15,30 +10,25 @@ import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
  ***********************/
 public abstract class StaticShader3D extends StaticShaderBase
 {
-	private final int transformation;
-	private final int projection;
-	private final int view;
-
-	private final FloatBuffer matrixBuffer;
+	private final Type transformation;
+	private final Type projection;
+	private final Type view;
 
 	public StaticShader3D(String path)
 	{
-		shader = Shader.fromShaders(path);
+		this(Shader.fromShaders(path));
 		this.path = path;
+	}
 
-		transformation = getUniform("transformation");
-		projection = getUniform("projection");
-		view = getUniform("view");
-/*
-		if (transformation == -1)
-			throw new RuntimeException("Uniform name not found for transformation");
-		if (projection == -1)
-			throw new RuntimeException("Uniform name not found for projection");
-		if (view == -1)
-			throw new RuntimeException("Uniform name not found for view");*/
+	public StaticShader3D(Shader shader)
+	{
+		this.shader = shader;
 
-		matrixBuffer = BufferUtils.createFloatBuffer(16);
+		addUniform("transformation", transformation = new Type(EnumUniformType.MAT_4));
+		addUniform("projection", projection = new Type(EnumUniformType.MAT_4));
+		addUniform("view", view = new Type(EnumUniformType.MAT_4));
 
+		initMatrixBuffers();
 		createUniforms();
 
 		shader.bind();
@@ -55,22 +45,16 @@ public abstract class StaticShader3D extends StaticShaderBase
 
 	public void setTransformation(Matrix4f matrix4f)
 	{
-		matrixBuffer.clear();
-		matrix4f.get(matrixBuffer);
-		glUniformMatrix4fv(transformation, false, matrixBuffer);
+		setUniform(transformation, matrix4f);
 	}
 
 	public void setProjection(Matrix4f matrix4f)
 	{
-		matrixBuffer.clear();
-		matrix4f.get(matrixBuffer);
-		glUniformMatrix4fv(projection, false, matrixBuffer);
+		setUniform(projection, matrix4f);
 	}
 
 	public void setView(Matrix4f matrix4f)
 	{
-		matrixBuffer.clear();
-		matrix4f.get(matrixBuffer);
-		glUniformMatrix4fv(view, false, matrixBuffer);
+		setUniform(view, matrix4f);
 	}
 }

@@ -1,11 +1,6 @@
 package steve6472.sge.gfx.shaders;
 
 import org.joml.Matrix4f;
-import org.lwjgl.BufferUtils;
-
-import java.nio.FloatBuffer;
-
-import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -15,26 +10,23 @@ import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
  ***********************/
 public abstract class StaticShaderCubeMap extends StaticShaderBase
 {
-	private final int projection;
-	private final int view;
-
-	private final FloatBuffer matrixBuffer;
+	private final Type projection;
+	private final Type view;
 
 	public StaticShaderCubeMap(String path)
 	{
 		shader = Shader.fromShaders(path);
 		this.path = path;
 
-		projection = getUniform("projection");
-		view = getUniform("view");
+		addUniform("projection", projection = new Type(EnumUniformType.MAT_4));
+		addUniform("view", view = new Type(EnumUniformType.MAT_4));
 
-		if (projection == -1)
+		if (projection.getId() == -1)
 			throw new RuntimeException("Uniform name not found for projection");
-		if (view == -1)
+		if (view.getId() == -1)
 			throw new RuntimeException("Uniform name not found for view");
 
-		matrixBuffer = BufferUtils.createFloatBuffer(16);
-
+		initMatrixBuffers();
 		createUniforms();
 
 		shader.bind();
@@ -48,15 +40,11 @@ public abstract class StaticShaderCubeMap extends StaticShaderBase
 
 	public void setProjection(Matrix4f matrix4f)
 	{
-		matrixBuffer.clear();
-		matrix4f.get(matrixBuffer);
-		glUniformMatrix4fv(projection, false, matrixBuffer);
+		setUniform(projection, matrix4f);
 	}
 
 	public void setView(Matrix4f matrix4f)
 	{
-		matrixBuffer.clear();
-		matrix4f.get(matrixBuffer);
-		glUniformMatrix4fv(view, false, matrixBuffer);
+		setUniform(view, matrix4f);
 	}
 }

@@ -1,6 +1,11 @@
 package steve6472.sge.gfx.shaders;
 
+import org.joml.Matrix3f;
+import org.joml.Matrix4f;
+import org.lwjgl.BufferUtils;
 import steve6472.sge.main.Util;
+
+import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL20.*;
 
@@ -14,6 +19,14 @@ public abstract class StaticShaderBase
 {
 	protected Shader shader;
 	protected String path;
+
+	protected FloatBuffer matrix4Buffer, matrix3Buffer;
+
+	protected void initMatrixBuffers()
+	{
+		matrix4Buffer = BufferUtils.createFloatBuffer(16);
+		matrix3Buffer = BufferUtils.createFloatBuffer(9);
+	}
 
 	public void reload(Object... uniforms)
 	{
@@ -78,51 +91,34 @@ public abstract class StaticShaderBase
 		if (type.id == -1) return;
 		if (type.uniformType == EnumUniformType.INT_1) glUniform1i(type.getId(), i0);
 	}
-/*
-	public void setUniform(Type type, Object... variables)
+
+	public void setUniform(Type type, Matrix3f m0)
 	{
 		if (type.id == -1) return;
-
-		switch (type.uniformType)
+		if (type.uniformType == EnumUniformType.MAT_3)
 		{
-			case FLOAT_1 -> set1f(type, (Float) variables[0]);
-			case FLOAT_2 -> set2f(type, (Float) variables[0], (Float) variables[1]);
-			case FLOAT_3 -> set3f(type, (Float) variables[0], (Float) variables[1], (Float) variables[2]);
-			case FLOAT_4 -> set4f(type, (Float) variables[0], (Float) variables[1], (Float) variables[2], (Float) variables[3]);
-
-			case INT_1 -> set1i(type, (Integer) variables[0]);
+			matrix3Buffer.clear();
+			m0.get(matrix3Buffer);
+			glUniformMatrix3fv(type.getId(), false, matrix3Buffer);
 		}
 	}
 
-	private void set1f(Type type, float f0)
+	public void setUniform(Type type, Matrix4f m0)
 	{
-		glUniform1f(type.getId(), f0);
+		if (type.id == -1) return;
+		if (type.uniformType == EnumUniformType.MAT_4)
+		{
+			matrix4Buffer.clear();
+			m0.get(matrix3Buffer);
+			glUniformMatrix3fv(type.getId(), false, matrix4Buffer);
+		}
 	}
-
-	private void set2f(Type type, float f0, float f1)
-	{
-		glUniform2f(type.getId(), f0, f1);
-	}
-
-	private void set3f(Type type, float f0, float f1, float f2)
-	{
-		glUniform3f(type.getId(), f0, f1, f2);
-	}
-
-	private void set4f(Type type, float f0, float f1, float f2, float f3)
-	{
-		glUniform4f(type.getId(), f0, f1, f2, f3);
-	}
-
-	private void set1i(Type type, int i0)
-	{
-		glUniform1i(type.getId(), i0);
-	}*/
 
 	public enum EnumUniformType
 	{
 		FLOAT_1, FLOAT_2, FLOAT_3, FLOAT_4,
-		INT_1
+		INT_1,
+		MAT_3, MAT_4
 	}
 
 	protected static class Type
