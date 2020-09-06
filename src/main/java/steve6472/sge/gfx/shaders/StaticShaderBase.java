@@ -109,8 +109,8 @@ public abstract class StaticShaderBase
 		if (type.uniformType == EnumUniformType.MAT_4)
 		{
 			matrix4Buffer.clear();
-			m0.get(matrix3Buffer);
-			glUniformMatrix3fv(type.getId(), false, matrix4Buffer);
+			m0.get(matrix4Buffer);
+			glUniformMatrix4fv(type.getId(), false, matrix4Buffer);
 		}
 	}
 
