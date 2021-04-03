@@ -3,7 +3,7 @@ package steve6472.sge.gfx.shaders;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
-import steve6472.sge.main.Util;
+import steve6472.sge.main.util.MathUtil;
 
 import java.nio.FloatBuffer;
 
@@ -30,7 +30,7 @@ public abstract class StaticShaderBase
 
 	public void reload(Object... uniforms)
 	{
-		if (!Util.isEven(uniforms.length)) throw new IllegalArgumentException("Incorrect Uniform data!");
+		if (!MathUtil.isEven(uniforms.length)) throw new IllegalArgumentException("Incorrect Uniform data!");
 
 		shader.updateShader(path);
 

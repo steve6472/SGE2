@@ -32,6 +32,7 @@ public class Test extends MainApp
 //		System.out.println(t);
 
 		setExitKey(KeyList.ESCAPE);
+		Window.enableVSync(true);
 	}
 
 	@Override

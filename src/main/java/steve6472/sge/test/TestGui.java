@@ -459,7 +459,7 @@ public class TestGui extends Gui
 		}
 	}
 
-	private ColoredTextBuilder cursorText = ColoredTextBuilder
+	private static ColoredTextBuilder cursorText = ColoredTextBuilder
 		.create()
 		.addText("Cursor ")
 		.addCustomChar(CustomChar.FORWARD_ARROW)
@@ -469,7 +469,7 @@ public class TestGui extends Gui
 		.addColoredText("", 1, 0, 0)
 		.addText("/")
 		.addColoredText("", 0, 1, 0);
-	
+
 	@Override
 	public void render()
 	{

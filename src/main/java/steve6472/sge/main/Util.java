@@ -14,66 +14,12 @@ public class Util
 	public static final int HOVERED_OVERLAY = 0x807f87be;
 	public static final int SELECTED_OVERLAY = 0x806d76ad;
 	public static final double PYThAGORASRATIO = 1.4142135623730950488016887242097;
-	private static final Random random;
 	//1,4142135623730950488016887242097
-	
-	static
-	{
-		random = new Random();
-	}
 	
 	public static String getFormatedTime()
 	{
 		return String.format("%tY.%tm.%te-%tH.%tM.%tS", Calendar.getInstance(), Calendar.getInstance(), Calendar.getInstance(), Calendar.getInstance(), Calendar.getInstance(), Calendar.getInstance());
 	}
-
-	public static boolean isEven(int number)
-	{
-		return number % 2 == 0;
-	}
-
-	public static double getDistance(int fromX, int fromY, int toX, int toY)
-	{
-		double a = -((fromY) - (toY));
-		double b = -((fromX) - (toX));
-		
-		return Math.sqrt((a * a) + (b * b));
-	}
-
-	public static double getDistance(double fromX, double fromY, double toX, double toY)
-	{
-		double a = -((fromY) - (toY));
-		double b = -((fromX) - (toX));
-
-		return Math.sqrt((a * a) + (b * b));
-	}
-
-	public static float getDistance(float fromX, float fromY, float toX, float toY)
-	{
-		float a = -((fromY) - (toY));
-		float b = -((fromX) - (toX));
-
-		return (float) Math.sqrt((a * a) + (b * b));
-	}
-
-	/**
-	 * @return distance between 2 3d points
-	 * Copied from https://stackoverflow.com/a/30599011
-	 */
-	public static double getDistance(double fx, double fy, double fz, double tx, double ty, double tz)
-	{
-		return Math.sqrt(Math.pow(fx - tx, 2) + Math.pow(fy - ty, 2) + Math.pow(fz - tz, 2));
-	}
-
-	/**
-	 * @return distance between 2 3d points
-	 * Copied from https://stackoverflow.com/a/30599011
-	 */
-	public static float getDistance(float fx, float fy, float fz, float tx, float ty, float tz)
-	{
-		return (float) Math.sqrt(Math.pow(fx - tx, 2) + Math.pow(fy - ty, 2) + Math.pow(fz - tz, 2));
-	}
-
 
 	/**
 	 * 
@@ -86,16 +32,6 @@ public class Util
 	public static double countAngle(double fromX, double fromY, double toX, double toY)
 	{
 		return -Math.toDegrees(Math.atan2(fromX - toX, fromY - toY));
-	}
-	
-	public static boolean isInRectangle(int rminx, int rminy, int rmaxx, int rmaxy, int px, int py)
-	{
-		return px >= rminx && px <= rmaxx && py >= rminy && py <= rmaxy;
-	}
-	
-	public static boolean isInRectangle(double rminx, double rminy, double rmaxx, double rmaxy, double px, double py)
-	{
-		return px >= rminx && px <= rmaxx && py >= rminy && py <= rmaxy;
 	}
 
 	public static boolean isCursorInRectangle(MainApp main, int x, int y, int w, int h)
@@ -126,53 +62,7 @@ public class Util
 			}
 		}
 	}
-	
-	public static boolean isNumber(String l)
-	{
-		try
-		{
-			Long.valueOf(l);
-			return true;
-		} catch (NumberFormatException ex)
-		{
-			return false;
-		}
-	}
 
-	public static boolean isPointNumber(String l)
-	{
-		try
-		{
-			Double.parseDouble(l);
-			return true;
-		} catch (NumberFormatException ex)
-		{
-			return false;
-		}
-	}
-	
-	public static boolean isNumberDouble(String l)
-	{
-		try
-		{
-			Double.valueOf(l);
-			return true;
-		} catch (NumberFormatException ex)
-		{
-			return false;
-		}
-	}
-	
-	public static boolean isNumberInRange(double min, double max, double number)
-	{
-		return (number >= min && number <= max);
-	}
-
-	public static boolean isNumberInRange(int min, int max, int number)
-	{
-		return (number >= min && number <= max);
-	}
-	
 	public static int getIntFromHex(String hex)
 	{
 		return (int) Long.parseLong(hex, 16);
@@ -204,21 +94,6 @@ public class Util
 		{
 			e.printStackTrace();
 		}
-	}
-
-	public static double clamp(double min, double max, double number)
-	{
-		return Math.min(Math.max(number, min), max);
-	}
-
-	public static float clamp(float min, float max, float number)
-	{
-		return Math.min(Math.max(number, min), max);
-	}
-
-	public static int clamp(int min, int max, int number)
-	{
-		return Math.min(Math.max(number, min), max);
 	}
 
 	public static String[] loadDataFromFile(String path)
@@ -374,20 +249,6 @@ public class Util
 		System.out.println();
 	}
 	
-	public static void removeNullsFromArray(Object[] arr)
-	{
-		List<Object> arr2 = new ArrayList<Object>();
-		
-		for (Object o : arr)
-		{
-			if (o != null)
-				arr2.add(o);
-		}
-		
-		arr = arr2.toArray();
-	}
-
-	
 	@FunctionalInterface
 	public interface DoubleInterface<C, I>
 	{
@@ -460,62 +321,12 @@ public class Util
 		Random r = new Random(seed);
 		return RandomUtil.randomLong(Long.MIN_VALUE, Long.MAX_VALUE, r.nextLong());
 	}
-	
-	public static int maxi(int a, int b)
-	{
-		return Math.max(a, b);
-	}
-	
-	public static double maxd(double a, double b)
-	{
-		return Math.max(a, b);
-	}
-	
-	public static float maxf(float a, float b)
-	{
-		return Math.max(a, b);
-	}
-	
-	public static long maxl(long a, long b)
-	{
-		return Math.max(a, b);
-	}
-	
-	public static int mini(int a, int b)
-	{
-		return Math.min(a, b);
-	}
-	
-	public static double mind(double a, double b)
-	{
-		return Math.min(a, b);
-	}
-	
-	public static float minf(float a, float b)
-	{
-		return Math.min(a, b);
-	}
-	
-	public static long minl(long a, long b)
-	{
-		return Math.min(a, b);
-	}
-	
-	public static double getRandomAngle()
-	{
-		return RandomUtil.randomDouble(0, 360);
-	}
-
-	public static double getRandomAngleRAD()
-	{
-		return RandomUtil.randomDouble(0, 2 * Math.PI);
-	}
 
 	/**
 	 * Code stolen from https://gist.github.com/yfnick/227e0c12957a329ad138
 	 * Thank you for creating this code!
-	 * @param data
-	 * @return
+	 * @param data data to be compressed
+	 * @return compressed data
 	 */
 	public static byte[] compress(String data)
 	{
@@ -538,8 +349,8 @@ public class Util
 	/**
 	 * Code stolen from https://gist.github.com/yfnick/227e0c12957a329ad138
 	 * Thank you for creating this code!
-	 * @param compressed
-	 * @return
+	 * @param compressed data to be decompressed
+	 * @return decompressed data
 	 */
 	public static String decompress(byte[] compressed)
 	{
@@ -687,17 +498,12 @@ public class Util
 	
 	public static boolean toBoolean(int i)
 	{
-		return i == 0 ? false : true;
+		return i != 0;
 	}
 	
 	public static int toInt(boolean b)
 	{
 		return b ? 1 : 0;
-	}
-	
-	public static float normalise(float x, float minX, float maxX)
-	{
-		return (x - minX) / (maxX - minX);
 	}
 
 	public static <T> ArrayList<T> insert(T t, List<T> original, int index)

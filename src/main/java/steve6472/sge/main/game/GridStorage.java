@@ -10,7 +10,6 @@ import steve6472.sge.test.LongMap;
  ***********************/
 public class GridStorage<T>
 {
-//	private HashMap<Long, T> objects;
 	private LongMap<T> objects;
 
 	public GridStorage()

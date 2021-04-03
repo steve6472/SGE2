@@ -74,11 +74,6 @@ public class ColoredText
 		return this;
 	}
 
-	public ColoredText copyColor()
-	{
-		return new ColoredText().setColor(colorRed, colorGreen, colorBlue);
-	}
-
 	public ColoredText setColor(ColoredText color)
 	{
 		if (color != null)

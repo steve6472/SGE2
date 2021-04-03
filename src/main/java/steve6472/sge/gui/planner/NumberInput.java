@@ -5,7 +5,7 @@ import steve6472.sge.gui.Component;
 import steve6472.sge.gui.components.Button;
 import steve6472.sge.gui.components.TextField;
 import steve6472.sge.main.MainApp;
-import steve6472.sge.main.Util;
+import steve6472.sge.main.util.MathUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +76,7 @@ public class NumberInput extends Component
 
 	private boolean checkNumber()
 	{
-		if (!Util.isNumber(field.getText())) return false;
+		if (!MathUtil.isInteger(field.getText())) return false;
 		return check.check(min, max, Integer.parseInt(field.getText()));
 	}
 

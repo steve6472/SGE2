@@ -5,7 +5,7 @@ import steve6472.sge.gfx.font.Font;
 import steve6472.sge.gui.components.Button;
 import steve6472.sge.gui.components.TextField;
 import steve6472.sge.main.MainApp;
-import steve6472.sge.main.Util;
+import steve6472.sge.main.util.MathUtil;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -98,7 +98,7 @@ public class PositionDialog extends PlannerDialog
 
 	private boolean checkNumber0(TextField tf)
 	{
-		if (!Util.isNumber(tf.getText())) return false;
+		if (!MathUtil.isInteger(tf.getText())) return false;
 
 		int i = Integer.parseInt(tf.getText());
 		return i >= 0;
@@ -106,7 +106,7 @@ public class PositionDialog extends PlannerDialog
 
 	private boolean checkNumber1(TextField tf)
 	{
-		if (!Util.isNumber(tf.getText())) return false;
+		if (!MathUtil.isInteger(tf.getText())) return false;
 
 		int i = Integer.parseInt(tf.getText());
 		return i > 0;

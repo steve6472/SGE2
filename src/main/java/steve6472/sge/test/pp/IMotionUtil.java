@@ -1,7 +1,7 @@
 package steve6472.sge.test.pp;
 
-import steve6472.sge.main.Util;
 import org.joml.Vector2f;
+import steve6472.sge.main.util.RandomUtil;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -29,7 +29,7 @@ public interface IMotionUtil
 
 	default void randomMotionInCircle()
 	{
-		double rang = Math.toRadians(Util.getRandomAngle());
+		double rang = RandomUtil.randomRadian();
 		circleMotion((float) rang);
 	}
 }

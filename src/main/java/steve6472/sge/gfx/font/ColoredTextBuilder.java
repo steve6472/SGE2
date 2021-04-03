@@ -32,16 +32,23 @@ public class ColoredTextBuilder
 		return new ColoredTextBuilder();
 	}
 
+	public ColoredTextBuilder add(ColoredText text)
+	{
+		addInternal(text);
+		end(text.isString() ? text.text.length() : 1, text.shade);
+		return this;
+	}
+
 	public ColoredTextBuilder addText(String text)
 	{
-		add(new ColoredText().setText(text).setColor(lastColor).setShade(shade).setOffset(offsetX, offsetY));
+		addInternal(new ColoredText().setText(text).setColor(lastColor).setShade(shade).setOffset(offsetX, offsetY));
 		end(text.length(), shade);
 		return this;
 	}
 
 	public ColoredTextBuilder addCustomChar(ICustomChar customChar)
 	{
-		add(new ColoredText().setCustomChar(customChar).setColor(lastColor).setShade(shade).setOffset(offsetX, offsetY));
+		addInternal(new ColoredText().setCustomChar(customChar).setColor(lastColor).setShade(shade).setOffset(offsetX, offsetY));
 		end(1, shade);
 		return this;
 	}
@@ -67,7 +74,7 @@ public class ColoredTextBuilder
 
 	public ColoredTextBuilder newLine()
 	{
-		add(NEW_LINE);
+		addInternal(NEW_LINE);
 		return this;
 	}
 
@@ -76,7 +83,7 @@ public class ColoredTextBuilder
 	 */
 	public ColoredTextBuilder addText(String text, boolean shade)
 	{
-		add(new ColoredText().setText(text).setColor(lastColor).setShade(shade).setOffset(offsetX, offsetY));
+		addInternal(new ColoredText().setText(text).setColor(lastColor).setShade(shade).setOffset(offsetX, offsetY));
 		end(text.length(), shade);
 		return this;
 	}
@@ -86,7 +93,7 @@ public class ColoredTextBuilder
 	 */
 	public ColoredTextBuilder addCustomCharacter(ICustomChar customChar, boolean shade)
 	{
-		add(new ColoredText().setCustomChar(customChar).setColor(lastColor).setShade(shade).setOffset(offsetX, offsetY));
+		addInternal(new ColoredText().setCustomChar(customChar).setColor(lastColor).setShade(shade).setOffset(offsetX, offsetY));
 		end(1, shade);
 		return this;
 	}
@@ -96,7 +103,7 @@ public class ColoredTextBuilder
 	 */
 	public ColoredTextBuilder addColoredCustomChar(ICustomChar customChar, float r, float g, float b)
 	{
-		add(new ColoredText().setCustomChar(customChar).setColor(r, g, b).setShade(shade).setOffset(offsetX, offsetY));
+		addInternal(new ColoredText().setCustomChar(customChar).setColor(r, g, b).setShade(shade).setOffset(offsetX, offsetY));
 		end(1, shade);
 		return this;
 	}
@@ -106,7 +113,7 @@ public class ColoredTextBuilder
 	 */
 	public ColoredTextBuilder addColoredText(String text, float r, float g, float b)
 	{
-		add(new ColoredText().setText(text).setColor(r, g, b).setShade(shade).setOffset(offsetX, offsetY));
+		addInternal(new ColoredText().setText(text).setColor(r, g, b).setShade(shade).setOffset(offsetX, offsetY));
 		end(text.length(), shade);
 		return this;
 	}
@@ -137,7 +144,7 @@ public class ColoredTextBuilder
 		this.size += size * (shade ? 2 : 1);
 	}
 
-	private void add(ColoredText text)
+	private void addInternal(ColoredText text)
 	{
 		if (text == null)
 			return;

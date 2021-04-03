@@ -11,6 +11,7 @@ import steve6472.sge.gui.components.context.ContextMenuButton;
 import steve6472.sge.main.KeyList;
 import steve6472.sge.main.MainApp;
 import steve6472.sge.main.Util;
+import steve6472.sge.main.util.MathUtil;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -386,7 +387,7 @@ public class FileSelectorDialog extends AdvancedMoveableDialog
 						Font.render(name, x + 30, y + 62 + q, 1);
 					}
 
-					boolean onFile = Util.isInRectangle(x + 10, y + 60 + q, x + getWidth() - 28, y + 73 + q, getMain().getMouseX(), getMain().getMouseY());
+					boolean onFile = MathUtil.isInRectangle(x + 10, y + 60 + q, x + getWidth() - 28, y + 73 + q, getMain().getMouseX(), getMain().getMouseY());
 
 					if (onFile)
 					{

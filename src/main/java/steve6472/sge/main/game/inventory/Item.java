@@ -7,12 +7,8 @@
 
 package steve6472.sge.main.game.inventory;
 
-import java.io.Serializable;
-
-public class Item implements Serializable
+public class Item
 {
-	private static final long serialVersionUID = 2335588895934903724L;
-
 	public static final Item AIR = new Item();
 	
 	public ItemType itemType;
