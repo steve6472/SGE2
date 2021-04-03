@@ -242,6 +242,22 @@ public abstract class Gui implements Serializable
 		contextMenuMap.put(contextMenu.getId(), contextMenu);
 	}
 
+	public void removeContextMenu(String id)
+	{
+		ContextMenu menu = contextMenuMap.get(id);
+
+		if (menu != null)
+		{
+			contextMenuMap.remove(id);
+			getMainApp().getEventHandler().unregister(menu);
+		}
+	}
+
+	protected HashMap<String, ContextMenu> getContextMenuMap()
+	{
+		return contextMenuMap;
+	}
+
 	public void setContextMenu(String id)
 	{
 		this.currentContextMenu = contextMenuMap.get(id);

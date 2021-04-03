@@ -10,8 +10,8 @@ package steve6472.sge.gfx.font;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import steve6472.sge.gfx.Sprite;
 import steve6472.sge.gfx.SpriteRender;
+import steve6472.sge.gfx.StaticTexture;
 import steve6472.sge.gfx.Tessellator3D;
 import steve6472.sge.gfx.shaders.FontShader;
 import steve6472.sge.gfx.shaders.Shader;
@@ -20,7 +20,7 @@ import java.util.HashMap;
 
 public class Font
 {
-	private static Sprite font;
+	private static StaticTexture font;
 	private static FontShader fontShader;
 	private static Matrix4f transformation;
 	private static FontTessellator tessellator;
@@ -28,6 +28,40 @@ public class Font
 	public static final HashMap<Character, Char> characters = new HashMap<>();
 
 	private static final Char EMPTY = new Char(4096, ' ', 8);
+
+	private static boolean monospace;
+	private static int tabSize = 32;
+	private static int monosizeSize = 8;
+
+	public static void setMonospace(boolean monospace)
+	{
+		Font.monospace = monospace;
+	}
+
+	public static boolean isMonospace()
+	{
+		return monospace;
+	}
+
+	public static int getTabSize()
+	{
+		return tabSize;
+	}
+
+	public static void setTabSize(int tabSize)
+	{
+		Font.tabSize = tabSize;
+	}
+
+	public static int getMonosizeSize()
+	{
+		return monosizeSize;
+	}
+
+	public static void setMonosizeSize(int monosizeSize)
+	{
+		Font.monosizeSize = monosizeSize;
+	}
 
 	static int lastCustomIndex = 4096;
 	
@@ -134,13 +168,14 @@ public class Font
 		addChar('[',100, 6);
 		addChar(']',101, 5);
 		addChar('~',102, 8);
-		addChar('	',103, 32);
+		addChar('\t',103, 32);
 		addChar('^',104, 8);
 		addChar('\n',409, 8);
 		addChar('¨',4095, 8);
 
 		//Special characters
 		addChar('\u0000',4095, 8); // Error Char
+
 		addChar('\u0001',4094, 8); // Arrow Up
 		addChar('\u0002',4093, 8); // Arrow Down
 		addChar('\u0003',4092, 8); // Box Plus
@@ -149,7 +184,7 @@ public class Font
 		addChar('\u0006',4089, 8); // Bin Icon
 		addChar('\u0007',4088, 8); // Folder Icon
 		addChar('\u0008',4087, 8); // Back Arrow
-		addChar('\u0009',4086, 8); // Forward Arrow
+//		addChar('\u0009',4086, 8); // Forward Arrow
 		addChar('\u0010',4085, 8); // Eye
 		addChar('\u0011',4084, 8); // Point
 		addChar('\u0012',4083, 8); // Line
@@ -162,10 +197,13 @@ public class Font
 		addChar('\u0019',4076, 8); // Square
 		addChar('\u000b',4075, 8); // Check
 		addChar('\u000c',4074, 8); // X
+
 	}
 
 	private static void addChar(char character, int index, int width)
 	{
+		if (characters.containsKey(character))
+			throw new IllegalArgumentException("Character '" + character + "' already in map!");
 		characters.put(character, new Char(index, character, width));
 	}
 
@@ -175,24 +213,63 @@ public class Font
 		{
 			String t = text.substring(2, text.length() - 1);
 			CustomChar ch = CustomChar.getValues()[Integer.parseInt(t)];
-			return ch.getWidth();
+			return getCharacterWidth(ch) * fontSize;
 		}
 		int size = 0;
 		for (int i = 0; i < text.length(); i++)
 		{
 			char c = text.charAt(i);
-			Char ch = characters.get(c);
-			if (ch == null)
-				throw new NullPointerException("Character not found: '" + c + "'");
-			size += ch.getWidth() * fontSize;
+			size += getCharacterWidth(c) * fontSize;
 		}
 		
 		return size;
 	}
 
+	public static int getCharacterWidth(Character character)
+	{
+		if (isMonospace())
+		{
+			if (character == '\t')
+				return getTabSize();
+
+			return getMonosizeSize();
+		}
+
+		Char ch = characters.get(character);
+		if (ch == null)
+			throw new NullPointerException("Character not found: '" + character + "'");
+		return ch.getWidth();
+	}
+
+	public static int getCharacterWidth(Char character)
+	{
+		if (isMonospace())
+		{
+			if (character.getCharacter() == '\t')
+				return getTabSize();
+
+			return getMonosizeSize();
+		}
+
+		return character.getWidth();
+	}
+
+	public static int getCharacterWidth(ICustomChar c)
+	{
+		if (isMonospace())
+			return getMonosizeSize();
+
+		return c.getWidth();
+	}
+
+	public static boolean isValidChar(char c)
+	{
+		return characters.containsKey(c);
+	}
+
 	public static void init(int maxLength)
 	{
-		font = new Sprite("font.png");
+		font = StaticTexture.fromTexture("font.png");
 //		font.change(false);
 
 		transformation = new Matrix4f();
@@ -276,7 +353,7 @@ public class Font
 				/* Text */
 				tessellator.col(red, green, blue, 1.0f);
 				tessellator.pos(lx, ly).endVertex();
-				lx += ch.getWidth() / 4f;
+				lx += getCharacterWidth(ch) / 4f;
 			}
 		}
 
@@ -290,7 +367,595 @@ public class Font
 		SpriteRender.end();
 	}
 
+	public static void render(String text, int x, int y, int size, boolean shade)
+	{
+		render(text, x, y, size, 1f, 1f, 1f, shade);
+	}
+	
+	public static void render(String text, int x, int y, float red, float green, float blue, boolean shade)
+	{
+		render(text, x, y, 1, red, green, blue, shade);
+	}
+	
+	public static void render(String text, int x, int y, int size, float red, float green, float blue, boolean shade)
+	{
+		renderFont(text, x, y, size, red, green, blue, shade);
+	}
+
+	public static void render(String text, int x, int y, int size)
+	{
+		render(text, x, y, size, 1f, 1f, 1f, true);
+	}
+	
+	public static void render(String text, int x, int y, float red, float green, float blue)
+	{
+		render(text, x, y, 1, red, green, blue, true);
+	}
+	
+	public static void render(String text, int x, int y, int size, float red, float green, float blue)
+	{
+		render(text, x, y, size, red, green, blue, true);
+	}
+
+	public static void render(String text, int x, int y, int size, Vector3f color)
+	{
+		render(text, x, y, size, color.x, color.y, color.z);
+	}
+
+	public static void render(String text, int x, int y)
+	{
+		render(text, x, y, 1);
+	}
+
+	public static void render(int x, int y, String text)
+	{
+		render(text, x, y, 1);
+	}
+
+	public static void renderCustom(int x, int y, float size, ColoredTextBuilder text)
+	{
+		if (text == null || text.getText().isEmpty())
+			return;
+
+		SpriteRender.start();
+
+		fontShader.bind();
+
+		size *= 8f;
+
+		transformation
+			.identity()
+			.translate(font.getWidth() * 0.5f - (font.getWidth() - size) * 0.5f, font.getHeight() * 0.5f - (font.getHeight() - size) * 0.5f, 0)
+			.translate(x, y, 0)
+			.scale(size * 0.5f, size * 0.5f, 1);
+
+		fontShader.setTransformation(transformation);
+
+		font.bind();
+
+		float lx = 0;
+		float ly = 0;
+		float f = 1f / (size * 0.5f);
+
+		tessellator.begin(text.getSize() * 6); // Char count (with shade or not) * vertex count
+
+		for (ColoredText o : text.getText())
+		{
+			if (o == null)
+				throw new NullPointerException("null in ColoredTextBuilder!");
+
+			if (o.isString())
+			{
+				for (int i = 0; i < o.text.length(); i++)
+				{
+					char c = o.text.charAt(i);
+
+					if (c == '\n')
+					{
+						lx = 0;
+						ly += f * size;
+						continue;
+					}
+
+					lx += f * o.offsetX;
+					ly += f * o.offsetY;
+
+					Char ch = characters.get(c);
+
+					if (ch == null)
+						ch = EMPTY;
+
+					float indexX = ch.getIndex() % 64 * 8;
+					float indexY = (ch.getIndex() >> 6) * 8;
+					float dx = indexX / (float) font.getWidth();
+					float dy = indexY / (float) font.getHeight();
+
+					tessellator.data(dx, dy);
+
+					if (o.shade)
+					{
+						/* Shade */
+						tessellator.col(o.colorRed * 0.21f, o.colorGreen * 0.21f, o.colorBlue * 0.21f, o.alpha);
+						tessellator.pos(lx + f * (size / 8f), ly + f * (size / 8f)).endVertex();
+					}
+
+					/* Text */
+					tessellator.col(o.colorRed, o.colorGreen, o.colorBlue, o.alpha);
+					tessellator.pos(lx, ly).endVertex();
+					lx += getCharacterWidth(ch) / 4f;
+				}
+			} else
+			{
+				ICustomChar ch = o.customChar;
+
+				lx += f * o.offsetX;
+				ly += f * o.offsetY;
+
+				float indexX = ch.getIndex() % 64 * 8;
+				float indexY = (ch.getIndex() >> 6) * 8;
+				float dx = indexX / (float) font.getWidth();
+				float dy = indexY / (float) font.getHeight();
+
+				tessellator.data(dx, dy);
+
+				if (o.shade)
+				{
+					/* Shade */
+					tessellator.col(o.colorRed * 0.21f, o.colorGreen * 0.21f, o.colorBlue * 0.21f, o.alpha);
+					tessellator.pos(lx + f * (size / 8f), ly + f * (size / 8f)).endVertex();
+				}
+
+				/* Text */
+				tessellator.col(o.colorRed, o.colorGreen, o.colorBlue, o.alpha);
+				tessellator.pos(lx, ly).endVertex();
+				lx += getCharacterWidth(ch) / 4f;
+			}
+		}
+
+		tessellator.loadPos(0);
+		tessellator.loadCol(1);
+		tessellator.loadData(2);
+
+		tessellator.draw(Tessellator3D.POINTS);
+
+		tessellator.disable(0, 1, 2);
+		SpriteRender.end();
+	}
+
+	/**
+	 *
+	 * @param x x
+	 * @param y y
+	 * @param size font size
+	 * @param text Color: [#ff80ff00] [0.5,1.0,0.0,1.0] [127,255,0,255] (aplha is optional)
+	 *             Space: [x10] [y16]
+	 *             New line: \n (doesn't need new entry)
+	 *             Shade: [s1] [s0] (true, false)
+	 */
+	public static void renderCustom(int x, int y, float size, Object... text)
+	{
+		if (text == null)
+			return;
+
+		SpriteRender.start();
+
+		fontShader.bind();
+
+		size *= 8f;
+
+		transformation
+				.identity()
+				.translate(font.getWidth() * 0.5f - (font.getWidth() - size) * 0.5f, font.getHeight() * 0.5f - (font.getHeight() - size) * 0.5f, 0)
+				.translate(x, y, 0)
+				.scale(size * 0.5f, size * 0.5f, 1);
+
+		fontShader.setTransformation(transformation);
+
+		font.bind();
+
+		float red = 1.0f, green = 1.0f, blue = 1.0f, alpha = 1.0f;
+		float lx = 0;
+		float ly = 0;
+		float f = 1f / (size * 0.5f);
+		boolean shade = true;
+
+		int temp = 0;
+		for (Object o : text)
+		{
+			if (o instanceof String)
+				temp += ((String) o).length();
+			else if (o instanceof Number)
+				temp += String.valueOf(((Number) o).doubleValue()).length();
+			else if (o == null)
+				temp += 5;
+			else if (o instanceof ICustomChar)
+				temp += ((CustomChar) o).toString().length();
+			else
+				temp += o.toString().length();
+		}
+		tessellator.begin(temp * 6 * 2); // Char count * vertex count * shade
+
+		for (Object o : text)
+		{
+			if (o == null)
+				continue;
+
+			String s;
+
+			if (o instanceof Vector3f a)
+			{
+				s = String.format("[%f,%f,%f]", a.x, a.y, a.z);
+			} else
+			{
+				s = o.toString();
+			}
+
+			if (s == null || s.isEmpty())
+				continue;
+
+			/* Check color, space, and stuff */
+			if (s.startsWith("[") && s.endsWith("]"))
+			{
+				if (s.charAt(1) == 's')
+				{
+					if (s.charAt(2) == '1')
+						shade = true;
+					else if (s.charAt(2) == '0')
+						shade = false;
+					continue;
+				}
+				else if (s.charAt(1) == 'x')
+				{
+					String t = s.substring(2, s.length() - 1);
+					lx += 1f / 4f * Float.parseFloat(t);
+					continue;
+				}
+				else if (s.charAt(1) == 'y')
+				{
+					String t = s.substring(2, s.length() - 1);
+					ly += 1f / 4f * Float.parseFloat(t);
+					continue;
+				}
+				else if (s.charAt(1) == 'c')
+				{
+					String t = s.substring(2, s.length() - 1);
+					CustomChar ch = CustomChar.getValues()[Integer.parseInt(t)];
+
+					float indexX = ch.getIndex() % 64 * 8;
+					float indexY = (ch.getIndex() >> 6) * 8;
+					float dx = indexX / (float) font.getWidth();
+					float dy = indexY / (float) font.getHeight();
+
+					tessellator.data(dx, dy);
+
+					if (shade)
+					{
+						/* Shade */
+						tessellator.col(red * 0.21f, green * 0.21f, blue * 0.21f, alpha);
+						tessellator.pos(lx + f * (size / 8f), ly + f * (size / 8f)).endVertex();
+					}
+
+					/* Text */
+					tessellator.col(red, green, blue, 1.0f);
+					tessellator.pos(lx, ly).endVertex();
+					lx += getCharacterWidth(ch) / 4f;
+					continue;
+				}
+				else if (s.charAt(1) == '#')
+				{
+					String t = s.substring(2, s.length() - 1);
+					float c0 = Long.parseLong(t.substring(0, 2), 16) / 255f;
+					float c1 = Long.parseLong(t.substring(2, 4), 16) / 255f;
+					float c2 = Long.parseLong(t.substring(4, 6), 16) / 255f;
+					if (t.length() == 6) // Without alpha
+					{
+						red = c0;
+						green = c1;
+						blue = c2;
+						continue;
+					}
+					else if (t.length() == 8) // With alpha
+					{
+						alpha = c0;
+						red = c1;
+						green = c2;
+						blue = Long.parseLong(t.substring(6, 8), 16) / 255f;
+						continue;
+					}
+				}
+				else if (s.contains("."))
+				{
+					long count = s.chars().filter(ch -> ch == '.').count();
+					String t = s.substring(1, s.length() - 1);
+					String[] g = t.split(",");
+
+					red = Float.parseFloat(g[0].trim());
+					green = Float.parseFloat(g[1].trim());
+					blue = Float.parseFloat(g[2].trim());
+
+					if (count == 4) // Alpha
+					{
+						alpha = Float.parseFloat(g[3].trim());
+					}
+					continue;
+				}
+				else
+				{
+					long count = s.chars().filter(ch -> ch == '.').count();
+					String t = s.substring(1, s.length() - 1);
+					String[] g = t.split(",");
+
+					red = Integer.parseInt(g[0].trim()) / 255f;
+					green = Integer.parseInt(g[1].trim()) / 255f;
+					blue = Integer.parseInt(g[2].trim()) / 255f;
+
+					if (count == 4) // Alpha
+					{
+						alpha = Integer.parseInt(g[3].trim()) / 255f;
+					}
+					continue;
+				}
+			}
+
+			for (int i = 0; i < s.length(); i++)
+			{
+				char c = s.charAt(i);
+
+				if (c == '\n')
+				{
+					lx = 0;
+					ly += f * size;
+					continue;
+				}
+
+				Char ch = characters.get(c);
+
+				if (ch == null)
+					ch = EMPTY;
+
+				float indexX = ch.getIndex() % 64 * 8;
+				float indexY = (ch.getIndex() >> 6) * 8;
+				float dx = indexX / (float) font.getWidth();
+				float dy = indexY / (float) font.getHeight();
+
+				tessellator.data(dx, dy);
+
+				if (shade)
+				{
+					/* Shade */
+					tessellator.col(red * 0.21f, green * 0.21f, blue * 0.21f, alpha);
+					tessellator.pos(lx + f * (size / 8f), ly + f * (size / 8f)).endVertex();
+				}
+
+				/* Text */
+				tessellator.col(red, green, blue, alpha);
+				tessellator.pos(lx, ly).endVertex();
+				lx += getCharacterWidth(ch) / 4f;
+			}
+		}
+
+		tessellator.loadPos(0);
+		tessellator.loadCol(1);
+		tessellator.loadData(2);
+
+		tessellator.draw(Tessellator3D.POINTS);
+
+		tessellator.disable(0, 1, 2);
+		SpriteRender.end();
+	}
+
+	public static void stringCenter(int x, int y, int w, int h, String text, int fontSize, Vector2f out)
+	{
+		int fontWidth = getTextWidth(text, fontSize) / 2;
+		int fontHeight = ((8 * fontSize)) / 2;
+		out.set(x + w / 2f - fontWidth, y + h / 2f - fontHeight);
+	}
+
+	public static int stringCenterX(int x, int width, String text, int fontSize)
+	{
+		if (text == null)
+			return 0;
+		int fontWidth = getTextWidth(text, fontSize) / 2;
+		return x + width / 2 - fontWidth;
+	}
+
+	public static StaticTexture getFont()
+	{
+		return font;
+	}
+
+	public static Object[] toSGA(String text)
+	{
+		Object[] o = new Object[text.length()];
+
+		for (int i = 0; i < text.length(); i++)
+		{
+			o[i] = switch(text.charAt(i))
+					{
+						case 'a', 'A' -> CustomChar.SGA_A;
+						case 'b', 'B' -> CustomChar.SGA_B;
+						case 'c', 'C' -> CustomChar.SGA_C;
+						case 'd', 'D' -> CustomChar.SGA_D;
+						case 'e', 'E' -> CustomChar.SGA_E;
+						case 'f', 'F' -> CustomChar.SGA_F;
+						case 'g', 'G' -> CustomChar.SGA_G;
+						case 'h', 'H' -> CustomChar.SGA_H;
+						case 'i', 'I' -> CustomChar.SGA_I;
+						case 'j', 'J' -> CustomChar.SGA_J;
+						case 'k', 'K' -> CustomChar.SGA_K;
+						case 'l', 'L' -> CustomChar.SGA_L;
+						case 'm', 'M' -> CustomChar.SGA_M;
+						case 'n', 'N' -> CustomChar.SGA_N;
+						case 'o', 'O' -> CustomChar.SGA_O;
+						case 'p', 'P' -> CustomChar.SGA_P;
+						case 'q', 'Q' -> CustomChar.SGA_Q;
+						case 'r', 'R' -> CustomChar.SGA_R;
+						case 's', 'S' -> CustomChar.SGA_S;
+						case 't', 'T' -> CustomChar.SGA_T;
+						case 'u', 'U' -> CustomChar.SGA_U;
+						case 'v', 'V' -> CustomChar.SGA_V;
+						case 'w', 'W' -> CustomChar.SGA_W;
+						case 'x', 'X' -> CustomChar.SGA_X;
+						case 'y', 'Y' -> CustomChar.SGA_Y;
+						case 'z', 'Z' -> CustomChar.SGA_Z;
+						default -> text.charAt(i);
+					};
+		}
+		return o;
+	}
+
+	public static Object[] toThinSGA(String text)
+	{
+		Object[] o = new Object[text.length()];
+
+		for (int i = 0; i < text.length(); i++)
+		{
+			o[i] = switch(text.charAt(i))
+					{
+						case 'a', 'A' -> CustomChar.SGA_THIN_A;
+						case 'b', 'B' -> CustomChar.SGA_THIN_B;
+						case 'c', 'C' -> CustomChar.SGA_THIN_C;
+						case 'd', 'D' -> CustomChar.SGA_THIN_D;
+						case 'e', 'E' -> CustomChar.SGA_THIN_E;
+						case 'f', 'F' -> CustomChar.SGA_THIN_F;
+						case 'g', 'G' -> CustomChar.SGA_THIN_G;
+						case 'h', 'H' -> CustomChar.SGA_THIN_H;
+						case 'i', 'I' -> CustomChar.SGA_THIN_I;
+						case 'j', 'J' -> CustomChar.SGA_THIN_J;
+						case 'k', 'K' -> CustomChar.SGA_THIN_K;
+						case 'l', 'L' -> CustomChar.SGA_THIN_L;
+						case 'm', 'M' -> CustomChar.SGA_THIN_M;
+						case 'n', 'N' -> CustomChar.SGA_THIN_N;
+						case 'o', 'O' -> CustomChar.SGA_THIN_O;
+						case 'p', 'P' -> CustomChar.SGA_THIN_P;
+						case 'q', 'Q' -> CustomChar.SGA_THIN_Q;
+						case 'r', 'R' -> CustomChar.SGA_THIN_R;
+						case 's', 'S' -> CustomChar.SGA_THIN_S;
+						case 't', 'T' -> CustomChar.SGA_THIN_T;
+						case 'u', 'U' -> CustomChar.SGA_THIN_U;
+						case 'v', 'V' -> CustomChar.SGA_THIN_V;
+						case 'w', 'W' -> CustomChar.SGA_THIN_W;
+						case 'x', 'X' -> CustomChar.SGA_THIN_X;
+						case 'y', 'Y' -> CustomChar.SGA_THIN_Y;
+						case 'z', 'Z' -> CustomChar.SGA_THIN_Z;
+						default -> text.charAt(i);
+					};
+		}
+		return o;
+	}
+
+	public static void renderFps(int x, int y, float fps)
+	{
+		String color;
+		if (fps <= 10)
+			color = "[#8b0000]";
+		else if (fps > 10 && fps <= 20)
+			color = "[#ff4c00]";
+		else if (fps > 20 && fps < 40)
+			color = "[#90ee90]";
+		else
+			color = "[#32cd32]";
+
+		renderCustom(x, y, 1, "Fps: ", color, fps);
+	}
+
+}
+
+
+
+
+/*
+	/**
+	 *
+	 * @param text
+	 * @param keys R:[#ff0000];G:[0.0,1.0,0.0]
+	 * @param x
+	 * @param y
+	 */
+/*
+	public static void renderCustom(String text, String keys, int x, int y)
+	{
+		String[] arr = keys.split(";");
+		for (String s : arr)
+		{
+			String[] ar = s.split(":");
+			String key = ar[0];
+			String col = ar[1];
+			text = text.replace(key, col);
+		}
+		renderCustom(text, x, y);
+	}*/
+
 	/*
+	/**
+	 * Bugs: Doesn't renderSprite [ if is not part of color tag.
+	 *       Any non complete color tag just straight up crashes!
+	 *
+	 *       Render as one text and color the chars with the help of a shader
+	 *       Make new space tag [s#]  # - number of pixels
+	 *
+	 * @param text
+	 * @param x
+	 * @param y
+	 */
+	/*
+	public static void renderCustom(String text, int x, int y)
+	{
+		List<ColoredText> coloredText = new ArrayList<>();
+
+		StringBuilder normalText = new StringBuilder();
+		StringBuilder color = new StringBuilder();
+
+		boolean storingToColor = false;
+		boolean ignoreNext = false;
+
+		for (int i = 0; i < text.length(); i++)
+		{
+			char c = text.charAt(i);
+
+			if (c == '\\' && !ignoreNext)
+			{
+				ignoreNext = true;
+				continue;
+			}
+
+			if (ignoreNext)
+			{
+				normalText.append(c);
+				ignoreNext = false;
+				continue;
+			}
+
+			if (c == '[')
+			{
+				coloredText.add(new ColoredText(normalText.toString(), color.toString()));
+				normalText = new StringBuilder();
+				color = new StringBuilder();
+				storingToColor = true;
+				continue;
+			}
+
+			if (!storingToColor) normalText.append(c);
+
+			if (c == ']')
+			{
+				storingToColor = false;
+				continue;
+			}
+
+			if (storingToColor) color.append(c);
+		}
+
+		coloredText.add(new ColoredText(normalText.toString(), color.toString()));
+
+		int tx = 0;
+
+		for (ColoredText s : coloredText)
+		{
+			render(s.text, x + tx, y, s.r, s.g, s.b);
+			tx += getTextWidth(s.text, 1);
+		}
+	}
 
 	private static void updateShader(int x, int y, int index, int size)
 	{
@@ -455,9 +1120,9 @@ public class Font
 	{
 		if (text == null || text.isEmpty())
 			return;
-		
+
 		glMatrixMode(GL_TEXTURE);
-		
+
 		glPushMatrix();
 		glPushAttrib(GL_CURRENT_BIT);
 		glScalef(1f / (float) font.getWidth() / size, 1f / (float) font.getHeight() / size, 1f);
@@ -526,7 +1191,7 @@ public class Font
 		glScalef((float) font.getWidth(), (float) font.getHeight(), 1f);
 		glPopAttrib();
 		glPopMatrix();
-		
+
 		glMatrixMode(GL_MODELVIEW);
 	}
 
@@ -553,481 +1218,3 @@ public class Font
 		glTexCoord2i(indexX, sizeY);
 		glVertex2f(x, sizeY + y - indexY);
 	}*/
-	
-	public static void render(String text, int x, int y, int size, boolean shade)
-	{
-		render(text, x, y, size, 1f, 1f, 1f, shade);
-	}
-	
-	public static void render(String text, int x, int y, float red, float green, float blue, boolean shade)
-	{
-		render(text, x, y, 1, red, green, blue, shade);
-	}
-	
-	public static void render(String text, int x, int y, int size, float red, float green, float blue, boolean shade)
-	{
-		renderFont(text, x, y, size, red, green, blue, shade);
-	}
-
-	public static void render(String text, int x, int y, int size)
-	{
-		render(text, x, y, size, 1f, 1f, 1f, true);
-	}
-	
-	public static void render(String text, int x, int y, float red, float green, float blue)
-	{
-		render(text, x, y, 1, red, green, blue, true);
-	}
-	
-	public static void render(String text, int x, int y, int size, float red, float green, float blue)
-	{
-		render(text, x, y, size, red, green, blue, true);
-	}
-
-	public static void render(String text, int x, int y, int size, Vector3f color)
-	{
-		render(text, x, y, size, color.x, color.y, color.z);
-	}
-
-	public static void render(String text, int x, int y)
-	{
-		render(text, x, y, 1);
-	}
-
-	public static void render(int x, int y, String text)
-	{
-		render(text, x, y, 1);
-	}
-
-	/**
-	 *
-	 * @param x x
-	 * @param y y
-	 * @param size font size
-	 * @param text Color: [#ff80ff00] [0.5,1.0,0.0,1.0] [127,255,0,255] (aplha is optional)
-	 *             Space: [x10] [y16]
-	 *             New line: \n (doesn't need new entry)
-	 *             Shade: [s1] [s0] (true, false)
-	 */
-	public static void renderCustom(int x, int y, float size, Object... text)
-	{
-		if (text == null)
-			return;
-
-		SpriteRender.start();
-
-		fontShader.bind();
-
-		size *= 8f;
-
-		transformation
-				.identity()
-				.translate(font.getWidth() * 0.5f - (font.getWidth() - size) * 0.5f, font.getHeight() * 0.5f - (font.getHeight() - size) * 0.5f, 0)
-				.translate(x, y, 0)
-				.scale(size * 0.5f, size * 0.5f, 1);
-
-		fontShader.setTransformation(transformation);
-
-		font.bind();
-
-		float red = 1.0f, green = 1.0f, blue = 1.0f, alpha = 1.0f;
-		float lx = 0;
-		float ly = 0;
-		float f = 1f / (size * 0.5f);
-		boolean shade = true;
-
-		int temp = 0;
-		for (Object o : text)
-		{
-			if (o instanceof String)
-				temp += ((String) o).length();
-			else if (o instanceof Number)
-				temp += String.valueOf(((Number) o).doubleValue()).length();
-			else if (o == null)
-				temp += 5;
-			else if (o instanceof CustomChar)
-				temp += ((CustomChar) o).toString().length();
-			else
-				temp += o.toString().length();
-		}
-		tessellator.begin(temp * 6 * 2); // Char count * vertex count * shade
-
-		for (Object o : text)
-		{
-			if (o == null)
-				continue;
-
-			String s;
-
-			if (o instanceof Vector3f)
-			{
-				Vector3f a = (Vector3f) o;
-				s = String.format("[%f,%f,%f]", a.x, a.y, a.z);
-			} else
-			{
-				s = o.toString();
-			}
-
-			if (s == null || s.isEmpty())
-				continue;
-
-			/* Check color, space, and stuff */
-			if (s.startsWith("[") && s.endsWith("]"))
-			{
-				if (s.charAt(1) == 's')
-				{
-					if (s.charAt(2) == '1')
-						shade = true;
-					else if (s.charAt(2) == '0')
-						shade = false;
-					continue;
-				}
-				else if (s.charAt(1) == 'x')
-				{
-					String t = s.substring(2, s.length() - 1);
-					lx += 1f / 4f * Float.parseFloat(t);
-					continue;
-				}
-				else if (s.charAt(1) == 'y')
-				{
-					String t = s.substring(2, s.length() - 1);
-					ly += 1f / 4f * Float.parseFloat(t);
-					continue;
-				}
-				else if (s.charAt(1) == 'c')
-				{
-					String t = s.substring(2, s.length() - 1);
-					CustomChar ch = CustomChar.getValues()[Integer.parseInt(t)];
-
-					float indexX = ch.getIndex() % 64 * 8;
-					float indexY = (ch.getIndex() >> 6) * 8;
-					float dx = indexX / (float) font.getWidth();
-					float dy = indexY / (float) font.getHeight();
-
-					tessellator.data(dx, dy);
-
-					if (shade)
-					{
-						/* Shade */
-						tessellator.col(red * 0.21f, green * 0.21f, blue * 0.21f, alpha);
-						tessellator.pos(lx + f * (size / 8f), ly + f * (size / 8f)).endVertex();
-					}
-
-					/* Text */
-					tessellator.col(red, green, blue, 1.0f);
-					tessellator.pos(lx, ly).endVertex();
-					lx += ch.getWidth() / 4f;
-					continue;
-				}
-				else if (s.charAt(1) == '#')
-				{
-					String t = s.substring(2, s.length() - 1);
-					float c0 = Long.parseLong(t.substring(0, 2), 16) / 255f;
-					float c1 = Long.parseLong(t.substring(2, 4), 16) / 255f;
-					float c2 = Long.parseLong(t.substring(4, 6), 16) / 255f;
-					if (t.length() == 6) // Without alpha
-					{
-						red = c0;
-						green = c1;
-						blue = c2;
-						continue;
-					}
-					else if (t.length() == 8) // With alpha
-					{
-						alpha = c0;
-						red = c1;
-						green = c2;
-						blue = Long.parseLong(t.substring(6, 8), 16) / 255f;
-						continue;
-					}
-				}
-				else if (s.contains("."))
-				{
-					long count = s.chars().filter(ch -> ch == '.').count();
-					String t = s.substring(1, s.length() - 1);
-					String[] g = t.split(",");
-
-					red = Float.parseFloat(g[0].trim());
-					green = Float.parseFloat(g[1].trim());
-					blue = Float.parseFloat(g[2].trim());
-
-					if (count == 4) // Alpha
-					{
-						alpha = Float.parseFloat(g[3].trim());
-					}
-					continue;
-				}
-				else
-				{
-					long count = s.chars().filter(ch -> ch == '.').count();
-					String t = s.substring(1, s.length() - 1);
-					String[] g = t.split(",");
-
-					red = Integer.parseInt(g[0].trim()) / 255f;
-					green = Integer.parseInt(g[1].trim()) / 255f;
-					blue = Integer.parseInt(g[2].trim()) / 255f;
-
-					if (count == 4) // Alpha
-					{
-						alpha = Integer.parseInt(g[3].trim()) / 255f;
-					}
-					continue;
-				}
-			}
-
-			for (int i = 0; i < s.length(); i++)
-			{
-				char c = s.charAt(i);
-
-				if (c == '\n')
-				{
-					lx = 0;
-					ly += f * size;
-					continue;
-				}
-
-				Char ch = characters.get(c);
-
-				if (ch == null)
-					ch = EMPTY;
-
-				float indexX = ch.getIndex() % 64 * 8;
-				float indexY = (ch.getIndex() >> 6) * 8;
-				float dx = indexX / (float) font.getWidth();
-				float dy = indexY / (float) font.getHeight();
-
-				tessellator.data(dx, dy);
-
-				if (shade)
-				{
-					/* Shade */
-					tessellator.col(red * 0.21f, green * 0.21f, blue * 0.21f, alpha);
-					tessellator.pos(lx + f * (size / 8f), ly + f * (size / 8f)).endVertex();
-				}
-
-				/* Text */
-				tessellator.col(red, green, blue, alpha);
-				tessellator.pos(lx, ly).endVertex();
-				lx += ch.getWidth() / 4f;
-			}
-		}
-
-		tessellator.loadPos(0);
-		tessellator.loadCol(1);
-		tessellator.loadData(2);
-
-		tessellator.draw(Tessellator3D.POINTS);
-
-		tessellator.disable(0, 1, 2);
-		SpriteRender.end();
-	}
-
-/*
-	/**
-	 *
-	 * @param text
-	 * @param keys R:[#ff0000];G:[0.0,1.0,0.0]
-	 * @param x
-	 * @param y
-	 */
-/*
-	public static void renderCustom(String text, String keys, int x, int y)
-	{
-		String[] arr = keys.split(";");
-		for (String s : arr)
-		{
-			String[] ar = s.split(":");
-			String key = ar[0];
-			String col = ar[1];
-			text = text.replace(key, col);
-		}
-		renderCustom(text, x, y);
-	}*/
-
-	/*
-	/**
-	 * Bugs: Doesn't renderSprite [ if is not part of color tag.
-	 *       Any non complete color tag just straight up crashes!
-	 *
-	 *       Render as one text and color the chars with the help of a shader
-	 *       Make new space tag [s#]  # - number of pixels
-	 *
-	 * @param text
-	 * @param x
-	 * @param y
-	 */
-	/*
-	public static void renderCustom(String text, int x, int y)
-	{
-		List<ColoredText> coloredText = new ArrayList<>();
-
-		StringBuilder normalText = new StringBuilder();
-		StringBuilder color = new StringBuilder();
-
-		boolean storingToColor = false;
-		boolean ignoreNext = false;
-
-		for (int i = 0; i < text.length(); i++)
-		{
-			char c = text.charAt(i);
-
-			if (c == '\\' && !ignoreNext)
-			{
-				ignoreNext = true;
-				continue;
-			}
-
-			if (ignoreNext)
-			{
-				normalText.append(c);
-				ignoreNext = false;
-				continue;
-			}
-
-			if (c == '[')
-			{
-				coloredText.add(new ColoredText(normalText.toString(), color.toString()));
-				normalText = new StringBuilder();
-				color = new StringBuilder();
-				storingToColor = true;
-				continue;
-			}
-
-			if (!storingToColor) normalText.append(c);
-
-			if (c == ']')
-			{
-				storingToColor = false;
-				continue;
-			}
-
-			if (storingToColor) color.append(c);
-		}
-
-		coloredText.add(new ColoredText(normalText.toString(), color.toString()));
-
-		int tx = 0;
-
-		for (ColoredText s : coloredText)
-		{
-			render(s.text, x + tx, y, s.r, s.g, s.b);
-			tx += getTextWidth(s.text, 1);
-		}
-	}*/
-
-	public static void stringCenter(int x, int y, int w, int h, String text, int fontSize, Vector2f out)
-	{
-		int fontWidth = getTextWidth(text, fontSize) / 2;
-		int fontHeight = ((8 * fontSize)) / 2;
-		out.set(x + w / 2f - fontWidth, y + h / 2f - fontHeight);
-	}
-
-	public static int stringCenterX(int x, int width, String text, int fontSize)
-	{
-		if (text == null)
-			return 0;
-		int fontWidth = getTextWidth(text, fontSize) / 2;
-		return x + width / 2 - fontWidth;
-	}
-
-	public static Sprite getFont()
-	{
-		return font;
-	}
-
-	public static Object[] toSGA(String text)
-	{
-		Object[] o = new Object[text.length()];
-
-		for (int i = 0; i < text.length(); i++)
-		{
-			o[i] = switch(text.charAt(i))
-					{
-						case 'a', 'A' -> CustomChar.SGA_A;
-						case 'b', 'B' -> CustomChar.SGA_B;
-						case 'c', 'C' -> CustomChar.SGA_C;
-						case 'd', 'D' -> CustomChar.SGA_D;
-						case 'e', 'E' -> CustomChar.SGA_E;
-						case 'f', 'F' -> CustomChar.SGA_F;
-						case 'g', 'G' -> CustomChar.SGA_G;
-						case 'h', 'H' -> CustomChar.SGA_H;
-						case 'i', 'I' -> CustomChar.SGA_I;
-						case 'j', 'J' -> CustomChar.SGA_J;
-						case 'k', 'K' -> CustomChar.SGA_K;
-						case 'l', 'L' -> CustomChar.SGA_L;
-						case 'm', 'M' -> CustomChar.SGA_M;
-						case 'n', 'N' -> CustomChar.SGA_N;
-						case 'o', 'O' -> CustomChar.SGA_O;
-						case 'p', 'P' -> CustomChar.SGA_P;
-						case 'q', 'Q' -> CustomChar.SGA_Q;
-						case 'r', 'R' -> CustomChar.SGA_R;
-						case 's', 'S' -> CustomChar.SGA_S;
-						case 't', 'T' -> CustomChar.SGA_T;
-						case 'u', 'U' -> CustomChar.SGA_U;
-						case 'v', 'V' -> CustomChar.SGA_V;
-						case 'w', 'W' -> CustomChar.SGA_W;
-						case 'x', 'X' -> CustomChar.SGA_X;
-						case 'y', 'Y' -> CustomChar.SGA_Y;
-						case 'z', 'Z' -> CustomChar.SGA_Z;
-						default -> text.charAt(i);
-					};
-		}
-		return o;
-	}
-
-	public static Object[] toThinSGA(String text)
-	{
-		Object[] o = new Object[text.length()];
-
-		for (int i = 0; i < text.length(); i++)
-		{
-			o[i] = switch(text.charAt(i))
-					{
-						case 'a', 'A' -> CustomChar.SGA_THIN_A;
-						case 'b', 'B' -> CustomChar.SGA_THIN_B;
-						case 'c', 'C' -> CustomChar.SGA_THIN_C;
-						case 'd', 'D' -> CustomChar.SGA_THIN_D;
-						case 'e', 'E' -> CustomChar.SGA_THIN_E;
-						case 'f', 'F' -> CustomChar.SGA_THIN_F;
-						case 'g', 'G' -> CustomChar.SGA_THIN_G;
-						case 'h', 'H' -> CustomChar.SGA_THIN_H;
-						case 'i', 'I' -> CustomChar.SGA_THIN_I;
-						case 'j', 'J' -> CustomChar.SGA_THIN_J;
-						case 'k', 'K' -> CustomChar.SGA_THIN_K;
-						case 'l', 'L' -> CustomChar.SGA_THIN_L;
-						case 'm', 'M' -> CustomChar.SGA_THIN_M;
-						case 'n', 'N' -> CustomChar.SGA_THIN_N;
-						case 'o', 'O' -> CustomChar.SGA_THIN_O;
-						case 'p', 'P' -> CustomChar.SGA_THIN_P;
-						case 'q', 'Q' -> CustomChar.SGA_THIN_Q;
-						case 'r', 'R' -> CustomChar.SGA_THIN_R;
-						case 's', 'S' -> CustomChar.SGA_THIN_S;
-						case 't', 'T' -> CustomChar.SGA_THIN_T;
-						case 'u', 'U' -> CustomChar.SGA_THIN_U;
-						case 'v', 'V' -> CustomChar.SGA_THIN_V;
-						case 'w', 'W' -> CustomChar.SGA_THIN_W;
-						case 'x', 'X' -> CustomChar.SGA_THIN_X;
-						case 'y', 'Y' -> CustomChar.SGA_THIN_Y;
-						case 'z', 'Z' -> CustomChar.SGA_THIN_Z;
-						default -> text.charAt(i);
-					};
-		}
-		return o;
-	}
-
-	public static void renderFps(int x, int y, float fps)
-	{
-		String color;
-		if (fps <= 10)
-			color = "[#8b0000]";
-		else if (fps > 10 && fps <= 20)
-			color = "[#ff4c00]";
-		else if (fps > 20 && fps < 40)
-			color = "[#90ee90]";
-		else
-			color = "[#32cd32]";
-
-		renderCustom(x, y, 1, "Fps: ", color, fps);
-	}
-
-}

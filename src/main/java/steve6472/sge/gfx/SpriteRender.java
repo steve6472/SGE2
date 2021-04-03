@@ -32,15 +32,15 @@ public class SpriteRender
 	private static int vao, v_vbo, t_vbo;
 	private static int w, h;
 
-	private static SpriteShader spriteShader;
-	private static SpriteAtlasShader spriteAtlasShader;
-	private static DoubleBorderShader doubleBorderShader;
-	private static SingleBorderShader singleBorderShader;
-	private static FillRectangleShader fillRectangleShader;
-	private static BorderShader borderShader;
-	private static CircleShader circleShader;
-	private static SoftCircleShader softCircleShader;
-	private static RingShader ringShader;
+	public static SpriteShader spriteShader;
+	public static SpriteAtlasShader spriteAtlasShader;
+	public static DoubleBorderShader doubleBorderShader;
+	public static SingleBorderShader singleBorderShader;
+	public static FillRectangleShader fillRectangleShader;
+	public static BorderShader borderShader;
+	public static CircleShader circleShader;
+	public static SoftCircleShader softCircleShader;
+	public static RingShader ringShader;
 	public static SoftRingShader softRingShader;
 
 	private static boolean manual = false;
@@ -470,7 +470,7 @@ public class SpriteRender
 
 		spriteAtlasShader.bind();
 		spriteAtlasShader.setTransformation(transformation);
-		spriteAtlasShader.setUniform(SpriteAtlasShader.SPRITEDATA, tileW, tileH, tileX, tileY);
+		spriteAtlasShader.setUniform(SpriteAtlasShader.SPRITEDATA, tileW, tileH, tileX / tileW, tileY / tileH);
 
 		bindSprite(spriteId);
 

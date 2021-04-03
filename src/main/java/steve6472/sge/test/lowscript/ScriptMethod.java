@@ -1,6 +1,6 @@
 package steve6472.sge.test.lowscript;
 
-import steve6472.sge.main.smartsave.DataType;
+import steve6472.sge.main.util.DataType;
 
 import java.util.Arrays;
 

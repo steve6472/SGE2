@@ -1,6 +1,6 @@
 package steve6472.sge.gfx.font;
 
-public enum CustomChar
+public enum CustomChar implements ICustomChar
 {
 	ERROR(8),
 	ARROW_UP_NOSHAFT(8), ARROW_DOWN_NOSHAFT(8),

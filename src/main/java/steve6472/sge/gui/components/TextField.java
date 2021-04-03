@@ -146,9 +146,14 @@ public class TextField extends Component implements IScheme<SchemeTextField>
 		if (!isFocused || !isEditable)
 			return;
 
-		typeChar(Character.toChars(event.getCodepoint())[0]);
+		final char c = Character.toChars(event.getCodepoint())[0];
 
-		runTypeEvents(Character.toChars(event.getCodepoint())[0]);
+		if (!Font.isValidChar(c))
+			return;
+
+		typeChar(c);
+
+		runTypeEvents(c);
 	}
 
 	public void typeChar(char c)

@@ -1,7 +1,7 @@
 package steve6472.sge.test.lowscript;
 
 import steve6472.sge.main.Util;
-import steve6472.sge.main.smartsave.DataType;
+import steve6472.sge.main.util.DataType;
 import steve6472.sge.test.lowscript.instructions.Instruction;
 import steve6472.sge.test.lowscript.instructions.flow.Goto;
 import steve6472.sge.test.lowscript.instructions.flow.Stop;

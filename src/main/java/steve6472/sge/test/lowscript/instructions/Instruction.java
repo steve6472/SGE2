@@ -1,7 +1,7 @@
 package steve6472.sge.test.lowscript.instructions;
 
 import steve6472.sge.main.Util;
-import steve6472.sge.main.smartsave.DataType;
+import steve6472.sge.main.util.DataType;
 import steve6472.sge.test.lowscript.LowScript;
 
 import java.util.HashMap;

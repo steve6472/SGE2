@@ -10,9 +10,9 @@ import org.joml.Matrix4f;
  ***********************/
 public abstract class StaticShader3D extends StaticShaderBase
 {
-	private final Type transformation;
-	private final Type projection;
-	private final Type view;
+	protected final Type transformation;
+	protected final Type projection;
+	protected final Type view;
 
 	public StaticShader3D(String path)
 	{

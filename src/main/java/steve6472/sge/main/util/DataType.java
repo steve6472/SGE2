@@ -5,7 +5,7 @@
 *
 ***********************/
 
-package steve6472.sge.main.smartsave;
+package steve6472.sge.main.util;
 
 public enum DataType
 {
@@ -25,7 +25,9 @@ public enum DataType
 	SHORTARRAY(short[].class),
 	SHORTARRAY2D(short[][].class),
 	SHORTARRAY3D(short[][][].class),
-	OBJECTARRAY(Object[].class);
+	OBJECTARRAY(Object[].class),
+	TAG_START(null),
+	TAG_END(null);
 
 	protected Class<?> clazz;
 

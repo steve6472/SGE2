@@ -8,11 +8,11 @@
 package steve6472.sge.test;
 
 import steve6472.sge.gfx.RainbowColor;
+import steve6472.sge.gfx.font.ColoredTextBuilder;
 import steve6472.sge.gfx.font.CustomChar;
 import steve6472.sge.gfx.font.Font;
-import steve6472.sge.gui.Component;
 import steve6472.sge.gui.Gui;
-import steve6472.sge.gui.planner.Planner;
+import steve6472.sge.gui.components.*;
 import steve6472.sge.gui.components.context.ContextMenu;
 import steve6472.sge.gui.components.context.ContextMenuButton;
 import steve6472.sge.gui.components.context.ContextMenuSubmenu;
@@ -24,10 +24,9 @@ import steve6472.sge.gui.components.dialog.YesNoDialog;
 import steve6472.sge.gui.components.schemes.SchemeButton;
 import steve6472.sge.gui.components.schemes.SchemeListItemButton;
 import steve6472.sge.gui.components.schemes.SchemeSlider;
+import steve6472.sge.gui.planner.Planner;
 import steve6472.sge.main.MainApp;
-import steve6472.sge.main.Util;
 import steve6472.sge.main.util.RandomUtil;
-import steve6472.sge.gui.components.*;
 
 public class TestGui extends Gui
 {
@@ -453,9 +452,23 @@ public class TestGui extends Gui
 			rainbowColor.tick();
 		}
 
-		System.out.println("\n".repeat(8));
-		getMainApp().getEventHandler().runTest();
+		if (System.currentTimeMillis() % 49 == 0)
+		{
+			System.out.println("\n".repeat(8));
+			getMainApp().getEventHandler().runTest();
+		}
 	}
+
+	private ColoredTextBuilder cursorText = ColoredTextBuilder
+		.create()
+		.addText("Cursor ")
+		.addCustomChar(CustomChar.FORWARD_ARROW)
+		.addColoredText(" X", 1, 0, 0)
+		.addText("/")
+		.addColoredText("Y", 0, 1, 0)
+		.addColoredText("", 1, 0, 0)
+		.addText("/")
+		.addColoredText("", 0, 1, 0);
 	
 	@Override
 	public void render()
@@ -466,18 +479,22 @@ public class TestGui extends Gui
 //		Font.renderCustom("This [#ff0000]text [0.0 1.0 0.0]is [0.0;0.0;1.0]colored [#ff0000]![#00ff00]![#0000ff]![#ffff00]![#00ffff]![#ff00ff]!", 7, 7);
 //		Font.renderCustom("[#ff0000]X[#ffffff]/[#00ff00]Y[#ffffff]: [#ff0000]" + mx + "[#ffffff]/[#00ff00]" + my, 7, 7);
 //		Font.renderCustom("Cursor:  #RX#W/#GY#W: #R" + mx + "#W/#G" + my, "#R:[#ff0000];#G:[#00ff00];#W:[#ffffff]", 7, 7);
-		Font.renderCustom(7, 7, 1,
+		/*Font.renderCustom(7, 7, 1,
 				"Cursor ", CustomChar.FORWARD_ARROW, "[#ff0000]", " X", "[1.0,1.0,1.0]", "/", "[0,255,0]", "Y", "[255,0,0]", " ", mx, "[#ffffff]", "/", "[0,255,0]", my);
-
+*/
+		cursorText.get(5).setText(" " + mx);
+		cursorText.get(7).setText("" + my);
+		Font.renderCustom(7, 7, 1, cursorText);
+/*
 		for (Component c : getComponents())
 		{
 			if (Util.isInRectangle(c.getX(), c.getY(), c.getX() + c.getWidth(), c.getY() + c.getHeight(), mainApp.getMouseX(), mainApp.getMouseY()))
 			{
-//				Font.renderCustom("Component: " + c.getClass().getSimpleName() + "  #RX#W: " + c.getX() + "  #GY#W: " + c.getY() +
-//								"  #PW#W: " + c.getWidth() + "  #AH#W: " + c.getHeight(),
-//						"#R:[#ff0000];#G:[#00ff00];#W:[#ffffff];#P:[#ff00ff];#A:[#00ffff]", 7, 522);
+				Font.renderCustom("Component: " + c.getClass().getSimpleName() + "  #RX#W: " + c.getX() + "  #GY#W: " + c.getY() +
+								"  #PW#W: " + c.getWidth() + "  #AH#W: " + c.getHeight(),
+						"#R:[#ff0000];#G:[#00ff00];#W:[#ffffff];#P:[#ff00ff];#A:[#00ffff]", 7, 522);
 			}
-		}
+		}*/
 
 		Font.render("This\nIs\nGUI", 7, 450, 1);
 
