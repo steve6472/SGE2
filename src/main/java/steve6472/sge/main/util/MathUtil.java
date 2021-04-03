@@ -1,5 +1,6 @@
 package steve6472.sge.main.util;
 
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import java.util.regex.Pattern;
@@ -138,5 +139,13 @@ public class MathUtil
 	public static boolean isDecimal(String text)
 	{
 		return IS_DECIMAL.matcher(text).matches();
+	}
+
+	public static Matrix4f createProjectionMatrix(float width, float height, float farPlane, float fov)
+	{
+		final float NEAR_PLANE = 0.1f;
+		float aspectRatio = width / height;
+
+		return new Matrix4f().perspective((float) Math.toRadians(fov), aspectRatio, NEAR_PLANE, farPlane);
 	}
 }

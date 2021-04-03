@@ -25,9 +25,7 @@ public enum DataType
 	SHORTARRAY(short[].class),
 	SHORTARRAY2D(short[][].class),
 	SHORTARRAY3D(short[][][].class),
-	OBJECTARRAY(Object[].class),
-	TAG_START(null),
-	TAG_END(null);
+	OBJECTARRAY(Object[].class);
 
 	protected Class<?> clazz;
 
