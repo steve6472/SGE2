@@ -55,7 +55,9 @@ public class PhysTest extends MainApp
 //		bottom = new Box(this, 0, 400, getWidth(), 100, true);
 
 		setExitKey(KeyList.ESCAPE);
+		Window.enableVSync(true);
 	}
+
 	boolean flag = true;
 	boolean fbf = true;
 
