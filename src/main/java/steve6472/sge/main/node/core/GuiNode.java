@@ -20,6 +20,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class GuiNode extends AdvancedMoveableDialog
 {
 	private final AbstractNode node;
+	private Button closeButton;
 
 	public GuiNode(AbstractNode node)
 	{
@@ -54,8 +55,8 @@ public class GuiNode extends AdvancedMoveableDialog
 			addComponent(b);
 		}
 
-		Button close = initCloseButton();
-		close.addClickEvent(c -> {
+		closeButton = initCloseButton();
+		closeButton.addClickEvent(c -> {
 			for (int i = 0; i < node.inputData.getSize(); i++)
 			{
 				NodePair con = node.inputConnections[i];
@@ -174,17 +175,22 @@ public class GuiNode extends AdvancedMoveableDialog
 				}
 			}
 			Font.render(getX() + 2, getY() - 10 * y, sb.toString());
-		}
 
-		for (int i = 0; i < node.outputConnections.length; i++)
-		{
-			Font.render(getX() + getWidth() - 2, 25 + i * 20 + getY(), "" + node.outputStates[i]);
-		}
+			for (int i = 0; i < node.outputConnections.length; i++)
+			{
+				Font.render(getX() + getWidth() - 2, 25 + i * 20 + getY(), "" + node.outputStates[i]);
+			}
 
-		for (int i = 0; i < node.inputConnections.length; i++)
-		{
-			Font.render(getX() - 2 - Font.getTextWidth("" + node.inputStates[i], 1), 25 + i * 20 + getY(), "" + node.inputStates[i]);
+			for (int i = 0; i < node.inputConnections.length; i++)
+			{
+				Font.render(getX() - 2 - Font.getTextWidth("" + node.inputStates[i], 1), 25 + i * 20 + getY(), "" + node.inputStates[i]);
+			}
 		}
+	}
+
+	public Button getCloseButton()
+	{
+		return closeButton;
 	}
 
 	protected void renderNode() {}

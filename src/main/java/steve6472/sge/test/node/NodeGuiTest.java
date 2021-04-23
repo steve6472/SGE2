@@ -4,14 +4,11 @@ import steve6472.sge.gui.Gui;
 import steve6472.sge.gui.components.Background;
 import steve6472.sge.gui.components.Button;
 import steve6472.sge.main.MainApp;
-import steve6472.sge.main.node.core.AbstractNode;
 import steve6472.sge.main.node.core.GuiNode;
 import steve6472.sge.main.node.core.NodeContainer;
 import steve6472.sge.main.node.core.Nodes;
 
 import java.io.File;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -67,12 +64,7 @@ class NodeGuiTest extends Gui
 		save.setSize(200, 30);
 		save.setLocation(7, 112);
 		save.addClickEvent(c -> {
-			final List<AbstractNode> collect = nodeContainer
-				.getNodes()
-				.stream()
-				.map(GuiNode::getNode)
-				.collect(Collectors.toList());
-			Nodes.save(new File("test/nodes_save.json"), collect);
+			Nodes.save(new File("test/nodes_save.json"), nodeContainer);
 		});
 		addComponent(save);
 

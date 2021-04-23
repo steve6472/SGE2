@@ -8,7 +8,6 @@ import steve6472.sge.main.util.Pair;
 
 import java.io.File;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.UUID;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
@@ -93,12 +92,12 @@ public class Nodes
 		return nodeJson;
 	}
 
-	public static void save(File file, List<AbstractNode> list)
+	public static void save(File file, NodeContainer container)
 	{
 		JSONObject main = new JSONObject();
 		JSONArray array = new JSONArray();
 
-		for (AbstractNode node : list)
+		for (AbstractNode node : container.getNodes())
 		{
 			final JSONObject nodeJson = saveNode(node, array);
 			nodeJson.put("x", node.guiX);
@@ -115,11 +114,11 @@ public class Nodes
 		JSONObject main = new JSONObject();
 		JSONArray array = new JSONArray();
 
-		for (GuiNode guiNode : container.getNodes())
+		for (AbstractNode node : container.getNodes())
 		{
-			final JSONObject nodeJson = saveNode(guiNode.getNode(), array);
-			nodeJson.put("x", guiNode.getX());
-			nodeJson.put("y", guiNode.getY());
+			final JSONObject nodeJson = saveNode(node, array);
+			nodeJson.put("x", node.guiNode.getX());
+			nodeJson.put("y", node.guiNode.getY());
 		}
 
 		main.put("nodes", array);
@@ -220,15 +219,15 @@ public class Nodes
 		}
 	}
 
-	private static void connectNodes(JSONArray nodesArray, AbstractNode[] nodeArray, List<AbstractNode> list)
+	private static void connectNodes(JSONArray nodesArray, AbstractNode[] nodeArray, NodeContainer container)
 	{
 		for (int i = 0; i < nodesArray.length(); i++)
 		{
 			JSONObject node = nodesArray.getJSONObject(i);
 
 			AbstractNode thisNode = nodeArray[i];
-			if (list != null)
-				list.add(thisNode);
+			if (container != null)
+				container.getNodes().add(thisNode);
 
 			JSONObject connections = node.getJSONObject("connections");
 
@@ -252,7 +251,7 @@ public class Nodes
 		}
 	}
 
-	public static void load(File file, List<AbstractNode> list)
+	public static void load(File file, NodeContainer container)
 	{
 		JSONObject json;
 
@@ -268,7 +267,7 @@ public class Nodes
 			node.guiY = nodeJson.getInt("y");
 			loadExtraData(node, nodeJson);
 		});
-		connectNodes(nodes, nodeArray, list);
+		connectNodes(nodes, nodeArray, container);
 	}
 
 	public static void loadGui(File file, NodeContainer container)
@@ -342,27 +341,25 @@ public class Nodes
 		node.disconnectInput(input);
 	}
 
-	public static void convertGuiToNormal(NodeContainer fromContainer, List<AbstractNode> toList, boolean closeGuiNodes)
+	public static void convertGuiToNormal(NodeContainer container)
 	{
-		for (GuiNode guiNode : fromContainer.getNodes())
+		for (AbstractNode node : container.getNodes())
 		{
-			AbstractNode node = guiNode.getNode();
-			node.guiX = guiNode.getX();
-			node.guiY = guiNode.getY();
-			toList.add(node);
+			node.guiX = node.guiNode.getX();
+			node.guiY = node.guiNode.getY();
 
-			if (closeGuiNodes)
-				guiNode.close();
+			node.guiNode.close();
+			node.guiNode = null;
 		}
 	}
 
-	public static void convertNormalToGui(List<AbstractNode> fromList, NodeContainer toContainer)
+	public static void convertNormalToGui(NodeContainer container)
 	{
-		for (AbstractNode node : fromList)
+		for (AbstractNode node : container.getNodes())
 		{
 			GuiNode guiNode = createGuiNode(node);
 			guiNode.setLocation(node.guiX, node.guiY);
-			toContainer.addNode(guiNode);
+			container.addNode(guiNode);
 		}
 	}
 }

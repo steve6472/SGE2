@@ -1,6 +1,5 @@
 package steve6472.sge.main.node.core;
 
-import steve6472.sge.gui.components.dialog.Dialog;
 import steve6472.sge.main.MainApp;
 
 import java.util.ArrayList;
@@ -15,19 +14,27 @@ import java.util.function.BiConsumer;
  ***********************/
 public class NodeContainer
 {
-	private final List<GuiNode> nodes;
+	private final List<AbstractNode> nodes;
 	private final MainApp main;
-	private BiConsumer<MainApp, GuiNode> addNode = MainApp::showDialog;
+	private BiConsumer<MainApp, GuiNode> addNode;
 
 	public NodeContainer(MainApp main)
 	{
 		nodes = new ArrayList<>();
 		this.main = main;
+		addNode = (mainApp, dialog) ->
+		{
+			mainApp.showDialog(dialog);
+			dialog.getCloseButton().addClickEvent(c -> {
+				nodes.remove(dialog.getNode());
+			});
+		};
 	}
 
 	public void addNode(GuiNode node)
 	{
-		nodes.add(node);
+		if (!nodes.contains(node.getNode()))
+			nodes.add(node.getNode());
 		addNode.accept(main, node);
 	}
 
@@ -36,14 +43,14 @@ public class NodeContainer
 		this.addNode = a;
 	}
 
-	public List<GuiNode> getNodes()
+	public List<AbstractNode> getNodes()
 	{
 		return nodes;
 	}
 
 	public void clear()
 	{
-		nodes.forEach(Dialog::close);
+		nodes.forEach(n -> n.guiNode.close());
 		nodes.clear();
 	}
 }
