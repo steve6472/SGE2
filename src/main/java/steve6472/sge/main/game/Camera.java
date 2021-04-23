@@ -12,14 +12,14 @@ import org.joml.Vector3f;
  ***********************/
 public class Camera implements IPosition3f
 {
-	protected Vector3f position;
+	protected Vector3f viewPosition, center;
 	protected float yaw, pitch, roll;
-	protected boolean canMoveHead = true;
 	protected Matrix4f viewMatrix;
 
 	public Camera()
 	{
-		position = new Vector3f();
+		viewPosition = new Vector3f();
+		center = new Vector3f();
 		viewMatrix = new Matrix4f();
 	}
 
@@ -55,24 +55,21 @@ public class Camera implements IPosition3f
 	 * @param mouseX mouseX
 	 * @param mouseY mouseY
 	 * @param sensitivity sensitivity
-	 * @param cx observer point coord x
-	 * @param cy observer point coord y
-	 * @param cz observer point coord z
 	 * @param orbitalDistance distance from orbited point
 	 */
-	public void headOrbit(int mouseX, int mouseY, float sensitivity, float cx, float cy, float cz, float orbitalDistance)
+	public void headOrbit(int mouseX, int mouseY, float sensitivity, float orbitalDistance)
 	{
 		head(mouseX, mouseY, sensitivity);
-		calculateOrbit(cx, cy, cz, orbitalDistance);
+		calculateOrbit(orbitalDistance);
 	}
 
-	public void calculateOrbit(float cx, float cy, float cz, float orbitalDistance)
+	public void calculateOrbit(float orbitalDistance)
 	{
 		float x, y, z;
-		x = (float) (Math.sin(yaw) * (Math.cos(pitch) * orbitalDistance)) + cx;
-		y = (float) (-Math.sin(pitch) * orbitalDistance) + cy;
-		z = (float) (Math.cos(yaw) * (Math.cos(pitch) * orbitalDistance)) + cz;
-		setPosition(x, y, z);
+		x = (float) (Math.sin(yaw) * (Math.cos(pitch) * orbitalDistance)) + center.x;
+		y = (float) (-Math.sin(pitch) * orbitalDistance) + center.y;
+		z = (float) (Math.cos(yaw) * (Math.cos(pitch) * orbitalDistance)) + center.z;
+		viewPosition.set(x, y, z);
 	}
 
 	public void updateViewMatrix()
@@ -83,7 +80,7 @@ public class Camera implements IPosition3f
 		viewMatrix.rotate(getYaw(), 0, -1, 0);
 		viewMatrix.rotate(getRoll(), 0, 0, -1);
 
-		viewMatrix.translate(-getX(), -getY(), -getZ());
+		viewMatrix.translate(-viewPosition.x, -viewPosition.y, -viewPosition.z);
 	}
 
 	public Matrix4f getViewMatrix()
@@ -121,25 +118,14 @@ public class Camera implements IPosition3f
 		this.roll = roll;
 	}
 
-	public boolean canMoveHead()
-	{
-		return canMoveHead;
-	}
-
-	public void setCanMoveHead(boolean canMoveHead)
-	{
-		this.canMoveHead = canMoveHead;
-	}
-
 	@Override
 	public Vector3f getPosition()
 	{
-		return position;
+		return center;
 	}
 
-	@Override
-	public String toString()
+	public Vector3f getViewPosition()
 	{
-		return "Camera{" + "position=" + position + ", yaw=" + yaw + ", pitch=" + pitch + ", roll=" + roll + ", canMoveHead=" + canMoveHead + '}';
+		return viewPosition;
 	}
 }
