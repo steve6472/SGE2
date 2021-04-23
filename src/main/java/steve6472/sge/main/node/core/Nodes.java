@@ -43,6 +43,17 @@ public class Nodes
 		nodeJson.put("outputs", outputs);
 	}
 
+	private static void saveManualInputs(AbstractNode node, JSONObject nodeJson)
+	{
+		JSONArray manualInputs = new JSONArray();
+		for (int i = 0; i < node.inputStates.length; i++)
+		{
+			manualInputs.put(node.isManual(i));
+		}
+
+		nodeJson.put("manual_inputs", manualInputs);
+	}
+
 	private static void saveInputConnections(AbstractNode node, JSONObject nodeJson)
 	{
 		JSONObject connections = new JSONObject();
@@ -80,6 +91,7 @@ public class Nodes
 
 		saveInputsOutputs(node, nodeJson);
 		saveInputConnections(node, nodeJson);
+		saveManualInputs(node, nodeJson);
 
 		if (node instanceof ExtraData e)
 		{
@@ -141,6 +153,15 @@ public class Nodes
 		}
 	}
 
+	private static void loadManualInputs(AbstractNode node, JSONObject nodeJson)
+	{
+		JSONArray inputs = nodeJson.getJSONArray("manual_inputs");
+		for (int i = 0; i < inputs.length(); i++)
+		{
+			node.setManual(i, inputs.getBoolean(i));
+		}
+	}
+
 	private static AbstractNode getNode(String uuid, AbstractNode[] array)
 	{
 		for (AbstractNode node : array)
@@ -195,6 +216,7 @@ public class Nodes
 			}
 
 			loadInputsOutputs(node, nodeJson);
+			loadManualInputs(node, nodeJson);
 
 			nodeArray[i] = node;
 			node.setUuid(UUID.fromString(nodeJson.getString("uuid")));

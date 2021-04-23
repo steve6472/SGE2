@@ -213,6 +213,11 @@ public abstract class AbstractNode
 		return inputManual[inputIndex];
 	}
 
+	public boolean setManual(int inputIndex, boolean manual)
+	{
+		return inputManual[inputIndex] = manual;
+	}
+
 	protected abstract void updateOutputState();
 
 	public void updateOutputs()
