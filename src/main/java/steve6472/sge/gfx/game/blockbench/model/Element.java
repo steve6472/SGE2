@@ -104,7 +104,13 @@ public final class Element extends OutlinerElement
 		@Override
 		public String toString()
 		{
-			return "Face{" + "u0=" + u0 + ", v0=" + v0 + ", u1=" + u1 + ", v1=" + v1 + ", rotation=" + rotation + ", texture=" + texture + '}';
+			return "Face{" + "u0=" + u0 + ", v0=" + v0 + ", u1=" + u1 + ", v1=" + v1 + ", rotation=" + rotation + ", texture=" + texture + '}' + '\n';
 		}
+	}
+
+	@Override
+	public String toString()
+	{
+		return "Element{" + "fromX=" + fromX + ", fromY=" + fromY + ", fromZ=" + fromZ + ", toX=" + toX + ", toY=" + toY + ", toZ=" + toZ + ", north=" + north + ", east=" + east + ", south=" + south + ", west=" + west + ", up=" + up + ", down=" + down + '}' + '\n';
 	}
 }

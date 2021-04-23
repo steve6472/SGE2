@@ -2,6 +2,8 @@ package steve6472.sge.main.game;
 
 import steve6472.sge.test.LongMap;
 
+import java.util.Optional;
+
 /**********************
  * Created by steve6472 (Mirek Jozefek)
  * On date: 30.9.2018
@@ -10,7 +12,7 @@ import steve6472.sge.test.LongMap;
  ***********************/
 public class GridStorage<T>
 {
-	private LongMap<T> objects;
+	private final LongMap<T> objects;
 
 	public GridStorage()
 	{
@@ -29,21 +31,16 @@ public class GridStorage<T>
 		return l;
 	}
 
-	public T get(int x, int z)
+	public Optional<T> get(int x, int z)
 	{
 		long key = getKey(x, z);
 
-		if (objects.containsKey(key))
-			return objects.get(getKey(x, z));
-
-		return null;
+		return Optional.ofNullable(objects.get(getKey(x, z)));
 	}
 
-	public T get(long key)
+	public Optional<T> get(long key)
 	{
-		if (objects.containsKey(key))
-			return objects.get(key);
-		return null;
+		return Optional.ofNullable(objects.get(key));
 	}
 
 	public void put(int x, int z, T obj)

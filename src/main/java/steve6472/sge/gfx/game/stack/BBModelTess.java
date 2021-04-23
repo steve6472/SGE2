@@ -1,11 +1,12 @@
-package steve6472.sge.gfx.game;
+package steve6472.sge.gfx.game.stack;
 
 import org.joml.Math;
 import org.joml.*;
+import steve6472.sge.gfx.StaticTexture;
 import steve6472.sge.gfx.Tessellator;
+import steve6472.sge.gfx.shaders.StaticShader3D;
 import steve6472.sge.main.util.ColorUtil;
-import steve6472.sge.test.test3d.EntityShader;
-import steve6472.sge.test.test3d.Test3D;
+import steve6472.sge.gfx.shaders.BBShader;
 
 import java.util.function.BiConsumer;
 
@@ -15,16 +16,16 @@ import java.util.function.BiConsumer;
  * Project: CaveGame
  *
  ***********************/
-public class EntityTess extends StackTess
+public class BBModelTess extends StackTess
 {
-	private static final int MAX_SIZE = 1024 * 32;
+	private static final int MAX_SIZE = 1024 * 128;
 	private static final float INV_255 = 1f / 255f;
 
 	private final StackTessellator tess;
 	private final Vector3f dest3f;
 	private final Vector4f lastColor;
 
-	public EntityTess(Stack stack)
+	public BBModelTess(Stack stack)
 	{
 		super(stack);
 
@@ -37,14 +38,14 @@ public class EntityTess extends StackTess
 		lastColor.set(1, 1, 1, 1);
 	}
 
-	public EntityTess pos(float x, float y, float z)
+	public BBModelTess pos(float x, float y, float z)
 	{
 		stack.transformPosition(x, y, z, dest3f);
 		tess.pos(dest3f);
 		return this;
 	}
 
-	public EntityTess color(int argb)
+	public BBModelTess color(int argb)
 	{
 		float alpha = ColorUtil.getAlpha(argb) * INV_255;
 		float red = ColorUtil.getRed(argb) * INV_255;
@@ -54,33 +55,33 @@ public class EntityTess extends StackTess
 		return color(red, green, blue, alpha);
 	}
 
-	public EntityTess color(float r, float g, float b, float a)
+	public BBModelTess color(float r, float g, float b, float a)
 	{
 		tess.color(r, g, b, a);
 		lastColor.set(r, g, b, a);
 		return this;
 	}
 
-	public EntityTess color(Vector4f color)
+	public BBModelTess color(Vector4f color)
 	{
 		tess.color(color.x, color.y, color.z, color.w);
 		lastColor.set(color);
 		return this;
 	}
 
-	public EntityTess uv(float u, float v)
+	public BBModelTess uv(float u, float v)
 	{
 		tess.uv(u, v);
 		return this;
 	}
 
-	public EntityTess uv(Vector2f uv)
+	public BBModelTess uv(Vector2f uv)
 	{
 		tess.uv(uv.x, uv.y);
 		return this;
 	}
 
-	public EntityTess normal(float nx, float ny, float nz)
+	public BBModelTess normal(float nx, float ny, float nz)
 	{
 		stack.pushMatrix();
 		stack.rotateY((float) (Math.PI / 2f));
@@ -97,19 +98,19 @@ public class EntityTess extends StackTess
 		return lastColor;
 	}
 
-	public EntityTess endVertex()
+	public BBModelTess endVertex()
 	{
 		tess.endVertex();
 		return this;
 	}
 
 	@Override
-	public void render(Matrix4f view)
+	public void render(Matrix4f view, StaticShader3D shader3D, StaticTexture entityTexture)
 	{
-		Test3D.entityShader.bind(view);
-		Test3D.entityShader.setTransformation(new Matrix4f());
-		Test3D.entityShader.setUniform(EntityShader.NORMAL_MATRIX, new Matrix3f(new Matrix4f(stack).invert().transpose3x3()));
-		Test3D.debugAtlas.bind();
+		shader3D.bind(view);
+		shader3D.setTransformation(new Matrix4f());
+		shader3D.setUniform(BBShader.NORMAL_MATRIX, new Matrix3f(new Matrix4f(stack).invert().transpose3x3()));
+		entityTexture.bind();
 
 		tess.loadPos(0);
 		tess.loadColor(1);
@@ -211,7 +212,7 @@ public class EntityTess extends StackTess
 		pos(x +w, y +h, z).endVertex();
 
 
-		// WEST
+		// WEST - ACTUALLY DOWN
 		normal(0, 0, -1);
 		pos(x, y, z + d).endVertex();
 		pos(x, y, z).endVertex();
@@ -222,5 +223,10 @@ public class EntityTess extends StackTess
 		pos(x, y, z + d).endVertex();
 
 		color(lastColor);
+	}
+
+	public StackTessellator getTess()
+	{
+		return tess;
 	}
 }

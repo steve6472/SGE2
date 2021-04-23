@@ -16,4 +16,10 @@ public abstract class OutlinerElement
 	public float positionX, positionY, positionZ;
 	public float scaleX, scaleY, scaleZ;
 	public UUID uuid;
+
+	@Override
+	public String toString()
+	{
+		return "OutlinerElement{" + "name='" + name + '\'' + ", originX=" + originX + ", originY=" + originY + ", originZ=" + originZ + ", rotationX=" + rotationX + ", rotationY=" + rotationY + ", rotationZ=" + rotationZ + ", positionX=" + positionX + ", positionY=" + positionY + ", positionZ=" + positionZ + ", scaleX=" + scaleX + ", scaleY=" + scaleY + ", scaleZ=" + scaleZ + ", uuid=" + uuid + '}' + '\n';
+	}
 }

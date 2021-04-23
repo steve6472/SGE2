@@ -109,7 +109,4 @@ public class AnimLoader
 
 		throw new IllegalArgumentException(o.getClass().getCanonicalName());
 	}
-
-	public record Bone(String name, List<IKey> positions, List<IKey> rotations, List<IKey> scales)
-	{}
 }

@@ -4,6 +4,7 @@ import net.objecthunter.exp4j.Expression;
 import net.objecthunter.exp4j.ExpressionBuilder;
 import net.objecthunter.exp4j.ValidationResult;
 import net.objecthunter.exp4j.function.Function;
+import steve6472.sge.main.util.MathUtil;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -36,6 +37,17 @@ public class ExpressionValue implements IKeyValue
 		}
 	};
 
+	private static final Function clamp = new Function("clamp", 3)
+	{
+		@Override
+		public double apply(double... doubles)
+		{
+			final double clamp = MathUtil.clamp(doubles[0], doubles[1], doubles[2]);
+			System.out.println(clamp);
+			return 1;
+		}
+	};
+
 	public ExpressionValue(String expression)
 	{
 		expression = expression.replaceAll("math\\.","");
@@ -48,6 +60,7 @@ public class ExpressionValue implements IKeyValue
 		ExpressionBuilder builder = new ExpressionBuilder(expression);
 		builder.function(degSin);
 		builder.function(degCos);
+		builder.function(clamp);
 
 		if (hasAnimTime)
 			builder.variable("t");

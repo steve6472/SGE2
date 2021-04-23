@@ -2,6 +2,7 @@ package steve6472.sge.gfx.game.blockbench.model;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import steve6472.sge.gfx.game.blockbench.ModelTextureAtlas;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -22,12 +23,12 @@ public class Loader
 {
 	private static final float TO_RAD = 0.017453292519943295f;
 
-	public static OutlinerElement[] load(String modelName)
+	public static OutlinerElement[] load(ModelTextureAtlas modelTextureAtlas, String modelName)
 	{
 		JSONObject model = new JSONObject(read(new File(modelName + ".bbmodel")));
 
 		JSONObject res = model.getJSONObject("resolution");
-		HashMap<UUID, Element> elements = loadElements(model.getJSONArray("elements"), model.getJSONArray("textures"), res.getFloat("width"), res.getFloat("height"));
+		HashMap<UUID, Element> elements = loadElements(modelTextureAtlas, model.getJSONArray("elements"), model.getJSONArray("textures"), res.getFloat("width"), res.getFloat("height"));
 
 		return loadOutliner(model.getJSONArray("outliner"), elements);
 	}
@@ -60,7 +61,7 @@ public class Loader
 		}
 	}
 
-	private static HashMap<UUID, Element> loadElements(JSONArray elements, JSONArray textures, float resX, float resY)
+	private static HashMap<UUID, Element> loadElements(ModelTextureAtlas modelTextureAtlas, JSONArray elements, JSONArray textures, float resX, float resY)
 	{
 		HashMap<UUID, Element> map = new HashMap<>();
 
@@ -68,14 +69,14 @@ public class Loader
 		{
 			if (element instanceof JSONObject jsonElement)
 			{
-				loadElement(map, jsonElement, textures, resX, resY);
+				loadElement(modelTextureAtlas, map, jsonElement, textures, resX, resY);
 			}
 		}
 
 		return map;
 	}
 
-	private static void loadElement(HashMap<UUID, Element> map, JSONObject json, JSONArray textures, float resX, float resY)
+	private static void loadElement(ModelTextureAtlas modelTextureAtlas, HashMap<UUID, Element> map, JSONObject json, JSONArray textures, float resX, float resY)
 	{
 		Element element = new Element();
 		element.uuid = loadCommon(element, json);
@@ -93,12 +94,12 @@ public class Loader
 
 		JSONObject faces = json.getJSONObject("faces");
 
-		if (faces.has("north")) element.north = loadFace(faces.getJSONObject("north"), textures, resX, resY);
-		if (faces.has("east")) element.east = loadFace(faces.getJSONObject("east"), textures, resX, resY);
-		if (faces.has("south")) element.south = loadFace(faces.getJSONObject("south"), textures, resX, resY);
-		if (faces.has("west")) element.west = loadFace(faces.getJSONObject("west"), textures, resX, resY);
-		if (faces.has("up")) element.up = loadFace(faces.getJSONObject("up"), textures, resX, resY);
-		if (faces.has("down")) element.down = loadFace(faces.getJSONObject("down"), textures, resX, resY);
+		if (faces.has("north")) element.north = loadFace(modelTextureAtlas, faces.getJSONObject("north"), textures, resX, resY);
+		if (faces.has("east")) element.east = loadFace(modelTextureAtlas, faces.getJSONObject("east"), textures, resX, resY);
+		if (faces.has("south")) element.south = loadFace(modelTextureAtlas, faces.getJSONObject("south"), textures, resX, resY);
+		if (faces.has("west")) element.west = loadFace(modelTextureAtlas, faces.getJSONObject("west"), textures, resX, resY);
+		if (faces.has("up")) element.up = loadFace(modelTextureAtlas, faces.getJSONObject("up"), textures, resX, resY);
+		if (faces.has("down")) element.down = loadFace(modelTextureAtlas, faces.getJSONObject("down"), textures, resX, resY);
 
 		map.put(element.uuid, element);
 	}
@@ -129,16 +130,15 @@ public class Loader
 		return uuid;
 	}
 
-	private static Element.Face loadFace(JSONObject json, JSONArray textures, float resX, float resY)
+	private static Element.Face loadFace(ModelTextureAtlas modelTextureAtlas, JSONObject json, JSONArray textures, float resX, float resY)
 	{
 		if (!json.has("texture") || json.get("texture") == null || json.isNull("texture"))
 			return null;
 
-//		int textureId = json.getInt("texture");
-//		String texturePath = findTexture(textures, textureId);
-//		BlockAtlas.putTexture(texturePath);
-//		int id = BlockAtlas.getTextureId(texturePath);
-		int id = 0;
+		int textureId = json.getInt("texture");
+		String texturePath = findTexture(textures, textureId);
+		modelTextureAtlas.putTexture(texturePath);
+		int id = modelTextureAtlas.getTextureId(texturePath);
 
 		JSONArray uv = json.getJSONArray("uv");
 

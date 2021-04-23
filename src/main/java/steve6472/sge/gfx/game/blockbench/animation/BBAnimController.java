@@ -1,20 +1,23 @@
 package steve6472.sge.gfx.game.blockbench.animation;
 
+import steve6472.sge.main.Procedure;
+
 /**********************
  * Created by steve6472 (Mirek Jozefek)
  * On date: 23.10.2020
  * Project: CaveGame
  *
  ***********************/
-public class AnimController
+public class BBAnimController
 {
 	private long start;
 	private long pause;
-	private boolean running, paused, loop, reversed;
+	private boolean running, paused, loop, reversed, stayAtLastFrame;
 	private double pauseTime;
 	private double speed;
+	private Procedure animationEndEvent;
 
-	public AnimController()
+	public BBAnimController()
 	{
 		this.speed = 1;
 	}
@@ -83,6 +86,16 @@ public class AnimController
 		this.reversed = reverse;
 	}
 
+	public boolean isStayAtLastFrame()
+	{
+		return stayAtLastFrame;
+	}
+
+	public void setStayAtLastFrame(boolean stayAtLastFrame)
+	{
+		this.stayAtLastFrame = stayAtLastFrame;
+	}
+
 	public void unpuase()
 	{
 		start = start + (System.currentTimeMillis() - pause);
@@ -99,11 +112,23 @@ public class AnimController
 
 	public double calculateTime(long end)
 	{
+		if (!running && !paused && !stayAtLastFrame)
+			return 0;
 		return (double) (end - start) / 1000d;
 	}
 
 	public double getSpeed()
 	{
 		return speed;
+	}
+
+	public Procedure getAnimationEndEvent()
+	{
+		return animationEndEvent;
+	}
+
+	public void setAnimationEndEvent(Procedure animationEndEvent)
+	{
+		this.animationEndEvent = animationEndEvent;
 	}
 }

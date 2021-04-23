@@ -1,8 +1,10 @@
 package steve6472.sge.gfx.game.blockbench.model;
 
-import steve6472.sge.gfx.game.EntityTess;
-import steve6472.sge.gfx.game.Stack;
+import steve6472.sge.gfx.game.blockbench.ModelTextureAtlas;
+import steve6472.sge.gfx.game.stack.BBModelTess;
+import steve6472.sge.gfx.game.stack.Stack;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 /**********************
@@ -11,30 +13,41 @@ import java.util.HashMap;
  * Project: CaveGame
  *
  ***********************/
-public class Model
+public class BBModel
 {
 	private static final float RAD_90 = (float) (-Math.PI / 2.0);
 
 	private OutlinerElement[] elements;
 	private HashMap<String, OutlinerElement> animElements;
 	private final String name;
+	private boolean blockbench = true;
 
-	public Model(String name)
+	public BBModel(ModelTextureAtlas modelTextureAtlas, String name)
 	{
 		this.name = name;
-		reload();
+		reload(modelTextureAtlas);
 	}
 
-	public void reload()
+	public BBModel(String name, OutlinerElement[] elements)
 	{
-		elements = Loader.load(name);
+		this.name = name;
+		this.elements = elements;
+		blockbench = false;
+	}
+
+	public void reload(ModelTextureAtlas modelTextureAtlas)
+	{
+		elements = Loader.load(modelTextureAtlas, name);
 		animElements = Loader.assignElements(elements);
 	}
 
 	public void render(Stack stack)
 	{
-		stack.scale(1f / 16f);
-		stack.rotateY(RAD_90);
+		if (blockbench)
+		{
+			stack.scale(1f / 16f);
+//			stack.rotateY(RAD_90);
+		}
 		for (OutlinerElement el : elements)
 		{
 			if (el instanceof Outliner outliner)
@@ -45,9 +58,13 @@ public class Model
 				rect(stack, element);
 			}
 		}
+		if (blockbench)
+		{
+			stack.scale(16f);
+		}
 	}
 
-	private void render(Stack stack, OutlinerElement el)
+	protected void render(Stack stack, OutlinerElement el)
 	{
 		stack.pushMatrix();
 		stack.translate(-el.positionX, el.positionY, el.positionZ);
@@ -68,7 +85,7 @@ public class Model
 		stack.popMatrix();
 	}
 
-	private void vert0(Element.Face face, EntityTess tess)
+	protected void vert0(Element.Face face, BBModelTess tess)
 	{
 		switch (face.getRotation())
 		{
@@ -80,7 +97,7 @@ public class Model
 		tess.endVertex();
 	}
 
-	private void vert1(Element.Face face, EntityTess tess)
+	protected void vert1(Element.Face face, BBModelTess tess)
 	{
 		switch (face.getRotation())
 		{
@@ -92,7 +109,7 @@ public class Model
 		tess.endVertex();
 	}
 
-	private void vert2(Element.Face face, EntityTess tess)
+	protected void vert2(Element.Face face, BBModelTess tess)
 	{
 		switch (face.getRotation())
 		{
@@ -104,7 +121,7 @@ public class Model
 		tess.endVertex();
 	}
 
-	private void vert3(Element.Face face, EntityTess tess)
+	protected void vert3(Element.Face face, BBModelTess tess)
 	{
 		switch (face.getRotation())
 		{
@@ -116,7 +133,7 @@ public class Model
 		tess.endVertex();
 	}
 
-	private void rect(Stack stack, Element element)
+	protected void rect(Stack stack, Element element)
 	{
 		float x = element.fromX;
 		float y = element.fromY;
@@ -126,7 +143,7 @@ public class Model
 		float h = element.toY - y;
 		float d = element.toZ - z;
 
-		EntityTess tess = stack.getEntityTess();
+		BBModelTess tess = stack.getBlockbenchTess();
 
 		if (element.up != null)
 		{
@@ -212,9 +229,25 @@ public class Model
 
 	}
 
+	@Override
+	public String toString()
+	{
+		return "Model{" + "elements=" + Arrays.toString(elements) + ", animElements=" + animElements + ", name='" + name + '\'' + '}';
+	}
+
 	public String getName()
 	{
 		return name;
+	}
+
+	public void setElements(OutlinerElement[] elements)
+	{
+		this.elements = elements;
+	}
+
+	public void setAnimElements(HashMap<String, OutlinerElement> animElements)
+	{
+		this.animElements = animElements;
 	}
 
 	public OutlinerElement[] getElements()

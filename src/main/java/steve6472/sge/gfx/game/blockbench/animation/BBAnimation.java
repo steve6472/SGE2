@@ -2,9 +2,8 @@ package steve6472.sge.gfx.game.blockbench.animation;
 
 import org.joml.Vector3f;
 import org.json.JSONObject;
-import steve6472.sge.gfx.game.blockbench.animation.AnimLoader.Bone;
+import steve6472.sge.gfx.game.blockbench.model.BBModel;
 import steve6472.sge.gfx.game.blockbench.model.Loader;
-import steve6472.sge.gfx.game.blockbench.model.Model;
 import steve6472.sge.gfx.game.blockbench.model.OutlinerElement;
 import steve6472.sge.main.util.MathUtil;
 import steve6472.sge.main.util.Pair;
@@ -19,23 +18,28 @@ import java.util.List;
  * Project: CaveGame
  *
  ***********************/
-public class Animation
+public class BBAnimation
 {
 	private static final Vector3f TEMP = new Vector3f();
 
 	private final String path, name;
-	private final Model model;
+	private final BBModel model;
 
 	private final List<Bone> bones;
 	private double dLength;
 
-	public Animation(String path, String name, Model model)
+	public BBAnimation(String path, String name, BBModel model)
 	{
 		this.path = path;
 		this.name = name;
 		this.model = model;
 		this.bones = new ArrayList<>();
 		reload();
+	}
+
+	public BBAnimation(String path, String name)
+	{
+		this(path, name, null);
 	}
 
 	public void reload()
@@ -45,7 +49,12 @@ public class Animation
 		dLength = AnimLoader.load(jsonObject.getJSONObject("animations").getJSONObject(name), bones);
 	}
 
-	public void tick(AnimController controller)
+	public void tick(BBAnimController controller)
+	{
+		tick(controller, model);
+	}
+
+	public void tick(BBAnimController controller, BBModel model)
 	{
 		double time;
 
@@ -109,6 +118,8 @@ public class Animation
 
 		if (time >= dLength)
 		{
+			if (controller.getAnimationEndEvent() != null)
+				controller.getAnimationEndEvent().process();
 			if (controller.isLooping())
 				controller.start();
 			else
@@ -250,7 +261,7 @@ public class Animation
 		return name;
 	}
 
-	public Model getModel()
+	public BBModel getModel()
 	{
 		return model;
 	}

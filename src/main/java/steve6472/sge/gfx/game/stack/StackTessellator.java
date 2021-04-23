@@ -1,4 +1,4 @@
-package steve6472.sge.gfx.game;
+package steve6472.sge.gfx.game.stack;
 
 import org.joml.Vector3f;
 import steve6472.sge.gfx.AbstractTessellator;
@@ -146,5 +146,25 @@ public class StackTessellator extends AbstractTessellator
 		color.clear();
 		texture.clear();
 		normal.clear();
+	}
+
+	public FloatBuffer getPos()
+	{
+		return pos;
+	}
+
+	public FloatBuffer getColor()
+	{
+		return color;
+	}
+
+	public FloatBuffer getTexture()
+	{
+		return texture;
+	}
+
+	public FloatBuffer getNormal()
+	{
+		return normal;
 	}
 }

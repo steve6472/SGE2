@@ -69,6 +69,19 @@ public class VertexObjectCreator
 		return vboID;
 	}
 
+	public static int storeFloatDataInAttributeList(int attributeNumber, int size, FloatBuffer data)
+	{
+		int vboID = glGenBuffers();
+		vbos.add(vboID);
+		final FloatBuffer buffer = data.duplicate();
+		buffer.flip();
+		glBindBuffer(GL_ARRAY_BUFFER, vboID);
+		glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
+		glVertexAttribPointer(attributeNumber, size, GL_FLOAT, false, 0, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		return vboID;
+	}
+
 	public static void storeFloatDataInAttributeList(int attributeNumber, int size, int vboId, float[] data)
 	{
 		FloatBuffer buffer = toFloatBuffer(data);
