@@ -3,7 +3,7 @@ package steve6472.sge.test.test3d;
 import org.joml.Matrix4f;
 import org.joml.Vector2d;
 import steve6472.sge.gfx.font.Font;
-import steve6472.sge.gfx.game.Stack;
+import steve6472.sge.gfx.game.stack.Stack;
 import steve6472.sge.gfx.shaders.Shader;
 import steve6472.sge.main.KeyList;
 import steve6472.sge.main.events.Event;
@@ -139,7 +139,7 @@ public class Topdown implements Itest
 		stack.translate(0, (float) ((playerLocation.y + 1)), 0);
 		stack.rotate((float) Math.toRadians(45), 1, 0, 0);
 		stack.scale(1, 1, (float) Math.sqrt(2));
-		stack.getEntityTess().rectangle(1, 1, facing.startIndex + (animTime / 60) % 3);
+		stack.getBlockbenchTess().rectangle(1, 1, facing.startIndex + (animTime / 60) % 3);
 		stack.popMatrix();
 
 		for (int i = 0; i < 36; i++)
@@ -153,38 +153,40 @@ public class Topdown implements Itest
 		}
 
 		int groundSize = 6;
-		stack.getEntityTess().color(1, 1, 1, 0.1f);
-		stack.getEntityTess().box(-groundSize / 2f, -1, -groundSize / 2f, groundSize, 0, groundSize);
+		stack.getBlockbenchTess().color(1, 1, 1, 0.1f);
+		stack.getBlockbenchTess().box(-groundSize / 2f, -1, -groundSize / 2f, groundSize, 0, groundSize);
 
-		stack.getEntityTess().color(0.1f, 0.1f, 0.1f, 0.3f);
+		stack.getBlockbenchTess().color(0.1f, 0.1f, 0.1f, 0.3f);
 
 		for (float i = 0; i < groundSize; i++)
 		{
 			if (i == 0)
 			{
-				stack.getEntityTess().color(0.1f, 0.1f, 0.8f, 0.3f);
-				stack.getEntityTess().box(-groundSize / 2f + i, -0.999f, -groundSize / 2f, 0.1f, 0, groundSize);
-				stack.getEntityTess().color(0.8f, 0.1f, 0.1f, 0.3f);
-				stack.getEntityTess().box(-groundSize / 2f, -0.999f, -groundSize / 2f, groundSize, 0, 0.1f);
-				stack.getEntityTess().color(0.1f, 0.1f, 0.1f, 0.3f);
+				stack.getBlockbenchTess().color(0.1f, 0.1f, 0.8f, 0.3f);
+				stack.getBlockbenchTess().box(-groundSize / 2f + i, -0.999f, -groundSize / 2f, 0.1f, 0, groundSize);
+				stack.getBlockbenchTess().color(0.8f, 0.1f, 0.1f, 0.3f);
+				stack.getBlockbenchTess().box(-groundSize / 2f, -0.999f, -groundSize / 2f, groundSize, 0, 0.1f);
+				stack.getBlockbenchTess().color(0.1f, 0.1f, 0.1f, 0.3f);
 				continue;
 			}
-			stack.getEntityTess().box(-groundSize / 2f + i, -0.999f, -groundSize / 2f, 0.1f, 0, groundSize);
-			stack.getEntityTess().box(-groundSize / 2f, -0.999f, groundSize / 2f - i, groundSize, 0, 0.1f);
+			stack.getBlockbenchTess().box(-groundSize / 2f + i, -0.999f, -groundSize / 2f, 0.1f, 0, groundSize);
+			stack.getBlockbenchTess().box(-groundSize / 2f, -0.999f, groundSize / 2f - i, groundSize, 0, 0.1f);
 		}
 
 		if (enable3D)
 		{
 			//			camera3D.setYaw((float) Math.sin(Math.toRadians((System.currentTimeMillis() % 3600) / 10f)));
 			camera3D.setPitch((float) Math.toRadians(-70));
-			camera3D.calculateOrbit((float) playerLocation.x, (float) ((playerLocation.y + 1)), (float) playerLocation.y, 10);
+			camera3D.setPosition((float) playerLocation.x, (float) ((playerLocation.y + 1)), (float) playerLocation.y);
+			camera3D.calculateOrbit(10);
 			//			camera3D.calculateOrbit((float) playerLocation.x, 0, (float) playerLocation.y, 10);
 
 			camera3D.updateViewMatrix();
 		} else
 		{
 			camera2D.setPitch((float) Math.toRadians(-90));
-			camera2D.calculateOrbit((float) playerLocation.x / scale, 0, (float) playerLocation.y / scale, 120);
+			camera3D.setPosition((float) playerLocation.x / scale, 0, (float) playerLocation.y / scale);
+			camera2D.calculateOrbit(120);
 
 			camera2D.updateViewMatrix();
 		}
@@ -194,7 +196,7 @@ public class Topdown implements Itest
 
 	public void render()
 	{
-		stack.render(enable3D ? camera3D.getViewMatrix() : camera2D.getViewMatrix());
+//		stack.render(enable3D ? camera3D.getViewMatrix() : camera2D.getViewMatrix(), Test3D.debugAtlas);
 
 		glDisable(GL_DEPTH_TEST);
 		glDisable(GL_CULL_FACE);
@@ -221,7 +223,7 @@ public class Topdown implements Itest
 			stack.translate(x, 1 + y, y);
 			stack.rotate((float) Math.toRadians(45), 1, 0, 0);
 			stack.scale(1, 1, (float) Math.sqrt(2));
-			stack.getEntityTess().rectangle(1, 1, tile.getIndex(state));
+			stack.getBlockbenchTess().rectangle(1, 1, tile.getIndex(state));
 			stack.popMatrix();
 		} else
 		{
@@ -230,7 +232,7 @@ public class Topdown implements Itest
 			stack.translate(x, y - 1, y);
 			stack.rotate((float) Math.toRadians(-45), 1, 0, 0);
 			stack.scale(1, 1, (float) Math.sqrt(2));
-			stack.getEntityTess().rectangle(1, 1, tile.getIndex(state));
+			stack.getBlockbenchTess().rectangle(1, 1, tile.getIndex(state));
 			stack.popMatrix();
 		}
 	}

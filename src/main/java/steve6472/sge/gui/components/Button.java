@@ -18,7 +18,6 @@ import java.util.function.Function;
 
 public class Button extends Component implements IScheme<SchemeButton>
 {
-	private static final long serialVersionUID = -4734082970298391201L;
 	private int fontSize = 1;
 
 	protected boolean enabled = true, hovered = false;

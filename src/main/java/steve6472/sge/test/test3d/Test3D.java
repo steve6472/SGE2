@@ -1,6 +1,7 @@
 package steve6472.sge.test.test3d;
 
 import steve6472.sge.gfx.StaticTexture;
+import steve6472.sge.gfx.shaders.BBShader;
 import steve6472.sge.main.MainApp;
 import steve6472.sge.main.MainFlags;
 import steve6472.sge.main.Window;
@@ -13,10 +14,10 @@ import steve6472.sge.main.Window;
  ***********************/
 public class Test3D extends MainApp
 {
-	public static EntityShader entityShader;
+	public static BBShader entityShader;
 	public static StaticTexture debugAtlas;
 
-	private Itest game;
+//	private Itest game;
 
 	@Override
 	public void init()
@@ -25,17 +26,17 @@ public class Test3D extends MainApp
 
 		debugAtlas = StaticTexture.fromTexture("game/debug_atlas.png");
 
-		entityShader = new EntityShader();
+		entityShader = new BBShader();
 		entityShader.bind();
-		entityShader.setUniform(EntityShader.ATLAS, 0);
+		entityShader.setUniform(BBShader.ATLAS, 0);
 
-		game = new Topdown(this);
+//		game = new Robotest(this);
 	}
 
 	@Override
 	public void tick()
 	{
-		game.tick();
+//		game.tick();
 	}
 
 	@Override
@@ -47,7 +48,7 @@ public class Test3D extends MainApp
 	@Override
 	public void render()
 	{
-		game.render();
+//		game.render();
 	}
 
 	@Override

@@ -1,17 +1,15 @@
 package steve6472.sge.gui;
 
-import steve6472.sge.main.events.AbstractEvent;
 import steve6472.sge.main.*;
+import steve6472.sge.main.events.AbstractEvent;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-public abstract class Component implements Serializable
+public abstract class Component
 {
-	private static final long serialVersionUID = 62938822794527605L;
 	private boolean isVisible = true;
 	protected int x, y, width, height, relx, rely;
 	private List<Component> components = new ArrayList<>();
