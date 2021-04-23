@@ -85,6 +85,8 @@ public abstract class AbstractNode
 		if (outputConnections[outputIndex] != null)
 		{
 			outputConnections[outputIndex].getList().removeIf(c -> c.getNode() == node && c.getIndex() == inputIndex);
+			if (outputConnections[outputIndex].getList().isEmpty())
+				outputConnections[outputIndex] = null;
 		}
 	}
 
@@ -142,12 +144,17 @@ public abstract class AbstractNode
 			return;
 		}
 
-		//		for (Pair<AbstractNode, Integer> p : outputConnections.get(index))
-		//		{
-		//			p.getA().flowRun();
-		//		}
-		//		outputConnections.get(index).forEach(p -> p.getA().flowRun());
-		outputConnections[index].getList().get(0).getNode().flowRun();
+		if (NodeJoint.ENABLE_MULTIFLOW)
+		{
+			for (NodePair nodePair : outputConnections[index].getList())
+			{
+				nodePair.getNode().flowRun();
+			}
+		}
+		else
+		{
+			outputConnections[index].getList().get(0).getNode().flowRun();
+		}
 	}
 
 	public void printStates()

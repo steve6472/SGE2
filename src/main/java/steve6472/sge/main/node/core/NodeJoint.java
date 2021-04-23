@@ -2,11 +2,15 @@ package steve6472.sge.main.node.core;
 
 import steve6472.sge.gfx.SpriteRender;
 import steve6472.sge.gfx.font.Font;
+import steve6472.sge.gui.Component;
 import steve6472.sge.gui.components.Button;
 import steve6472.sge.gui.components.ToggleButton;
+import steve6472.sge.main.KeyList;
 import steve6472.sge.main.Log;
+import steve6472.sge.main.node.nodes.gui.ConstantDialog;
 import steve6472.sge.main.util.Pair;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /**********************
@@ -17,12 +21,12 @@ import java.util.function.Consumer;
  ***********************/
 public class NodeJoint extends ToggleButton
 {
-	private static final boolean ENABLE_MULTIFLOW = false;
+	public static boolean ENABLE_MULTIFLOW = false;
 
 	private final AbstractNode node;
 	private final int index;
 	private final boolean isInput;
-	private final JointType type;
+	private final JointType<?> type;
 
 	private Consumer<Button> createToggle()
 	{
@@ -30,6 +34,7 @@ public class NodeJoint extends ToggleButton
 		{
 			Pair<AbstractNode, NodeJoint> from = Nodes.selectedFrom;
 
+			// Disconnecting inputs
 			if (from == null && isInput && node.hasInput(index))
 			{
 				Nodes.disconnect(node, index);
@@ -112,7 +117,7 @@ public class NodeJoint extends ToggleButton
 		};
 	}
 
-	public NodeJoint(AbstractNode node, int index, boolean isInput, String text, JointType type)
+	public NodeJoint(AbstractNode node, int index, boolean isInput, String text, JointType<?> type)
 	{
 		super(text);
 		this.node = node;
@@ -120,6 +125,52 @@ public class NodeJoint extends ToggleButton
 		this.isInput = isInput;
 		this.type = type;
 		this.addClickEvent(createToggle());
+	}
+
+	@Override
+	public void tick()
+	{
+		super.tick();
+
+		if (isVisible() && enabled && isInput)
+		{
+			onMouseClicked_(b -> {
+
+				if (type.parse == null)
+					return;
+
+				ConstantDialog<?> intConst = new ConstantDialog<>(type.example, type.parse, i -> node.updateInputState(index, i));
+				getMain().showDialog(intConst);
+				intConst.center();
+			});
+		}
+	}
+
+	private boolean flag_;
+
+	private void onMouseClicked_(final Consumer<Component> action)
+	{
+		Objects.requireNonNull(action);
+		if (isCursorInComponent())
+		{
+			if (!flag_)
+			{
+				if (getMain().getMouseHandler().getButton() == KeyList.RMB)
+				{
+					flag_ = true;
+				}
+			} else
+			{
+				if (getMain().getMouseHandler().getButton() != KeyList.RMB)
+				{
+					flag_ = false;
+					action.accept(this);
+				}
+			}
+		} else
+		{
+			flag_ = false;
+		}
 	}
 
 	protected void renderText()

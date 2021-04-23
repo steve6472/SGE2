@@ -40,12 +40,12 @@ public class Log
 	public static void debug(String text)
 	{
 		if (PRINT_DEBUG)
-			System.out.println(BRIGHT_WHITE + text);
+			System.out.println(BRIGHT_WHITE + text + WHITE);
 	}
 
 	public static void err(String text)
 	{
 		if (PRINT_ERROR)
-			System.out.println(RED + text);
+			System.out.println(RED + text + WHITE);
 	}
 }
