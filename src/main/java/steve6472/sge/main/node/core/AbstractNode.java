@@ -24,6 +24,8 @@ public abstract class AbstractNode
 	protected Object[] inputStates;
 	protected Object[] outputStates;
 
+	private boolean[] inputManual;
+
 	protected GuiNode guiNode;
 	// Used when converting from gui -> normal and back
 	protected int guiX, guiY;
@@ -34,6 +36,7 @@ public abstract class AbstractNode
 
 		inputStates = new Object[inputData.getSize()];
 		outputStates = new Object[outputData.getSize()];
+		inputManual = new boolean[inputData.getSize()];
 
 		uuid = UUID.randomUUID();
 
@@ -56,6 +59,7 @@ public abstract class AbstractNode
 
 		inputStates = new Object[this.inputData.getSize()];
 		outputStates = new Object[this.outputData.getSize()];
+		inputManual = new boolean[this.inputData.getSize()];
 
 		uuid = UUID.randomUUID();
 
@@ -187,9 +191,26 @@ public abstract class AbstractNode
 		if (!Objects.equals(inputStates[index], state))
 		{
 			inputStates[index] = state;
+			inputManual[index] = false;
 			updateOutputState();
 			updateOutputs();
 		}
+	}
+
+	public void updateInputStateManual(int index, Object state)
+	{
+		if (!Objects.equals(inputStates[index], state))
+		{
+			inputStates[index] = state;
+			inputManual[index] = true;
+			updateOutputState();
+			updateOutputs();
+		}
+	}
+
+	public boolean isManual(int inputIndex)
+	{
+		return inputManual[inputIndex];
 	}
 
 	protected abstract void updateOutputState();

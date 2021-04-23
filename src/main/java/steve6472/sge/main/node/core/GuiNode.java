@@ -1,5 +1,6 @@
 package steve6472.sge.main.node.core;
 
+import steve6472.sge.gfx.SpriteRender;
 import steve6472.sge.gfx.font.Font;
 import steve6472.sge.gui.Component;
 import steve6472.sge.gui.components.Button;
@@ -183,7 +184,18 @@ public class GuiNode extends AdvancedMoveableDialog
 
 			for (int i = 0; i < node.inputConnections.length; i++)
 			{
-				Font.render(getX() - 2 - Font.getTextWidth("" + node.inputStates[i], 1), 25 + i * 20 + getY(), "" + node.inputStates[i]);
+				Font.render(getX() - 3 - Font.getTextWidth("" + node.inputStates[i], 1), 29 + i * 20 + getY(), "" + node.inputStates[i]);
+			}
+		}
+
+		for (int i = 0; i < node.inputConnections.length; i++)
+		{
+			if (node.isManual(i))
+			{
+				final int textWidth = Font.getTextWidth("" + node.inputStates[i], 1);
+				SpriteRender.fillRect(getX() - 7 - textWidth, 25 + i * 20 + getY(), textWidth + 7, 16, 0.25f, 0.25f, 0.25f, 1f);
+				SpriteRender.renderBorder(getX() - 9 - textWidth, 23 + i * 20 + getY(), textWidth + 11, 20, 0, 0, 0, 1f);
+				Font.render(getX() - 3 - textWidth, 29 + i * 20 + getY(), "" + node.inputStates[i]);
 			}
 		}
 	}

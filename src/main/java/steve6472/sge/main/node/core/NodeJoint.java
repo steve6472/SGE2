@@ -139,7 +139,7 @@ public class NodeJoint extends ToggleButton
 				if (type.parse == null)
 					return;
 
-				ConstantDialog<?> intConst = new ConstantDialog<>(type.example, type.parse, i -> node.updateInputState(index, i));
+				ConstantDialog<?> intConst = new ConstantDialog<>(type.example, type.parse, i -> node.updateInputStateManual(index, i));
 				getMain().showDialog(intConst);
 				intConst.center();
 			});
