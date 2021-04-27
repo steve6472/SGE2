@@ -16,7 +16,7 @@ import steve6472.sge.gfx.shaders.StaticShader3D;
  ***********************/
 public class LineTess extends StackTess
 {
-	private static final int MAX_SIZE = 1024 * 8;
+	private static final int MAX_SIZE = 1024 * 32;
 
 	private final LineTessellator tess;
 	private final Vector3f dest3f;
