@@ -1,6 +1,5 @@
 package steve6472.sge.test.test3d;
 
-import org.joml.Matrix4f;
 import org.joml.Vector2d;
 import steve6472.sge.gfx.font.Font;
 import steve6472.sge.gfx.game.stack.Stack;
@@ -10,7 +9,6 @@ import steve6472.sge.main.events.Event;
 import steve6472.sge.main.events.KeyEvent;
 import steve6472.sge.main.game.Camera;
 import steve6472.sge.main.game.stateengine.State;
-import steve6472.sge.main.util.MathUtil;
 import steve6472.sge.test.test3d.tiles.DoorTile;
 import steve6472.sge.test.test3d.tiles.Tile;
 
@@ -111,7 +109,7 @@ public class Topdown implements Itest
 	}
 
 	public void tick()
-	{
+	{/*
 		float aspectRatio = main.getWindowWidth() / (float) main.getWindowHeight();
 		Test3D.entityShader.bind();
 
@@ -191,7 +189,7 @@ public class Topdown implements Itest
 			camera2D.updateViewMatrix();
 		}
 
-		movePlayer();
+		movePlayer();*/
 	}
 
 	public void render()
@@ -213,7 +211,7 @@ public class Topdown implements Itest
 	}
 
 	private void renderTile(State state, int x, int y)
-	{
+	{/*
 		final Tile tile = (Tile) state.getObject();
 
 		if (tile.isWall())
@@ -234,7 +232,7 @@ public class Topdown implements Itest
 			stack.scale(1, 1, (float) Math.sqrt(2));
 			stack.getBlockbenchTess().rectangle(1, 1, tile.getIndex(state));
 			stack.popMatrix();
-		}
+		}*/
 	}
 
 	private void movePlayer()

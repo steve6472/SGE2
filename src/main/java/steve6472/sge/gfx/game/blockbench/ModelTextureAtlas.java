@@ -43,10 +43,7 @@ public class ModelTextureAtlas
 	{
 		for (BBModel model : models)
 		{
-			for (OutlinerElement element : model.getElements())
-			{
-				recursiveAssignTextures(element);
-			}
+			assignTextures(model);
 		}
 	}
 
@@ -113,7 +110,7 @@ public class ModelTextureAtlas
 			} catch (RuntimeException ex)
 			{
 				int newSize = size << 1;
-				System.out.println("Image did not fit, incresing size to " + newSize);
+//				System.out.println("Image did not fit, incresing size to " + newSize);
 				compileTextures(newSize);
 				return;
 			}
@@ -168,9 +165,18 @@ public class ModelTextureAtlas
 		{
 			return usedTexturesReference.get(name);
 		} catch (Exception ex) {
-			System.err.println(name);ex.printStackTrace();
+			System.err.println(name);
+			ex.printStackTrace();
 		}
 		return 0;
+	}
+
+	public void clean()
+	{
+		atlas.clean();
+		textures = null;
+		usedTextures.clear();
+		usedTexturesReference.clear();
 	}
 
 	public Rectangle getTexture(int texture)

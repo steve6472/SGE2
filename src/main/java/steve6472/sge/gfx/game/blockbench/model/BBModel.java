@@ -1,7 +1,7 @@
 package steve6472.sge.gfx.game.blockbench.model;
 
 import steve6472.sge.gfx.game.blockbench.ModelTextureAtlas;
-import steve6472.sge.gfx.game.stack.BBModelTess;
+import steve6472.sge.gfx.game.stack.tess.BBTess;
 import steve6472.sge.gfx.game.stack.Stack;
 
 import java.util.Arrays;
@@ -20,7 +20,6 @@ public class BBModel
 	private OutlinerElement[] elements;
 	private HashMap<String, OutlinerElement> animElements;
 	private final String name;
-	private boolean blockbench = true;
 
 	public BBModel(ModelTextureAtlas modelTextureAtlas, String name)
 	{
@@ -32,7 +31,6 @@ public class BBModel
 	{
 		this.name = name;
 		this.elements = elements;
-		blockbench = false;
 	}
 
 	public void reload(ModelTextureAtlas modelTextureAtlas)
@@ -43,28 +41,22 @@ public class BBModel
 
 	public void render(Stack stack)
 	{
-		if (blockbench)
-		{
-			stack.scale(1f / 16f);
-//			stack.rotateY(RAD_90);
-		}
+		stack.scale(1f / 16f);
+		BBTess tess = (BBTess) stack.getRenderType("blockbench").getTess();
 		for (OutlinerElement el : elements)
 		{
 			if (el instanceof Outliner outliner)
 			{
-				render(stack, outliner);
+				render(stack, tess, outliner);
 			} else if (el instanceof Element element)
 			{
-				rect(stack, element);
+				rect(tess, element);
 			}
 		}
-		if (blockbench)
-		{
-			stack.scale(16f);
-		}
+		stack.scale(16f);
 	}
 
-	protected void render(Stack stack, OutlinerElement el)
+	protected void render(Stack stack, BBTess tess, OutlinerElement el)
 	{
 		stack.pushMatrix();
 		stack.translate(-el.positionX, el.positionY, el.positionZ);
@@ -76,16 +68,16 @@ public class BBModel
 		{
 			for (OutlinerElement child : outliner.children)
 			{
-				render(stack, child);
+				render(stack, tess, child);
 			}
 		} else if (el instanceof Element element)
 		{
-			rect(stack, element);
+			rect(tess, element);
 		}
 		stack.popMatrix();
 	}
 
-	protected void vert0(Element.Face face, BBModelTess tess)
+	protected void vert0(Element.Face face, BBTess tess)
 	{
 		switch (face.getRotation())
 		{
@@ -97,7 +89,7 @@ public class BBModel
 		tess.endVertex();
 	}
 
-	protected void vert1(Element.Face face, BBModelTess tess)
+	protected void vert1(Element.Face face, BBTess tess)
 	{
 		switch (face.getRotation())
 		{
@@ -109,7 +101,7 @@ public class BBModel
 		tess.endVertex();
 	}
 
-	protected void vert2(Element.Face face, BBModelTess tess)
+	protected void vert2(Element.Face face, BBTess tess)
 	{
 		switch (face.getRotation())
 		{
@@ -121,7 +113,7 @@ public class BBModel
 		tess.endVertex();
 	}
 
-	protected void vert3(Element.Face face, BBModelTess tess)
+	protected void vert3(Element.Face face, BBTess tess)
 	{
 		switch (face.getRotation())
 		{
@@ -133,7 +125,7 @@ public class BBModel
 		tess.endVertex();
 	}
 
-	protected void rect(Stack stack, Element element)
+	protected void rect(BBTess tess, Element element)
 	{
 		float x = element.fromX;
 		float y = element.fromY;
@@ -142,8 +134,6 @@ public class BBModel
 		float w = element.toX - x;
 		float h = element.toY - y;
 		float d = element.toZ - z;
-
-		BBModelTess tess = stack.getBlockbenchTess();
 
 		if (element.up != null)
 		{

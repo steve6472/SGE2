@@ -2,10 +2,10 @@ package steve6472.sge.test.test3d;
 
 import steve6472.sge.gfx.font.Font;
 import steve6472.sge.gfx.game.blockbench.ModelTextureAtlas;
-import steve6472.sge.gfx.game.stack.Stack;
 import steve6472.sge.gfx.game.blockbench.animation.BBAnimController;
 import steve6472.sge.gfx.game.blockbench.animation.BBAnimation;
 import steve6472.sge.gfx.game.blockbench.model.BBModel;
+import steve6472.sge.gfx.game.stack.Stack;
 import steve6472.sge.gfx.shaders.Shader;
 import steve6472.sge.main.game.Camera;
 import steve6472.sge.main.util.MathUtil;

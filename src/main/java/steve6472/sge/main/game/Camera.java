@@ -128,4 +128,10 @@ public class Camera implements IPosition3f
 	{
 		return viewPosition;
 	}
+
+	@Override
+	public String toString()
+	{
+		return "Camera{" + "viewPosition=" + viewPosition + ", center=" + center + ", yaw=" + yaw + ", pitch=" + pitch + ", roll=" + roll + '}';
+	}
 }

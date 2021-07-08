@@ -1,0 +1,33 @@
+{"nodes": [
+    {
+        "outputs": [42],
+        "inputs": [],
+        "extra": {"constant": 42},
+        "x": 344,
+        "manual_inputs": [],
+        "y": 214,
+        "id": "constant:int",
+        "uuid": "77b4a083-56fa-42fe-ad6e-6a7e322f3eb9",
+        "connections": {}
+    },
+    {
+        "outputs": [],
+        "inputs": [7],
+        "x": 539,
+        "manual_inputs": [true],
+        "y": 155,
+        "id": "print:int",
+        "uuid": "df28daff-1623-43ad-9f54-0249c13d8e3a",
+        "connections": {}
+    },
+    {
+        "outputs": [],
+        "inputs": [42],
+        "x": 537,
+        "manual_inputs": [false],
+        "y": 241,
+        "id": "print:int",
+        "uuid": "9f78faed-acd0-4562-90fa-086b6eebfaf9",
+        "connections": {"77b4a083-56fa-42fe-ad6e-6a7e322f3eb9": [0, 0]}
+    }
+]}

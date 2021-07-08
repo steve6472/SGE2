@@ -59,7 +59,7 @@
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.19655173" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -77,11 +77,11 @@
       <recent name="steve6472.sge.test.test3d.tiles" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="steve6472.sge.gfx.game.stack.A" />
       <recent name="steve6472.sge.main.node.nodes.gui" />
       <recent name="steve6472.sge.main.node.nodes.logic" />
       <recent name="steve6472.sge.main.node.nodes" />
       <recent name="steve6472.sge.test.codec" />
-      <recent name="steve6472.sge.gfx.shaders" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -90,9 +90,9 @@
       <command value="&quot;C:\Program Files\Java\jdk-14\bin\java.exe&quot; --enable-preview -Dorg.lwjgl.util.Debug=true &quot;-javaagent:D:\IntelliJ IDEA Community Edition 201.6487.11\lib\idea_rt.jar=54804:D:\IntelliJ IDEA Community Edition 201.6487.11\bin&quot; -Dfile.encoding=UTF-8 -classpath D:\StevesGameEngine\target\classes;C:\Users\Steve\.m2\repository\org\lwjgl\lwjgl\3.2.1\lwjgl-3.2.1.jar;C:\Users\Steve\.m2\repository\org\lwjgl\lwjgl-glfw\3.1.0\lwjgl-glfw-3.1.0.jar;C:\Users\Steve\.m2\repository\org\lwjgl\lwjgl-opengl\3.1.0\lwjgl-opengl-3.1.0.jar;C:\Users\Steve\.m2\repository\org\joml\joml\1.9.22\joml-1.9.22.jar;C:\Users\Steve\.m2\repository\steve6472\save-system\1.0-SNAPSHOT\save-system-1.0-SNAPSHOT.jar steve6472.sge.test.Test " />
     </option>
   </component>
-  <component name="RunManager" selected="Application.NodeTestMain">
-    <configuration name="BinaryCalculator" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="steve6472.sge.test.BinaryCalculator" />
+  <component name="RunManager" selected="Application.BlockbenchRenderTest">
+    <configuration name="BlockbenchRenderTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="steve6472.sge.test.BlockbenchRenderTest" />
       <module name="StevesGameEngine" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -155,11 +155,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.NodeTestMain" />
+        <item itemvalue="Application.BlockbenchRenderTest" />
         <item itemvalue="Application.Test" />
-        <item itemvalue="Application.CodecTest" />
         <item itemvalue="Application.Test3D" />
-        <item itemvalue="Application.BinaryCalculator" />
+        <item itemvalue="Application.NodeTestMain" />
+        <item itemvalue="Application.CodecTest" />
       </list>
     </recent_temporary>
   </component>

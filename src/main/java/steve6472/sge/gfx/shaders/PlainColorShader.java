@@ -6,11 +6,11 @@ package steve6472.sge.gfx.shaders;
  * Project: NoiseGenerator
  *
  ***********************/
-public class LineShader extends StaticShader3D
+public class PlainColorShader extends StaticShader3D
 {
-	public LineShader()
+	public PlainColorShader()
 	{
-		super("game/3d/line");
+		super("game/3d/plain_color");
 	}
 
 	@Override

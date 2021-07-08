@@ -15,6 +15,8 @@ import java.util.regex.Pattern;
  ***********************/
 public class MathUtil
 {
+	public static final float INV_255 = 1f / 255f;
+
 	private static final float FLOAT_COMPARE_PRECISION = 0.00000001f;
 	private static final Pattern IS_DECIMAL = Pattern.compile("([+-]?\\d*(\\.\\d+)?)+");
 	private static final Pattern IS_INTEGER = Pattern.compile("([+-]?\\d)+");

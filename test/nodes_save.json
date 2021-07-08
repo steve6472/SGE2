@@ -1,0 +1,17 @@
+{"nodes": [
+    {
+        "outputs": [42],
+        "inputs": [],
+        "extra": {"constant": 42},
+        "id": "constant:int",
+        "uuid": "d5223319-4c41-42f8-abb6-8d9e4995c337",
+        "connections": {}
+    },
+    {
+        "outputs": [],
+        "inputs": [42],
+        "id": "print:int",
+        "uuid": "941bccd0-ea92-476c-9f00-dca72503295d",
+        "connections": {"d5223319-4c41-42f8-abb6-8d9e4995c337": [0, 0]}
+    }
+]}

@@ -2,46 +2,50 @@ package steve6472.sge.gfx.game.stack;
 
 import org.joml.Matrix4f;
 import org.joml.Matrix4fStack;
-import steve6472.sge.gfx.StaticTexture;
-import steve6472.sge.gfx.shaders.StaticShader3D;
+
+import java.util.HashMap;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
- * On date: 4/3/2021
+ * On date: 7/7/2021
  * Project: StevesGameEngine
  *
  ***********************/
 public class Stack extends Matrix4fStack
 {
-	private final BBModelTess blockbenchTess;
-	private final LineTess lineTess;
+	public final HashMap<String, RenderType> renderTypes = new HashMap<>();
 
 	public Stack()
 	{
 		super(16);
-		blockbenchTess = new BBModelTess(this);
-		lineTess = new LineTess(this);
 	}
 
-	public void render(Matrix4f view, StaticShader3D bbShader, StaticTexture bbTexture, StaticShader3D lineShader)
+	public void addRenderType(String id, RenderType renderType)
 	{
-		blockbenchTess.render(view, bbShader, bbTexture);
-		lineTess.render(view, lineShader, null);
+		if (renderTypes.containsKey(id))
+			throw new IllegalArgumentException("Duplicate render type id:" + id);
+
+		renderTypes.put(id, renderType);
+	}
+
+	public RenderType getRenderType(String id)
+	{
+		return renderTypes.get(id);
+	}
+
+	public void render(Matrix4f view)
+	{
+		for (RenderType value : renderTypes.values())
+		{
+			value.render(view);
+		}
 	}
 
 	public void reset()
 	{
-		blockbenchTess.reset();
-		lineTess.reset();
-	}
-
-	public BBModelTess getBlockbenchTess()
-	{
-		return blockbenchTess;
-	}
-
-	public LineTess getLineTess()
-	{
-		return lineTess;
+		for (RenderType value : renderTypes.values())
+		{
+			value.reset();
+		}
 	}
 }
