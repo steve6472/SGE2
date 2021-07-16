@@ -6,31 +6,6 @@ package steve6472.sge.main.util;
  * Project: SJP
  *
  ***********************/
-public class Triple<A, B, C>
+public record Triple<A, B, C>(A a, B b, C c)
 {
-	private final A a;
-	private final B b;
-	private final C c;
-
-	public Triple(A a, B b, C c)
-	{
-		this.a = a;
-		this.b = b;
-		this.c = c;
-	}
-
-	public A getA()
-	{
-		return a;
-	}
-
-	public B getB()
-	{
-		return b;
-	}
-	
-	public C getC()
-	{
-		return c;
-	}
 }

@@ -3,6 +3,7 @@ package steve6472.sge.gfx.game.blockbench.model;
 import steve6472.sge.gfx.game.blockbench.ModelTextureAtlas;
 import steve6472.sge.gfx.game.stack.tess.BBTess;
 import steve6472.sge.gfx.game.stack.Stack;
+import steve6472.sge.gfx.game.voxelizer.VoxLayers;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -15,8 +16,6 @@ import java.util.HashMap;
  ***********************/
 public class BBModel
 {
-	private static final float RAD_90 = (float) (-Math.PI / 2.0);
-
 	private OutlinerElement[] elements;
 	private HashMap<String, OutlinerElement> animElements;
 	private final String name;
@@ -27,16 +26,39 @@ public class BBModel
 		reload(modelTextureAtlas);
 	}
 
+	public BBModel(ModelTextureAtlas modelTextureAtlas, String name, VoxLayers layers)
+	{
+		this.name = name;
+		reload(modelTextureAtlas, layers);
+	}
+
 	public BBModel(String name, OutlinerElement[] elements)
 	{
 		this.name = name;
 		this.elements = elements;
 	}
 
+	public BBModel(OutlinerElement[] elements)
+	{
+		this(null, elements);
+	}
+
 	public void reload(ModelTextureAtlas modelTextureAtlas)
 	{
-		elements = Loader.load(modelTextureAtlas, name);
-		animElements = Loader.assignElements(elements);
+		if (name != null)
+		{
+			elements = Loader.load(modelTextureAtlas, name);
+			animElements = Loader.assignElements(elements);
+		}
+	}
+
+	public void reload(ModelTextureAtlas modelTextureAtlas, VoxLayers layers)
+	{
+		if (name != null)
+		{
+			elements = Loader.load(modelTextureAtlas, name, layers);
+			animElements = Loader.assignElements(elements);
+		}
 	}
 
 	public void render(Stack stack)

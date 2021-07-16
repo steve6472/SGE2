@@ -13,6 +13,7 @@ import java.io.IOException;
  * Project: SGE2
  *
  ***********************/
+@Deprecated(forRemoval = true)
 public class Atlas
 {
 	private Sprite texture;

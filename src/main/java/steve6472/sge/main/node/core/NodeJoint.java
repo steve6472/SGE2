@@ -47,19 +47,19 @@ public class NodeJoint extends ToggleButton
 				Nodes.selectedFrom = new Pair<>(node, this);
 			} else
 			{
-				if (from.getB() == this)
+				if (from.b() == this)
 				{
 					Nodes.selectedFrom = null;
 					Log.err("Node can not be connected to itself!");
 					setToggled(false);
 				} else
 				{
-					if (isInput == from.getB().isInput)
+					if (isInput == from.b().isInput)
 					{
 						Log.err("Can not connect input to input or output to output!");
 					} else
 					{
-						if (from.getA() == node)
+						if (from.a() == node)
 						{
 							Log.err("Node can not be connected to itself!");
 						}
@@ -70,29 +70,29 @@ public class NodeJoint extends ToggleButton
 								Log.err("Input join can have only one connection!");
 							} else
 							{
-								if (type != from.getB().type)
+								if (type != from.b().type)
 								{
 									Log.err("Types are not compatible!");
 								} else
 								{
-									if (type == JointTypeRegistry.FLOW && from.getA().hasOutput(from.getB().index) && !ENABLE_MULTIFLOW)
+									if (type == JointTypeRegistry.FLOW && from.a().hasOutput(from.b().index) && !ENABLE_MULTIFLOW)
 									{
 										Log.err("Flow can have only one output!");
 									} else
 									{
-										node.connectInput(index, from.getA(), from.getB().index);
-										from.getA().connectOutput(from.getB().index, node, index);
+										node.connectInput(index, from.a(), from.b().index);
+										from.a().connectOutput(from.b().index, node, index);
 									}
 								}
 							}
 						} else
 						{
-							if (from.getA().hasInput(from.getB().index))
+							if (from.a().hasInput(from.b().index))
 							{
 								Log.err("Input join can have only one connection!");
 							} else
 							{
-								if (type != from.getB().type)
+								if (type != from.b().type)
 								{
 									Log.err("Types are not compatible!");
 								} else
@@ -102,14 +102,14 @@ public class NodeJoint extends ToggleButton
 										Log.err("Flow can have only one output!");
 									} else
 									{
-										node.connectOutput(index, from.getA(), from.getB().index);
-										from.getA().connectInput(from.getB().index, node, index);
+										node.connectOutput(index, from.a(), from.b().index);
+										from.a().connectInput(from.b().index, node, index);
 									}
 								}
 							}
 						}
 					}
-					from.getB().setToggled(false);
+					from.b().setToggled(false);
 					setToggled(false);
 					Nodes.selectedFrom = null;
 				}

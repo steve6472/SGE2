@@ -1,5 +1,7 @@
 package steve6472.sge.gfx.game.blockbench.model;
 
+import steve6472.sge.gfx.game.voxelizer.VoxLayer;
+
 import java.util.Objects;
 
 /**********************
@@ -20,10 +22,11 @@ public final class Element extends OutlinerElement
 		private float v0;
 		private float u1;
 		private float v1;
-		private final byte rotation;
-		private final int texture;
+		private byte rotation;
+		private int texture;
+		private VoxLayer layer;
 
-		public Face(float u0, float v0, float u1, float v1, byte rotation, int texture)
+		public Face(float u0, float v0, float u1, float v1, byte rotation, int texture, VoxLayer layer)
 		{
 			this.u0 = u0;
 			this.v0 = v0;
@@ -31,6 +34,7 @@ public final class Element extends OutlinerElement
 			this.v1 = v1;
 			this.rotation = rotation;
 			this.texture = texture;
+			this.layer = layer;
 		}
 
 		public float getU0()
@@ -78,9 +82,29 @@ public final class Element extends OutlinerElement
 			return rotation;
 		}
 
+		public void setRotation(byte rotation)
+		{
+			this.rotation = rotation;
+		}
+
 		public int texture()
 		{
 			return texture;
+		}
+
+		public void setTexture(int texture)
+		{
+			this.texture = texture;
+		}
+
+		public void setLayer(VoxLayer layer)
+		{
+			this.layer = layer;
+		}
+
+		public VoxLayer getLayer()
+		{
+			return layer;
 		}
 
 		@Override

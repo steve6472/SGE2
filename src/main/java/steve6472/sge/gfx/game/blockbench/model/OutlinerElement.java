@@ -13,6 +13,7 @@ public abstract class OutlinerElement
 	public String name;
 	public float originX, originY, originZ;
 	public float rotationX, rotationY, rotationZ;
+	// used in animations
 	public float positionX, positionY, positionZ;
 	public float scaleX, scaleY, scaleZ;
 	public UUID uuid;

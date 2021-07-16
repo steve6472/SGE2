@@ -129,8 +129,8 @@ public class BBAnimation
 
 	private void animate(Pair<IKey, IKey> pair, double time, int index, List<IKey> keys, boolean reverse)
 	{
-		IKey before = pair.getA();
-		IKey after = pair.getB();
+		IKey before = pair.a();
+		IKey after = pair.b();
 		double t = MathUtil.time(before.time(), after.time(), time);
 
 		float vx;

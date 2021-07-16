@@ -1,4 +1,4 @@
-package steve6472.sge.main.game.inventory;
+package steve6472.sge.main.game.item;
 
 public enum ItemMotion
 {
