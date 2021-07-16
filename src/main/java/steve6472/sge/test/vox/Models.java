@@ -12,9 +12,10 @@ import steve6472.sge.gfx.game.blockbench.model.OutlinerElement;
 public class Models
 {
 	public static final BBModel AIR = VoxRenderTest.models.addModel(new BBModel(new OutlinerElement[] {}));
-	public static final BBModel ROCK = addModel("game/props/rock");
-	public static final BBModel DEBUG = addModel("game/props/debug");
-	public static final BBModel GIZMO = addModel("game/props/gizmo");
+	public static final BBModel ROCK = addModel("game/props/block/rock");
+	public static final BBModel DEBUG = addModel("game/props/block/debug");
+	public static final BBModel GIZMO = addModel("game/props/block/gizmo");
+	public static final BBModel PISTON = addModel("game/props/block/piston");
 
 	private static BBModel addModel(String path)
 	{

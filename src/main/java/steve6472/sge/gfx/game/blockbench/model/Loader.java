@@ -145,6 +145,8 @@ public class Loader
 
 		int textureId = json.getInt("texture");
 		String texturePath = findTexture(textures, textureId);
+		if (texturePath == null)
+			return null;
 		modelTextureAtlas.putTexture(texturePath);
 		int id = modelTextureAtlas.getTextureId(texturePath);
 
@@ -199,7 +201,7 @@ public class Loader
 				return path;
 			}
 		}
-		return "block/null";
+		return null;
 	}
 
 	public static String read(File f)

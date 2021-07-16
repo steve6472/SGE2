@@ -84,8 +84,8 @@ public class BBModel
 		stack.translate(-el.positionX, el.positionY, el.positionZ);
 		stack.translate(el.originX, el.originY, el.originZ);
 		stack.rotateXYZ(el.rotationX, el.rotationY, el.rotationZ);
-		stack.translate(-el.originX, -el.originY, -el.originZ);
 		stack.scale(el.scaleX, el.scaleY, el.scaleZ);
+		stack.translate(-el.originX, -el.originY, -el.originZ);
 		if (el instanceof Outliner outliner)
 		{
 			for (OutlinerElement child : outliner.children)

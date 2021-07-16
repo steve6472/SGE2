@@ -4,15 +4,15 @@ import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.joml.Vector3i;
 import org.lwjgl.opengl.GL11;
-import steve6472.sge.gfx.VertexObjectCreator;
 import steve6472.sge.gfx.game.blockbench.ModelRepository;
+import steve6472.sge.gfx.game.blockbench.animation.BBAnimController;
+import steve6472.sge.gfx.game.blockbench.animation.BBAnimation;
 import steve6472.sge.gfx.game.stack.RenderType;
 import steve6472.sge.gfx.game.stack.Stack;
 import steve6472.sge.gfx.game.stack.tess.AbstractTess;
 import steve6472.sge.gfx.game.stack.tess.BBTess;
 import steve6472.sge.gfx.game.stack.tess.LineTess;
 import steve6472.sge.gfx.game.stack.tess.TriangleTess;
-import steve6472.sge.gfx.game.voxelizer.PassData;
 import steve6472.sge.gfx.game.voxelizer.ThreadedChunkModelBuilder;
 import steve6472.sge.gfx.game.voxelizer.VoxLayer;
 import steve6472.sge.gfx.game.voxelizer.VoxModel;
@@ -56,6 +56,9 @@ public class VoxRenderTest extends MainApp
 	private World world;
 	private ThreadedChunkModelBuilder builder;
 
+	private BBAnimController controller;
+	private BBAnimation animation;
+
 	public static final VoxLayer MAIN_LAYER = new VoxLayer("main");
 
 	@Override
@@ -67,7 +70,7 @@ public class VoxRenderTest extends MainApp
 	@Override
 	public void init()
 	{
-		Window.enableVSync(true);
+//		Window.enableVSync(true);
 		glEnable(GL_CULL_FACE);
 
 		models = new ModelRepository()
@@ -132,6 +135,17 @@ public class VoxRenderTest extends MainApp
 		stack.addRenderType("triangle", new RenderType(plainColorShader, triangleTess, (StaticShaderBase s, AbstractTess t) -> t.draw(GL11.GL_TRIANGLES)));
 
 		camera = new Camera();
+
+		/*
+		 * Animation
+		 */
+
+		controller = new BBAnimController();
+		animation = new BBAnimation("game/props/block/piston", "extend", Models.PISTON);
+
+//		controller.setLoop(true);
+		controller.start();
+		controller.setStayAtLastFrame(true);
 	}
 
 	@Override
@@ -142,6 +156,12 @@ public class VoxRenderTest extends MainApp
 			camera.setPosition(0f, 1, 0f);
 			camera.headOrbit(getMouseX(), getMouseY(), 0.5f, distance);
 			camera.updateViewMatrix();
+		}
+
+		if (controller.hasEnded())
+		{
+			controller.setReverse(!controller.isReversed());
+			controller.start();
 		}
 	}
 
@@ -162,18 +182,21 @@ public class VoxRenderTest extends MainApp
 		lineTess.axisGizmo(0.5f, 0.05f, 0.25f);
 		triangleTess.axisGizmo(0.5f, 0.05f, 0.1f);
 
-		entityShader.bind(camera.getViewMatrix());
-		entityShader.setUniform(BBShader.NORMAL_MATRIX, new Matrix3f(new Matrix4f(stack).invert().transpose3x3()));
-		models.getAtlasTexture().bind();
-		VertexObjectCreator.basicRender(worldModel.getVao(), 4, worldModel.getTriangleCount() * 3, GL11.GL_TRIANGLES);
+		animation.tick(controller, Models.PISTON);
+		Models.PISTON.render(stack);
 
+//		entityShader.bind(camera.getViewMatrix());
+//		entityShader.setUniform(BBShader.NORMAL_MATRIX, new Matrix3f(new Matrix4f(stack).invert().transpose3x3()));
+//		models.getAtlasTexture().bind();
+//		VertexObjectCreator.basicRender(worldModel.getVao(), 4, worldModel.getTriangleCount() * 3, GL11.GL_TRIANGLES);
+//
 		stack.render(camera.getViewMatrix());
-
-		if (builder.canTake())
-		{
-			PassData take = builder.take();
-			worldModel.update(take);
-		}
+//
+//		if (builder.canTake())
+//		{
+//			PassData take = builder.take();
+//			worldModel.update(take);
+//		}
 	}
 
 	@Event
@@ -183,6 +206,11 @@ public class VoxRenderTest extends MainApp
 		{
 			models.reload();
 			builder.addToQueue(worldModel);
+			animation.reload();
+		}
+		if (e.getAction() == KeyList.PRESS && e.getKey() == KeyList.SPACE)
+		{
+			controller.start();
 		}
 	}
 
