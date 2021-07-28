@@ -1,6 +1,7 @@
-package steve6472.sge.gfx.game.blockbench;
+package steve6472.sge.gfx.game.blockbench.model;
 
 import steve6472.sge.gfx.StaticTexture;
+import steve6472.sge.gfx.game.blockbench.ImagePacker;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

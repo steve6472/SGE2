@@ -1,5 +1,8 @@
 package steve6472.sge.main.game;
 
+import org.joml.Vector3i;
+import steve6472.sge.main.util.MathUtil;
+
 import java.util.Objects;
 
 /**********************
@@ -10,9 +13,9 @@ import java.util.Objects;
  ***********************/
 public class VoxPos
 {
-	private int x;
-	private int y;
-	private int z;
+	private final int x;
+	private final int y;
+	private final int z;
 
 	public VoxPos(int x, int y, int z)
 	{
@@ -37,8 +40,7 @@ public class VoxPos
 
 	public VoxPos up(int n)
 	{
-		this.y += n;
-		return this;
+		return offset(Direction.UP, n);
 	}
 
 	public VoxPos up()
@@ -48,8 +50,7 @@ public class VoxPos
 
 	public VoxPos down(int n)
 	{
-		this.y -= n;
-		return this;
+		return offset(Direction.DOWN, n);
 	}
 
 	public VoxPos down()
@@ -59,8 +60,7 @@ public class VoxPos
 
 	public VoxPos north(int n)
 	{
-		this.z -= n;
-		return this;
+		return offset(Direction.NORTH, n);
 	}
 
 	public VoxPos north()
@@ -70,8 +70,7 @@ public class VoxPos
 
 	public VoxPos east(int n)
 	{
-		this.x += n;
-		return this;
+		return offset(Direction.EAST, n);
 	}
 
 	public VoxPos east()
@@ -81,8 +80,7 @@ public class VoxPos
 
 	public VoxPos south(int n)
 	{
-		this.z += n;
-		return this;
+		return offset(Direction.SOUTH, n);
 	}
 
 	public VoxPos south()
@@ -92,8 +90,7 @@ public class VoxPos
 
 	public VoxPos west(int n)
 	{
-		this.x -= n;
-		return this;
+		return offset(Direction.WEST, n);
 	}
 
 	public VoxPos west()
@@ -101,11 +98,9 @@ public class VoxPos
 		return west(1);
 	}
 
-	public void setPos(int x, int y, int z)
+	public VoxPos offset(Direction direction, int steps)
 	{
-		setX(x);
-		setY(y);
-		setZ(z);
+		return new VoxPos(x + direction.getNormalI().x * steps, y + direction.getNormalI().y * steps, z + direction.getNormalI().z * steps);
 	}
 
 	public int getX()
@@ -113,19 +108,9 @@ public class VoxPos
 		return x;
 	}
 
-	public void setX(int x)
-	{
-		this.x = x;
-	}
-
 	public int getY()
 	{
 		return y;
-	}
-
-	public void setY(int y)
-	{
-		this.y = y;
 	}
 
 	public int getZ()
@@ -133,23 +118,14 @@ public class VoxPos
 		return z;
 	}
 
-	public void setZ(int z)
+	public VoxPos add(VoxPos other)
 	{
-		this.z = z;
+		return new VoxPos(x + other.x, y + other.y, z + other.z);
 	}
 
-	public void set(VoxPos other)
+	public Vector3i toVec3i()
 	{
-		this.x = other.x;
-		this.y = other.y;
-		this.z = other.z;
-	}
-
-	public void add(VoxPos other)
-	{
-		this.x += other.x;
-		this.y += other.y;
-		this.z += other.z;
+		return new Vector3i(x, y, z);
 	}
 
 	public VoxPos copy()
@@ -159,10 +135,12 @@ public class VoxPos
 
 	public VoxPos floorMod(int mod)
 	{
-		this.x = Math.floorMod(x, mod);
-		this.y = Math.floorMod(y, mod);
-		this.z = Math.floorMod(z, mod);
-		return this;
+		return new VoxPos(Math.floorMod(x, mod), Math.floorMod(y, mod), Math.floorMod(z, mod));
+	}
+
+	public VoxPos clamp(int min, int max)
+	{
+		return new VoxPos(MathUtil.clamp(x, min, max), MathUtil.clamp(y, min, max), MathUtil.clamp(z, min, max));
 	}
 
 	public boolean equals(int x, int y, int z)
@@ -185,5 +163,11 @@ public class VoxPos
 	public int hashCode()
 	{
 		return Objects.hash(x, y, z);
+	}
+
+	@Override
+	public String toString()
+	{
+		return "VoxPos{" + "x=" + x + ", y=" + y + ", z=" + z + '}';
 	}
 }

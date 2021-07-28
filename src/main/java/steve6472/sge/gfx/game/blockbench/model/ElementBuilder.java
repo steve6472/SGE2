@@ -1,5 +1,6 @@
 package steve6472.sge.gfx.game.blockbench.model;
 
+import steve6472.sge.gfx.game.voxelizer.VoxLayer;
 import steve6472.sge.main.game.Direction;
 
 /**********************
@@ -21,6 +22,11 @@ public class ElementBuilder
 	public static ElementBuilder create()
 	{
 		return new ElementBuilder();
+	}
+
+	public static Element[] emptyElement()
+	{
+		return new Element[] {};
 	}
 
 	public ElementBuilder name(String name)
@@ -63,24 +69,117 @@ public class ElementBuilder
 
 	public ElementBuilder rectangle(float fromX, float fromY, float fromZ, float toX, float toY, float toZ)
 	{
-		element.fromX = fromX;
+		element.fromX = fromX - 8f;
 		element.fromY = fromY;
-		element.fromZ = fromZ;
-		element.toX = toX;
+		element.fromZ = fromZ - 8f;
+		element.toX = toX - 8f;
 		element.toY = toY;
-		element.toZ = toZ;
+		element.toZ = toZ - 8f;
 		return this;
 	}
 
 	public ElementBuilder rectangleWHD(float fromX, float fromY, float fromZ, float width, float height, float depth)
 	{
-		element.fromX = fromX;
+		element.fromX = fromX - 8f;
 		element.fromY = fromY;
-		element.fromZ = fromZ;
-		element.toX = fromX + width;
+		element.fromZ = fromZ - 8f;
+		element.toX = fromX + width - 8f;
 		element.toY = fromY + height;
-		element.toZ = fromZ + depth;
+		element.toZ = fromZ + depth - 8f;
 		return this;
+	}
+
+	/**
+	 * Generates UV based on position
+	 * @param texture texture of selected faces
+	 * @param faces faces to auto generate
+	 */
+	public ElementBuilder autoFaces(int texture, float resX, float resY, byte rotation, VoxLayer layer, Direction... faces)
+	{
+		for (Direction face : faces)
+		{
+			switch (face)
+			{
+				case UP -> setFace(face, FaceBuilder.create().setTexture(texture).resolution(resX, resY).setLayer(layer).rotation(rotation).uv(element.fromX + 8, element.fromZ + 8, element.toX + 8, element.toZ + 8));
+				case NORTH -> setFace(face, FaceBuilder.create().setTexture(texture).resolution(resX, resY).setLayer(layer).rotation(rotation).uv(-element.toX + 8, -element.toY + 16, -element.fromX + 8, -element.fromY + 16));
+				case EAST -> setFace(face, FaceBuilder.create().setTexture(texture).resolution(resX, resY).setLayer(layer).rotation(rotation).uv(-element.toZ + 8, -element.toY + 16, -element.fromZ + 8, -element.fromY + 16));
+				case SOUTH -> setFace(face, FaceBuilder.create().setTexture(texture).resolution(resX, resY).setLayer(layer).rotation(rotation).uv(element.fromX + 8, -element.toY + 16, element.toX + 8, -element.fromY + 16));
+				case WEST -> setFace(face, FaceBuilder.create().setTexture(texture).resolution(resX, resY).setLayer(layer).rotation(rotation).uv(element.fromZ + 8, -element.toY + 16, element.toZ + 8, -element.fromY + 16));
+				case DOWN -> setFace(face, FaceBuilder.create().setTexture(texture).resolution(resX, resY).setLayer(layer).rotation(rotation).uv(element.fromX + 8, -element.toZ + 8, element.toX + 8, -element.fromZ + 8));
+			}
+		}
+		return this;
+	}
+
+	public ElementBuilder autoFaces(int texture, Direction... faces)
+	{
+		return autoFaces(texture, 16f, 16f, (byte) 0, ModelRepository.NORMAL_LAYER, faces);
+	}
+
+	public ElementBuilder autoFaces(int texture, float resX, float resY, Direction... faces)
+	{
+		return autoFaces(texture, resX, resY, (byte) 0, ModelRepository.NORMAL_LAYER, faces);
+	}
+
+	public ElementBuilder autoFaces(int texture, float resX, float resY, byte rotation, Direction... faces)
+	{
+		return autoFaces(texture, resX, resY, rotation, ModelRepository.NORMAL_LAYER, faces);
+	}
+
+	public ElementBuilder autoFaces(int texture, byte rotation, Direction... faces)
+	{
+		return autoFaces(texture, 16f, 16f, rotation, ModelRepository.NORMAL_LAYER, faces);
+	}
+
+	public ElementBuilder autoFaces(int texture, VoxLayer layer, Direction... faces)
+	{
+		return autoFaces(texture, 16f, 16f, (byte) 0, layer, faces);
+	}
+
+	public ElementBuilder autoFaces(int texture, float resX, float resY, VoxLayer layer, Direction... faces)
+	{
+		return autoFaces(texture, resX, resY, (byte) 0, layer, faces);
+	}
+
+	public ElementBuilder autoFaces(int texture, byte rotation, VoxLayer layer, Direction... faces)
+	{
+		return autoFaces(texture, 16f, 16f, rotation, layer, faces);
+	}
+
+
+	public ElementBuilder autoFaces(int texture)
+	{
+		return autoFaces(texture, 16f, 16f, (byte) 0, ModelRepository.NORMAL_LAYER, Direction.getValues());
+	}
+
+	public ElementBuilder autoFaces(int texture, float resX, float resY)
+	{
+		return autoFaces(texture, resX, resY, (byte) 0, ModelRepository.NORMAL_LAYER, Direction.getValues());
+	}
+
+	public ElementBuilder autoFaces(int texture, float resX, float resY, byte rotation)
+	{
+		return autoFaces(texture, resX, resY, rotation, ModelRepository.NORMAL_LAYER, Direction.getValues());
+	}
+
+	public ElementBuilder autoFaces(int texture, byte rotation)
+	{
+		return autoFaces(texture, 16f, 16f, rotation, ModelRepository.NORMAL_LAYER, Direction.getValues());
+	}
+
+	public ElementBuilder autoFaces(int texture, VoxLayer layer)
+	{
+		return autoFaces(texture, 16f, 16f, (byte) 0, layer, Direction.getValues());
+	}
+
+	public ElementBuilder autoFaces(int texture, float resX, float resY, VoxLayer layer)
+	{
+		return autoFaces(texture, resX, resY, (byte) 0, layer, Direction.getValues());
+	}
+
+	public ElementBuilder autoFaces(int texture, byte rotation, VoxLayer layer)
+	{
+		return autoFaces(texture, 16f, 16f, rotation, layer, Direction.getValues());
 	}
 
 	public ElementBuilder setFace(Direction face, FaceBuilder builder)
@@ -93,6 +192,15 @@ public class ElementBuilder
 			case EAST -> element.east = builder.build();
 			case SOUTH -> element.south = builder.build();
 			case WEST -> element.west = builder.build();
+		}
+		return this;
+	}
+
+	public ElementBuilder setFaces(FaceBuilder builder, Direction... faces)
+	{
+		for (Direction face : faces)
+		{
+			setFace(face, new FaceBuilder(builder.build()));
 		}
 		return this;
 	}

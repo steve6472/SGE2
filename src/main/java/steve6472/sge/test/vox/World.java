@@ -1,6 +1,6 @@
 package steve6472.sge.test.vox;
 
-import steve6472.sge.gfx.game.blockbench.model.BBModel;
+import steve6472.sge.gfx.game.voxelizer.Builder;
 import steve6472.sge.gfx.game.voxelizer.IModelAccessor;
 import steve6472.sge.main.game.VoxPos;
 import steve6472.sge.main.game.stateengine.State;
@@ -13,7 +13,7 @@ import java.util.HashMap;
  * Project: StevesGameEngine
  *
  ***********************/
-public class World implements IModelAccessor
+class World implements IModelAccessor
 {
 	public HashMap<VoxPos, State> blocks = new HashMap<>();
 
@@ -33,11 +33,26 @@ public class World implements IModelAccessor
 	}
 
 	@Override
-	public BBModel getModel(int x, int y, int z)
+	public void loadElements(Builder elements, int x, int y, int z)
 	{
 		State state = blocks.get(new VoxPos(x, y, z));
-		if (state == null)
-			return Models.AIR;
-		return ((Block) state.getObject()).getModel(state);
+		if (state != null)
+		{
+			elements.addModel(((Block) state.getObject()).getModel(state));
+		}
+//		Element CENTER = ElementBuilder
+//			.create()
+//			.rectangle(0, 0, 0, 16, 16, 16)
+//			.autoFaces(Models.grass, Direction.UP)
+//			.autoFaces(Models.grass_side, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST)
+//			.autoFaces(Models.dirt, Direction.DOWN)
+//			.build();
+//
+//		VoxRenderTest.models.getAtlas().faces(CENTER);
+//
+//		if (x == 0 && y == 0 && z == 0)
+//		{
+//			elements.addElement(CENTER);
+//		}
 	}
 }

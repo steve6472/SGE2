@@ -20,8 +20,8 @@
 				value: 'normal',
 				options: {
 					'normal': 'normal',
-					'tint': 'tint',
-					'overlay': 'overlay'
+					'overlay': 'overlay',
+					'double_sided': 'double_sided'
 				},
 				onChange: function(slider, event) 
 				{

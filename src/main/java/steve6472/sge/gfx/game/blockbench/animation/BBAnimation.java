@@ -1,15 +1,11 @@
 package steve6472.sge.gfx.game.blockbench.animation;
 
 import org.joml.Vector3f;
-import org.json.JSONObject;
 import steve6472.sge.gfx.game.blockbench.model.BBModel;
-import steve6472.sge.gfx.game.blockbench.model.Loader;
 import steve6472.sge.gfx.game.blockbench.model.OutlinerElement;
 import steve6472.sge.main.util.MathUtil;
 import steve6472.sge.main.util.Pair;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 /**********************
@@ -22,31 +18,29 @@ public class BBAnimation
 {
 	private static final Vector3f TEMP = new Vector3f();
 
-	private final String path, name;
-	private final BBModel model;
-
+	private final String name;
+	private final double dLength;
 	private final List<Bone> bones;
-	private double dLength;
 
-	public BBAnimation(String path, String name, BBModel model)
+	private BBModel model;
+
+	public BBAnimation(String name, List<Bone> bones, double dLength)
 	{
-		this.path = path;
 		this.name = name;
-		this.model = model;
-		this.bones = new ArrayList<>();
-		reload();
+		this.bones = bones;
+		this.dLength = dLength;
 	}
 
-	public BBAnimation(String path, String name)
+	public void setModel(BBModel model)
 	{
-		this(path, name, null);
+		this.model = model;
 	}
 
 	public void reload()
 	{
-		bones.clear();
-		JSONObject jsonObject = new JSONObject(Loader.read(new File(path + ".animation.json")));
-		dLength = AnimLoader.load(jsonObject.getJSONObject("animations").getJSONObject(name), bones);
+//		bones.clear();
+//		JSONObject jsonObject = new JSONObject(Loader.read(new File(path + ".animation.json")));
+//		dLength = AnimLoader.load(jsonObject.getJSONObject("animations").getJSONObject(name), bones);
 	}
 
 	public void tick(BBAnimController controller)
@@ -249,11 +243,6 @@ public class BBAnimation
 		}
 
 		return new Pair<>(keys.get(index), keys.get(index - 1));
-	}
-
-	public String getPath()
-	{
-		return path;
 	}
 
 	public String getName()

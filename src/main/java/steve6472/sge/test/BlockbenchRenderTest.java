@@ -1,10 +1,8 @@
 package steve6472.sge.test;
 
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
-import steve6472.sge.gfx.game.blockbench.ModelRepository;
 import steve6472.sge.gfx.game.blockbench.model.BBModel;
+import steve6472.sge.gfx.game.blockbench.model.ModelRepository;
 import steve6472.sge.gfx.game.stack.RenderType;
 import steve6472.sge.gfx.game.stack.Stack;
 import steve6472.sge.gfx.game.stack.tess.AbstractTess;
@@ -56,7 +54,7 @@ public class BlockbenchRenderTest extends MainApp
 		glEnable(GL_CULL_FACE);
 
 		models = new ModelRepository();
-		model = models.addModel("game/robot");
+		model = models.loadModel("game/robot");
 		models.finish();
 
 		entityShader = new BBShader();
@@ -74,7 +72,7 @@ public class BlockbenchRenderTest extends MainApp
 		stack.addRenderType("blockbench", new RenderType(entityShader, bbtess, (StaticShaderBase s, AbstractTess t) -> {
 
 			BBShader shader = (BBShader) s;
-			shader.setUniform(BBShader.NORMAL_MATRIX, new Matrix3f(new Matrix4f(stack).invert().transpose3x3()));
+//			shader.setUniform(BBShader.NORMAL_MATRIX, new Matrix3f(new Matrix4f(stack).invert().transpose3x3()));
 			models.getAtlasTexture().bind();
 
 			t.draw(GL11.GL_TRIANGLES);

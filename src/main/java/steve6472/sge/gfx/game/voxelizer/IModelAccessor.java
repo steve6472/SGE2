@@ -1,7 +1,5 @@
 package steve6472.sge.gfx.game.voxelizer;
 
-import steve6472.sge.gfx.game.blockbench.model.BBModel;
-
 /**********************
  * Created by steve6472 (Mirek Jozefek)
  * On date: 7/13/2021
@@ -10,5 +8,5 @@ import steve6472.sge.gfx.game.blockbench.model.BBModel;
  ***********************/
 public interface IModelAccessor
 {
-	BBModel getModel(int x, int y, int z);
+	void loadElements(Builder elements, int x, int y, int z);
 }

@@ -10,7 +10,7 @@ import steve6472.sge.main.game.stateengine.StateObject;
  * Project: StevesGameEngine
  *
  ***********************/
-public class Block extends StateObject
+class Block extends StateObject
 {
 	private final BBModel model;
 

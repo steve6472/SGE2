@@ -1,14 +1,12 @@
-package steve6472.sge.test.test3d;
+package steve6472.sge.gfx.game.blockbench.model;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
- * On date: 4/3/2021
+ * On date: 7/28/2021
  * Project: StevesGameEngine
  *
  ***********************/
-interface Itest
+public enum PropertyClass
 {
-	void tick();
-
-	void render();
+	FACE, CUBE
 }

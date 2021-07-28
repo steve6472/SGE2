@@ -60,18 +60,6 @@ public enum Direction
 		return normali;
 	}
 
-	public VoxPos offset(VoxPos pos)
-	{
-		VoxPos copy = pos.copy();
-		switch (axis)
-		{
-			case X -> copy.setX(copy.getX() + offset);
-			case Y -> copy.setY(copy.getY() + offset);
-			case Z -> copy.setZ(copy.getZ() + offset);
-		}
-		return copy;
-	}
-
 	public static Direction[] getValues()
 	{
 		return VALUES;

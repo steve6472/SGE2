@@ -1,5 +1,7 @@
 package steve6472.sge.gfx.game.stack.mix;
 
+import org.joml.Vector3f;
+import steve6472.sge.gfx.game.stack.Stack;
 import steve6472.sge.gfx.game.stack.buffer.Buffer3f;
 
 /**********************
@@ -14,8 +16,24 @@ public interface IStackPos3<T> extends IMain<T>, IStack
 
 	default T pos(float x, float y, float z)
 	{
-		getStack().transformPosition(x, y, z, TempValues.TEMP_VECTOR);
-		getPositionBuffer().set(TempValues.TEMP_VECTOR);
+		getPositionBuffer().set(getTransformedVector(x, y, z));
 		return getTess();
+	}
+
+	default T posUntransformed(float x, float y, float z)
+	{
+		getPositionBuffer().set(x, y, z);
+		return getTess();
+	}
+
+	default T posUntransformed(Vector3f vec)
+	{
+		return posUntransformed(vec.x, vec.y, vec.z);
+	}
+
+	default Vector3f getTransformedVector(float x, float y, float z)
+	{
+		getStack().transformPosition(x, y, z, Stack.TEMP_VECTOR);
+		return Stack.TEMP_VECTOR;
 	}
 }

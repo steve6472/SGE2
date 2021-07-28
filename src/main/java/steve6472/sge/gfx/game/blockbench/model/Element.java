@@ -2,6 +2,7 @@ package steve6472.sge.gfx.game.blockbench.model;
 
 import steve6472.sge.gfx.game.voxelizer.VoxLayer;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 /**********************
@@ -10,13 +11,26 @@ import java.util.Objects;
  * Project: CaveGame
  *
  ***********************/
-public final class Element extends OutlinerElement
+public final class Element extends OutlinerElement implements IProperties
 {
 	public float fromX, fromY, fromZ;
 	public float toX, toY, toZ;
 	public Face north, east, south, west, up, down;
+	public HashMap<String, ModelPropertyValue> properties;
 
-	public static final class Face
+	@Override
+	public HashMap<String, ModelPropertyValue> getProperties()
+	{
+		return properties;
+	}
+
+	@Override
+	public PropertyClass getPropertyClass()
+	{
+		return PropertyClass.CUBE;
+	}
+
+	public static final class Face implements IProperties
 	{
 		private float u0;
 		private float v0;
@@ -25,6 +39,7 @@ public final class Element extends OutlinerElement
 		private byte rotation;
 		private int texture;
 		private VoxLayer layer;
+		public HashMap<String, ModelPropertyValue> properties;
 
 		public Face(float u0, float v0, float u1, float v1, byte rotation, int texture, VoxLayer layer)
 		{
@@ -35,6 +50,18 @@ public final class Element extends OutlinerElement
 			this.rotation = rotation;
 			this.texture = texture;
 			this.layer = layer;
+		}
+
+		@Override
+		public HashMap<String, ModelPropertyValue> getProperties()
+		{
+			return properties;
+		}
+
+		@Override
+		public PropertyClass getPropertyClass()
+		{
+			return PropertyClass.FACE;
 		}
 
 		public float getU0()
@@ -128,13 +155,20 @@ public final class Element extends OutlinerElement
 		@Override
 		public String toString()
 		{
-			return "Face{" + "u0=" + u0 + ", v0=" + v0 + ", u1=" + u1 + ", v1=" + v1 + ", rotation=" + rotation + ", texture=" + texture + '}' + '\n';
+			return "Face{" + "u0=" + u0 + ", v0=" + v0 + ", u1=" + u1 + ", v1=" + v1 + ", rotation=" + rotation + ", texture=" + texture + ", layer=" + layer + '}' + '\n';
 		}
 	}
+
+//	@Override
+//	public String toString()
+//	{
+//		return "Element{" + "name=" + name + ", fromX=" + fromX + ", fromY=" + fromY + ", fromZ=" + fromZ + ", toX=" + toX + ", toY=" + toY + ", toZ=" + toZ + ", north=" + north + ", east=" + east + ", south=" + south + ", west=" + west + ", up=" + up + ", down=" + down + '}' + '\n';
+//	}
+
 
 	@Override
 	public String toString()
 	{
-		return "Element{" + "fromX=" + fromX + ", fromY=" + fromY + ", fromZ=" + fromZ + ", toX=" + toX + ", toY=" + toY + ", toZ=" + toZ + ", north=" + north + ", east=" + east + ", south=" + south + ", west=" + west + ", up=" + up + ", down=" + down + '}' + '\n';
+		return "Element{" + "fromX=" + fromX + ", fromY=" + fromY + ", fromZ=" + fromZ + ", toX=" + toX + ", toY=" + toY + ", toZ=" + toZ + ", north=" + north + ", east=" + east + ", south=" + south + ", west=" + west + ", up=" + up + ", down=" + down + ", name='" + name + '\'' + ", originX=" + originX + ", originY=" + originY + ", originZ=" + originZ + ", rotationX=" + rotationX + ", rotationY=" + rotationY + ", rotationZ=" + rotationZ + ", positionX=" + positionX + ", positionY=" + positionY + ", positionZ=" + positionZ + ", scaleX=" + scaleX + ", scaleY=" + scaleY + ", scaleZ=" + scaleZ + ", uuid=" + uuid + '}' + '\n';
 	}
 }

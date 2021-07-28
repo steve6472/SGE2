@@ -2,10 +2,10 @@ package steve6472.sge.gfx.game.blockbench.model;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import steve6472.sge.gfx.game.blockbench.ModelRepository;
-import steve6472.sge.gfx.game.blockbench.ModelTextureAtlas;
+import steve6472.sge.gfx.game.blockbench.animation.AnimLoader;
+import steve6472.sge.gfx.game.blockbench.animation.BBAnimation;
+import steve6472.sge.gfx.game.blockbench.animation.Bone;
 import steve6472.sge.gfx.game.voxelizer.VoxLayer;
-import steve6472.sge.gfx.game.voxelizer.VoxLayers;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -26,17 +26,31 @@ public class Loader
 {
 	private static final float TO_RAD = 0.017453292519943295f;
 
-	public static OutlinerElement[] load(ModelTextureAtlas modelTextureAtlas, String modelName)
-	{
-		return load(modelTextureAtlas, modelName, null);
-	}
-
-	public static OutlinerElement[] load(ModelTextureAtlas modelTextureAtlas, String modelName, VoxLayers layers)
+	public static OutlinerElement[] load(ModelRepository repository, HashMap<String, BBAnimation> animationsMap, String modelName)
 	{
 		JSONObject model = new JSONObject(read(new File(modelName + ".bbmodel")));
 
 		JSONObject res = model.getJSONObject("resolution");
-		HashMap<UUID, Element> elements = loadElements(modelTextureAtlas, model.getJSONArray("elements"), model.getJSONArray("textures"), res.getFloat("width"), res.getFloat("height"), layers);
+		HashMap<UUID, Element> elements = loadElements(repository, model.getJSONArray("elements"), model.getJSONArray("textures"), res.getFloat("width"), res.getFloat("height"));
+
+		if (model.has("animations"))
+		{
+			JSONArray animationsJson = model.getJSONArray("animations");
+			for (int i = 0; i < animationsJson.length(); i++)
+			{
+				JSONObject o = animationsJson.getJSONObject(i);
+
+				// Existing empty animation
+				if (o.has("animators"))
+				{
+					List<Bone> bones = new ArrayList<>();
+					double len = AnimLoader.load(o, bones);
+					String name = o.getString("name");
+					BBAnimation animation = new BBAnimation(name, bones, len);
+					animationsMap.put(name, animation);
+				}
+			}
+		}
 
 		return loadOutliner(model.getJSONArray("outliner"), elements);
 	}
@@ -69,7 +83,7 @@ public class Loader
 		}
 	}
 
-	private static HashMap<UUID, Element> loadElements(ModelTextureAtlas modelTextureAtlas, JSONArray elements, JSONArray textures, float resX, float resY, VoxLayers layers)
+	private static HashMap<UUID, Element> loadElements(ModelRepository repository, JSONArray elements, JSONArray textures, float resX, float resY)
 	{
 		HashMap<UUID, Element> map = new HashMap<>();
 
@@ -77,14 +91,14 @@ public class Loader
 		{
 			if (element instanceof JSONObject jsonElement)
 			{
-				loadElement(modelTextureAtlas, map, jsonElement, textures, resX, resY, layers);
+				loadElement(repository, map, jsonElement, textures, resX, resY);
 			}
 		}
 
 		return map;
 	}
 
-	private static void loadElement(ModelTextureAtlas modelTextureAtlas, HashMap<UUID, Element> map, JSONObject json, JSONArray textures, float resX, float resY, VoxLayers layers)
+	private static void loadElement(ModelRepository repository, HashMap<UUID, Element> map, JSONObject json, JSONArray textures, float resX, float resY)
 	{
 		Element element = new Element();
 		element.uuid = loadCommon(element, json);
@@ -102,12 +116,12 @@ public class Loader
 
 		JSONObject faces = json.getJSONObject("faces");
 
-		if (faces.has("north")) element.north = loadFace(modelTextureAtlas, faces.getJSONObject("north"), textures, resX, resY, layers);
-		if (faces.has("east")) element.east = loadFace(modelTextureAtlas, faces.getJSONObject("east"), textures, resX, resY, layers);
-		if (faces.has("south")) element.south = loadFace(modelTextureAtlas, faces.getJSONObject("south"), textures, resX, resY, layers);
-		if (faces.has("west")) element.west = loadFace(modelTextureAtlas, faces.getJSONObject("west"), textures, resX, resY, layers);
-		if (faces.has("up")) element.up = loadFace(modelTextureAtlas, faces.getJSONObject("up"), textures, resX, resY, layers);
-		if (faces.has("down")) element.down = loadFace(modelTextureAtlas, faces.getJSONObject("down"), textures, resX, resY, layers);
+		if (faces.has("north")) element.north = loadFace(repository, faces.getJSONObject("north"), textures, resX, resY);
+		if (faces.has("east")) element.east = loadFace(repository, faces.getJSONObject("east"), textures, resX, resY);
+		if (faces.has("south")) element.south = loadFace(repository, faces.getJSONObject("south"), textures, resX, resY);
+		if (faces.has("west")) element.west = loadFace(repository, faces.getJSONObject("west"), textures, resX, resY);
+		if (faces.has("up")) element.up = loadFace(repository, faces.getJSONObject("up"), textures, resX, resY);
+		if (faces.has("down")) element.down = loadFace(repository, faces.getJSONObject("down"), textures, resX, resY);
 
 		map.put(element.uuid, element);
 	}
@@ -138,7 +152,7 @@ public class Loader
 		return uuid;
 	}
 
-	private static Element.Face loadFace(ModelTextureAtlas modelTextureAtlas, JSONObject json, JSONArray textures, float resX, float resY, VoxLayers layers)
+	private static Element.Face loadFace(ModelRepository repository, JSONObject json, JSONArray textures, float resX, float resY)
 	{
 		if (!json.has("texture") || json.get("texture") == null || json.isNull("texture"))
 			return null;
@@ -147,12 +161,13 @@ public class Loader
 		String texturePath = findTexture(textures, textureId);
 		if (texturePath == null)
 			return null;
-		modelTextureAtlas.putTexture(texturePath);
-		int id = modelTextureAtlas.getTextureId(texturePath);
+		repository.getAtlas().putTexture(texturePath);
+		int id = repository.getAtlas().getTextureId(texturePath);
 
 		JSONArray uv = json.getJSONArray("uv");
 
-		VoxLayer layer = layers == null ? ModelRepository.NORMAL_LAYER : layers.getLayer(json.optString("layer", "normal"));
+		VoxLayer layer1 = repository.getLayer(json.optString("layer", "normal"));
+		VoxLayer layer = layer1 == null ? ModelRepository.NORMAL_LAYER : layer1;
 
 		return new Element.Face(uv.getFloat(0) / resX, uv.getFloat(1) / resY, uv.getFloat(2) / resX, uv.getFloat(3) / resY, (byte) (json.optInt("rotation", 0) / 90), id, layer);
 	}

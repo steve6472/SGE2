@@ -1,6 +1,5 @@
 package steve6472.sge.gfx.game.blockbench.model;
 
-import steve6472.sge.gfx.game.blockbench.ModelRepository;
 import steve6472.sge.gfx.game.voxelizer.VoxLayer;
 
 /**********************
@@ -18,6 +17,11 @@ public class FaceBuilder
 	private FaceBuilder()
 	{
 		this.face = new Element.Face(0, 0, 0, 0, (byte) 0, 0, ModelRepository.NORMAL_LAYER);
+	}
+
+	FaceBuilder(Element.Face copy)
+	{
+		this.face = new Element.Face(copy.getU0(), copy.getV0(), copy.getU1(), copy.getV1(), copy.getRotation(), copy.texture(), copy.getLayer());
 	}
 
 	public static FaceBuilder create()

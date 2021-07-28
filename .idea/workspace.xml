@@ -17,6 +17,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="AnnotationType" />
+        <option value="Enum" />
         <option value="Interface" />
         <option value="Class" />
       </list>
@@ -51,23 +52,24 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="JAVA" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="Groovy JUnit" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.Groovy JUnit" value="groovy.util.GroovyTestCase" />
     <property name="ignore.preview.features.used" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/steve6472/sge/main/node" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/steve6472/sge/main/game/registry" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.19655173" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.selected.configurable" value="editor.reader.mode" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\StevesGameEngine\src\main\java\steve6472\sge\main\game\registry" />
       <recent name="D:\StevesGameEngine\src\main\java\steve6472\sge\main\node" />
       <recent name="D:\StevesGameEngine\src\main\resources\shaders\game\3d" />
       <recent name="D:\StevesGameEngine\src\main\java\steve6472\sge\main\game" />
       <recent name="D:\StevesGameEngine\src\main\java\steve6472" />
-      <recent name="D:\StevesGameEngine\src\main\java\steve6472\sge\gui\components" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="groovy.util.GroovyTestCase" />
@@ -80,11 +82,11 @@
       <recent name="steve6472.sge.test.test3d.tiles" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="steve6472.sge.gfx.game.stack.tess" />
+      <recent name="steve6472.sge.main.game" />
       <recent name="steve6472.sge.test" />
       <recent name="steve6472.sge.gfx.game.stack.A" />
       <recent name="steve6472.sge.main.node.nodes.gui" />
-      <recent name="steve6472.sge.main.node.nodes.logic" />
-      <recent name="steve6472.sge.main.node.nodes" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -101,15 +103,8 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="steve6472.sge.test.Test" />
-      <module name="StevesGameEngine" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Test3D" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="steve6472.sge.test.test3d.Test3D" />
+    <configuration name="RegistryTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="steve6472.sge.test.registry.RegistryTest" />
       <module name="StevesGameEngine" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -125,6 +120,13 @@
     <configuration name="VoxRenderTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="steve6472.sge.test.vox.VoxRenderTest" />
       <module name="StevesGameEngine" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Scratch" type="Java Scratch" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Scratch" />
+      <option name="SCRATCH_FILE_URL" value="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_2.java" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -159,10 +161,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Application.VoxRenderTest" />
+        <item itemvalue="Application.RegistryTest" />
+        <item itemvalue="Java Scratch.Scratch" />
         <item itemvalue="Application.ThreadedChunkModelBuilder" />
         <item itemvalue="Application.BlockbenchRenderTest" />
-        <item itemvalue="Application.Test" />
-        <item itemvalue="Application.Test3D" />
       </list>
     </recent_temporary>
   </component>
@@ -176,5 +178,15 @@
       <updated>1584620574213</updated>
     </task>
     <servers />
+  </component>
+  <component name="regexState">
+    <option name="map">
+      <map>
+        <entry key="flags" value="0" />
+        <entry key="mode" value="0" />
+        <entry key="regex" value="(19||20)\d\d([- /.])(0[1-9]||1[012])\2(0[1-9]||[12][0-9]||3[01])" />
+        <entry key="text" value="1900-01-01 2007/08/13 1900.01.01 1900 01 01 1900-01.01 1900 13 01 1900 02 31" />
+      </map>
+    </option>
   </component>
 </project>

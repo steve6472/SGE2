@@ -6,7 +6,6 @@ layout(location = 2) in vec2 texture;
 layout(location = 3) in vec3 normal;
 
 uniform mat4 transformation;
-uniform mat3 normalMatrix;
 uniform mat4 projection;
 uniform mat4 view;
 
@@ -18,10 +17,9 @@ void main()
 {
     vColor = color;
     vTexture = texture;
+    vNormal = normal;
 
     vec4 worldPosition = transformation * vec4(position, 1.0);
-
-    vNormal = normalize(normalMatrix * normal);
 
     gl_Position = projection * view * worldPosition;
 

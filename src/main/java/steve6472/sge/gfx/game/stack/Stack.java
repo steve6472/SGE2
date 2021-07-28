@@ -2,6 +2,7 @@ package steve6472.sge.gfx.game.stack;
 
 import org.joml.Matrix4f;
 import org.joml.Matrix4fStack;
+import org.joml.Vector3f;
 
 import java.util.HashMap;
 
@@ -13,6 +14,8 @@ import java.util.HashMap;
  ***********************/
 public class Stack extends Matrix4fStack
 {
+	public static final Vector3f TEMP_VECTOR = new Vector3f();
+
 	public final HashMap<String, RenderType> renderTypes = new HashMap<>();
 
 	public Stack()

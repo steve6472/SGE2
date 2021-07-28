@@ -1,10 +1,6 @@
-package steve6472.sge.gfx.game.blockbench;
+package steve6472.sge.gfx.game.blockbench.model;
 
 import steve6472.sge.gfx.StaticTexture;
-import steve6472.sge.gfx.game.blockbench.model.Element;
-import steve6472.sge.gfx.game.blockbench.model.BBModel;
-import steve6472.sge.gfx.game.blockbench.model.Outliner;
-import steve6472.sge.gfx.game.blockbench.model.OutlinerElement;
 
 import java.awt.*;
 import java.io.File;
@@ -61,7 +57,7 @@ public class ModelTextureAtlas
 		}
 	}
 
-	private void faces(Element element)
+	public void faces(Element element)
 	{
 		if (element.north != null) face(element.north);
 		if (element.east != null) face(element.east);
@@ -133,7 +129,7 @@ public class ModelTextureAtlas
 		return value + 1;
 	}
 
-	public void putTexture(String name)
+	public int putTexture(String name)
 	{
 		try
 		{
@@ -147,15 +143,20 @@ public class ModelTextureAtlas
 				{
 					throw new FileNotFoundException("Texture '" + name + "' does not exist!");
 				}
-				//				System.out.println("New texture: '" + name + "' id: " + usedTexturesReference.size());
-				usedTexturesReference.put(name, usedTexturesReference.size());
+				//				System.out.println("New texture: '" + name + "' id: " + usedTexturesReference.id());
+				int id = usedTexturesReference.size();
+				usedTexturesReference.put(name, id);
 //				usedTextures.add(usedTexturesReference.get(name), name);
 				usedTextures.add(name);
+				return id;
 			}
+			//TODO: probably don't do this
+			return usedTexturesReference.get(name);
 		} catch (Exception ex)
 		{
 			ex.printStackTrace();
 			System.exit(64);
+			return 0;
 		}
 	}
 

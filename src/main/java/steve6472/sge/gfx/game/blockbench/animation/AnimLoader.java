@@ -2,6 +2,7 @@ package steve6472.sge.gfx.game.blockbench.animation;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import steve6472.sge.main.util.MathUtil;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -17,84 +18,73 @@ public class AnimLoader
 {
 	public static double load(JSONObject animation, List<Bone> boneList)
 	{
-		double length = animation.getDouble("animation_length");
-		JSONObject bones = animation.getJSONObject("bones");
+		double length = animation.getDouble("length");
+		JSONObject animators = animation.getJSONObject("animators");
 
-		for (String s : bones.keySet())
+		for (String s : animators.keySet())
 		{
-			loadBone(bones.getJSONObject(s), s, boneList);
+			loadAnimator(animators.getJSONObject(s), boneList);
 		}
 
 		return length;
 	}
 
-	private static void loadBone(JSONObject boneJson, String boneName, List<Bone> bones)
+	private static void loadAnimator(JSONObject boneJson, List<Bone> bones)
 	{
-		List<IKey> pos = loadKeys(boneJson, "position");
-		List<IKey> rot = loadKeys(boneJson, "rotation");
-		List<IKey> siz = loadKeys(boneJson, "scale");
+		JSONArray keyframes = boneJson.getJSONArray("keyframes");
 
-		Bone bone = new Bone(boneName, pos, rot, siz);
+		List<IKey> pos = new ArrayList<>();
+		List<IKey> rot = new ArrayList<>();
+		List<IKey> siz = new ArrayList<>();
+
+		for (int i = 0; i < keyframes.length(); i++)
+		{
+			JSONObject keyframe = keyframes.getJSONObject(i);
+
+			List<IKey> list = switch (keyframe.getString("channel"))
+			{
+				case "position" -> pos;
+				case "rotation" -> rot;
+				case "scale" -> siz;
+				default -> throw new IllegalStateException("Unexpected value: " + keyframe.getString("channel"));
+			};
+
+			loadDataPoints(keyframe, list);
+		}
+
+		pos.sort(Comparator.comparingDouble(IKey::time));
+		rot.sort(Comparator.comparingDouble(IKey::time));
+		siz.sort(Comparator.comparingDouble(IKey::time));
+
+		Bone bone = new Bone(boneJson.getString("name"), pos, rot, siz);
 		bones.add(bone);
 	}
 
-	private static List<IKey> loadKeys(JSONObject json, String keyType)
+	private static void loadDataPoints(JSONObject json, List<IKey> list)
 	{
-		List<IKey> list = new ArrayList<>();
+		JSONArray data_points = json.getJSONArray("data_points");
+		if (data_points.length() > 1)
+			System.err.println("Animation has more than one data_point JSONObject! (Info from AnimLoader)");
+		JSONObject dataPoints = data_points.getJSONObject(0);
 
-		if (!json.has(keyType))
-			return list;
+		list.add(new Key(
+			json.getDouble("time"),
+			loadValue(dataPoints.get("x")),
+			loadValue(dataPoints.get("y")),
+			loadValue(dataPoints.get("z")),
+			getType(json.getString("interpolation"))
+			)
+		);
+	}
 
-		// type has only one value
-		if (json.get(keyType) instanceof JSONArray arr)
+	private static EnumKeyType getType(String interpolation)
+	{
+		return switch (interpolation)
 		{
-			list.add(
-				new Key(
-					0,
-					loadValue(arr.get(0)),
-					loadValue(arr.get(1)),
-					loadValue(arr.get(2)),
-					EnumKeyType.LINEAR
-				)
-			);
-			return list;
-		}
-
-		JSONObject type = json.getJSONObject(keyType);
-
-		for (String s : type.keySet())
-		{
-			double time = Double.parseDouble(s);
-			if (type.get(s) instanceof JSONObject o)
-			{
-				JSONArray post = o.getJSONArray("post");
-				list.add(
-					new Key(
-						time,
-						loadValue(post.get(0)),
-						loadValue(post.get(1)),
-						loadValue(post.get(2)),
-						EnumKeyType.CATMULL_ROM
-					)
-				);
-
-			} else if (type.get(s) instanceof JSONArray arr)
-			{
-				list.add(
-					new Key(
-						time,
-						loadValue(arr.get(0)),
-						loadValue(arr.get(1)),
-						loadValue(arr.get(2)),
-						EnumKeyType.LINEAR
-					)
-				);
-			}
-		}
-
-		list.sort(Comparator.comparingDouble(IKey::time));
-
-		return list;
+			case "linear" -> EnumKeyType.LINEAR;
+			case "catmullrom" -> EnumKeyType.CATMULL_ROM;
+			default -> throw new IllegalStateException("Unexpected value: " + interpolation);
+		};
 	}
 
 	private static IKeyValue loadValue(Object o)
@@ -104,6 +94,9 @@ public class AnimLoader
 			return new NumericValue(n.floatValue());
 		} else if (o instanceof String s)
 		{
+			if (MathUtil.isDecimal(s))
+				return new NumericValue(Float.parseFloat(s));
+
 			return new ExpressionValue(s);
 		}
 

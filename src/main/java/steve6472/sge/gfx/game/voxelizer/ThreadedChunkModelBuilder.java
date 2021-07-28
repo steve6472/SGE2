@@ -2,15 +2,11 @@ package steve6472.sge.gfx.game.voxelizer;
 
 import org.joml.*;
 import org.lwjgl.BufferUtils;
-import steve6472.sge.gfx.game.blockbench.model.BBModel;
-import steve6472.sge.gfx.game.blockbench.model.Element;
-import steve6472.sge.gfx.game.blockbench.model.Outliner;
-import steve6472.sge.gfx.game.blockbench.model.OutlinerElement;
+import steve6472.sge.gfx.game.blockbench.model.*;
 import steve6472.sge.main.util.MathUtil;
 
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -24,9 +20,12 @@ import java.util.concurrent.LinkedBlockingQueue;
  ***********************/
 public class ThreadedChunkModelBuilder extends Thread
 {
-	private final BBModel[] neighbours = new BBModel[6];
+	public boolean DEBUG = false;
+
+	private final Builder center = new Builder();
+	private final Builder[] neighbours = new Builder[6];
 	private final Vector3i[] offsets = {new Vector3i(1, 0, 0), new Vector3i(-1, 0, 0), new Vector3i(0, 1, 0), new Vector3i(0, -1, 0), new Vector3i(0, 0, 1), new Vector3i(0, 0, -1)};
-	private final HashMap<BBModel, List<Vector3f>> cache = new HashMap<>();
+	private final HashMap<BBModel, List<Vector3f>> modelCache = new HashMap<>();
 	private final BlockingQueue<VoxModel> inputQueue;
 	private final BlockingQueue<PassData> outputQueue;
 	private final Vector3i offset;
@@ -51,9 +50,23 @@ public class ThreadedChunkModelBuilder extends Thread
 		this.normal = new ArrayList<>();
 
 		offset = new Vector3i();
+		for (int i = 0; i < 6; i++)
+		{
+			neighbours[i] = new Builder();
+		}
 	}
 
-	private void rebuild(VoxModel model)
+	private void loadNeightbour(int x, int y, int z, int index)
+	{
+		neighbours[index].transform().identity();
+		neighbours[index].transform().translate(offsets[index].x, offsets[index].y, offsets[index].z);
+		neighbours[index].transform().scale(1f / 16f);
+//		neighbours[index].getTransformation().translate(0, -8f, 0);
+		modelAccessor.loadElements(neighbours[index], x, y, z);
+		neighbours[index].transform().scale(16f);
+	}
+
+	public PassData rebuild_(VoxModel model)
 	{
 		for (int i = 0; i < 16; i++)
 		{
@@ -63,38 +76,82 @@ public class ThreadedChunkModelBuilder extends Thread
 				{
 					offset.set(i, j, k);
 
-					neighbours[0] = modelAccessor.getModel(i + model.position.x() * 16 + 1, j + model.position.y() * 16, k + model.position.z() * 16);
-					neighbours[1] = modelAccessor.getModel(i + model.position.x() * 16 - 1, j + model.position.y() * 16, k + model.position.z() * 16);
-					neighbours[2] = modelAccessor.getModel(i + model.position.x() * 16, j + model.position.y() * 16 + 1, k + model.position.z() * 16);
-					neighbours[3] = modelAccessor.getModel(i + model.position.x() * 16, j + model.position.y() * 16 - 1, k + model.position.z() * 16);
-					neighbours[4] = modelAccessor.getModel(i + model.position.x() * 16, j + model.position.y() * 16, k + model.position.z() * 16 + 1);
-					neighbours[5] = modelAccessor.getModel(i + model.position.x() * 16, j + model.position.y() * 16, k + model.position.z() * 16 - 1);
+					modelAccessor.loadElements(center, i + model.position.x() * 16, j + model.position.y() * 16, k + model.position.z() * 16);
 
-					for (BBModel neighbour : neighbours)
+					if (center.isEmpty())
+						continue;
+
+					loadNeightbour(i + model.position.x() * 16 + 1, j + model.position.y() * 16, k + model.position.z() * 16, 0);
+					loadNeightbour(i + model.position.x() * 16 - 1, j + model.position.y() * 16, k + model.position.z() * 16, 1);
+					loadNeightbour(i + model.position.x() * 16, j + model.position.y() * 16 + 1, k + model.position.z() * 16, 2);
+					loadNeightbour(i + model.position.x() * 16, j + model.position.y() * 16 - 1, k + model.position.z() * 16, 3);
+					loadNeightbour(i + model.position.x() * 16, j + model.position.y() * 16, k + model.position.z() * 16 + 1, 4);
+					loadNeightbour(i + model.position.x() * 16, j + model.position.y() * 16, k + model.position.z() * 16 - 1, 5);
+
+					for (Builder neighbour : neighbours)
 					{
-						addToCache(neighbour);
+						neighbour.getModels().forEach(this::addToCache);
 					}
 
-					BBModel bbModel = modelAccessor.getModel(i + model.position.x() * 16, j + model.position.y() * 16, k + model.position
-						.z() * 16);
+					for (BBModel bbModel : center.getModels())
+					{
+						addToCache(bbModel);
+						build(bbModel, i + model.position.x() * 16, j + model.position.y() * 16, k + model.position.z() * 16, model.layer);
+					}
 
-					addToCache(bbModel);
+					//						build(element);
+//					STACK.clear();
+//					STACK.scale(1f / 16f);
+////					//				1		modelAccessor.transform(STACK, i + model.position.x() * 16, j + model.position.y() * 16, k + model.position.z() * 16);
+//					STACK.mul(center.getTransformation());
+//					STACK.translate(0, -8f, 0);
+					STACK.clear();
+					STACK.scale(1f / 16f);
+					STACK.mul(center.transform());
+					STACK.translate(0, -8f, 0);
+					for (Element element : center.getElements())
+					{
+						color(1, 1, 1, 1);
+						rect(element, model.layer);
+					}
 
-					build(bbModel);
+					for (Builder neighbour : neighbours)
+					{
+						neighbour.clear();
+					}
 
-					Arrays.fill(neighbours, null);
+					center.clear();
+
+					if (DEBUG)
+						System.out.println("");
 				}
 			}
 		}
 
+
+		PassData passData = new PassData(model.getLayer(), toFloatBuffer3(vertices), toFloatBuffer4(colors), toFloatBuffer2(textures), toFloatBuffer3(normal), vertexCount / 3, model.position
+			.x(), model.position.y(), model.position.z());
+		clear();
+		return passData;
+	}
+
+	private void rebuild(VoxModel model)
+	{
+		PassData data = rebuild_(model);
+
 		try
 		{
-			outputQueue.put(new PassData(model.getLayer(), toFloatBuffer3(vertices), toFloatBuffer4(colors), toFloatBuffer2(textures), toFloatBuffer3(normal), vertexCount / 3, model.position.x(), model.position.y(), model.position.z()));
+			outputQueue.put(data);
 		} catch (InterruptedException e)
 		{
 			e.printStackTrace();
 		}
 
+		clear();
+	}
+
+	public void clear()
+	{
 		vertices.clear();
 		colors.clear();
 		textures.clear();
@@ -111,21 +168,22 @@ public class ThreadedChunkModelBuilder extends Thread
 	 */
 	public void clearCache()
 	{
-		cache.clear();
+		modelCache.clear();
 	}
 
 	private void addToCache(BBModel model)
 	{
-		if (model == null || cache.containsKey(model))
+		if (model == null || modelCache.containsKey(model))
 			return;
 
 		List<Vector3f> vertices = new ArrayList<>();
 		renderCache(model, vertices, new Matrix4fStack(16));
-		cache.put(model, vertices);
+		modelCache.put(model, vertices);
 	}
 
 	public void renderCache(BBModel model, List<Vector3f> vertices, Matrix4fStack stack)
 	{
+		stack.translate(0, -0.5f, 0);
 		stack.scale(1f / 16f);
 		for (OutlinerElement el : model.getElements())
 		{
@@ -144,9 +202,13 @@ public class ThreadedChunkModelBuilder extends Thread
 		stack.pushMatrix();
 		stack.translate(-el.positionX, el.positionY, el.positionZ);
 		stack.translate(el.originX, el.originY, el.originZ);
-		stack.rotateXYZ(el.rotationX, el.rotationY, el.rotationZ);
-		stack.translate(-el.originX, -el.originY, -el.originZ);
+		QUAT.identity();
+		QUAT.rotateZ(el.rotationZ);
+		QUAT.rotateY(el.rotationY);
+		QUAT.rotateX(el.rotationX);
+		stack.rotate(QUAT);
 		stack.scale(el.scaleX, el.scaleY, el.scaleZ);
+		stack.translate(-el.originX, -el.originY, -el.originZ);
 		if (el instanceof Outliner outliner)
 		{
 			for (OutlinerElement child : outliner.children)
@@ -241,39 +303,175 @@ public class ThreadedChunkModelBuilder extends Thread
 			stack.transformPosition(x, y + h, z + d, TEMP_VECTOR);
 			vertices.add(new Vector3f(TEMP_VECTOR));
 		}
+	}
 
+	protected int elementCache(Matrix4f transformations, Element element, List<Vector3f> vertices)
+	{
+		float x = element.fromX;
+		float y = element.fromY;
+		float z = element.fromZ;
+
+		float w = element.toX - x;
+		float h = element.toY - y;
+		float d = element.toZ - z;
+
+		int s = -1;
+
+		if (element.up != null)
+		{
+			transformations.transformPosition(x + w, y + h, z, vertices.get(++s));
+			transformations.transformPosition(x, y + h, z, vertices.get(++s));
+			transformations.transformPosition(x, y + h, z + d, vertices.get(++s));
+			transformations.transformPosition(x + w, y + h, z + d, vertices.get(++s));
+		}
+
+		if (element.down != null)
+		{
+			transformations.transformPosition(x, y, z + d, vertices.get(++s));
+			transformations.transformPosition(x, y, z, vertices.get(++s));
+			transformations.transformPosition(x + w, y, z, vertices.get(++s));
+			transformations.transformPosition(x + w, y, z + d, vertices.get(++s));
+		}
+
+		if (element.north != null)
+		{
+			transformations.transformPosition(x + w, y + h, z, vertices.get(++s));
+			transformations.transformPosition(x + w, y, z, vertices.get(++s));
+			transformations.transformPosition(x, y, z, vertices.get(++s));
+			transformations.transformPosition(x, y + h, z, vertices.get(++s));
+		}
+
+		if (element.east != null)
+		{
+			transformations.transformPosition(x + w, y + h, z + d, vertices.get(++s));
+			transformations.transformPosition(x + w, y, z + d, vertices.get(++s));
+			transformations.transformPosition(x + w, y, z, vertices.get(++s));
+			transformations.transformPosition(x + w, y + h, z, vertices.get(++s));
+		}
+
+		if (element.south != null)
+		{
+			transformations.transformPosition(x, y + h, z + d, vertices.get(++s));
+			transformations.transformPosition(x, y, z + d, vertices.get(++s));
+			transformations.transformPosition(x + w, y, z + d, vertices.get(++s));
+			transformations.transformPosition(x + w, y + h, z + d, vertices.get(++s));
+		}
+
+		if (element.west != null)
+		{
+			transformations.transformPosition(x, y + h, z, vertices.get(++s));
+			transformations.transformPosition(x, y, z, vertices.get(++s));
+			transformations.transformPosition(x, y, z + d, vertices.get(++s));
+			transformations.transformPosition(x, y + h, z + d, vertices.get(++s));
+		}
+
+		return s;
 	}
 
 	/*
 	 * Model builder functions
 	 */
 
-	private boolean buildFace(int index)
+	private boolean buildFace()
 	{
-		BBModel n = neighbours[index];
-		Vector3i o = offsets[index];
-
-		List<Vector3f> vertices = cache.get(n);
-		if (vertices != null && !vertices.isEmpty())
+		for (int i = 0; i < 6; i++)
 		{
-			for (int j = 0; j < vertices.size() / 4; j++)
+			Builder n = neighbours[i];
+			Matrix4f transformations = n.transform();
+
+			for (Element element : n.getElements())
 			{
-				v0.set(vertices.get(j * 4)).add(o.x, o.y, o.z);
-				v1.set(vertices.get(j * 4 + 1)).add(o.x, o.y, o.z);
-				v2.set(vertices.get(j * 4 + 2)).add(o.x, o.y, o.z);
-				v3.set(vertices.get(j * 4 + 3)).add(o.x, o.y, o.z);
-
-				Vector3f norm = new Vector3f();
-				Vector3f norm_ = new Vector3f();
-				GeometryUtils.normal(v0, v1, v2, norm);
-				GeometryUtils.normal(V0, V1, V2, norm_);
-
-				if (norm.add(norm_).absolute().length() > 0.000001f)
+				List<Vector3f> vertices = ELEMENT_VERTICES;
+				int count = elementCache(MATRIX4F.set(n.transform()).scale(1f / 16f).translate(0, -24, 0), element, vertices);
+				if (count == 0)
 					continue;
 
-				if (isPointInsideRectangle(v0, v1, v2, v3, V0) && isPointInsideRectangle(v0, v1, v2, v3, V1) && isPointInsideRectangle(v0, v1, v2, v3, V2) && isPointInsideRectangle(v0, v1, v2, v3, V3))
+				for (int j = 0; j < count / 4; j++)
 				{
-					return false;
+					v0.set(vertices.get(j * 4));
+					v1.set(vertices.get(j * 4 + 1));
+					v2.set(vertices.get(j * 4 + 2));
+
+					transformations.transformPosition(v0);
+					transformations.transformPosition(v1);
+					transformations.transformPosition(v2);
+
+//					PointTess point = (PointTess) VoxRenderTest.stack.getRenderType("point").getTess();
+//					point.color(0xffffffff);
+//					point.pos(v0.x, v0.y, v0.z).endVertex();
+//					point.pos(v1.x, v1.y, v1.z).endVertex();
+//					point.pos(v2.x, v2.y, v2.z).endVertex();
+
+					GeometryUtils.normal(v0, v1, v2, NORMAL);
+					GeometryUtils.normal(V0, V1, V2, NORMAL_);
+
+					if (NORMAL.add(NORMAL_).absolute().length() > 0.000001f)
+						continue;
+
+					v3.set(vertices.get(j * 4 + 3));
+					transformations.transformPosition(v3);
+
+					if (DEBUG)
+					{
+						System.out.printf("v0: %s, v1: %s, v2: %s, v3: %s \n", v0, v1, v2, v3);
+						System.out.printf("V0: %s, V1: %s, V2: %s, V3: %s \n", V0, V1, V2, V3);
+					}
+
+					if (isPointInsideRectangle(v0, v1, v2, v3, V0) && isPointInsideRectangle(v0, v1, v2, v3, V1) && isPointInsideRectangle(v0, v1, v2, v3, V2) && isPointInsideRectangle(v0, v1, v2, v3, V3))
+					{
+						return false;
+					}
+				}
+			}
+
+			for (BBModel model : n.getModels())
+			{
+				List<Vector3f> vertices = modelCache.get(model);
+				if (vertices != null && !vertices.isEmpty())
+				{
+					if (DEBUG)
+						System.out.println(offset);
+
+					for (int j = 0; j < vertices.size() / 4; j++)
+					{
+						v0.set(vertices.get(j * 4));
+						v1.set(vertices.get(j * 4 + 1));
+						v2.set(vertices.get(j * 4 + 2));
+
+						transformations.transformPosition(v0);
+						transformations.transformPosition(v1);
+						transformations.transformPosition(v2);
+
+//						if (offset.equals(0, 0, 0))
+//						{
+//							PointTess point = (PointTess) VoxRenderTest.stack.getRenderType("point").getTess();
+//							point.color(0xff00ffff);
+//							point.pos(v0.x, v0.y, v0.z).endVertex();
+//							point.pos(v1.x, v1.y, v1.z).endVertex();
+//							point.pos(v2.x, v2.y, v2.z).endVertex();
+//						}
+
+
+						GeometryUtils.normal(v0, v1, v2, NORMAL);
+						GeometryUtils.normal(V0, V1, V2, NORMAL_);
+
+						if (NORMAL.add(NORMAL_).absolute().length() > 0.000001f)
+							continue;
+
+						v3.set(vertices.get(j * 4 + 3));
+						transformations.transformPosition(v3);
+
+						if (DEBUG)
+						{
+							System.out.printf("v0: %s, v1: %s, v2: %s, v3: %s \n", v0, v1, v2, v3);
+							System.out.printf("V0: %s, V1: %s, V2: %s, V3: %s \n", V0, V1, V2, V3);
+						}
+
+						if (isPointInsideRectangle(v0, v1, v2, v3, V0) && isPointInsideRectangle(v0, v1, v2, v3, V1) && isPointInsideRectangle(v0, v1, v2, v3, V2) && isPointInsideRectangle(v0, v1, v2, v3, V3))
+						{
+							return false;
+						}
+					}
 				}
 			}
 		}
@@ -306,7 +504,7 @@ public class ThreadedChunkModelBuilder extends Thread
 		return MathUtil.compareFloat(rectArea, t0 + t1 + t2 + t3, 0.00001f);
 	}
 
-	private void rect(Element element)
+	private void rect(Element element, VoxLayer layer)
 	{
 		float x = element.fromX;
 		float y = element.fromY;
@@ -316,37 +514,54 @@ public class ThreadedChunkModelBuilder extends Thread
 		float h = element.toY - y;
 		float d = element.toZ - z;
 
-		if (element.up != null)
+		if (DEBUG)
+			System.out.println(element);
+
+		if (element.up != null && element.up.getLayer().equals(layer))
 		{
-			normal(0, 1, 0);
+			if (DEBUG)
+				System.out.println("up");
+//			normal(0, 1, 0);
 
 			STACK.transformPosition(x + w, y + h, z, V0);
 			STACK.transformPosition(x, y + h, z, V1);
 			STACK.transformPosition(x, y + h, z + d, V2);
 			STACK.transformPosition(x + w, y + h, z + d, V3);
 
-			if (buildFace(2))
-			{
-				vert0(element.up, pos(V0));
-				vert1(element.up, pos(V1));
-				vert2(element.up, pos(V2));
+			GeometryUtils.normal(V0, V1, V2, NORMAL);
 
-				vert2(element.up, pos(V2));
-				vert3(element.up, pos(V3));
-				vert0(element.up, pos(V0));
+			builderNormal.set(NORMAL);
+
+			if (buildFace())
+			{
+				if (DEBUG)
+					System.out.println("Building up " + V0 + " " + V1 + " " + V2);
+				vert3(element.up, pos(V0));
+				vert0(element.up, pos(V1));
+				vert1(element.up, pos(V2));
+
+				vert1(element.up, pos(V2));
+				vert2(element.up, pos(V3));
+				vert3(element.up, pos(V0));
 			}
 		}
 
-		if (element.down != null)
+		if (element.down != null && element.down.getLayer().equals(layer))
 		{
-			normal(0, -1, 0);
+			if (DEBUG)
+				System.out.println("down");
+//			normal(0, -1, 0);
 
 			STACK.transformPosition(x, y, z + d, V0);
 			STACK.transformPosition(x, y, z, V1);
 			STACK.transformPosition(x + w, y, z, V2);
 			STACK.transformPosition(x + w, y, z + d, V3);
 
-			if (buildFace(3))
+			GeometryUtils.normal(V0, V1, V2, NORMAL);
+
+			builderNormal.set(NORMAL);
+
+			if (buildFace())
 			{
 				vert0(element.down, pos(V0));
 				vert1(element.down, pos(V1));
@@ -359,16 +574,22 @@ public class ThreadedChunkModelBuilder extends Thread
 		}
 
 
-		if (element.north != null)
+		if (element.north != null && element.north.getLayer().equals(layer))
 		{
-			normal(1, 0, 0);
+			if (DEBUG)
+				System.out.println("north");
+//			normal(1, 0, 0);
 
 			STACK.transformPosition(x + w, y + h, z, V0);
 			STACK.transformPosition(x + w, y, z, V1);
 			STACK.transformPosition(x, y, z, V2);
 			STACK.transformPosition(x, y + h, z, V3);
 
-			if (buildFace(5))
+			GeometryUtils.normal(V0, V1, V2, NORMAL);
+
+			builderNormal.set(NORMAL);
+
+			if (buildFace())
 			{
 				vert0(element.north, pos(V0));
 				vert1(element.north, pos(V1));
@@ -381,15 +602,22 @@ public class ThreadedChunkModelBuilder extends Thread
 		}
 
 
-		if (element.east != null)
+		if (element.east != null && element.east.getLayer().equals(layer))
 		{
-			normal(0, 0, 1);
+			if (DEBUG)
+				System.out.println("east");
+//			normal(0, 0, 1);
+
 			STACK.transformPosition(x + w, y + h, z + d, V0);
 			STACK.transformPosition(x + w, y, z + d, V1);
 			STACK.transformPosition(x + w, y, z, V2);
 			STACK.transformPosition(x + w, y + h, z, V3);
 
-			if (buildFace(0))
+			GeometryUtils.normal(V0, V1, V2, NORMAL);
+
+			builderNormal.set(NORMAL);
+
+			if (buildFace())
 			{
 				vert0(element.east, pos(V0));
 				vert1(element.east, pos(V1));
@@ -402,16 +630,22 @@ public class ThreadedChunkModelBuilder extends Thread
 		}
 
 
-		if (element.south != null)
+		if (element.south != null && element.south.getLayer().equals(layer))
 		{
-			normal(-1, 0, 0);
+			if (DEBUG)
+				System.out.println("south");
+//			normal(-1, 0, 0);
 
 			STACK.transformPosition(x, y + h, z + d, V0);
 			STACK.transformPosition(x, y, z + d, V1);
 			STACK.transformPosition(x + w, y, z + d, V2);
 			STACK.transformPosition(x + w, y + h, z + d, V3);
 
-			if (buildFace(4))
+			GeometryUtils.normal(V0, V1, V2, NORMAL);
+
+			builderNormal.set(NORMAL);
+
+			if (buildFace())
 			{
 				vert0(element.south, pos(V0));
 				vert1(element.south, pos(V1));
@@ -424,16 +658,22 @@ public class ThreadedChunkModelBuilder extends Thread
 		}
 
 
-		if (element.west != null)
+		if (element.west != null && element.west.getLayer().equals(layer))
 		{
-			normal(0, 0, -1);
+			if (DEBUG)
+				System.out.println("west");
+//			normal(0, 0, -1);
 
 			STACK.transformPosition(x, y + h, z, V0);
 			STACK.transformPosition(x, y, z, V1);
 			STACK.transformPosition(x, y, z + d, V2);
 			STACK.transformPosition(x, y + h, z + d, V3);
 
-			if (buildFace(1))
+			GeometryUtils.normal(V0, V1, V2, NORMAL);
+
+			builderNormal.set(NORMAL);
+
+			if (buildFace())
 			{
 				vert0(element.west, pos(V0));
 				vert1(element.west, pos(V1));
@@ -446,6 +686,13 @@ public class ThreadedChunkModelBuilder extends Thread
 		}
 	}
 
+	private final List<Vector3f> ELEMENT_VERTICES = new ArrayList<>(4 * 6);
+	{
+		for (int i = 0; i < 4 * 6; i++)
+		{
+			ELEMENT_VERTICES.add(new Vector3f());
+		}
+	}
 	private final Vector3f TEMP_VECTOR = new Vector3f();
 	private final Vector3f V0 = new Vector3f();
 	private final Vector3f V1 = new Vector3f();
@@ -455,6 +702,9 @@ public class ThreadedChunkModelBuilder extends Thread
 	private final Vector3f v1 = new Vector3f();
 	private final Vector3f v2 = new Vector3f();
 	private final Vector3f v3 = new Vector3f();
+	private final Quaternionf QUAT = new Quaternionf();
+	private final Vector3f NORMAL = new Vector3f();
+	private final Vector3f NORMAL_ = new Vector3f();
 	private final Matrix4fStack STACK = new Matrix4fStack(16);
 	private final Matrix4f MATRIX4F = new Matrix4f();
 	private final Vector3f builderPos = new Vector3f();
@@ -466,14 +716,6 @@ public class ThreadedChunkModelBuilder extends Thread
 	{
 		builderPos.set(v).add(offset.x, offset.y, offset.z);
 		return this;
-	}
-
-	private void normal(float nx, float ny, float nz)
-	{
-		MATRIX4F.identity();
-		MATRIX4F.transformPosition(nx, ny, nz, TEMP_VECTOR);
-		TEMP_VECTOR.normalize();
-		builderNormal.set(TEMP_VECTOR);
 	}
 
 	private void uv(float u, float v)
@@ -495,42 +737,42 @@ public class ThreadedChunkModelBuilder extends Thread
 		vertexCount++;
 	}
 
-	private void build(BBModel model)
+	private void build(BBModel model, int x, int y, int z, VoxLayer layer)
 	{
-		STACK.identity();
+		STACK.clear();
 		//todo : move -8, 0, -8
 //		STACK.translate(offset.x, offset.y, offset.z);
 		STACK.scale(1f / 16f);
+		STACK.mul(center.transform());
+		STACK.translate(0, -8f, 0);
 		color(1, 1, 1, 1);
 		for (OutlinerElement el : model.getElements())
 		{
-			if (el instanceof Outliner outliner)
-			{
-				build(outliner);
-			} else if (el instanceof Element element)
-			{
-				rect(element);
-			}
+			build(el, layer);
 		}
 	}
 
-	private void build(OutlinerElement el)
+	private void build(OutlinerElement el, VoxLayer layer)
 	{
 		STACK.pushMatrix();
 		STACK.translate(-el.positionX, el.positionY, el.positionZ);
 		STACK.translate(el.originX, el.originY, el.originZ);
-		STACK.rotateXYZ(el.rotationX, el.rotationY, el.rotationZ);
+		QUAT.identity();
+		QUAT.rotateZ(el.rotationZ);
+		QUAT.rotateY(el.rotationY);
+		QUAT.rotateX(el.rotationX);
+		STACK.rotate(QUAT);
 		STACK.translate(-el.originX, -el.originY, -el.originZ);
 		STACK.scale(el.scaleX, el.scaleY, el.scaleZ);
 		if (el instanceof Outliner outliner)
 		{
 			for (OutlinerElement child : outliner.children)
 			{
-				build(child);
+				build(child, layer);
 			}
 		} else if (el instanceof Element element)
 		{
-			rect(element);
+			rect(element, layer);
 		}
 		STACK.popMatrix();
 	}

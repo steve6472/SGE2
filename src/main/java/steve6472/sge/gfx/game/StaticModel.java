@@ -1,6 +1,5 @@
 package steve6472.sge.gfx.game;
 
-import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL11;
 import steve6472.sge.gfx.StaticTexture;
@@ -57,7 +56,6 @@ public class StaticModel
 	{
 		shader.bind(view);
 		shader.setTransformation(transformation);
-		shader.setUniform(BBShader.NORMAL_MATRIX, new Matrix3f(new Matrix4f(transformation).invert().transpose3x3()));
 		texture.bind();
 
 		VertexObjectCreator.basicRender(getVao(), 4, getVertexCount(), GL11.GL_TRIANGLES);

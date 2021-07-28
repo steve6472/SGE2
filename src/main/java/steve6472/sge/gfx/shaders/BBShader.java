@@ -8,7 +8,7 @@ package steve6472.sge.gfx.shaders;
  ***********************/
 public class BBShader extends StaticShader3D
 {
-	public static Type ATLAS, NORMAL_MATRIX;
+	public static Type ATLAS;
 
 	public BBShader()
 	{
@@ -19,6 +19,5 @@ public class BBShader extends StaticShader3D
 	protected void createUniforms()
 	{
 		addUniform("atlas", ATLAS = new Type(EnumUniformType.INT_1));
-		addUniform("normalMatrix", NORMAL_MATRIX = new Type(EnumUniformType.MAT_3));
 	}
 }
