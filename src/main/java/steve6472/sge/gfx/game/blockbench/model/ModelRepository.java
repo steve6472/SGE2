@@ -19,21 +19,30 @@ public class ModelRepository
 	private final List<ElementHolder> elements = new ArrayList<>();
 	private final ModelTextureAtlas atlas = new ModelTextureAtlas();
 	private final VoxLayers layers = new VoxLayers();
-	private final HashMap<PropertyClass, ModelProperty> properties = new HashMap<>();
-
+	private final HashMap<PropertyClass, List<ModelProperty>> properties = new HashMap<>();
 
 	public static final VoxLayer NORMAL_LAYER = new VoxLayer("normal");
-	public static final ModelProperty LAYER_PROPERTY = new ModelProperty(PropertyClass.FACE, PropertyType.STRING, "layer", NORMAL_LAYER.getId());
+	public static ModelProperty LAYER_PROPERTY;
 
 	public ModelRepository()
 	{
 		addLayer(NORMAL_LAYER);
+		LAYER_PROPERTY = new ModelProperty(PropertyClass.FACE, PropertyType.STRING, "layer", () -> NORMAL_LAYER, (s) -> layers.getLayer((String) s));
 		addProperty(LAYER_PROPERTY);
 	}
 
 	public void addProperty(ModelProperty property)
 	{
-		properties.put(property.clazz(), property);
+		List<ModelProperty> modelProperties = properties.get(property.clazz());
+		if (modelProperties == null)
+		{
+			modelProperties = new ArrayList<>();
+			modelProperties.add(property);
+			properties.put(property.clazz(), modelProperties);
+		} else
+		{
+			modelProperties.add(property);
+		}
 	}
 
 	public ElementHolder addElement(Supplier<Element> constructor)
@@ -106,7 +115,7 @@ public class ModelRepository
 		return elements;
 	}
 
-	public HashMap<PropertyClass, ModelProperty> getProperties()
+	public HashMap<PropertyClass, List<ModelProperty>> getProperties()
 	{
 		return properties;
 	}

@@ -10,7 +10,7 @@ import java.util.HashMap;
  ***********************/
 public interface IProperties
 {
-	HashMap<String, ModelPropertyValue> getProperties();
+	HashMap<ModelProperty, Object> getProperties();
 
 	PropertyClass getPropertyClass();
 }

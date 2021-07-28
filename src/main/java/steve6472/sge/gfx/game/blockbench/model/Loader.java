@@ -5,7 +5,6 @@ import org.json.JSONObject;
 import steve6472.sge.gfx.game.blockbench.animation.AnimLoader;
 import steve6472.sge.gfx.game.blockbench.animation.BBAnimation;
 import steve6472.sge.gfx.game.blockbench.animation.Bone;
-import steve6472.sge.gfx.game.voxelizer.VoxLayer;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -123,6 +122,8 @@ public class Loader
 		if (faces.has("up")) element.up = loadFace(repository, faces.getJSONObject("up"), textures, resX, resY);
 		if (faces.has("down")) element.down = loadFace(repository, faces.getJSONObject("down"), textures, resX, resY);
 
+		loadProperties(repository, json, element, PropertyClass.CUBE);
+
 		map.put(element.uuid, element);
 	}
 
@@ -166,12 +167,29 @@ public class Loader
 
 		JSONArray uv = json.getJSONArray("uv");
 
-		VoxLayer layer1 = repository.getLayer(json.optString("layer", "normal"));
-		VoxLayer layer = layer1 == null ? ModelRepository.NORMAL_LAYER : layer1;
+		Element.Face face = new Element.Face(uv.getFloat(0) / resX, uv.getFloat(1) / resY, uv.getFloat(2) / resX, uv
+			.getFloat(3) / resY, (byte) (json.optInt("rotation", 0) / 90), id);
 
-		return new Element.Face(uv.getFloat(0) / resX, uv.getFloat(1) / resY, uv.getFloat(2) / resX, uv.getFloat(3) / resY, (byte) (json.optInt("rotation", 0) / 90), id, layer);
+		loadProperties(repository, json, face, PropertyClass.FACE);
+
+		return face;
 	}
 
+	private static void loadProperties(ModelRepository repository, JSONObject json, IProperties propertyObject, PropertyClass propertyClass)
+	{
+		List<ModelProperty> modelProperties = repository.getProperties().get(propertyClass);
+
+		for (ModelProperty modelProperty : modelProperties)
+		{
+			if (json.has(modelProperty.name()))
+			{
+				propertyObject.getProperties().put(modelProperty, modelProperty.value().apply(json.get(modelProperty.name())));
+			} else
+			{
+				propertyObject.getProperties().put(modelProperty, modelProperty.defaultValue().get());
+			}
+		}
+	}
 
 	private static OutlinerElement[] loadOutliner(JSONArray outliner, HashMap<UUID, Element> elements)
 	{

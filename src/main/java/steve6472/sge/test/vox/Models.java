@@ -15,6 +15,7 @@ class Models
 	public static final BBModel DEBUG = addModel("game/props/block/debug");
 	public static final BBModel GIZMO = addModel("game/props/block/gizmo");
 	public static final BBModel OUTLINE = addModel("game/props/block/outline");
+	public static final BBModel OUTLINE_ = addModel("game/props/block/outline_");
 	public static final BBModel PISTON = addModel("game/props/block/piston_move");
 	public static final int grass_side = VoxRenderTest.models.getAtlas().putTexture("props/blocks/grass_side");
 	public static final int grass = VoxRenderTest.models.getAtlas().putTexture("props/blocks/grass");

@@ -3,11 +3,15 @@ package steve6472.sge.test.vox;
 import org.joml.Vector3i;
 import org.lwjgl.opengl.GL11;
 import steve6472.sge.gfx.game.blockbench.animation.BBAnimController;
+import steve6472.sge.gfx.game.blockbench.model.ModelProperty;
 import steve6472.sge.gfx.game.blockbench.model.ModelRepository;
+import steve6472.sge.gfx.game.blockbench.model.PropertyClass;
+import steve6472.sge.gfx.game.blockbench.model.PropertyType;
 import steve6472.sge.gfx.game.stack.RenderType;
 import steve6472.sge.gfx.game.stack.Stack;
 import steve6472.sge.gfx.game.stack.tess.*;
 import steve6472.sge.gfx.game.voxelizer.ThreadedChunkModelBuilder;
+import steve6472.sge.gfx.game.voxelizer.VoxLayer;
 import steve6472.sge.gfx.game.voxelizer.VoxModel;
 import steve6472.sge.gfx.shaders.BBShader;
 import steve6472.sge.gfx.shaders.PlainColorShader;
@@ -51,6 +55,8 @@ public class VoxRenderTest extends MainApp
 
 	private BBAnimController controller;
 
+	private static final VoxLayer DOUBLE_SIDED = new VoxLayer("double_sided");
+
 	@Override
 	protected boolean enableGLDebug()
 	{
@@ -72,6 +78,9 @@ public class VoxRenderTest extends MainApp
 				builder.clearCache();
 			}
 		};
+		models.addLayer(DOUBLE_SIDED);
+		models.addProperty(new ModelProperty(PropertyClass.CUBE, PropertyType.BOOLEAN, "collision", () -> false, o -> o));
+		models.addProperty(new ModelProperty(PropertyClass.CUBE, PropertyType.BOOLEAN, "hitbox", () -> false, o -> o));
 		Models.init();
 		models.finish();
 
@@ -99,6 +108,7 @@ public class VoxRenderTest extends MainApp
 //		world.setState(Blocks.ROCK.getDefaultState(), new VoxPos(0, 0, 0));
 //		world.setState(Blocks.DEBUG.getDefaultState(), new VoxPos(0, 1, 0));
 
+		System.out.println(Models.OUTLINE_);
 
 		entityShader = new BBShader();
 		entityShader.bind();

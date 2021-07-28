@@ -1,7 +1,5 @@
 package steve6472.sge.gfx.game.blockbench.model;
 
-import steve6472.sge.gfx.game.voxelizer.VoxLayer;
-
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -16,11 +14,14 @@ public final class Element extends OutlinerElement implements IProperties
 	public float fromX, fromY, fromZ;
 	public float toX, toY, toZ;
 	public Face north, east, south, west, up, down;
-	public HashMap<String, ModelPropertyValue> properties;
+	public HashMap<ModelProperty, Object> properties;
 
 	@Override
-	public HashMap<String, ModelPropertyValue> getProperties()
+	public HashMap<ModelProperty, Object> getProperties()
 	{
+		if (properties == null)
+			properties = new HashMap<>();
+
 		return properties;
 	}
 
@@ -38,10 +39,9 @@ public final class Element extends OutlinerElement implements IProperties
 		private float v1;
 		private byte rotation;
 		private int texture;
-		private VoxLayer layer;
-		public HashMap<String, ModelPropertyValue> properties;
+		public final HashMap<ModelProperty, Object> properties;
 
-		public Face(float u0, float v0, float u1, float v1, byte rotation, int texture, VoxLayer layer)
+		public Face(float u0, float v0, float u1, float v1, byte rotation, int texture)
 		{
 			this.u0 = u0;
 			this.v0 = v0;
@@ -49,11 +49,11 @@ public final class Element extends OutlinerElement implements IProperties
 			this.v1 = v1;
 			this.rotation = rotation;
 			this.texture = texture;
-			this.layer = layer;
+			properties = new HashMap<>();
 		}
 
 		@Override
-		public HashMap<String, ModelPropertyValue> getProperties()
+		public HashMap<ModelProperty, Object> getProperties()
 		{
 			return properties;
 		}
@@ -124,16 +124,6 @@ public final class Element extends OutlinerElement implements IProperties
 			this.texture = texture;
 		}
 
-		public void setLayer(VoxLayer layer)
-		{
-			this.layer = layer;
-		}
-
-		public VoxLayer getLayer()
-		{
-			return layer;
-		}
-
 		@Override
 		public boolean equals(Object o)
 		{
@@ -155,20 +145,45 @@ public final class Element extends OutlinerElement implements IProperties
 		@Override
 		public String toString()
 		{
-			return "Face{" + "u0=" + u0 + ", v0=" + v0 + ", u1=" + u1 + ", v1=" + v1 + ", rotation=" + rotation + ", texture=" + texture + ", layer=" + layer + '}' + '\n';
+			StringBuilder sb = new StringBuilder();
+
+			sb.append("Face{\n");
+			sb.append("\t\tu0=").append(u0).append('\n');
+			sb.append("\t\tv0=").append(v0).append('\n');
+			sb.append("\t\tu1=").append(u1).append('\n');
+			sb.append("\t\tv1=").append(v1).append('\n');
+			sb.append("\t\trotation=").append(rotation).append('\n');
+			sb.append("\t\ttexture=").append(texture).append('\n');
+			sb.append("\t\tproperties={");
+			properties.forEach((k, v) -> sb.append("\n\t\t\t").append(k.name()).append("=").append(v));
+			sb.append("\n\t\t}");
+
+			return sb.toString();
 		}
 	}
-
-//	@Override
-//	public String toString()
-//	{
-//		return "Element{" + "name=" + name + ", fromX=" + fromX + ", fromY=" + fromY + ", fromZ=" + fromZ + ", toX=" + toX + ", toY=" + toY + ", toZ=" + toZ + ", north=" + north + ", east=" + east + ", south=" + south + ", west=" + west + ", up=" + up + ", down=" + down + '}' + '\n';
-//	}
-
 
 	@Override
 	public String toString()
 	{
-		return "Element{" + "fromX=" + fromX + ", fromY=" + fromY + ", fromZ=" + fromZ + ", toX=" + toX + ", toY=" + toY + ", toZ=" + toZ + ", north=" + north + ", east=" + east + ", south=" + south + ", west=" + west + ", up=" + up + ", down=" + down + ", name='" + name + '\'' + ", originX=" + originX + ", originY=" + originY + ", originZ=" + originZ + ", rotationX=" + rotationX + ", rotationY=" + rotationY + ", rotationZ=" + rotationZ + ", positionX=" + positionX + ", positionY=" + positionY + ", positionZ=" + positionZ + ", scaleX=" + scaleX + ", scaleY=" + scaleY + ", scaleZ=" + scaleZ + ", uuid=" + uuid + '}' + '\n';
+		StringBuilder sb = new StringBuilder();
+		sb.append("\nElement{\n");
+		sb.append("\tname=").append(name).append('\n');
+		sb.append("\tfrom=[").append(fromX).append(", ").append(fromY).append(", ").append(fromZ).append("]\n");
+		sb.append("\tto=[").append(toX).append(", ").append(toY).append(", ").append(toZ).append("]\n");
+		sb.append("\torigin=[").append(originX).append(", ").append(originY).append(", ").append(originZ).append("]\n");
+		sb.append("\trotation=[").append(rotationX).append(", ").append(rotationY).append(", ").append(rotationZ).append("]\n");
+		sb.append("\tposition=[").append(positionX).append(", ").append(positionY).append(", ").append(positionZ).append("]\n");
+		sb.append("\tscale=[").append(scaleX).append(", ").append(scaleY).append(", ").append(scaleZ).append("]\n");
+		sb.append("\tproperties={");
+		properties.forEach((k, v) -> sb.append("\n\t\t").append(k.name()).append("=").append(v));
+		sb.append("\n\t}\n");
+		if (up != null) sb.append("\tup=").append(up).append('\n');
+		if (down != null) sb.append("\tdown=").append(down).append('\n');
+		if (north != null) sb.append("\tnorth=").append(north).append('\n');
+		if (east != null) sb.append("\teast=").append(east).append('\n');
+		if (south != null) sb.append("\tsouth=").append(south).append('\n');
+		if (west != null) sb.append("\twest=").append(west).append('\n');
+		sb.append('}');
+		return sb.toString();
 	}
 }

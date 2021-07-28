@@ -1,7 +1,5 @@
 package steve6472.sge.gfx.game.blockbench.model;
 
-import steve6472.sge.gfx.game.voxelizer.VoxLayer;
-
 /**********************
  * Created by steve6472 (Mirek Jozefek)
  * On date: 7/13/2021
@@ -16,12 +14,13 @@ public class FaceBuilder
 
 	private FaceBuilder()
 	{
-		this.face = new Element.Face(0, 0, 0, 0, (byte) 0, 0, ModelRepository.NORMAL_LAYER);
+		this.face = new Element.Face(0, 0, 0, 0, (byte) 0, 0);
 	}
 
 	FaceBuilder(Element.Face copy)
 	{
-		this.face = new Element.Face(copy.getU0(), copy.getV0(), copy.getU1(), copy.getV1(), copy.getRotation(), copy.texture(), copy.getLayer());
+		this.face = new Element.Face(copy.getU0(), copy.getV0(), copy.getU1(), copy.getV1(), copy.getRotation(), copy.texture());
+		copy.getProperties().forEach((k, v) -> this.face.getProperties().put(k, v));
 	}
 
 	public static FaceBuilder create()
@@ -85,9 +84,9 @@ public class FaceBuilder
 		return this;
 	}
 
-	public FaceBuilder setLayer(VoxLayer layer)
+	public FaceBuilder addProperty(ModelProperty property, Object value)
 	{
-		face.setLayer(layer);
+		face.getProperties().put(property, value);
 		return this;
 	}
 

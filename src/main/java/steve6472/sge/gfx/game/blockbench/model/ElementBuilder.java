@@ -100,12 +100,12 @@ public class ElementBuilder
 		{
 			switch (face)
 			{
-				case UP -> setFace(face, FaceBuilder.create().setTexture(texture).resolution(resX, resY).setLayer(layer).rotation(rotation).uv(element.fromX + 8, element.fromZ + 8, element.toX + 8, element.toZ + 8));
-				case NORTH -> setFace(face, FaceBuilder.create().setTexture(texture).resolution(resX, resY).setLayer(layer).rotation(rotation).uv(-element.toX + 8, -element.toY + 16, -element.fromX + 8, -element.fromY + 16));
-				case EAST -> setFace(face, FaceBuilder.create().setTexture(texture).resolution(resX, resY).setLayer(layer).rotation(rotation).uv(-element.toZ + 8, -element.toY + 16, -element.fromZ + 8, -element.fromY + 16));
-				case SOUTH -> setFace(face, FaceBuilder.create().setTexture(texture).resolution(resX, resY).setLayer(layer).rotation(rotation).uv(element.fromX + 8, -element.toY + 16, element.toX + 8, -element.fromY + 16));
-				case WEST -> setFace(face, FaceBuilder.create().setTexture(texture).resolution(resX, resY).setLayer(layer).rotation(rotation).uv(element.fromZ + 8, -element.toY + 16, element.toZ + 8, -element.fromY + 16));
-				case DOWN -> setFace(face, FaceBuilder.create().setTexture(texture).resolution(resX, resY).setLayer(layer).rotation(rotation).uv(element.fromX + 8, -element.toZ + 8, element.toX + 8, -element.fromZ + 8));
+				case UP -> setFace(face, FaceBuilder.create().setTexture(texture).resolution(resX, resY).addProperty(ModelRepository.LAYER_PROPERTY, layer).rotation(rotation).uv(element.fromX + 8, element.fromZ + 8, element.toX + 8, element.toZ + 8));
+				case NORTH -> setFace(face, FaceBuilder.create().setTexture(texture).resolution(resX, resY).addProperty(ModelRepository.LAYER_PROPERTY, layer).rotation(rotation).uv(-element.toX + 8, -element.toY + 16, -element.fromX + 8, -element.fromY + 16));
+				case EAST -> setFace(face, FaceBuilder.create().setTexture(texture).resolution(resX, resY).addProperty(ModelRepository.LAYER_PROPERTY, layer).rotation(rotation).uv(-element.toZ + 8, -element.toY + 16, -element.fromZ + 8, -element.fromY + 16));
+				case SOUTH -> setFace(face, FaceBuilder.create().setTexture(texture).resolution(resX, resY).addProperty(ModelRepository.LAYER_PROPERTY, layer).rotation(rotation).uv(element.fromX + 8, -element.toY + 16, element.toX + 8, -element.fromY + 16));
+				case WEST -> setFace(face, FaceBuilder.create().setTexture(texture).resolution(resX, resY).addProperty(ModelRepository.LAYER_PROPERTY, layer).rotation(rotation).uv(element.fromZ + 8, -element.toY + 16, element.toZ + 8, -element.fromY + 16));
+				case DOWN -> setFace(face, FaceBuilder.create().setTexture(texture).resolution(resX, resY).addProperty(ModelRepository.LAYER_PROPERTY, layer).rotation(rotation).uv(element.fromX + 8, -element.toZ + 8, element.toX + 8, -element.fromZ + 8));
 			}
 		}
 		return this;

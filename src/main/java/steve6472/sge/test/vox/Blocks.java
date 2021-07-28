@@ -13,4 +13,5 @@ class Blocks
 	public static final Block GIZMO = new Block(Models.GIZMO);
 	public static final Block DEBUG = new Block(Models.DEBUG);
 	public static final Block OUTLINE = new Block(Models.OUTLINE);
+	public static final Block OUTLINE_ = new Block(Models.OUTLINE_);
 }

@@ -517,7 +517,7 @@ public class ThreadedChunkModelBuilder extends Thread
 		if (DEBUG)
 			System.out.println(element);
 
-		if (element.up != null && element.up.getLayer().equals(layer))
+		if (element.up != null && element.up.getProperties().get(ModelRepository.LAYER_PROPERTY).equals(layer))
 		{
 			if (DEBUG)
 				System.out.println("up");
@@ -546,7 +546,7 @@ public class ThreadedChunkModelBuilder extends Thread
 			}
 		}
 
-		if (element.down != null && element.down.getLayer().equals(layer))
+		if (element.down != null && element.down.getProperties().get(ModelRepository.LAYER_PROPERTY).equals(layer))
 		{
 			if (DEBUG)
 				System.out.println("down");
@@ -574,7 +574,7 @@ public class ThreadedChunkModelBuilder extends Thread
 		}
 
 
-		if (element.north != null && element.north.getLayer().equals(layer))
+		if (element.north != null && element.north.getProperties().get(ModelRepository.LAYER_PROPERTY).equals(layer))
 		{
 			if (DEBUG)
 				System.out.println("north");
@@ -602,7 +602,7 @@ public class ThreadedChunkModelBuilder extends Thread
 		}
 
 
-		if (element.east != null && element.east.getLayer().equals(layer))
+		if (element.east != null && element.east.getProperties().get(ModelRepository.LAYER_PROPERTY).equals(layer))
 		{
 			if (DEBUG)
 				System.out.println("east");
@@ -630,7 +630,7 @@ public class ThreadedChunkModelBuilder extends Thread
 		}
 
 
-		if (element.south != null && element.south.getLayer().equals(layer))
+		if (element.south != null && element.south.getProperties().get(ModelRepository.LAYER_PROPERTY).equals(layer))
 		{
 			if (DEBUG)
 				System.out.println("south");
@@ -658,7 +658,7 @@ public class ThreadedChunkModelBuilder extends Thread
 		}
 
 
-		if (element.west != null && element.west.getLayer().equals(layer))
+		if (element.west != null && element.west.getProperties().get(ModelRepository.LAYER_PROPERTY).equals(layer))
 		{
 			if (DEBUG)
 				System.out.println("west");
