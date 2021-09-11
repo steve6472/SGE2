@@ -23,12 +23,32 @@ public class ModelRepository
 
 	public static final VoxLayer NORMAL_LAYER = new VoxLayer("normal");
 	public static ModelProperty LAYER_PROPERTY;
+	public static ModelProperty DISABLE_OTHER_CULL;
 
 	public ModelRepository()
 	{
 		addLayer(NORMAL_LAYER);
 		LAYER_PROPERTY = new ModelProperty(PropertyClass.FACE, PropertyType.STRING, "layer", () -> NORMAL_LAYER, (s) -> layers.getLayer((String) s));
 		addProperty(LAYER_PROPERTY);
+
+		DISABLE_OTHER_CULL = new ModelProperty(PropertyClass.FACE, PropertyType.BOOLEAN, "disable_other_cull", () -> false, (s) -> s);
+		addProperty(DISABLE_OTHER_CULL);
+	}
+
+	public static boolean getBoolProperty(IProperties obj, ModelProperty property)
+	{
+		Object o = obj.getProperties().get(property);
+		if (o instanceof Boolean b)
+			return b;
+		return (boolean) property.defaultValue().get();
+	}
+
+	public static String getStringProperty(IProperties obj, ModelProperty property)
+	{
+		Object o = obj.getProperties().get(property);
+		if (o instanceof String s)
+			return s;
+		return (String) property.defaultValue().get();
 	}
 
 	public void addProperty(ModelProperty property)

@@ -1,7 +1,7 @@
 (function() {
     var layer;
 	
-	var collision, hitbox;
+	var collision, hitbox, disableOtherCull;
 
     Plugin.register('steves_game_engine',
 	{
@@ -14,6 +14,7 @@
         onload()
 		{
 			new Property(Face, 'string', 'layer', {exposed: true, default: () => "normal"});
+			new Property(Face, 'boolean', 'disable_other_cull', {exposed: true, default: () => false});
 			new Property(Cube, 'boolean', 'collision', {exposed: true, default: () => false});
 			new Property(Cube, 'boolean', 'hitbox', {exposed: true, default: () => false});
 			
@@ -59,6 +60,17 @@
 					Undo.finishEdit('Change Hitbox');
 				}
 			});
+
+			disableOtherCull = new Toggle('toggle_disable_other_cull', {
+				icon: 'crop_square',
+				condition: () => !Project.box_uv && Cube.selected.length,
+				onChange: function(value) // value is a boolean
+				{
+					Undo.initEdit({elements: Cube.selected});
+					Cube.selected[0].faces[main_uv.face].disable_other_cull = value;
+					Undo.finishEdit('Change Disable Other Cull');
+				}
+			});
 			
 			Blockbench.on('update_selection', data => 
 			{
@@ -66,17 +78,20 @@
 				{
 					layer.value = Cube.selected[0].faces[main_uv.face].layer;
 					layer.set(Cube.selected[0].faces[main_uv.face].layer);
-					
+
 					collision.value = Cube.selected[0].collision;
 					hitbox.value = Cube.selected[0].hitbox;
+					disableOtherCull.value = Cube.selected[0].faces[main_uv.face].disableOtherCull;
 					collision.updateEnabledState();
 					hitbox.updateEnabledState();
+					disableOtherCull.updateEnabledState();
 				}
 			});
 			
 			Toolbox.add(layer);
 			Toolbox.add(collision);
 			Toolbox.add(hitbox);
+			Toolbox.add(disableOtherCull);
         },
 		
         onunload()
@@ -84,6 +99,7 @@
             layer.delete();
             collision.delete();
             hitbox.delete();
+            disableOtherCull.delete();
         }
     });
 

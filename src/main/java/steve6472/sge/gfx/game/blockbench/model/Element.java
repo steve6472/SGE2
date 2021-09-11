@@ -148,15 +148,13 @@ public final class Element extends OutlinerElement implements IProperties
 			StringBuilder sb = new StringBuilder();
 
 			sb.append("Face{\n");
-			sb.append("\t\tu0=").append(u0).append('\n');
-			sb.append("\t\tv0=").append(v0).append('\n');
-			sb.append("\t\tu1=").append(u1).append('\n');
-			sb.append("\t\tv1=").append(v1).append('\n');
+			sb.append("\t\tuv=[").append(u0).append(", ").append(v0).append(", ").append(u1).append(", ").append(v1).append("]\n");
 			sb.append("\t\trotation=").append(rotation).append('\n');
 			sb.append("\t\ttexture=").append(texture).append('\n');
 			sb.append("\t\tproperties={");
 			properties.forEach((k, v) -> sb.append("\n\t\t\t").append(k.name()).append("=").append(v));
 			sb.append("\n\t\t}");
+			sb.append("\n\t}");
 
 			return sb.toString();
 		}

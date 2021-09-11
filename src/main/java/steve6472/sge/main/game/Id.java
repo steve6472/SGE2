@@ -25,6 +25,11 @@ public record Id(String namespace, String id)
 			throw new IllegalArgumentException("Id does not match pattern [a-z0-9_]* '" + id + "'");
 	}
 
+	public Id(String s)
+	{
+		this(s.split(":")[0], s.split(":")[1]);
+	}
+
 	@Override
 	public boolean equals(Object o)
 	{

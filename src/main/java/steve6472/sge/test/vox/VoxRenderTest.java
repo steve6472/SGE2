@@ -108,7 +108,7 @@ public class VoxRenderTest extends MainApp
 //		world.setState(Blocks.ROCK.getDefaultState(), new VoxPos(0, 0, 0));
 //		world.setState(Blocks.DEBUG.getDefaultState(), new VoxPos(0, 1, 0));
 
-		System.out.println(Models.OUTLINE_);
+		System.out.println(Models.OUTLINE);
 
 		entityShader = new BBShader();
 		entityShader.bind();

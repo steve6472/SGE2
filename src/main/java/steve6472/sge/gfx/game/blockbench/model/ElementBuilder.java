@@ -17,6 +17,9 @@ public class ElementBuilder
 	private ElementBuilder()
 	{
 		this.element = new Element();
+		element.scaleX = 1;
+		element.scaleY = 1;
+		element.scaleZ = 1;
 	}
 
 	public static ElementBuilder create()
@@ -86,6 +89,12 @@ public class ElementBuilder
 		element.toX = fromX + width - 8f;
 		element.toY = fromY + height;
 		element.toZ = fromZ + depth - 8f;
+		return this;
+	}
+
+	public ElementBuilder addProperty(ModelProperty property, Object value)
+	{
+		element.getProperties().put(property, value);
 		return this;
 	}
 

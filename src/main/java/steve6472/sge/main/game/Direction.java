@@ -4,7 +4,7 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 4/10/2021
  * Project: RoboTest
  *
@@ -14,6 +14,8 @@ public enum Direction
 	UP(Axis.Y, 1), DOWN(Axis.Y, -1), NORTH(Axis.Z, -1), EAST(Axis.X, 1), SOUTH(Axis.Z, 1), WEST(Axis.X, -1);
 
 	private static final Direction[] VALUES = {UP, DOWN, NORTH, EAST, SOUTH, WEST};
+	private static final Direction[] CARDINAL = {NORTH, EAST, SOUTH, WEST};
+	private static final Direction[] FACES_REVERSED = {WEST, SOUTH, EAST, NORTH, DOWN, UP};
 
 	private final Axis axis;
 	private final int offset;
@@ -24,20 +26,8 @@ public enum Direction
 	{
 		this.axis = axis;
 		this.offset = offset;
-
-		normal = switch (axis)
-		{
-			case X -> new Vector3f(offset, 0, 0);
-			case Y -> new Vector3f(0, offset, 0);
-			case Z -> new Vector3f(0, 0, offset);
-		};
-
-		normali = switch (axis)
-		{
-			case X -> new Vector3i(offset, 0, 0);
-			case Y -> new Vector3i(0, offset, 0);
-			case Z -> new Vector3i(0, 0, offset);
-		};
+		normal = axis.getNormal(offset);
+		normali = axis.getNormalI(offset);
 	}
 
 	public Axis getAxis()
@@ -65,8 +55,37 @@ public enum Direction
 		return VALUES;
 	}
 
-	public enum Axis
+	public static Direction[] getFacesReversed()
 	{
-		X, Y, Z
+		return FACES_REVERSED;
+	}
+
+	public static Direction[] getCardinal()
+	{
+		return CARDINAL;
+	}
+
+	public Direction getOpposite()
+	{
+		return switch (this)
+			{
+				case UP -> DOWN;
+				case DOWN -> UP;
+				case NORTH -> SOUTH;
+				case SOUTH -> NORTH;
+				case EAST -> WEST;
+				case WEST -> EAST;
+			};
+	}
+	
+	public static Direction fromNormal(Vector3f n)
+	{
+		if (n.x < 0) return WEST;
+		else if (n.x > 0) return EAST;
+		else if (n.y < 0) return DOWN;
+		else if (n.y > 0) return UP;
+		else if (n.z < 0) return NORTH;
+		else if (n.z > 0) return SOUTH;
+		throw new IllegalStateException("Normal is zero!");
 	}
 }

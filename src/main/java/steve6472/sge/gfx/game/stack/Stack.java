@@ -35,6 +35,11 @@ public class Stack extends Matrix4fStack
 	{
 		return renderTypes.get(id);
 	}
+	
+	public <T> T getTess(Class<T> clazz, String id)
+	{
+		return clazz.cast(renderTypes.get(id).getTess());
+	}
 
 	public void render(Matrix4f view)
 	{

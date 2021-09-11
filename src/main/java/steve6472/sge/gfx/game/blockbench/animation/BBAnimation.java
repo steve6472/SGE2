@@ -36,13 +36,6 @@ public class BBAnimation
 		this.model = model;
 	}
 
-	public void reload()
-	{
-//		bones.clear();
-//		JSONObject jsonObject = new JSONObject(Loader.read(new File(path + ".animation.json")));
-//		dLength = AnimLoader.load(jsonObject.getJSONObject("animations").getJSONObject(name), bones);
-	}
-
 	public void tick(BBAnimController controller)
 	{
 		tick(controller, model);
@@ -253,5 +246,10 @@ public class BBAnimation
 	public BBModel getModel()
 	{
 		return model;
+	}
+
+	public double getLength()
+	{
+		return dLength;
 	}
 }
