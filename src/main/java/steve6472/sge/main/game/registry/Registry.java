@@ -79,10 +79,14 @@ public class Registry<T extends ID>
 		registers.forEach(r -> {
 			if (EVENT_HANDLER != null)
 			{
-				RegisterEvent<?> e = new RegisterEvent<>(r);
+				RegisterEvent.Pre<?> e = new RegisterEvent.Pre<>(r);
 				EVENT_HANDLER.runEvent(e);
 				if (!e.isCancelled())
+				{
 					r.create();
+					RegisterEvent.Post<?> E = new RegisterEvent.Post<>(r);
+					EVENT_HANDLER.runEvent(E);
+				}
 			} else
 			{
 				r.create();

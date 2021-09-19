@@ -1,7 +1,7 @@
 (function() {
     var layer;
 	
-	var collision, hitbox, disableOtherCull;
+	var collision, hitbox, disableOtherCull/*, setId*/;
 
     Plugin.register('steves_game_engine',
 	{
@@ -17,6 +17,7 @@
 			new Property(Face, 'boolean', 'disable_other_cull', {exposed: true, default: () => false});
 			new Property(Cube, 'boolean', 'collision', {exposed: true, default: () => false});
 			new Property(Cube, 'boolean', 'hitbox', {exposed: true, default: () => false});
+			//new Property(Cube, 'string', 'id', {exposed: true, default: () => ""});
 			
 			layer = new BarSelect('set_layer', {
 				condition: () => !Project.box_uv && Cube.selected.length,
@@ -71,6 +72,30 @@
 					Undo.finishEdit('Change Disable Other Cull');
 				}
 			});
+
+			/*setId = new Action('set_id', {
+                name: 'Set ID',
+                description: 'Sets id',
+                icon: 'fingerprint',
+				condition: () => !Project.box_uv && Cube.selected.length,
+                click: function() {
+					new Dialog({
+						id: 'set_id_dialog',
+						title: 'ID',
+						form: {
+							ID: {label: 'Id', type: 'input', value: Cube.selected[0].id, placeholder: "Cube Id"}
+						},
+						onConfirm: function(formData) {
+					
+							Undo.initEdit({elements: Cube.selected});
+							Cube.selected[0].id = formData.ID;
+							Undo.finishEdit('randomize cube height');
+						this.hide()
+						}
+					}).show()
+                }
+            });*/
+ 
 			
 			Blockbench.on('update_selection', data => 
 			{
@@ -92,6 +117,7 @@
 			Toolbox.add(collision);
 			Toolbox.add(hitbox);
 			Toolbox.add(disableOtherCull);
+			//Toolbox.add(setId);
         },
 		
         onunload()

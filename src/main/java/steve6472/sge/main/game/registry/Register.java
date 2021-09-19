@@ -35,10 +35,14 @@ public final class Register<T extends ID>
 		{
 			if (Registry.getEventHandler() != null)
 			{
-				RegisterEvent.Object<?> e = new RegisterEvent.Object(this, o);
+				RegisterEvent.Object.Pre<?> e = new RegisterEvent.Object.Pre<>(this, o);
 				Registry.getEventHandler().runEvent(e);
 				if (!e.isCancelled())
+				{
 					o.create();
+					RegisterEvent.Object.Post<?> E = new RegisterEvent.Object.Post<>(this, o);
+					Registry.getEventHandler().runEvent(E);
+				}
 			} else
 			{
 				o.create();

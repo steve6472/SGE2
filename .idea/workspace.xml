@@ -56,7 +56,7 @@
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="Groovy JUnit" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.Groovy JUnit" value="groovy.util.GroovyTestCase" />
     <property name="ignore.preview.features.used" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/steve6472/sge/main/game/registry" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/steve6472/sge/gfx/game/voxelizer" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.19655173" />
@@ -65,11 +65,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\StevesGameEngine\src\main\java\steve6472\sge\gfx\game\voxelizer" />
       <recent name="D:\StevesGameEngine\src\main\java\steve6472\sge\main\game\registry" />
       <recent name="D:\StevesGameEngine\src\main\java\steve6472\sge\main\node" />
       <recent name="D:\StevesGameEngine\src\main\resources\shaders\game\3d" />
       <recent name="D:\StevesGameEngine\src\main\java\steve6472\sge\main\game" />
-      <recent name="D:\StevesGameEngine\src\main\java\steve6472" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
       <recent name="groovy.util.GroovyTestCase" />
@@ -82,11 +82,11 @@
       <recent name="steve6472.sge.test.test3d.tiles" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="steve6472.sge.gfx.game.voxelizer" />
       <recent name="steve6472.sge.gfx.game.stack.tess" />
       <recent name="steve6472.sge.main.game" />
       <recent name="steve6472.sge.test" />
       <recent name="steve6472.sge.gfx.game.stack.A" />
-      <recent name="steve6472.sge.main.node.nodes.gui" />
     </key>
   </component>
   <component name="RunAnythingCache">

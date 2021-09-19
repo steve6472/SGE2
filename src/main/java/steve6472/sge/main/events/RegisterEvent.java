@@ -15,7 +15,7 @@ public class RegisterEvent<T extends ID> extends AbstractEvent implements Cancel
 	private final Register<T> register;
 	private boolean cancelled = false;
 
-	public RegisterEvent(Register<T> registry)
+	private RegisterEvent(Register<T> registry)
 	{
 		this.register = registry;
 	}
@@ -47,11 +47,34 @@ public class RegisterEvent<T extends ID> extends AbstractEvent implements Cancel
 		return cancelled;
 	}
 
+	public static class Pre<T extends ID> extends RegisterEvent<T>
+	{
+		public Pre(Register<T> registry)
+		{
+			super(registry);
+		}
+	}
+
+	public static class Post<T extends ID> extends RegisterEvent<T>
+	{
+		public Post(Register<T> registry)
+		{
+			super(registry);
+		}
+
+		@Override
+		public void setCancelled(boolean cancelled)
+		{
+			throw new IllegalStateException("Post events can not be cancelled!");
+		}
+	}
+
+
 	public static class Object<T extends ID> extends RegisterEvent<T>
 	{
 		private final RegistryObject<T> object;
 
-		public Object(Register<T> registry, RegistryObject<T> object)
+		private Object(Register<T> registry, RegistryObject<T> object)
 		{
 			super(registry);
 			this.object = object;
@@ -65,6 +88,28 @@ public class RegisterEvent<T extends ID> extends AbstractEvent implements Cancel
 		public RegistryObject<T> getObject()
 		{
 			return object;
+		}
+
+		public static class Pre<T extends ID> extends Object<T>
+		{
+			public Pre(Register<T> registry, RegistryObject<T> object)
+			{
+				super(registry, object);
+			}
+		}
+
+		public static class Post<T extends ID> extends Object<T>
+		{
+			public Post(Register<T> registry, RegistryObject<T> object)
+			{
+				super(registry, object);
+			}
+
+			@Override
+			public void setCancelled(boolean cancelled)
+			{
+				throw new IllegalStateException("Post events can not be cancelled!");
+			}
 		}
 	}
 }
