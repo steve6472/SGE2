@@ -10,7 +10,7 @@ import java.util.function.Supplier;
  * Project: VoxWorld
  *
  ***********************/
-public class RegistryObject<T extends ID>
+public class RegistryObject<T extends ID> implements Comparable<RegistryObject<T>>
 {
 	private final Supplier<T> constructor;
 	private T object;
@@ -61,5 +61,11 @@ public class RegistryObject<T extends ID>
 	public static <T extends ID> RegistryObject<T> of(Id id, Registry<T> registry)
 	{
 		return registry.getObject(id);
+	}
+
+	@Override
+	public int compareTo(RegistryObject<T> o)
+	{
+		return o.getId().toString().compareTo(id.toString());
 	}
 }

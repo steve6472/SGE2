@@ -2,6 +2,7 @@
     var layer;
 	
 	var collision, hitbox, disableOtherCull/*, setId*/;
+	var randomizeUV;
 
     Plugin.register('steves_game_engine',
 	{
@@ -97,6 +98,40 @@
             });*/
  
 			
+			
+            randomizeUV = new Action('randomize_uv',
+			{
+                name: 'Randomize UV',
+                description: 'Randomizes position of UV',
+                icon: 'open_with',
+				condition: () => Format.id === 'free' && Cube.selected.length && !Project.box_uv,
+                click: function() 
+				{
+                    Undo.initEdit({elements: Cube.selected});
+					
+					let newTint;
+					let face = main_uv.face;
+					
+                    Cube.selected.forEach(cube =>
+					{
+						let w = cube.faces[face].uv[2] - cube.faces[face].uv[0];
+						let h = cube.faces[face].uv[3] - cube.faces[face].uv[1];
+						
+						let x = Math.floor(Math.random() * (17 - w));
+						let y = Math.floor(Math.random() * (17 - h));
+						cube.faces[face].uv = [x, y, x + w, y + h];
+						
+						main_uv.message("Randomized UV for selected cubes");
+						
+						Canvas.updateUV(cube)
+                    });
+					
+                    Undo.finishEdit('Randomized UV');
+                }
+            });
+			
+			
+			
 			Blockbench.on('update_selection', data => 
 			{
 				if (Format.id === 'free' && Cube.selected.length > 0)
@@ -118,6 +153,7 @@
 			Toolbox.add(hitbox);
 			Toolbox.add(disableOtherCull);
 			//Toolbox.add(setId);
+			MenuBar.addAction(randomizeUV, 'filter')
         },
 		
         onunload()
@@ -126,6 +162,7 @@
             collision.delete();
             hitbox.delete();
             disableOtherCull.delete();
+			randomizeUV.delete();
         }
     });
 
