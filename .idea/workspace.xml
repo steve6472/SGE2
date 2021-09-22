@@ -99,7 +99,7 @@
       <command value="&quot;C:\Program Files\Java\jdk-14\bin\java.exe&quot; --enable-preview -Dorg.lwjgl.util.Debug=true &quot;-javaagent:D:\IntelliJ IDEA Community Edition 201.6487.11\lib\idea_rt.jar=54804:D:\IntelliJ IDEA Community Edition 201.6487.11\bin&quot; -Dfile.encoding=UTF-8 -classpath D:\StevesGameEngine\target\classes;C:\Users\Steve\.m2\repository\org\lwjgl\lwjgl\3.2.1\lwjgl-3.2.1.jar;C:\Users\Steve\.m2\repository\org\lwjgl\lwjgl-glfw\3.1.0\lwjgl-glfw-3.1.0.jar;C:\Users\Steve\.m2\repository\org\lwjgl\lwjgl-opengl\3.1.0\lwjgl-opengl-3.1.0.jar;C:\Users\Steve\.m2\repository\org\joml\joml\1.9.22\joml-1.9.22.jar;C:\Users\Steve\.m2\repository\steve6472\save-system\1.0-SNAPSHOT\save-system-1.0-SNAPSHOT.jar steve6472.sge.test.Test " />
     </option>
   </component>
-  <component name="RunManager" selected="Maven.compile install">
+  <component name="RunManager" selected="JUnit.StateTest">
     <configuration name="Direction" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="steve6472.sge.main.game.Direction" />
       <module name="StevesGameEngine" />
@@ -130,9 +130,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Scratch" type="Java Scratch" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="Scratch" />
-      <option name="SCRATCH_FILE_URL" value="file://$APPLICATION_CONFIG_DIR$/scratches/scratch_2.java" />
+    <configuration name="StateTest.testNoProperty" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="StevesGameEngine" />
+      <option name="PACKAGE_NAME" value="steve6472.sge.main.game.stateengine" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.sge.main.game.stateengine.StateTest" />
+      <option name="METHOD_NAME" value="testNoProperty" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -167,17 +170,17 @@
       <item itemvalue="Application.Direction" />
       <item itemvalue="Application.RegistryTest" />
       <item itemvalue="Application.VoxRenderTest" />
-      <item itemvalue="Java Scratch.Scratch" />
-      <item itemvalue="Maven.compile install" />
       <item itemvalue="JUnit.StateTest" />
+      <item itemvalue="Maven.compile install" />
+      <item itemvalue="JUnit.StateTest.testNoProperty" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="JUnit.StateTest" />
+        <item itemvalue="JUnit.StateTest.testNoProperty" />
         <item itemvalue="Application.VoxRenderTest" />
         <item itemvalue="Application.Direction" />
         <item itemvalue="Application.RegistryTest" />
-        <item itemvalue="Java Scratch.Scratch" />
       </list>
     </recent_temporary>
   </component>

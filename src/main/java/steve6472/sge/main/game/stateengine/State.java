@@ -31,6 +31,9 @@ public class State
 
 	public <T extends Comparable<T>> State with(IProperty<T> property, T value)
 	{
+		if (properties.get(property) == null)
+			throw new IllegalStateException("Property '" + property.getName() + "' does not exist!");
+
 		m: for (State tileState : tileStates)
 		{
 			for (IProperty<?> iProperty : tileState.properties.keySet())
@@ -38,7 +41,9 @@ public class State
 				if (iProperty == property)
 				{
 					if (!tileState.get(property).equals(value))
+					{
 						continue m;
+					}
 				} else
 				{
 					Comparable<?> val = properties.get(iProperty);
@@ -52,8 +57,7 @@ public class State
 			return tileState;
 		}
 
-		// This should not happen
-		throw new IllegalStateException("Could not find desired state with property " + property.getName() + " with value " + value);
+		throw new IllegalStateException("Could not find desired value '" + value + "' for property '" + property.getName() + "'");
 	}
 
 	public StateObject getObject()

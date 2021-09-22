@@ -16,6 +16,7 @@ public class TestStateObject extends StateObject
 {
 	public static BooleanProperty LIT = BooleanProperty.create("lit");
 	public static IntProperty FACING = IntProperty.create("facing", 0, 3);
+	public static BooleanProperty UNUSED_BOOL = BooleanProperty.create("unused");
 
 	public TestStateObject()
 	{

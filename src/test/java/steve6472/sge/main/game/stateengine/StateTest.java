@@ -23,7 +23,7 @@ class StateTest
 
 	@Test
 	@Order(1)
-	@DisplayName("Get")
+	@DisplayName("Get (value from property)")
 	void testGet()
 	{
 		Assertions.assertInstanceOf(Integer.class, defaultState.get(TestStateObject.FACING));
@@ -43,8 +43,8 @@ class StateTest
 	@DisplayName("Default State")
 	void testDefaultState()
 	{
-		Assertions.assertEquals(defaultState.get(TestStateObject.FACING), 0);
-		Assertions.assertEquals(defaultState.get(TestStateObject.LIT), false);
+		Assertions.assertEquals(0, defaultState.get(TestStateObject.FACING));
+		Assertions.assertEquals(false, defaultState.get(TestStateObject.LIT));
 	}
 
 	@Test
@@ -65,5 +65,21 @@ class StateTest
 		defaultState = defaultState.with(TestStateObject.LIT, true);
 		Assertions.assertEquals(2, defaultState.get(TestStateObject.FACING));
 		Assertions.assertEquals(true, defaultState.get(TestStateObject.LIT));
+	}
+
+	@Test
+	@Order(6)
+	@DisplayName("No property")
+	void testNoProperty()
+	{
+		Assertions.assertThrows(IllegalStateException.class, () -> defaultState.with(TestStateObject.UNUSED_BOOL, false), "Property '" + TestStateObject.UNUSED_BOOL.getName() + "' does not exist!");
+	}
+
+	@Test
+	@Order(7)
+	@DisplayName("No value")
+	void testNoValue()
+	{
+		Assertions.assertThrows(IllegalStateException.class, () -> defaultState.with(TestStateObject.FACING, 7), "Could not find desired value '" + 7 + "' for property '" + TestStateObject.FACING.getName() + "'");
 	}
 }
