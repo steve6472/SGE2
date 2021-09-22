@@ -19,6 +19,7 @@
         <option value="AnnotationType" />
         <option value="Enum" />
         <option value="Interface" />
+        <option value="JUnit5 Test Class" />
         <option value="Class" />
       </list>
     </option>
@@ -53,15 +54,16 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="JAVA" />
-    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="Groovy JUnit" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit5" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.Groovy JUnit" value="groovy.util.GroovyTestCase" />
+    <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit5" value="" />
     <property name="ignore.preview.features.used" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/src/main/java/steve6472/sge/gfx/game/voxelizer" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.19655173" />
     <property name="restartRequiresConfirmation" value="false" />
-    <property name="settings.editor.selected.configurable" value="editor.reader.mode" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -72,12 +74,14 @@
       <recent name="D:\StevesGameEngine\src\main\java\steve6472\sge\main\game" />
     </key>
     <key name="CreateTestDialog.Recents.Supers">
+      <recent name="" />
       <recent name="groovy.util.GroovyTestCase" />
     </key>
     <key name="CreateBuilderDialog.RecentsKey">
       <recent name="steve6472.sge.gfx.game.blockbench.model" />
     </key>
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="steve6472.sge.main.game.stateengine" />
       <recent name="steve6472.sge.main.node.nodes.logic" />
       <recent name="steve6472.sge.test.test3d.tiles" />
     </key>
@@ -110,16 +114,18 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ThreadedChunkModelBuilder" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="steve6472.sge.gfx.game.voxelizer.ThreadedChunkModelBuilder" />
+    <configuration name="VoxRenderTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="steve6472.sge.test.vox.VoxRenderTest" />
       <module name="StevesGameEngine" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="VoxRenderTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="steve6472.sge.test.vox.VoxRenderTest" />
+    <configuration name="StateTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="StevesGameEngine" />
+      <option name="PACKAGE_NAME" value="steve6472.sge.main.game.stateengine" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.sge.main.game.stateengine.StateTest" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -160,18 +166,18 @@
     <list>
       <item itemvalue="Application.Direction" />
       <item itemvalue="Application.RegistryTest" />
-      <item itemvalue="Application.ThreadedChunkModelBuilder" />
       <item itemvalue="Application.VoxRenderTest" />
       <item itemvalue="Java Scratch.Scratch" />
       <item itemvalue="Maven.compile install" />
+      <item itemvalue="JUnit.StateTest" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.StateTest" />
         <item itemvalue="Application.VoxRenderTest" />
         <item itemvalue="Application.Direction" />
         <item itemvalue="Application.RegistryTest" />
         <item itemvalue="Java Scratch.Scratch" />
-        <item itemvalue="Application.ThreadedChunkModelBuilder" />
       </list>
     </recent_temporary>
   </component>

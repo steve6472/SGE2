@@ -29,9 +29,31 @@ public class State
 		return (T) properties.get(property);
 	}
 
-	public <T extends Comparable<T>, V extends T> StateFinder with(IProperty<T> property, V value)
+	public <T extends Comparable<T>> State with(IProperty<T> property, T value)
 	{
-		return new StateFinder(tileStates).with(property, value);
+		m: for (State tileState : tileStates)
+		{
+			for (IProperty<?> iProperty : tileState.properties.keySet())
+			{
+				if (iProperty == property)
+				{
+					if (!tileState.get(property).equals(value))
+						continue m;
+				} else
+				{
+					Comparable<?> val = properties.get(iProperty);
+					if (!tileState.get(iProperty).equals(val))
+					{
+						continue m;
+					}
+				}
+			}
+
+			return tileState;
+		}
+
+		// This should not happen
+		throw new IllegalStateException("Could not find desired state with property " + property.getName() + " with value " + value);
 	}
 
 	public StateObject getObject()
