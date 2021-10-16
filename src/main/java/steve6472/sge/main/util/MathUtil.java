@@ -143,6 +143,12 @@ public class MathUtil
 		return new Vector2f(x, -y);
 	}
 
+	public static void toScreenPos(Matrix4f viewMatrix, Matrix4f projectionMatrix, Vector3f worldPos, int screenWidth, int screenHeight, Vector2f destination)
+	{
+		Vector4f clipSpacePos = new Vector4f(worldPos, 1.0f).mul(viewMatrix).mul(projectionMatrix);
+		destination.set(((clipSpacePos.x / clipSpacePos.w) / 2.0f) * (float) screenWidth, ((clipSpacePos.y / clipSpacePos.w) / 2.0f) * (float) screenHeight);
+	}
+
 	/*
 	 * 2D
 	 */

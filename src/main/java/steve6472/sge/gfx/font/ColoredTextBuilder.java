@@ -59,6 +59,12 @@ public class ColoredTextBuilder
 		return this;
 	}
 
+	public ColoredTextBuilder setAlpha(float a)
+	{
+		lastColor.setAlpha(a);
+		return this;
+	}
+
 	public ColoredTextBuilder addOffset(float offsetX, float offsetY)
 	{
 		this.offsetX = offsetX;
@@ -127,7 +133,7 @@ public class ColoredTextBuilder
 		return text.get(index);
 	}
 
-	List<ColoredText> getText()
+	public List<ColoredText> getText()
 	{
 		return text;
 	}

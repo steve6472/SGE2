@@ -95,6 +95,11 @@ public class DialogManager
 		glDisable(GL_DEPTH_TEST);
 		glDisable(GL_CULL_FACE);
 
+		float[] f = new float[4];
+		glGetFloatv(GL_COLOR_CLEAR_VALUE, f);
+
+		glClearColor(0, 0, 0, 0);
+
 		for (Iterator<FloatingDialog> iterator = this.dialogs.iterator(); iterator.hasNext(); )
 		{
 			FloatingDialog dialog = iterator.next();
@@ -121,6 +126,7 @@ public class DialogManager
 
 		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
+		glClearColor(f[0], f[1], f[2], f[3]);
 
 		glViewport(0, 0, main.getWidth(), main.getHeight());
 		glBindFramebuffer(GL_FRAMEBUFFER, mainBuffer);

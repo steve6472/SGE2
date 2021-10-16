@@ -8,5 +8,5 @@ package steve6472.sge.gfx.game.blockbench.model;
  ***********************/
 public enum PropertyClass
 {
-	FACE, CUBE
+	FACE, CUBE, MESH
 }

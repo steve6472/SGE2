@@ -118,11 +118,6 @@ public class VoxPos
 		return z;
 	}
 
-	public VoxPos add(VoxPos other)
-	{
-		return new VoxPos(x + other.x, y + other.y, z + other.z);
-	}
-
 	public Vector3i toVec3i()
 	{
 		return new Vector3i(x, y, z);
@@ -131,6 +126,30 @@ public class VoxPos
 	public VoxPos copy()
 	{
 		return new VoxPos(this);
+	}
+
+	/*
+	 * Math
+	 */
+
+	public VoxPos add(VoxPos other)
+	{
+		return new VoxPos(x + other.x, y + other.y, z + other.z);
+	}
+
+	public VoxPos add(int x, int y, int z)
+	{
+		return new VoxPos(x + this.x, y + this.y, z + this.z);
+	}
+
+	public VoxPos mul(int factor)
+	{
+		return mul(factor, factor, factor);
+	}
+
+	public VoxPos mul(int x, int y, int z)
+	{
+		return new VoxPos(x * this.x, y * this.y, z * this.z);
 	}
 
 	public VoxPos floorMod(int mod)

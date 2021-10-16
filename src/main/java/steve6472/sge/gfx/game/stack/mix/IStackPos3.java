@@ -36,4 +36,15 @@ public interface IStackPos3<T> extends IMain<T>, IStack
 		getStack().transformPosition(x, y, z, Stack.TEMP_VECTOR);
 		return Stack.TEMP_VECTOR;
 	}
+
+	default Vector3f getTransformedVector(Vector3f vec)
+	{
+		getStack().transformPosition(vec, Stack.TEMP_VECTOR);
+		return Stack.TEMP_VECTOR;
+	}
+
+	default T pos(Vector3f pos)
+	{
+		return pos(pos.x, pos.y, pos.z);
+	}
 }

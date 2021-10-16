@@ -108,8 +108,6 @@ public class VoxRenderTest extends MainApp
 //		world.setState(Blocks.ROCK.getDefaultState(), new VoxPos(0, 0, 0));
 //		world.setState(Blocks.DEBUG.getDefaultState(), new VoxPos(0, 1, 0));
 
-		System.out.println(Models.OUTLINE);
-
 		entityShader = new BBShader();
 		entityShader.bind();
 		entityShader.setUniform(BBShader.ATLAS, 0);
@@ -186,8 +184,9 @@ public class VoxRenderTest extends MainApp
 		lineTess.axisGizmo(0.5f, 0.05f, 0.25f);
 		triangleTess.axisGizmo(0.5f, 0.05f, 0.1f);
 
-		Models.PISTON.getAnimation("extend").tick(controller);
-		Models.PISTON.render(stack);
+//		Models.PISTON.getAnimation("extend").tick(controller);
+//		Models.PISTON.render(stack);
+		Models.MESH.render(stack);
 
 		worldModel.update(builder.rebuild_(worldModel));
 

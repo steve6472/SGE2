@@ -1,5 +1,6 @@
 package steve6472.sge.gfx.game.blockbench.model;
 
+import org.joml.Vector2f;
 import steve6472.sge.gfx.StaticTexture;
 
 import java.awt.*;
@@ -54,6 +55,9 @@ public class ModelTextureAtlas
 		} else if (e instanceof Element element)
 		{
 			faces(element);
+		} else if (e instanceof MeshElement mesh)
+		{
+			meshFaces(mesh);
 		}
 	}
 
@@ -65,6 +69,25 @@ public class ModelTextureAtlas
 		if (element.west != null) face(element.west);
 		if (element.up != null) face(element.up);
 		if (element.down != null) face(element.down);
+	}
+
+	public void meshFaces(MeshElement mesh)
+	{
+		for (MeshElement.Face face : mesh.getFaces())
+		{
+			Rectangle r = getTexture(face.texture());
+			float x = r.x;
+			float y = r.y;
+			float w = r.width;
+			float h = r.height;
+			float texel = atlas.getTexel();
+
+			for (int i = 0; i < 3; i++)
+			{
+				Vector2f uv = face.getUvs()[i];
+				uv.set((x + w * uv.x) * texel, (y + h * uv.y) * texel);
+			}
+		}
 	}
 
 	private void face(Element.Face face)

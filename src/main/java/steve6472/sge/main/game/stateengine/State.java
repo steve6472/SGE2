@@ -2,8 +2,10 @@ package steve6472.sge.main.game.stateengine;
 
 import steve6472.sge.main.game.stateengine.properties.IProperty;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -14,13 +16,16 @@ import java.util.List;
 public class State
 {
 	private final StateObject tile;
-	private final HashMap<IProperty<?>, Comparable<?>> properties;
+	private final Map<IProperty<?>, Comparable<?>> properties;
 	private final List<State> tileStates;
 
 	public State(StateObject tile, HashMap<IProperty<?>, Comparable<?>> properties, List<State> tileStates)
 	{
 		this.tile = tile;
-		this.properties = properties;
+		if (properties == null)
+			this.properties = null;
+		else
+			this.properties = Collections.unmodifiableMap(properties);
 		this.tileStates = tileStates;
 	}
 
@@ -58,6 +63,14 @@ public class State
 		}
 
 		throw new IllegalStateException("Could not find desired value '" + value + "' for property '" + property.getName() + "'");
+	}
+
+	/**
+	 * @return Unmodifiable Map
+	 */
+	public Map<IProperty<?>, Comparable<?>> getProperties()
+	{
+		return properties;
 	}
 
 	public StateObject getObject()

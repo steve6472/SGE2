@@ -111,6 +111,9 @@ public class BBModel
 		} else if (el instanceof Element element)
 		{
 			rect(tess, element);
+		} else if (el instanceof MeshElement mesh)
+		{
+			mesh(tess, mesh);
 		}
 		stack.popMatrix();
 	}
@@ -284,7 +287,23 @@ public class BBModel
 			vert3(element.west, tess.pos(x, y + h, z + d));
 			vert0(element.west, tess.posUntransformed(V0));
 		}
+	}
 
+	private void mesh(BBTess tess, MeshElement element)
+	{
+		for (MeshElement.Face face : element.getFaces())
+		{
+			V0.set(tess.getTransformedVector(face.getVerts()[0]));
+			V1.set(tess.getTransformedVector(face.getVerts()[1]));
+			V2.set(tess.getTransformedVector(face.getVerts()[2]));
+
+			GeometryUtils.normal(V0, V1, V2, NORM);
+			tess.normal(NORM.x, NORM.y, NORM.z);
+
+			tess.posUntransformed(V0).uv(face.getUvs()[0].x, face.getUvs()[0].y).endVertex();
+			tess.posUntransformed(V1).uv(face.getUvs()[1].x, face.getUvs()[1].y).endVertex();
+			tess.posUntransformed(V2).uv(face.getUvs()[2].x, face.getUvs()[2].y).endVertex();
+		}
 	}
 
 	@Override

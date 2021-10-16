@@ -14,8 +14,8 @@
         variant: 'both',
         onload()
 		{
-			new Property(Face, 'string', 'layer', {exposed: true, default: () => "normal"});
-			new Property(Face, 'boolean', 'disable_other_cull', {exposed: true, default: () => false});
+			new Property(CubeFace, 'string', 'layer', {exposed: true, default: () => "normal"});
+			new Property(CubeFace, 'boolean', 'disable_other_cull', {exposed: true, default: () => false});
 			new Property(Cube, 'boolean', 'collision', {exposed: true, default: () => false});
 			new Property(Cube, 'boolean', 'hitbox', {exposed: true, default: () => false});
 			//new Property(Cube, 'string', 'id', {exposed: true, default: () => ""});
@@ -34,7 +34,10 @@
 				{
 					Undo.initEdit({elements: Cube.selected});
 					console.log(slider.value);
-					Cube.selected[0].faces[main_uv.face].layer = slider.value;
+					//Cube.selected[0].faces[UVEditor.vue.selected_faces[0]].layer = slider.value;
+					Cube.selected.forEach(cube => {
+                        cube.faces[UVEditor.vue.selected_faces[0]].layer = slider.value;
+                    });
 					Undo.finishEdit('Change Layer');
 				}
 			});
@@ -46,7 +49,10 @@
 				{
 					Undo.initEdit({elements: Cube.selected});
 					console.log(value);
-					Cube.selected[0].collision = value;
+					//Cube.selected[0].collision = value;
+					Cube.selected.forEach(cube => {
+                        cube.collision = value;
+                    });
 					Undo.finishEdit('Change Collision');
 				}
 			});
@@ -58,7 +64,10 @@
 				{
 					Undo.initEdit({elements: Cube.selected});
 					console.log(value);
-					Cube.selected[0].hitbox = value;
+					//Cube.selected[0].hitbox = value;
+					Cube.selected.forEach(cube => {
+                        cube.hitbox = value;
+                    });
 					Undo.finishEdit('Change Hitbox');
 				}
 			});
@@ -69,7 +78,10 @@
 				onChange: function(value) // value is a boolean
 				{
 					Undo.initEdit({elements: Cube.selected});
-					Cube.selected[0].faces[main_uv.face].disable_other_cull = value;
+					//Cube.selected[0].faces[UVEditor.vue.selected_faces[0]].disable_other_cull = value;
+					Cube.selected.forEach(cube => {
+                        cube.faces[UVEditor.vue.selected_faces[0]].disable_other_cull = disableOtherCull.value;
+                    });
 					Undo.finishEdit('Change Disable Other Cull');
 				}
 			});
@@ -110,7 +122,7 @@
                     Undo.initEdit({elements: Cube.selected});
 					
 					let newTint;
-					let face = main_uv.face;
+					let face = UVEditor.vue.selected_faces[0];
 					
                     Cube.selected.forEach(cube =>
 					{
@@ -136,12 +148,16 @@
 			{
 				if (Format.id === 'free' && Cube.selected.length > 0)
 				{
-					layer.value = Cube.selected[0].faces[main_uv.face].layer;
-					layer.set(Cube.selected[0].faces[main_uv.face].layer);
+					if (UVEditor.vue.selected_faces[0] != undefined)
+					{
+						layer.value = Cube.selected[0].faces[UVEditor.vue.selected_faces[0]].layer;
+						disableOtherCull.value = Cube.selected[0].faces[UVEditor.vue.selected_faces[0]].disableOtherCull;
+					}
+					//layer.set(Cube.selected[0].faces[UVEditor.vue.selected_faces[0]].layer);
 
 					collision.value = Cube.selected[0].collision;
 					hitbox.value = Cube.selected[0].hitbox;
-					disableOtherCull.value = Cube.selected[0].faces[main_uv.face].disableOtherCull;
+					
 					collision.updateEnabledState();
 					hitbox.updateEnabledState();
 					disableOtherCull.updateEnabledState();

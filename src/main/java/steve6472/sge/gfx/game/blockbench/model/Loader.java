@@ -1,5 +1,6 @@
 package steve6472.sge.gfx.game.blockbench.model;
 
+import org.joml.Vector3f;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import steve6472.sge.gfx.game.blockbench.animation.AnimLoader;
@@ -10,10 +11,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**********************
  * Created by steve6472 (Mirek Jozefek)
@@ -30,7 +28,7 @@ public class Loader
 		JSONObject model = new JSONObject(read(new File(modelName + ".bbmodel")));
 
 		JSONObject res = model.getJSONObject("resolution");
-		HashMap<UUID, Element> elements = loadElements(repository, model.getJSONArray("elements"), model.getJSONArray("textures"), res.getFloat("width"), res.getFloat("height"));
+		HashMap<UUID, OutlinerElement> elements = loadElements(repository, model.getJSONArray("elements"), model.getJSONArray("textures"), res.getFloat("width"), res.getFloat("height"));
 
 		if (model.has("animations"))
 		{
@@ -82,9 +80,9 @@ public class Loader
 		}
 	}
 
-	private static HashMap<UUID, Element> loadElements(ModelRepository repository, JSONArray elements, JSONArray textures, float resX, float resY)
+	private static HashMap<UUID, OutlinerElement> loadElements(ModelRepository repository, JSONArray elements, JSONArray textures, float resX, float resY)
 	{
-		HashMap<UUID, Element> map = new HashMap<>();
+		HashMap<UUID, OutlinerElement> map = new HashMap<>();
 
 		for (Object element : elements)
 		{
@@ -97,7 +95,107 @@ public class Loader
 		return map;
 	}
 
-	private static void loadElement(ModelRepository repository, HashMap<UUID, Element> map, JSONObject json, JSONArray textures, float resX, float resY)
+	private static void loadElement(ModelRepository repository, HashMap<UUID, OutlinerElement> map, JSONObject json, JSONArray textures, float resX, float resY)
+	{
+		if (json.has("type"))
+		{
+			if ("mesh".equals(json.getString("type")))
+			{
+				loadMeshElement(repository, map, json, textures, resX, resY);
+				return;
+			} else
+			{
+				throw new IllegalStateException("Unexpected value: " + json.getString("type"));
+			}
+		}
+		loadCubeElement(repository, map, json, textures, resX, resY);
+	}
+
+	private static void loadMeshElement(ModelRepository repository, HashMap<UUID, OutlinerElement> map, JSONObject json, JSONArray textures, float resX, float resY)
+	{
+		MeshElement element = new MeshElement();
+		element.uuid = loadCommon(element, json);
+
+		HashMap<String, Vector3f> verticesMap = new HashMap<>();
+
+		JSONObject vertices = json.getJSONObject("vertices");
+		for (String id : vertices.keySet())
+		{
+			JSONArray vertexJson = vertices.getJSONArray(id);
+			Vector3f vertex = new Vector3f();
+			vertex.x = vertexJson.getFloat(0);
+			vertex.y = vertexJson.getFloat(1);
+			vertex.z = vertexJson.getFloat(2);
+			verticesMap.put(id, vertex);
+		}
+
+		JSONObject faces = json.getJSONObject("faces");
+		for (String id : faces.keySet())
+		{
+			JSONObject faceJson = faces.getJSONObject(id);
+
+			int textureId = faceJson.getInt("texture");
+			String texturePath = findTexture(textures, textureId);
+			repository.getAtlas().putTexture(texturePath);
+			int texture = repository.getAtlas().getTextureId(texturePath);
+
+			JSONArray verticesArray = faceJson.getJSONArray("vertices");
+
+			JSONObject uv = faceJson.getJSONObject("uv");
+
+			Set<String> uvKeys = uv.keySet();
+			if (uvKeys.size() > 4)
+				throw new IllegalStateException("Too many vertices for one face! (" + uvKeys.size() + ")");
+
+			if (uvKeys.size() == 3)
+			{
+				MeshElement.Face face = element.new Face(texture);
+				for (int i = 0; i < 3; i++)
+				{
+					String vertId = verticesArray.getString(i);
+					JSONArray uvsJson = uv.getJSONArray(vertId);
+
+					face.getVerts()[i].set(verticesMap.get(vertId));
+					face.getUvs()[i].set(uvsJson.getFloat(0) / resX, uvsJson.getFloat(1) / resY);
+				}
+				element.addFace(face);
+			}
+			else if (uvKeys.size() == 4)
+			{
+				{
+					int[] order = {0, 1, 2};
+					MeshElement.Face face = element.new Face(texture);
+					for (int i = 0; i < 3; i++)
+					{
+						String vertId = verticesArray.getString(order[i]);
+						JSONArray uvsJson = uv.getJSONArray(vertId);
+
+						face.getVerts()[i].set(verticesMap.get(vertId));
+						face.getUvs()[i].set(uvsJson.getFloat(0) / resX, uvsJson.getFloat(1) / resY);
+					}
+					element.addFace(face);
+				}
+
+				int[] order = {3, 2, 1};
+				MeshElement.Face face = element.new Face(texture);
+				for (int i = 0; i < 3; i++)
+				{
+					String vertId = verticesArray.getString(order[i]);
+					JSONArray uvsJson = uv.getJSONArray(vertId);
+
+					face.getVerts()[i].set(verticesMap.get(vertId));
+					face.getUvs()[i].set(uvsJson.getFloat(0) / resX, uvsJson.getFloat(1) / resY);
+				}
+				element.addFace(face);
+			}
+		}
+
+//		loadProperties(repository, json, element, PropertyClass.MESH);
+
+		map.put(element.uuid, element);
+	}
+
+	private static void loadCubeElement(ModelRepository repository, HashMap<UUID, OutlinerElement> map, JSONObject json, JSONArray textures, float resX, float resY)
 	{
 		Element element = new Element();
 		element.uuid = loadCommon(element, json);
@@ -160,8 +258,6 @@ public class Loader
 
 		int textureId = json.getInt("texture");
 		String texturePath = findTexture(textures, textureId);
-		if (texturePath == null)
-			return null;
 		repository.getAtlas().putTexture(texturePath);
 		int id = repository.getAtlas().getTextureId(texturePath);
 
@@ -191,7 +287,7 @@ public class Loader
 		}
 	}
 
-	private static OutlinerElement[] loadOutliner(JSONArray outliner, HashMap<UUID, Element> elements)
+	private static OutlinerElement[] loadOutliner(JSONArray outliner, HashMap<UUID, OutlinerElement> elements)
 	{
 		List<OutlinerElement> outlinerElements = new ArrayList<>();
 		for (Object o : outliner)
@@ -201,7 +297,7 @@ public class Loader
 		return outlinerElements.toArray(OutlinerElement[]::new);
 	}
 
-	private static OutlinerElement loadOutlinerElement(Object obj, HashMap<UUID, Element> elements)
+	private static OutlinerElement loadOutlinerElement(Object obj, HashMap<UUID, OutlinerElement> elements)
 	{
 		if (obj instanceof String string)
 		{
@@ -222,19 +318,12 @@ public class Loader
 
 	private static String findTexture(JSONArray textures, int id)
 	{
-		for (int i = 0; i < textures.length(); i++)
-		{
-			JSONObject texture = textures.getJSONObject(i);
-			if (texture.getInt("id") == id)
-			{
-				String path = texture.getString("path");
-				path = path.replace("\\", "/");
-				path = path.substring(path.indexOf("textures") + 9);
-				path = path.substring(0, path.length() - 4);
-				return path;
-			}
-		}
-		return null;
+		JSONObject texture = textures.getJSONObject(id);
+		String path = texture.getString("path");
+		path = path.replace("\\", "/");
+		path = path.substring(path.indexOf("textures") + 9);
+		path = path.substring(0, path.length() - 4);
+		return path;
 	}
 
 	public static String read(File f)

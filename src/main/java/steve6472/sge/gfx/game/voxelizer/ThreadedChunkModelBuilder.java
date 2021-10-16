@@ -787,6 +787,26 @@ public class ThreadedChunkModelBuilder extends Thread
 		} else if (el instanceof Element element)
 		{
 			rect(element, layer);
+		} else if (el instanceof MeshElement mesh)
+		{
+			for (MeshElement.Face face : mesh.getFaces())
+			{
+				STACK.transformPosition(face.getVerts()[0], V0);
+				STACK.transformPosition(face.getVerts()[1], V1);
+				STACK.transformPosition(face.getVerts()[2], V2);
+
+				GeometryUtils.normal(V0, V1, V2, NORMAL);
+				builderNormal.set(NORMAL);
+
+				uv(face.getUvs()[0].x, face.getUvs()[0].y);
+				pos(V0).endVertex();
+
+				uv(face.getUvs()[1].x, face.getUvs()[1].y);
+				pos(V1).endVertex();
+
+				uv(face.getUvs()[2].x, face.getUvs()[2].y);
+				pos(V2).endVertex();
+			}
 		}
 		STACK.popMatrix();
 	}
