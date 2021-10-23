@@ -120,6 +120,7 @@ public class NumberSlider extends Component
 				mouseFlag = false;
 				buttonFlag = false;
 				value += clickChange * mul;
+				changeEvents.forEach(Procedure::process);
 				return;
 			}
 
@@ -129,6 +130,7 @@ public class NumberSlider extends Component
 				mouseFlag = false;
 				buttonFlag = false;
 				value += clickChange * mul;
+				changeEvents.forEach(Procedure::process);
 				return;
 			}
 		}

@@ -162,6 +162,16 @@ public class VoxPos
 		return new VoxPos(MathUtil.clamp(x, min, max), MathUtil.clamp(y, min, max), MathUtil.clamp(z, min, max));
 	}
 
+	public static VoxPos min(VoxPos a, VoxPos b)
+	{
+		return new VoxPos(Math.min(a.getX(), b.getX()), Math.min(a.getY(), b.getY()), Math.min(a.getZ(), b.getZ()));
+	}
+
+	public static VoxPos max(VoxPos a, VoxPos b)
+	{
+		return new VoxPos(Math.max(a.getX(), b.getX()), Math.max(a.getY(), b.getY()), Math.max(a.getZ(), b.getZ()));
+	}
+
 	public boolean equals(int x, int y, int z)
 	{
 		return this.x == x && this.y == y && this.z == z;

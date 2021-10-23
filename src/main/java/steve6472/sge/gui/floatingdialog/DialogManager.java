@@ -53,6 +53,16 @@ public class DialogManager
 		dialogs.remove(dialog);
 	}
 
+	public void removeAllDialogs()
+	{
+		for (Iterator<FloatingDialog> iterator = dialogs.iterator(); iterator.hasNext(); )
+		{
+			FloatingDialog dialog = iterator.next();
+			dialog.getFrameBuffer().deleteFrameBuffer();
+			iterator.remove();
+		}
+	}
+
 	public boolean isActive()
 	{
 		return active;
