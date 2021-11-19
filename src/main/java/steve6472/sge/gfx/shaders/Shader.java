@@ -20,7 +20,7 @@ import static org.lwjgl.opengl.GL20.*;
  * @author ElegantWhelp (I guess)
  *
  */
-public class Shader
+public class Shader extends AbstractShader
 {
 	private int program;
 	private int vs;

@@ -2,6 +2,7 @@ package steve6472.sge.gfx.game.stack;
 
 import org.joml.Matrix4f;
 import steve6472.sge.gfx.game.stack.tess.AbstractTess;
+import steve6472.sge.gfx.shaders.StaticGeometryShader3D;
 import steve6472.sge.gfx.shaders.StaticShader3D;
 import steve6472.sge.gfx.shaders.StaticShaderBase;
 
@@ -35,6 +36,8 @@ public class RenderType
 	{
 		if (shader instanceof StaticShader3D shader3D)
 			shader3D.bind(view);
+		else if (shader instanceof StaticGeometryShader3D geometryShader)
+			geometryShader.bind(view);
 		else
 			shader.bind();
 

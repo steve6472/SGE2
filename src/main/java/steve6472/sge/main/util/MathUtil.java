@@ -192,6 +192,16 @@ public class MathUtil
 		return IS_DECIMAL.matcher(text).matches();
 	}
 
+	/**
+	 * @param rotTime time it takes to make 1 revolution of a circle in seconds
+	 * @return radians
+	 */
+	public static double animateRadians(double rotTime)
+	{
+		rotTime = rotTime / Math.PI;
+		return Math.toRadians((System.currentTimeMillis() % (3600 * rotTime)) / (10.0 * rotTime));
+	}
+
 	public static Matrix4f createProjectionMatrix(float width, float height, float farPlane, float fov)
 	{
 		final float NEAR_PLANE = 0.1f;

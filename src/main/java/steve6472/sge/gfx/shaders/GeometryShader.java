@@ -18,7 +18,7 @@ import static org.lwjgl.opengl.GL32.GL_GEOMETRY_SHADER;
  * Project: SJP
  *
  ***********************/
-public class GeometryShader
+public class GeometryShader extends AbstractShader
 {
 	private int program;
 	private int vs;
@@ -27,12 +27,22 @@ public class GeometryShader
 
 	private GeometryShader() {}
 
+	private static InputStream newStream(String path)
+	{
+		InputStream stream = MainApp.class.getResourceAsStream(path);
+		if (stream == null)
+		{
+			throw new NullPointerException("'" + path + "' not found");
+		}
+		return stream;
+	}
+
 	public static GeometryShader fromShaders(String path)
 	{
 		return fromResource(
-			MainApp.class.getResourceAsStream("/shaders/" + path + ".vs"),
-			MainApp.class.getResourceAsStream("/shaders/" + path + ".gs"),
-			MainApp.class.getResourceAsStream("/shaders/" + path + ".fs"));
+			newStream("/shaders/" + path + ".vs"),
+			newStream("/shaders/" + path + ".gs"),
+			newStream("/shaders/" + path + ".fs"));
 	}
 
 	public static GeometryShader fromFile(String path)

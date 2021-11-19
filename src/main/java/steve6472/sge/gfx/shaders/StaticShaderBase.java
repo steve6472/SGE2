@@ -3,7 +3,6 @@ package steve6472.sge.gfx.shaders;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
-import steve6472.sge.main.util.MathUtil;
 
 import java.nio.FloatBuffer;
 
@@ -17,7 +16,7 @@ import static org.lwjgl.opengl.GL20.*;
  ***********************/
 public abstract class StaticShaderBase
 {
-	protected Shader shader;
+	protected AbstractShader shader;
 	protected String path;
 
 	protected FloatBuffer matrix4Buffer, matrix3Buffer;
@@ -28,24 +27,12 @@ public abstract class StaticShaderBase
 		matrix3Buffer = BufferUtils.createFloatBuffer(9);
 	}
 
-	public void reload(Object... uniforms)
-	{
-		if (!MathUtil.isEven(uniforms.length)) throw new IllegalArgumentException("Incorrect Uniform data!");
-
-		shader.updateShader(path);
-
-		for (int i = 0; i < uniforms.length / 2; i++)
-		{
-			addUniform((String) uniforms[i * 2], (Type) uniforms[i * 2 + 1]);
-		}
-	}
-
 	public void bind()
 	{
 		shader.bind();
 	}
 
-	public Shader getShader()
+	public AbstractShader getShader()
 	{
 		return shader;
 	}
