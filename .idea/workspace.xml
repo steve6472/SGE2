@@ -80,17 +80,20 @@
     <key name="CreateBuilderDialog.RecentsKey">
       <recent name="steve6472.sge.gfx.game.blockbench.model" />
     </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="steve6472.sge.main.networking" />
+    </key>
     <key name="CreateTestDialog.RecentsKey">
       <recent name="steve6472.sge.main.game.stateengine" />
       <recent name="steve6472.sge.main.node.nodes.logic" />
       <recent name="steve6472.sge.test.test3d.tiles" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="steve6472.sge.main.networking" />
       <recent name="steve6472.sge.gfx.game.stack.buffer" />
       <recent name="steve6472.sge.gfx.game.voxelizer" />
       <recent name="steve6472.sge.gfx.game.stack.tess" />
       <recent name="steve6472.sge.main.game" />
-      <recent name="steve6472.sge.test" />
     </key>
   </component>
   <component name="RunAnythingCache">
@@ -102,13 +105,6 @@
   <component name="RunManager" selected="Maven.compile install">
     <configuration name="Direction" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="steve6472.sge.main.game.Direction" />
-      <module name="StevesGameEngine" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="RegistryTest" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="steve6472.sge.test.registry.RegistryTest" />
       <module name="StevesGameEngine" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -136,6 +132,15 @@
       <option name="MAIN_CLASS_NAME" value="steve6472.sge.main.game.stateengine.StateTest" />
       <option name="METHOD_NAME" value="testNoProperty" />
       <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TestNet" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="StevesGameEngine" />
+      <option name="PACKAGE_NAME" value="steve6472.sge.main.networking" />
+      <option name="MAIN_CLASS_NAME" value="steve6472.sge.main.networking.TestNet" />
+      <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -168,19 +173,19 @@
     </configuration>
     <list>
       <item itemvalue="Application.Direction" />
-      <item itemvalue="Application.RegistryTest" />
       <item itemvalue="Application.VoxRenderTest" />
       <item itemvalue="JUnit.StateTest" />
       <item itemvalue="JUnit.StateTest.testNoProperty" />
       <item itemvalue="Maven.compile install" />
+      <item itemvalue="JUnit.TestNet" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.TestNet" />
         <item itemvalue="Application.VoxRenderTest" />
         <item itemvalue="JUnit.StateTest" />
         <item itemvalue="JUnit.StateTest.testNoProperty" />
         <item itemvalue="Application.Direction" />
-        <item itemvalue="Application.RegistryTest" />
       </list>
     </recent_temporary>
   </component>

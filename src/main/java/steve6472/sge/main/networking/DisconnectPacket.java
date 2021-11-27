@@ -5,22 +5,23 @@
 *
 ***********************/
 
-package steve6472.sge.main.networking.packet;
+package steve6472.sge.main.networking;
 
 public class DisconnectPacket extends Packet<IPacketHandler>
 {
+	public static final int ID = 1;
 
 	public DisconnectPacket()
 	{
 	}
 
 	@Override
-	public void output(DataStream output)
+	public void output(PacketData output)
 	{
 	}
 
 	@Override
-	public void input(DataStream input)
+	public void input(PacketData input)
 	{
 	}
 

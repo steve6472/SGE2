@@ -5,7 +5,7 @@
 *
 ***********************/
 
-package steve6472.sge.main.networking.packet;
+package steve6472.sge.main.networking;
 
 public interface IPacketHandler
 {

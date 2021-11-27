@@ -7,12 +7,10 @@
 
 package steve6472.sge.main.networking;
 
-import java.io.Serializable;
 import java.net.InetAddress;
 
-public class ConnectedClient implements Serializable
+public class ConnectedClient
 {
-	private static final long serialVersionUID = 2210549833950901523L;
 	private InetAddress ip;
 	private int port;
 

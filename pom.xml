@@ -172,6 +172,14 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/io.netty/netty-buffer -->
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-buffer</artifactId>
+            <version>4.1.70.Final</version>
+        </dependency>
+
+
         <!-- LWJGL -->
 
         <dependency>
