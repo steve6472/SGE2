@@ -3,7 +3,7 @@ package steve6472.sge.gfx.shaders;
 import org.joml.Matrix4f;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 16.02.2020
  * Project: SJP
  *

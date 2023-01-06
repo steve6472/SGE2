@@ -5,7 +5,7 @@ import org.joml.Vector3i;
 import static steve6472.sge.gfx.VertexObjectCreator.*;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 7/8/2021
  * Project: StevesGameEngine
  *

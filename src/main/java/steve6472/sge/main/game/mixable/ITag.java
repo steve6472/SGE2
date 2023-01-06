@@ -5,7 +5,7 @@ import steve6472.sge.main.game.Tag;
 import java.util.List;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 2.1.2019
  * Project: SGE2
  *

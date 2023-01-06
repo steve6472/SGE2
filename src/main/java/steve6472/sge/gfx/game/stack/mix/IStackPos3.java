@@ -5,7 +5,7 @@ import steve6472.sge.gfx.game.stack.Stack;
 import steve6472.sge.gfx.game.stack.buffer.Buffer3f;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 7/7/2021
  * Project: StevesGameEngine
  *

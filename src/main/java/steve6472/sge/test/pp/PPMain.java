@@ -12,7 +12,7 @@ import steve6472.sge.main.MainFlags;
 import steve6472.sge.main.Window;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 13.08.2019
  * Project: SJP
  *

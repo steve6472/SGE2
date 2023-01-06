@@ -1,7 +1,7 @@
 package steve6472.sge.gfx.game.blockbench.animation;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 25.10.2020
  * Project: CaveGame
  *

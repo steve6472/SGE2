@@ -5,7 +5,7 @@ import steve6472.SSS;
 import org.joml.Vector4f;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 13.12.2018
  * Project: SGE2
  *

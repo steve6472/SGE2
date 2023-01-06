@@ -6,7 +6,7 @@ import steve6472.sge.main.util.ColorUtil;
 import static steve6472.sge.main.util.MathUtil.INV_255;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 7/7/2021
  * Project: StevesGameEngine
  *

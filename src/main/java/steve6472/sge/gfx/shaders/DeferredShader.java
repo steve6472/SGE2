@@ -3,7 +3,7 @@ package steve6472.sge.gfx.shaders;
 import java.util.function.Supplier;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 13.02.2020
  * Project: SJP
  *

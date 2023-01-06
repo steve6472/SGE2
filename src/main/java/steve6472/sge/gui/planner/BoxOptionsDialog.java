@@ -12,7 +12,7 @@ import steve6472.sge.gui.components.TextField;
 import java.util.function.Consumer;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 02.06.2019
  * Project: SJP
  *

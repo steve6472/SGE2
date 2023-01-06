@@ -5,7 +5,7 @@ import steve6472.sge.gui.components.TextField;
 import steve6472.sge.main.MainApp;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 08.05.2019
  * Project: SJP
  *

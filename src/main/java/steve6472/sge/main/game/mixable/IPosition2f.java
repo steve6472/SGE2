@@ -3,7 +3,7 @@ package steve6472.sge.main.game.mixable;
 import org.joml.Vector2f;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 2.1.2019
  * Project: SGE2
  *

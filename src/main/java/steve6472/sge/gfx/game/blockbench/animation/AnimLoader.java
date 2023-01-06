@@ -9,7 +9,7 @@ import java.util.Comparator;
 import java.util.List;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 23.10.2020
  * Project: CaveGame
  *

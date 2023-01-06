@@ -5,7 +5,7 @@ import steve6472.sge.main.util.RandomUtil;
 import org.joml.Vector2f;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 17.05.2019
  * Project: SJP
  *

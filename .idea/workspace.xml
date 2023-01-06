@@ -4,7 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c1bd068a-8a5e-44bc-949b-ef2256b04a80" name="Default Changelist" comment="" />
+    <list default="true" id="c1bd068a-8a5e-44bc-949b-ef2256b04a80" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/sge/gfx/game/blockbench/model/Loader.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/sge/gfx/game/blockbench/model/Loader.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/sge/gfx/game/blockbench/model/ModelTextureAtlas.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/sge/gfx/game/blockbench/model/ModelTextureAtlas.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/sge/gui/components/TextField.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/sge/gui/components/TextField.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/sge/main/networking/ConnectedClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/sge/main/networking/ConnectedClient.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/sge/main/networking/PacketData.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/sge/main/networking/PacketData.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/steve6472/sge/main/networking/UDPServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/steve6472/sge/main/networking/UDPServer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/steve6472/sge/main/networking/PHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/steve6472/sge/main/networking/PHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/steve6472/sge/main/networking/TestServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/steve6472/sge/main/networking/TestServer.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -12,6 +24,10 @@
   </component>
   <component name="CodeInsightWorkspaceSettings">
     <option name="optimizeImportsOnTheFly" value="true" />
+  </component>
+  <component name="DarkyenusTimeTracker">
+    <option name="totalTimeSeconds" value="2433" />
+    <option name="naggedAbout" value="1" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -24,6 +40,15 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/src/test/java/steve6472/sge/main/networking/PHandler.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/test/java/steve6472/sge/main/networking/TestClient.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/test/java/steve6472/sge/main/networking/TestNet.java" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/src/test/java/steve6472/sge/main/networking/TestServer.java" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="InstancesTracker">
     <option name="classes">
       <map>
@@ -31,10 +56,14 @@
       </map>
     </option>
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
       <MavenGeneralSettings>
         <option name="localRepository" value="D:\MavenRepo" />
+        <option name="useMavenConfig" value="true" />
       </MavenGeneralSettings>
     </option>
     <option name="enabledProfiles">
@@ -103,8 +132,8 @@
     </option>
   </component>
   <component name="RunManager" selected="Maven.compile install">
-    <configuration name="Direction" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="steve6472.sge.main.game.Direction" />
+    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="steve6472.sge.test.Test" />
       <module name="StevesGameEngine" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -172,20 +201,20 @@
       <method v="2" />
     </configuration>
     <list>
-      <item itemvalue="Application.Direction" />
+      <item itemvalue="Application.Test" />
       <item itemvalue="Application.VoxRenderTest" />
       <item itemvalue="JUnit.StateTest" />
       <item itemvalue="JUnit.StateTest.testNoProperty" />
-      <item itemvalue="Maven.compile install" />
       <item itemvalue="JUnit.TestNet" />
+      <item itemvalue="Maven.compile install" />
     </list>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Test" />
         <item itemvalue="JUnit.TestNet" />
         <item itemvalue="Application.VoxRenderTest" />
         <item itemvalue="JUnit.StateTest" />
         <item itemvalue="JUnit.StateTest.testNoProperty" />
-        <item itemvalue="Application.Direction" />
       </list>
     </recent_temporary>
   </component>

@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 10. 2. 2018
  * Project: SCR2
  *
@@ -19,7 +19,8 @@ public abstract class UDPServer extends Thread
 	private DatagramSocket socket;
 	protected Set<ConnectedClient> clients;
 	protected IPacketHandler packetHandler;
-	
+	private int maxPacketSize = 508;
+
 	public UDPServer(int port)
 	{
 		clients = new HashSet<>();
@@ -38,7 +39,17 @@ public abstract class UDPServer extends Thread
 			ex.printStackTrace();
 		}
 	}
-	
+
+	protected void setMaxPacketSize(int maxPacketSize)
+	{
+		this.maxPacketSize = maxPacketSize;
+	}
+
+	public int getMaxPacketSize()
+	{
+		return maxPacketSize;
+	}
+
 	public static boolean isPortAviable(int port)
 	{
 		DatagramSocket s;
@@ -71,7 +82,7 @@ public abstract class UDPServer extends Thread
 	{
 		while (true)
 		{
-			byte[] data = new byte[65535];
+			byte[] data = new byte[maxPacketSize];
 			DatagramPacket p = new DatagramPacket(data, data.length);
 			try
 			{
@@ -85,55 +96,34 @@ public abstract class UDPServer extends Thread
 
 			if (Packets.getPacketId(packet) == ConnectPacket.ID)
 			{
-				connectClient(p.getAddress(), p.getPort());
-				clientConnectEvent(p);
+				ConnectedClient connectedClient = connectClient(p.getAddress(), p.getPort());
+				clientConnectEvent(connectedClient);
 			}
 			else if (Packets.getPacketId(packet) == DisconnectPacket.ID)
 			{
-				disconnectClientByPort(p.getPort());
-				clientDisconnectEvent(p);
+				ConnectedClient connectedClient = disconnectClientByPort(p.getPort());
+				clientDisconnectEvent(connectedClient);
 			}
 		}
 	}
 
-	public abstract void clientConnectEvent(DatagramPacket packet);
+	public abstract void clientConnectEvent(ConnectedClient client);
 	
-	public abstract void clientDisconnectEvent(DatagramPacket packet);
+	public abstract void clientDisconnectEvent(ConnectedClient client);
 	
-	public void connectClient(InetAddress ip, int port)
+	public ConnectedClient connectClient(InetAddress ip, int port)
 	{
 //		System.out.println(ip.getHostAddress() + ":" + port + " Connected");
-		clients.add(new ConnectedClient(ip, port));
+		ConnectedClient e = new ConnectedClient(ip, port);
+		clients.add(e);
+		return e;
 	}
 	
-	public final void sendPacket(Packet<? extends IPacketHandler> packet)
+	public void sendPacket(Packet<? extends IPacketHandler> packet)
 	{
 		sendDataToAllClients(Packets.packetToByteArray(packet));
 	}
 
-	/*
-	public final void sendPacketWithException(Packet<? extends IPacketHandler> packet, DatagramPacket p)
-	{
-		String id = Packet.getPacketIdHex(Packet.getPacketId(packet));
-		sendDataToAllClientsWithException(packetToByteArray(id, packet), p.getAddress(), p.getPort());
-	}
-	
-	public final void sendPacket(Packet<? extends IPacketHandler> packet, InetAddress ip, int port)
-	{
-		String id = Packet.getPacketIdHex(Packet.getPacketId(packet));
-		sendData(packetToByteArray(id, packet), ip, port);
-	}
-	
-	public final void sendPacket(Packet<? extends IPacketHandler> packet, DatagramPacket p)
-	{
-		String id = Packet.getPacketIdHex(Packet.getPacketId(packet));
-		sendData(packetToByteArray(id, packet), p.getAddress(), p.getPort());
-	}*/
-	
-//	public abstract void handlePacket(Packet packet, int packetId, DataStream packetData);
-	
-//	public abstract void handlePacket(Packet<?> packet, int packetId, DatagramPacket sender);
-	
 	@SuppressWarnings("unchecked")
 	public void handlePacket(Packet<? extends IPacketHandler> packet, DatagramPacket sender)
 	{
@@ -141,16 +131,26 @@ public abstract class UDPServer extends Thread
 		((Packet<IPacketHandler>)packet).handlePacket(packetHandler);
 	}
 
-	public final void disconnectClientByPort(int port)
+	public ConnectedClient disconnectClientByPort(int port)
 	{
-		clients.removeIf(c -> c.getPort() == port);
+		ConnectedClient[] dcdClients = new ConnectedClient[1];
+		clients.removeIf(c ->
+		{
+			if (c.getPort() == port)
+			{
+				dcdClients[0] = c;
+				return true;
+			}
+			return false;
+		});
 		System.out.println(port + " has disconnected");
+		return dcdClients[0];
 	}
 
-	protected final void sendData(byte[] data, InetAddress ipAddress, int port)
+	protected void sendData(byte[] data, InetAddress ipAddress, int port)
 	{
 		DatagramPacket packet = new DatagramPacket(data, data.length, ipAddress, port);
-		
+
 		try
 		{
 			socket.send(packet);
@@ -160,24 +160,13 @@ public abstract class UDPServer extends Thread
 		}
 	}
 
-	protected final void sendDataToAllClients(byte[] data)
+	protected void sendDataToAllClients(byte[] data)
 	{
 		for (ConnectedClient cc : clients)
 		{
 			sendData(data, cc.getIp(), cc.getPort());
 		}
 	}
-	/*
-	protected final void sendDataToAllClientsWithException(byte[] data, InetAddress ip, int port)
-	{
-		for (ConnectedClient cc : clients)
-		{
-			if (!(cc.getPort() == port && cc.getIp().equals(ip)))
-			{
-				sendData(data, cc.getIp(), cc.getPort());
-			}
-		}
-	}*/
 
 	public final int getClientCount()
 	{

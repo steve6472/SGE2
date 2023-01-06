@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 4/3/2021
  * Project: StevesGameEngine
  *
@@ -22,7 +22,8 @@ public class ModelTextureAtlas
 	private final HashMap<String, Integer> usedTexturesReference = new HashMap<>();
 	private Rectangle[] textures;
 	private Atlas atlas;
-
+	//todo: create default path
+	
 	public StaticTexture getTexture()
 	{
 		return atlas.getSprite();

@@ -5,7 +5,7 @@ import steve6472.sge.test.LongMap;
 import java.util.Optional;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 30.9.2018
  * Project: 3DTest
  *

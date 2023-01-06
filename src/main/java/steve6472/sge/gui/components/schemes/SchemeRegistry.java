@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.HashMap;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 14.12.2018
  * Project: SGE2
  *

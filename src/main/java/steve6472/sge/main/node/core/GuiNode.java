@@ -16,7 +16,7 @@ import java.util.Iterator;
 import static org.lwjgl.opengl.GL11.*;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 4/20/2021
  * Project: StevesGameEngine
  *

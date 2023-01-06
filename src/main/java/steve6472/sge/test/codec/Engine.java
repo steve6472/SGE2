@@ -1,7 +1,7 @@
 package steve6472.sge.test.codec;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 4/20/2021
  * Project: StevesGameEngine
  *

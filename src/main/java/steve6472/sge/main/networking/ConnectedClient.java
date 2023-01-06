@@ -1,5 +1,5 @@
 /**********************
-* Created by steve6472 (Mirek Jozefek)
+* Created by steve6472
 * On date: 10. 2. 2018
 * Project: SCR2
 *
@@ -8,36 +8,29 @@
 package steve6472.sge.main.networking;
 
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 
 public class ConnectedClient
 {
-	private InetAddress ip;
-	private int port;
+	private final InetSocketAddress address;
 
 	public ConnectedClient(InetAddress ip, int port)
 	{
-		this.ip = ip;
-		this.port = port;
+		address = new InetSocketAddress(ip, port);
 	}
 
 	public int getPort()
 	{
-		return port;
+		return address.getPort();
 	}
 	
 	public InetAddress getIp()
 	{
-		return ip;
-	}
-	
-	public void setIp(InetAddress ip)
-	{
-		this.ip = ip;
-	}
-	
-	public void setPort(int port)
-	{
-		this.port = port;
+		return address.getAddress();
 	}
 
+	public InetSocketAddress getAddress()
+	{
+		return address;
+	}
 }

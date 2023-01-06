@@ -6,7 +6,7 @@ import steve6472.sge.main.util.MathUtil;
 import java.util.Objects;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 17.10.2020
  * Project: CaveGame
  *

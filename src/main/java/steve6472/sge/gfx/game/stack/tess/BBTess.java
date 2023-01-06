@@ -11,7 +11,7 @@ import steve6472.sge.gfx.game.stack.mix.IStackPos3;
 import steve6472.sge.gfx.game.stack.mix.ITexture;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 7/7/2021
  * Project: StevesGameEngine
  *

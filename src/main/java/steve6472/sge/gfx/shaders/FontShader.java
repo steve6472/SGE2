@@ -6,7 +6,7 @@ import steve6472.sge.main.MainApp;
 import static org.lwjgl.opengl.GL20.*;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 29.4.2019
  * Project: SGE2
  *

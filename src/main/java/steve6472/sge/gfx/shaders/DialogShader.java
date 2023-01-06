@@ -1,7 +1,7 @@
 package steve6472.sge.gfx.shaders;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 19.07.2020
  * Project: FloatingDialogs
  *

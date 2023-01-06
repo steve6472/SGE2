@@ -5,7 +5,7 @@ import steve6472.sge.main.util.ColorUtil;
 import static org.lwjgl.opengl.GL11.*;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 19.1.2019
  * Project: SGE2
  *

@@ -8,7 +8,7 @@ import steve6472.sge.gfx.game.stack.mix.IColor4;
 import steve6472.sge.gfx.game.stack.mix.IStackPos3;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 7/8/2021
  * Project: StevesGameEngine
  *

@@ -8,7 +8,7 @@ import steve6472.sge.main.MainApp;
 import steve6472.sge.main.util.MathUtil;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 04.06.2019
  * Project: SJP
  *

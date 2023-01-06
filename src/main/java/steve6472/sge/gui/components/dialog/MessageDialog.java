@@ -4,7 +4,7 @@ import steve6472.sge.gfx.font.Font;
 import steve6472.sge.main.MainApp;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 17.03.2019
  * Project: SGE2
  *

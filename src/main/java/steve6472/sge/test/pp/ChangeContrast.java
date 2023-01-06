@@ -5,7 +5,7 @@ import steve6472.sge.gfx.Sprite;
 import steve6472.sge.gfx.post.Effect;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 16.08.2019
  * Project: SJP
  *

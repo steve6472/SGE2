@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 7/21/2021
  * Project: StevesGameEngine
  *

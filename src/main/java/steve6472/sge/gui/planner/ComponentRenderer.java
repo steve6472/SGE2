@@ -4,7 +4,7 @@ import steve6472.sge.main.MainApp;
 import steve6472.sge.gui.components.*;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 08.06.2019
  * Project: SGE2 - Planner
  *

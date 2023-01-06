@@ -3,7 +3,7 @@ package steve6472.sge.gui.components.dialog;
 import steve6472.sge.main.KeyList;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 17.03.2019
  * Project: SGE2
  *

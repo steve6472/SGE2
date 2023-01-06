@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.function.Function;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 4/22/2021
  * Project: StevesGameEngine
  *

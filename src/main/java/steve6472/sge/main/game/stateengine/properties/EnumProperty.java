@@ -1,7 +1,7 @@
 package steve6472.sge.main.game.stateengine.properties;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 03.07.2020
  * Project: CaveGame
  *

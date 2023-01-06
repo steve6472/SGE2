@@ -3,7 +3,7 @@ package steve6472.sge.gfx.game.blockbench.model;
 import java.util.UUID;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 22.10.2020
  * Project: CaveGame
  *

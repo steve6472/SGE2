@@ -7,7 +7,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 11.3.2019
  * Project: SJP
  *

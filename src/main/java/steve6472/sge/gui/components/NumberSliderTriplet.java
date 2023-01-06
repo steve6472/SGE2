@@ -4,7 +4,7 @@ import steve6472.sge.gui.Component;
 import steve6472.sge.main.MainApp;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 28.08.2020
  * Project: CaveGame
  *

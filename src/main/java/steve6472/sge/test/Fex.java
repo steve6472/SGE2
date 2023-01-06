@@ -1,7 +1,7 @@
 package steve6472.sge.test;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 30.04.2019
  * Project: SJP
  *

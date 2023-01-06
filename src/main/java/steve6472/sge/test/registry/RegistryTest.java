@@ -7,7 +7,7 @@ import steve6472.sge.main.game.Id;
 import steve6472.sge.main.game.registry.*;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 7/21/2021
  * Project: StevesGameEngine
  *

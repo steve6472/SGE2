@@ -1,5 +1,5 @@
 /**********************
-* Created by steve6472 (Mirek Jozefek)
+* Created by steve6472
 * On date: 30. 1. 2018
 * Project: SGE
 *

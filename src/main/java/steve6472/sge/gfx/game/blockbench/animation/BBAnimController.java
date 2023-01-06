@@ -3,7 +3,7 @@ package steve6472.sge.gfx.game.blockbench.animation;
 import steve6472.sge.main.Procedure;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 23.10.2020
  * Project: CaveGame
  *

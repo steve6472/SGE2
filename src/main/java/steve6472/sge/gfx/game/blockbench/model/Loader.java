@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 22.10.2020
  * Project: CaveGame
  *
@@ -275,14 +275,17 @@ public class Loader
 	{
 		List<ModelProperty> modelProperties = repository.getProperties().get(propertyClass);
 
-		for (ModelProperty modelProperty : modelProperties)
+		if (modelProperties != null)
 		{
-			if (json.has(modelProperty.name()))
+			for (ModelProperty modelProperty : modelProperties)
 			{
-				propertyObject.getProperties().put(modelProperty, modelProperty.value().apply(json.get(modelProperty.name())));
-			} else
-			{
-				propertyObject.getProperties().put(modelProperty, modelProperty.defaultValue().get());
+				if (json.has(modelProperty.name()))
+				{
+					propertyObject.getProperties().put(modelProperty, modelProperty.value().apply(json.get(modelProperty.name())));
+				} else
+				{
+					propertyObject.getProperties().put(modelProperty, modelProperty.defaultValue().get());
+				}
 			}
 		}
 	}

@@ -7,7 +7,7 @@ import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 11/27/2021
  * Project: StevesGameEngine
  *

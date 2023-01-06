@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Objects;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 22.10.2020
  * Project: CaveGame
  *

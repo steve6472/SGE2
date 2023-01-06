@@ -11,7 +11,7 @@ import steve6472.sge.gfx.game.stack.tess.AbstractTess;
 import steve6472.sge.gfx.shaders.BBShader;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 4/5/2021
  * Project: StevesGameEngine
  *

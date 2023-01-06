@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.function.Function;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 02.06.2019
  * Project: SGE2
  *

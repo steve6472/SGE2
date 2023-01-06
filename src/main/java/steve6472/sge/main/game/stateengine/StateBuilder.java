@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 03.07.2020
  * Project: StateTest
  *

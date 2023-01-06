@@ -6,7 +6,7 @@ import steve6472.sge.main.MainApp;
 import java.util.function.Consumer;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 19.03.2019
  * Project: SGE2
  *

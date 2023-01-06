@@ -3,7 +3,7 @@ package steve6472.sge.gui.components.context;
 import steve6472.sge.gfx.Render;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 16.03.2019
  * Project: SJP
  *

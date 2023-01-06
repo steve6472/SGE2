@@ -3,7 +3,7 @@ package steve6472.sge.gfx.game.voxelizer;
 import java.nio.FloatBuffer;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 7/8/2021
  * Project: StevesGameEngine
  *

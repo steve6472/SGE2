@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.List;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 14.08.2019
  * Project: SJP
  *

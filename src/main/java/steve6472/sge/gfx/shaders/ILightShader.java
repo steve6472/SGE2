@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 import static org.lwjgl.opengl.GL20.*;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 06.09.2020
  * Project: StevesGameEngine
  *

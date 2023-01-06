@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.function.Supplier;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 7/17/2021
  * Project: VoxWorld
  *

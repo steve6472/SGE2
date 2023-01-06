@@ -5,7 +5,7 @@ import steve6472.sge.main.game.registry.Register;
 import steve6472.sge.main.game.registry.RegistryObject;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 7/21/2021
  * Project: StevesGameEngine
  *

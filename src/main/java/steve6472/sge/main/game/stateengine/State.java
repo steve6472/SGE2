@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 3/20/2021
  * Project: GameMaker
  *

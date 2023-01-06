@@ -1,5 +1,5 @@
 /**********************
-* Created by steve6472 (Mirek Jozefek)
+* Created by steve6472
 * On date: 4. 3. 2018
 * Project: SGE2
 *
@@ -193,8 +193,9 @@ public class TextField extends Component implements IScheme<SchemeTextField>
 
 			int textSize = Font.getTextWidth(middle, fontSize);
 			int textStart = Font.getTextWidth(left, fontSize);
+
 			SpriteRender.fillRect(
-				x + (height - 8 * fontSize) / 2 + textStart, y + 2, textSize, height - 4,
+				tx + textStart, y + 2, textSize, height - 4,
 				scheme.selectFill
 			);
 
@@ -208,14 +209,10 @@ public class TextField extends Component implements IScheme<SchemeTextField>
 
 		if (showCarret && isFocused && isEditable)
 		{
-			int textWidth = Font.getTextWidth(text.substring(0, carretPosition), fontSize);
-			int cx = textWidth + x + fontSize * 3 + 5;
+			int textWidth = Font.getTextWidth(text.substring(0, Math.min(text.length(), carretPosition)), fontSize);
+			int cx = tx + textWidth;
 			int cy = y + height / 2 + fontHeight;
 			int carretWidth = 8 * fontSize;
-			if (text.length() > 0 && carretPosition != text.length())
-			{
-				cx = textWidth + x + fontSize * 3 + 2;
-			}
 			if (carretPosition == text.length())
 			{
 				SpriteRender.fillRect(
@@ -225,7 +222,7 @@ public class TextField extends Component implements IScheme<SchemeTextField>
 			} else
 			{
 				SpriteRender.fillRect(
-					cx, ty, fontSize, 8 * fontSize,
+					cx, ty - 1, fontSize + 1, 8 * fontSize + 1,
 					scheme.carretColor
 				);
 			}

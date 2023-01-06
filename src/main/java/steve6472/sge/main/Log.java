@@ -1,7 +1,7 @@
 package steve6472.sge.main;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 17.04.2020
  * Project: NoiseGenerator
  *

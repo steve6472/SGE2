@@ -1,5 +1,5 @@
 /**********************
-* Created by steve6472 (Mirek Jozefek)
+* Created by steve6472
 * On date: 30. 1. 2018
 * Project: SGE
 *
@@ -9,7 +9,7 @@ package steve6472.sge.main.periodicTable;
 
 /**
  * Data stolen from {@link} https://www.ptable.com/?lang=en
- * @author Mirek
+ * @author steve6472
  *
  */
 public enum Element

@@ -13,7 +13,7 @@ import static org.lwjgl.opengl.GL32.GL_GEOMETRY_SHADER;
  * 
  * @author ElegantWhelp (I guess)
  *
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 25.11.2018
  * Project: SJP
  *

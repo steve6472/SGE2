@@ -9,7 +9,7 @@ import org.joml.Matrix4f;
 import static org.lwjgl.opengl.GL11.*;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 16.02.2020
  * Project: SJP
  *

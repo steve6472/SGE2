@@ -3,15 +3,17 @@ package steve6472.sge.main.networking;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 
+import java.util.UUID;
+
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 11/27/2021
  * Project: StevesGameEngine
  *
  ***********************/
 public class PacketData
 {
-	ByteBuf buffer;
+	private ByteBuf buffer;
 
 	public PacketData()
 	{
@@ -40,6 +42,21 @@ public class PacketData
 		return readInt();
 	}
 
+	public ByteBuf getBuffer()
+	{
+		return buffer;
+	}
+
+	/**
+	 * Returns {@code true}
+	 * if and only if {@code (this.writerIndex - this.readerIndex)} is greater
+	 * than {@code 0}.
+	 */
+	public boolean isReadable()
+	{
+		return buffer.isReadable();
+	}
+
 	public void writeString(String s)
 	{
 		buffer.writeInt(s.length());
@@ -66,6 +83,11 @@ public class PacketData
 		buffer.writeBoolean(value);
 	}
 
+	public void writeLong(long value)
+	{
+		buffer.writeLong(value);
+	}
+
 	public void writeFloat(float value)
 	{
 		buffer.writeFloat(value);
@@ -75,6 +97,14 @@ public class PacketData
 	{
 		buffer.writeDouble(value);
 	}
+
+	public void writeUUID(UUID uuid)
+	{
+		buffer.writeLong(uuid.getLeastSignificantBits());
+		buffer.writeLong(uuid.getMostSignificantBits());
+	}
+
+
 
 	public String readString()
 	{
@@ -104,6 +134,11 @@ public class PacketData
 		return buffer.readBoolean();
 	}
 
+	public long readLong()
+	{
+		return buffer.readLong();
+	}
+
 	public float readFloat()
 	{
 		return buffer.readFloat();
@@ -112,5 +147,12 @@ public class PacketData
 	public double readDouble()
 	{
 		return buffer.readDouble();
+	}
+
+	public UUID readUUID()
+	{
+		long least = buffer.readLong();
+		long most = buffer.readLong();
+		return new UUID(most, least);
 	}
 }

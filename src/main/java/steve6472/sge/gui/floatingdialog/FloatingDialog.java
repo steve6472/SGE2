@@ -7,7 +7,7 @@ import steve6472.sge.main.MainApp;
 import steve6472.sge.main.game.mixable.IPosition3f;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 19.07.2020
  * Project: FloatingDialogs
  *

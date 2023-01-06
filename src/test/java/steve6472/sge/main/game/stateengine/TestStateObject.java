@@ -7,7 +7,7 @@ import steve6472.sge.main.game.stateengine.properties.IntProperty;
 import java.util.List;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 9/22/2021
  * Project: StevesGameEngine
  *

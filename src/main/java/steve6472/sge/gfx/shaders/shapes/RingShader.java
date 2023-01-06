@@ -3,7 +3,7 @@ package steve6472.sge.gfx.shaders.shapes;
 import steve6472.sge.gfx.shaders.StaticShader2D;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 29.4.2019
  * Project: SGE2
  *

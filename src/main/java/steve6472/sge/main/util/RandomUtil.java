@@ -6,7 +6,7 @@ import org.joml.Math;
 import java.util.Random;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 07.09.2019
  * Project: SJP
  *

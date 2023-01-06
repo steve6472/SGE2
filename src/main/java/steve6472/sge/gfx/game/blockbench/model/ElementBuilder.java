@@ -4,7 +4,7 @@ import steve6472.sge.gfx.game.voxelizer.VoxLayer;
 import steve6472.sge.main.game.Direction;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 7/13/2021
  * Project: StevesGameEngine
  *

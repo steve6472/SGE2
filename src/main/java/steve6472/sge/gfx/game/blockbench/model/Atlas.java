@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.Map;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 26.08.2020
  * Project: CaveGame
  *

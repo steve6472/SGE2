@@ -8,7 +8,7 @@ import steve6472.sge.main.game.stateengine.State;
 import java.util.HashMap;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 7/13/2021
  * Project: StevesGameEngine
  *

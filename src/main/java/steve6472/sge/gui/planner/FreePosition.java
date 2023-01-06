@@ -9,7 +9,7 @@ import steve6472.sge.main.MainApp;
 import steve6472.sge.main.Util;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 05.06.2019
  * Project: SJP
  *

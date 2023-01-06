@@ -7,7 +7,7 @@ import net.objecthunter.exp4j.function.Function;
 import steve6472.sge.main.util.MathUtil;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 24.10.2020
  * Project: CaveGame
  *

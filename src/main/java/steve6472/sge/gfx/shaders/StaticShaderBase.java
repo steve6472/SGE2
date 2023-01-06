@@ -9,7 +9,7 @@ import java.nio.FloatBuffer;
 import static org.lwjgl.opengl.GL20.*;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 13.08.2019
  * Project: SJP
  *

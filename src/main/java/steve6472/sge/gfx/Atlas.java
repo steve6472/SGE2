@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: (Original: 23. 3. 2018) Edited: 2. 1. 2019
  * Project: SGE2
  *

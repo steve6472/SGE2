@@ -5,7 +5,7 @@ import steve6472.sge.main.node.core.Nodes;
 import steve6472.sge.main.node.nodes.gui.ConstantGuiNode;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 4/22/2021
  * Project: StevesGameEngine
  *

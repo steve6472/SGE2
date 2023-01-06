@@ -7,7 +7,7 @@ import steve6472.sge.main.events.Event;
 import steve6472.sge.main.events.RegisterNodesEvent;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 4/21/2021
  * Project: StevesGameEngine
  *

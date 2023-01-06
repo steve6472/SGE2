@@ -8,7 +8,7 @@ import org.joml.Vector4f;
 import java.util.regex.Pattern;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 4/3/2021
  * Project: StevesGameEngine
  *

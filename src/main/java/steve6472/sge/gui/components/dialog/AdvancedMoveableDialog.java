@@ -6,7 +6,7 @@ import steve6472.sge.gui.components.Button;
 import steve6472.sge.test.Fex;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 18.04.2019
  * Project: SJP
  *

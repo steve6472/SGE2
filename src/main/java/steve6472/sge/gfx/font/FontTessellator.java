@@ -5,7 +5,7 @@ import steve6472.sge.gfx.AbstractTessellator;
 import java.nio.FloatBuffer;
 
 /**********************
- * Created by steve6472 (Mirek Jozefek)
+ * Created by steve6472
  * On date: 03.05.2019
  * Project: SJP
  *
